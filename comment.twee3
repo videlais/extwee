@@ -1,0 +1,32 @@
+/* Just some rubbish. */
+// Random content
+[TOML]
+Some data
+
+:: StoryTitle
+PassageShellTesting
+
+:: UserScript[script]
+
+
+:: UserStylesheet[stylesheet]
+
+
+:: Start [test, fred, dead] {"position": [100,100]}
+[[Another passage]]
+
+[[A third passage]]
+
+:: Another passage[A, B, C]
+[[A fourth passage]]
+
+[[A third passage]] 
+
+:: A third passage
+[[Start]]
+
+:: A fourth passage
+[[A fifth passage]]
+
+:: A fifth passage
+Double-click this passage to edit it.
