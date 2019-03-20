@@ -1,1 +1,3 @@
 node_modules
+storyformats/*
+.DS_Store

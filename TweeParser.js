@@ -1,18 +1,23 @@
+const fs = require("fs");
+const path = require('path');
 const Passage = require('./Passage.js');
 const Story = require('./Story.js');
 /**
- * @class Parser
- * @module Parser
+ * @class TweeParser
+ * @module TweeParser
  */
-class Parser {
+class TweeParser {
 	/**
-     * @method Parser
+     * @method TweeParser
      * @constructor
      */
-    constructor (mode = "twee3") {
+    constructor (file) {
         this.passages = [];
         this.story = new Story();
-        this.mode = mode;
+        this.mode = null;
+        this.contents = "";
+        this.readFile(file);
+        this.parse(this.contents);
     }
 
     /**
@@ -43,6 +48,7 @@ class Parser {
         // Fix the first result
         parsingPassages[0] = parsingPassages[0].slice(2, parsingPassages[0].length);
 
+        // Iterate through the passages
         for(let passage of parsingPassages) {
 
         	// Set default values
@@ -226,11 +232,60 @@ class Parser {
         // Set the passages to the internal story
         this.story.passages = this.passages;
 
-        // Return the story object
-        return this.story;
+    }
+
+    readFile(file) {
+
+        // Attempt to find the file
+        if(fs.existsSync(file) ) {
+
+            this.mode = this._checkFileExtentsion(file);
+
+            // Check if this is a known file extentsion
+            if(this.mode != null) {
+
+                // The file exists.
+                // It is of a known type.
+                // Time to read the file.
+                this.contents = fs.readFileSync(file, 'utf8');
+
+            } else {
+                // The file was not a Twee or Twee2 file based on extension
+                throw new Error("Error: Unknown filetype!");
+            }
+
+
+        } else {
+            throw new Error("Error: Source file not found!");
+        }
+
+    }
+ 
+
+    _checkFileExtentsion(input) {
+
+        // Set default
+        let fileType = null;
+
+        // Test for Twee files
+        if(path.extname(input) == ".tw" ||  path.extname(input) == ".twee" ) {
+            fileType = "twee";
+        }
+
+        // Test for Twee files
+        if(path.extname(input) == ".tw2" ||  path.extname(input) == ".twee2" ) {
+            fileType = "twee2";
+        }
+
+        // Test for Twee3 files
+        if (path.extname(input) ==".tw3" ||  path.extname(input) == ".twee3" ) {
+            fileType = "twee3";
+        }
+
+        return fileType;
 
     }
 
 }
 
-module.exports = Parser;
+module.exports = TweeParser;

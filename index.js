@@ -6,7 +6,7 @@
 const util = require('util');
 
 const argv = require('yargs')
-	.usage('Usage: extwee -i [Source]')
+	.usage('Usage: extwee -i [Source] -f [Story Format]')
 	.describe('i', 'Source')
     .describe('h', 'Help')
     .describe('v', 'Version')
@@ -15,20 +15,16 @@ const argv = require('yargs')
     .alias('v', 'version')
     .alias('i', 'input')
     .alias('f', 'format')
-    .demandOption(['i'])
+    .demandOption(['i, f'])
     .argv;
 
-const Parser = require('./Parser.js');
-const ExTweeFile = require('./ExTweeFile.js');
+const TweeParser = require('./TweeParser.js');
+const StoryFormatParser = require('./StoryFormatParser.js');
 
-// Check and then read the file
-let fc = new ExTweeFile();
-fc.readFile(argv.input);
+let tp = new TweeParser(argv.input);
+let sfp = new StoryFormatParser(argv.format);
 
-// Create a new parser
-let p = new Parser();
-	
-// Parse the file
-let story = p.parse(fc.contents, fc.extentsion);
+console.log(util.inspect(tp.story, { showHidden: true, depth: null, colors: true }));
 
-console.log(util.inspect(story, { showHidden: true, depth: null, colors: true }));
+console.log(util.inspect(sfp.storyformat, { showHidden: true, depth: null, colors: true }));
+
