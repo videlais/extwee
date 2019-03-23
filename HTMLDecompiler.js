@@ -87,6 +87,16 @@ class HTMLDecompiler {
             )
         );
 
+        // Add StoryMetadata
+        this.passages.push(
+            new Passage(
+                "StoryMetadata", 
+                [],
+                {}, 
+                JSON.stringify(this.story.metadata, null, 4)
+            )
+        );
+
         // Move through the passages
         for(let passage in storyPassages) {
 
@@ -101,6 +111,9 @@ class HTMLDecompiler {
             // Split the string into an array
             let size = attr.size.split(",");
 
+            // Save name in case characters need to be escaped
+            let name = attr.name;
+
             // Create the tags array
             let tagArray = [];
 
@@ -113,9 +126,9 @@ class HTMLDecompiler {
             }
 
             // Check if "Start" is, in fact, the Start passage
-            if(attr.pid == "1" && attr.name != "Start") {
+            if(attr.pid == "1" && name != "Start") {
 
-                this.story.metadata.start = attr.name;
+                this.story.metadata.start = name;
 
             } else {
 
@@ -127,7 +140,7 @@ class HTMLDecompiler {
             // Add a new Passage into an array
             this.passages.push(
                 new Passage(
-                        attr.name, 
+                        name, 
                         tagArray,
                         {
                             "position": [ position[0], position[1] ],
@@ -140,15 +153,32 @@ class HTMLDecompiler {
 
         }
 
-        // Add StoryMetadata
+
+        let styleElement = this.dom.querySelector('#twine-user-stylesheet');
+
+        // Add UserStylesheet
         this.passages.push(
             new Passage(
-                "StoryMetadata", 
-                [],
+                "UserStylesheet", 
+                ["style"],
                 {}, 
-                JSON.stringify(this.story.metadata, null, 4)
+                styleElement.rawText
             )
         );
+
+        let scriptElement = this.dom.querySelector('#twine-user-script');
+
+        // Add UserScript
+        this.passages.push(
+            new Passage(
+                "UserScript", 
+                ["script"],
+                {}, 
+                scriptElement.rawText
+            )
+        );
+
+
         
     }
 
@@ -160,15 +190,25 @@ class HTMLDecompiler {
             // Write the name
             this.outputContents += ":: " + passage.name;
 
-            // Test if it has tags
+            // Test if it has any tags
             if(passage.tags.length > 0) {
 
                 this.outputContents += " [";
 
-                for(let tag of passage.tags) {
+                // Test if it only has one tag
+                if(passage.tags.length == 1) {
 
-                    this.outputContents += tag + ", ";
+                    this.outputContents += passage.tags[0];
 
+                } else {
+
+                    // It has multiple tags
+                    // Add them seperated by a comma
+                    for(let tag of passage.tags) {
+
+                        this.outputContents += tag + ", ";
+
+                    }
                 }
 
                 this.outputContents += "]";
