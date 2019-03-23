@@ -7,10 +7,20 @@ class Story {
      * @method Story
      * @constructor
      */
-    constructor (title = "", metadata = null, passages = []) {
-        this.title = title;
-        this.metadata = metadata;
-        this.passages = passages;
+    constructor () {
+        this.name = "";
+        this.metadata = {
+            "ifid": "",
+            "format": "",
+            "formatVersion": "",
+            "zoom": "",
+            "start": ""
+        };
+        this.passages = null;
+		this.tagColors = "";
+		this.zoom = "";
+        this.creator = "";
+        this.creatorVersion = "";
     }
 
 }
