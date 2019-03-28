@@ -22,28 +22,28 @@ const argv = require('yargs')
     .argv;
 
 const TweeParser = require('./TweeParser.js');
+const TweeWriter = require('./TweeWriter.js');
 const StoryFormatParser = require('./StoryFormatParser.js');
-const HTMLDecompiler = require('./HTMLDecompiler.js')
+const HTMLParser = require('./HTMLParser.js');
+const HTMLWriter = require('./HTMLWriter.js');
+
+let tp = null;
+let sfp = null;
 
 if(argv.hasOwnProperty("input")) {
 
-    let tp = new TweeParser(argv.input);
-    console.log(util.inspect(tp.story, { showHidden: true, depth: null, colors: true }));
-
-}
-
-if(argv.hasOwnProperty("format")) {
-
-    let sfp = new StoryFormatParser(argv.format);
-    console.log(util.inspect(sfp.storyformat, { showHidden: true, depth: null, colors: true }));
+    tp = new TweeParser(argv.input);
+    sfp = new StoryFormatParser(argv.format);
+    let hw = new HTMLWriter(argv.output, tp.story, sfp.JSON);
+    //console.log(util.inspect(tp.story, { showHidden: true, depth: null, colors: true }));
 
 }
 
 if(argv.hasOwnProperty("decompile")) { 
 
-    let hd = new HTMLDecompiler(argv.decompile, argv.output);
+    let hd = new HTMLParser(argv.decompile);
+    let tw = new TweeWriter(hd.story, argv.output);
     //console.log(util.inspect(hd.passages, { showHidden: true, depth: null, colors: true }));
 
 }
-
 

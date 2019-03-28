@@ -16,6 +16,9 @@ class TweeParser {
         this.story = new Story();
         this.mode = null;
         this.contents = "";
+        this.style = "";
+        this.script = "";
+
         this.readFile(file);
         this.parse(this.contents);
     }
@@ -91,8 +94,7 @@ class TweeParser {
 
 	        		} catch(event) {
 
-	        			// Silently fail
-	        			metadata = {};
+	        			console.warn("Unable to parse passage JSON.");
 
 	        		}
 
@@ -166,7 +168,7 @@ class TweeParser {
 	        		header = header.substring(0, openingLessPosition) + header.substring(closingGreaterPosition+1);
 	        	}
 
-	        	this.position = position;
+	        	this.story.metadata.position = [ position[0], position[1] ];
 
         	}
 
@@ -198,7 +200,9 @@ class TweeParser {
 
         if(pos != undefined) {
 
-        	this.story.title = pos.text;
+        	this.story.name = pos.text;
+            // Remove the StoryTitle passage
+            this.passages = this.passages.filter(p => p.name !== "StoryTitle");
 
         }
 
@@ -224,6 +228,9 @@ class TweeParser {
         			this.story.metadata = {};
 
         		}
+
+                // Remove the StoryMetadata passage
+                this.passages = this.passages.filter(p => p.name !== "StoryMetadata");
 
         	}
         	

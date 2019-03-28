@@ -11,7 +11,7 @@ class HTMLWriter {
      * @method TweeWriter
      * @constructor
      */
-    constructor (file, story, storyFormat) {
+    constructor (file, story, storyFormat = null) {
         this.file = file;
         this.story = story;
         this.storyFormat = storyFormat;
@@ -27,6 +27,16 @@ class HTMLWriter {
 
     writeFile(file) {
 
+        // Check if this.storyFormat was overwritten.
+        // If not, use the values from this.story
+        if(this.storyFormat == null) {
+
+            this.storyFormat = {};
+            this.storyFormat.name = this.story.metadata.format;
+            this.storyFormat.version = this.story.metadata.formatVersion;
+
+        }
+
         // Build <tw-storydata>
         this.storyData += 
             '<tw-storydata name="' + this.story.name + '" ' +
@@ -35,8 +45,8 @@ class HTMLWriter {
             'creator-version="' + this.story.creatorVersion + '" ' +
             'ifid="' + this.story.metadata.ifid + '" ' + 
             'zoom="' + this.story.metadata.zoom + '" ' +
-            'format="' + this.story.metadata.format + '" ' + 
-            'format-version="' + this.story.metadata.formatVersion + '" ' + 
+            'format="' + this.storyFormat.name + '" ' + 
+            'format-version="' + this.storyFormat.version + '" ' + 
             'options hidden>\n';
 
         // Build the STYLE
@@ -65,7 +75,15 @@ class HTMLWriter {
 
         this.storyData += '</script>\n';
 
+        // All the script data has been written.
+        // Delete all 'script'-tagged passages
+        this.story.deleteAllByTag("script");
 
+        // All the style data has been written.
+        // Delete all 'style'-tagged passages
+        this.story.deleteAllByTag("style");
+
+        // Create a PID that will be incremented each loop
         let pid = 1;
 
         // Build the passages
@@ -73,6 +91,7 @@ class HTMLWriter {
 
             this.storyData += '<tw-passagedata pid="' + pid + '" name="' + passage.name + '"';
 
+            // Write out any tags
             if(passage.tags.length > 1) {
 
                 this.storyData += ' tags="'; 
@@ -92,6 +111,34 @@ class HTMLWriter {
             } else {
 
                 this.storyData += ' tags ';
+
+            }
+
+            // Write out position
+            if(passage.metadata.hasOwnProperty("position")) {
+
+                this.storyData += 'position="' + 
+                    passage.metadata.position + '" ';
+
+            } else {
+
+                // Didn't have a position.
+                // Make one up.
+                this.storyData += 'position="100,100" ';
+
+            }
+
+            // Write out size
+            if(passage.metadata.hasOwnProperty("size") ) {
+
+                this.storyData += 'size="' +
+                    passage.metadata.size + '" ';
+
+            } else {
+
+                // Didn't have a size.
+                // Make one up.
+                this.storyData += 'size="100,100" ';
 
             }
 

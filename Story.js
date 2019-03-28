@@ -21,8 +21,15 @@ class Story {
 		this.zoom = "";
         this.creator = "";
         this.creatorVersion = "";
+
+        // Save the mode
+        // This will affect which
+        this.mode = "twee3";
     }
 
+    /**
+     * @method getStylePassages()
+     */
     getStylePassages() {
 
         let stylePassages = [];
@@ -39,11 +46,14 @@ class Story {
 
     }
 
+    /**
+     * @method getScriptPassages()
+     */
     getScriptPassages() {
 
         let scriptPassages = [];
 
-        scriptPassages = this.passages.filter(function(passage){
+        scriptPassages = this.passages.filter(function(passage) {
 
             let results = passage.tags.filter(tag => tag == "script");
 
@@ -52,6 +62,25 @@ class Story {
         });
 
         return scriptPassages;
+
+    }
+
+    /**
+     * @method deleteAllByTag()
+     */
+    deleteAllByTag(searchTag) {
+
+        this.passages = this.passages.filter(function(passage) {
+
+            let results = passage.tags.filter(tag => tag != searchTag);
+
+            return (results.length == 0);
+
+        });
+
+    }
+
+    checkSpecialPassages() {
 
     }
 
