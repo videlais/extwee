@@ -118,7 +118,7 @@ class TweeParser {
 
         		// Eat the opening and closing square brackets
         		tags = tags.substring(1, tags.length-1);
-        		let tagsArray = tags.split(",");
+        		let tagsArray = tags.split(" ");
 
         		// There are multiple tags
         		if(tagsArray.length > 0) {
@@ -168,7 +168,7 @@ class TweeParser {
 	        		header = header.substring(0, openingLessPosition) + header.substring(closingGreaterPosition+1);
 	        	}
 
-	        	this.story.metadata.position = [ position[0], position[1] ];
+	        	this.story.metadata.position = position[0] + ", " + position[1];
 
         	}
 
@@ -204,6 +204,12 @@ class TweeParser {
             // Remove the StoryTitle passage
             this.passages = this.passages.filter(p => p.name !== "StoryTitle");
 
+        } else {
+
+            // There was no StoryTitle passage
+            // Set a value of "Unknown"
+            this.story.name = "Unknown";
+
         }
 
         // Check if running in Twee3 mode (default)
@@ -232,7 +238,15 @@ class TweeParser {
                 // Remove the StoryMetadata passage
                 this.passages = this.passages.filter(p => p.name !== "StoryMetadata");
 
-        	}
+        	} else {
+
+                if(!this.story.metadata.hasOwnProperty('ifid') ) {
+
+                    throw new Error("This story does not have an IFID.");
+
+                }
+
+            }
         	
         }
 

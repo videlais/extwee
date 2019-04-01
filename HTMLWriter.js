@@ -40,7 +40,7 @@ class HTMLWriter {
         // Build <tw-storydata>
         this.storyData += 
             '<tw-storydata name="' + this.story.name + '" ' +
-            'startnode="' + this.story.metadata.start + '" ' +
+            'startnode="' + this.story.getStartingPassage() + '" ' +
             'creator="' + this.story.creator + '" ' +
             'creator-version="' + this.story.creatorVersion + '" ' +
             'ifid="' + this.story.metadata.ifid + '" ' + 
