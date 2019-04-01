@@ -13,7 +13,7 @@ Because of potentially conflicting licenses, Extwee does not come with any Twine
 ## Compatibility With Other Tools
 
 * Does not parse StorySettings
-* Does not parse @includes
+* Does not parse ```@includes```
 * Does not parse StoryIncludes
 * Does not handle [haml]; will not parse HAML
 * Does not handle [twee2] special passages
