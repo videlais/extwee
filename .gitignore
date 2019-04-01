@@ -1,3 +1,4 @@
 node_modules
-storyformats/*
+testing
+storyformats
 .DS_Store
