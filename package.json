@@ -1,11 +1,10 @@
 {
   "name": "extwee",
-  "version": "0.0.4",
-  "description": "A Twee compiler written in JS. Supports Twee (from Twine 1.4), Twee2 from Twee 2, and Twee3 formats through filetypes.",
+  "version": "1.0.0",
+  "description": "A Twee compiler written in JS.",
   "main": "main.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "mocha"
+    "start": "node index.js"
   },
   "keywords": [
     "twine",
@@ -16,7 +15,6 @@
   "author": "Dan Cox",
   "license": "MIT",
   "dependencies": {
-    "mocha": "^6.0.2",
     "yargs": "^13.2.2",
     "node-html-parser": "^1.1.12"
   },
