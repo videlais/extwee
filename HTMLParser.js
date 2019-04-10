@@ -1,6 +1,3 @@
-
-const fs = require("fs");
-const path = require('path');
 const { parse } = require('node-html-parser');
 const htmlparser = parse;
 const Story = require('./Story.js');
@@ -14,40 +11,23 @@ class HTMLParser {
      * @method HTMLParser
      * @constructor
      */
-    constructor (inputFile) {
-        this.inputFile = inputFile;
-        this.inputContents = "";
+    constructor (content) {
+        this.inputContents = content;
         this.outputContents = "";
 
         this.dom = null;
         this.story = null;
 
-        this.readFile(this.inputFile);
-        this.parse();
+        this.parse(this.inputContents);
     }
 
-    readFile(file) {
-
-        // Attempt to find the file
-        if(fs.existsSync(file) ) {
-
-            this.inputContents = fs.readFileSync(file, 'utf8');
-
-        } else {
-
-            throw new Error("Error: File not found!");
-        
-        }
-
-    }
-
-    parse() {
+    parse(content) {
 
         // Send to node-html-parser
         // Enable getting the content of 'script', 'style', and 'pre' elements
         // Get back a DOM
         this.dom = new htmlparser(
-                        this.inputContents, 
+                        content, 
                         {
                                   lowerCaseTagName: false,
                                   script: true,

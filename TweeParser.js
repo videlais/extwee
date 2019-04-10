@@ -1,5 +1,3 @@
-const fs = require("fs");
-const path = require('path');
 const Passage = require('./Passage.js');
 const Story = require('./Story.js');
 /**
@@ -11,15 +9,13 @@ class TweeParser {
      * @method TweeParser
      * @constructor
      */
-    constructor (file) {
+    constructor (content) {
         this.passages = [];
         this.story = new Story();
-        this.mode = null;
-        this.contents = "";
+        this.contents = content;
         this.style = "";
         this.script = "";
 
-        this.readFile(file);
         this.parse(this.contents);
     }
 
@@ -68,38 +64,34 @@ class TweeParser {
         	// (And trim any remaining whitespace.)
         	text = passage.substring(header.length+1, passage.length).trim();
 
-        	// If this is twee3 mode, look for passage metadata
-        	if (this.mode == "twee3") {
+	        // Test for metadata
+	        let openingCurlyBracketPosition = header.lastIndexOf('{');
+	        let closingCurlyBracketPosition = header.lastIndexOf('}');
 
-	        	// Test for metadata
-	        	let openingCurlyBracketPosition = header.lastIndexOf('{');
-	        	let closingCurlyBracketPosition = header.lastIndexOf('}');
+	        if(openingCurlyBracketPosition != -1 && closingCurlyBracketPosition != -1) {
 
-	        	if(openingCurlyBracketPosition != -1 && closingCurlyBracketPosition != -1) {
+	        	// Save the text metadata
+	        	metadata = header.slice(openingCurlyBracketPosition, closingCurlyBracketPosition+1);
 
-	        		// Save the text metadata
-	        		metadata = header.slice(openingCurlyBracketPosition, closingCurlyBracketPosition+1);
+	        	// Remove the metadata from the header
+	        	header = header.substring(0, openingCurlyBracketPosition) + header.substring(closingCurlyBracketPosition+1);
+	        }
 
-	        		// Remove the metadata from the header
-	        		header = header.substring(0, openingCurlyBracketPosition) + header.substring(closingCurlyBracketPosition+1);
-	        	}
+	        // There was passage metadata
+	        if(metadata.length > 0) {
 
-	        	// There was passage metadata
-	        	if(metadata.length > 0) {
+	        	// Try to parse the metadata
+	        	try {
 
-	        		// Try to parse the metadata
-	        		try {
+	        		metadata = JSON.parse(metadata);
 
-	        			metadata = JSON.parse(metadata);
+	        	} catch(event) {
 
-	        		} catch(event) {
-
-	        			console.warn("Unable to parse passage JSON.");
-
-	        		}
+	        		console.warn("Unable to parse passage JSON.");
 
 	        	}
-        	}
+
+	        }
 
         	// Test for tags
         	let openingSquareBracketPosition = header.lastIndexOf('[');
@@ -154,23 +146,20 @@ class TweeParser {
         		tags = [];
         	}
 
-        	if(this.mode == "twee2") {
+        	
+        	// Test for position information
+	        let openingLessPosition = header.lastIndexOf('<');
+	        let closingGreaterPosition = header.lastIndexOf('>');
 
-        		// Test for position information
-	        	let openingLessPosition = header.lastIndexOf('<');
-	        	let closingGreaterPosition = header.lastIndexOf('>');
+	        if(openingLessPosition != -1 && closingGreaterPosition != -1) {
 
-	        	if(openingLessPosition != -1 && closingGreaterPosition != -1) {
+	        	position = header.slice(openingLessPosition, closingGreaterPosition+1);
 
-	        		position = header.slice(openingLessPosition, closingGreaterPosition+1);
+	        	// Remove the position information from the header
+	        	header = header.substring(0, openingLessPosition) + header.substring(closingGreaterPosition+1);
+	        }
 
-	        		// Remove the position information from the header
-	        		header = header.substring(0, openingLessPosition) + header.substring(closingGreaterPosition+1);
-	        	}
-
-	        	this.story.metadata.position = position[0] + ", " + position[1];
-
-        	}
+	        this.story.metadata.position = position[0] + ", " + position[1];
 
         	// Trim any remaining whitespace
         	header = header.trim();
@@ -252,58 +241,6 @@ class TweeParser {
 
         // Set the passages to the internal story
         this.story.passages = this.passages;
-
-    }
-
-    readFile(file) {
-
-        // Attempt to find the file
-        if(fs.existsSync(file) ) {
-
-            this.mode = this._checkFileExtentsion(file);
-
-            // Check if this is a known file extentsion
-            if(this.mode != null) {
-
-                // The file exists.
-                // It is of a known type.
-                // Time to read the file.
-                this.contents = fs.readFileSync(file, 'utf8');
-
-            } else {
-                // The file was not a Twee or Twee2 file based on extension
-                throw new Error("Error: Unknown filetype!");
-            }
-
-
-        } else {
-            throw new Error("Error: Source file not found!");
-        }
-
-    }
- 
-
-    _checkFileExtentsion(input) {
-
-        // Set default
-        let fileType = null;
-
-        // Test for Twee files
-        if(path.extname(input) == ".tw" ||  path.extname(input) == ".twee" ) {
-            fileType = "twee";
-        }
-
-        // Test for Twee files
-        if(path.extname(input) == ".tw2" ||  path.extname(input) == ".twee2" ) {
-            fileType = "twee2";
-        }
-
-        // Test for Twee3 files
-        if (path.extname(input) ==".tw3" ||  path.extname(input) == ".twee3" ) {
-            fileType = "twee3";
-        }
-
-        return fileType;
 
     }
 

@@ -12,7 +12,8 @@ const argv = require('yargs')
     .alias('h', 'help')
     .demandOption(['o'])
     .argv;
-    
+
+const FileReader = require('./FileReader.js');
 const TweeParser = require('./TweeParser.js');
 const TweeWriter = require('./TweeWriter.js');
 const StoryFormatParser = require('./StoryFormatParser.js');
@@ -25,7 +26,9 @@ if(argv.hasOwnProperty("input") ) {
 
         if(argv.hasOwnProperty("output") ) {
 
-            let tp = new TweeParser(argv.input);
+
+            let fr = new FileReader(argv.input);
+            let tp = new TweeParser(fr.contents);
             let sfp = new StoryFormatParser(argv.format);
             let hw = new HTMLWriter(argv.output, tp.story, sfp.JSON);
 
@@ -44,7 +47,8 @@ if(argv.hasOwnProperty("input") ) {
 
     if(argv.hasOwnProperty("output") )
     {
-        let hd = new HTMLParser(argv.decompile);
+        let fr = new FileReader(argv.decompile);
+        let hd = new HTMLParser(fr.contents);
         let tw = new TweeWriter(hd.story, argv.output);
 
     } else {
