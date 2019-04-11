@@ -12,13 +12,11 @@ class HTMLParser {
      * @constructor
      */
     constructor (content) {
-        this.inputContents = content;
-        this.outputContents = "";
 
         this.dom = null;
         this.story = null;
 
-        this.parse(this.inputContents);
+        this.parse(content);
     }
 
     parse(content) {

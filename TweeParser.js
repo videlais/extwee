@@ -25,7 +25,7 @@ class TweeParser {
      */
     parse(fileContents) {
 
-    	// Check if there are extra notes in the files
+    	// Check if there are extra content in the files
     	// If so, cut it all out for the parser
     	if(fileContents[0] != ':' && fileContents[1] != ':') {
 
@@ -215,24 +215,14 @@ class TweeParser {
 
         	} catch(event) {
 
-        		// Silently fail
-        		this.story.metadata = {};
+        		// Silently fail with default values
 
         	}
 
             // Remove the StoryMetadata passage
             this.passages = this.passages.filter(p => p.name !== "StoryMetadata");
 
-        } else {
-
-            if(!this.story.metadata.hasOwnProperty('ifid') ) {
-
-                throw new Error("This story does not have an IFID.");
-
-            }
-
-        }
-        	
+        }	
 
         // Set the passages to the internal story
         this.story.passages = this.passages;

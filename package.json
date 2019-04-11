@@ -2,10 +2,11 @@
   "name": "extwee",
   "version": "1.0.0",
   "description": "A Twee compiler written in JS.",
-  "author": "Dan Cox <dan.cox@videlais.com> (http://videlais.com)",
+  "author": "Dan Cox",
   "main": "main.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha test/test.js"
   },
   "keywords": [
     "twine",
@@ -13,19 +14,18 @@
     "parser",
     "compiler"
   ],
-  "author": "Dan Cox",
   "license": "MIT",
   "dependencies": {
-    "yargs": "^13.2.2",
-    "node-html-parser": "^1.1.12"
+    "mocha": "^6.1.2",
+    "node-html-parser": "^1.1.12",
+    "yargs": "^13.2.2"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "repository": {
-      "type": "git",
-      "url": "https://github.com/videlais/extwee"
+    "type": "git",
+    "url": "https://github.com/videlais/extwee"
   },
   "bugs": {
-      "url": "https://github.com/videlais/extwee/issues"
+    "url": "https://github.com/videlais/extwee/issues"
   }
 }
