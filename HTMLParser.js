@@ -74,16 +74,6 @@ class HTMLParser {
             )
         );
 
-        // Add StoryMetadata
-        this.story.passages.push(
-            new Passage(
-                "StoryMetadata", 
-                "",
-                {}, 
-                JSON.stringify(this.story.metadata, null, 4)
-            )
-        );
-
         // Move through the passages
         for(let passage in storyPassages) {
 
@@ -101,6 +91,7 @@ class HTMLParser {
             // Escape the name
             let name = this._escapeMetacharacters(attr.name);
 
+            // Create empty tags
             let tags = new String();
 
             // Escape any tags
@@ -108,18 +99,6 @@ class HTMLParser {
             if(attr.tags.length > 0 && attr.tags != '""') {
 
                 tags = this._escapeMetacharacters(attr.tags);
-
-            }
-            
-            // Check if "Start" is, in fact, the Start passage
-            if(attr.pid == "1" && name != "Start") {
-
-                this.story.metadata.start = name;
-
-            } else {
-
-                // Start exists, so remove this optional property
-                delete this.story.metadata.start;
 
             }
 
@@ -139,7 +118,7 @@ class HTMLParser {
 
         }
 
-
+        // Look for the style element
         let styleElement = this.dom.querySelector('#twine-user-stylesheet');
 
         // Check if there is any content.
@@ -157,7 +136,7 @@ class HTMLParser {
             );
         }
         
-
+        // Look for the script element
         let scriptElement = this.dom.querySelector('#twine-user-script');
 
         // Check if there is any content.
@@ -175,6 +154,21 @@ class HTMLParser {
             );
 
         }
+
+        // Now that all passages have been handled,
+        //  change the start name from number to string.
+        this.story.metadata.start = this.story.getStartingPassage();
+
+        // Add StoryMetadata
+        this.story.passages.push(
+            new Passage(
+                "StoryMetadata", 
+                "",
+                {}, 
+                JSON.stringify(this.story.metadata, null, 4)
+            )
+        );
+
     }
 
     _escapeMetacharacters(text) {
