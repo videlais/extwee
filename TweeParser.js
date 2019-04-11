@@ -201,43 +201,38 @@ class TweeParser {
 
         }
 
-        // Check if running in Twee3 mode (default)
-        if(this.mode == "twee3") {
-
-        	// Look for StoryMetadata
-        	pos = this.passages.find((el) => {
+        // Look for StoryMetadata
+        pos = this.passages.find((el) => {
         		return el.name == "StoryMetadata";
-        	});
+        });
 
-        	if(pos != undefined ) {
+        if(pos != undefined ) {
 
+        	// Try to parse the StoryMetadata
+        	try {
 
-        		// Try to parse the StoryMetadata
-        		try {
+        		this.story.metadata = JSON.parse(pos.text);
 
-        			this.story.metadata = JSON.parse(pos.text);
+        	} catch(event) {
 
-        		} catch(event) {
+        		// Silently fail
+        		this.story.metadata = {};
 
-        			// Silently fail
-        			this.story.metadata = {};
+        	}
 
-        		}
+            // Remove the StoryMetadata passage
+            this.passages = this.passages.filter(p => p.name !== "StoryMetadata");
 
-                // Remove the StoryMetadata passage
-                this.passages = this.passages.filter(p => p.name !== "StoryMetadata");
+        } else {
 
-        	} else {
+            if(!this.story.metadata.hasOwnProperty('ifid') ) {
 
-                if(!this.story.metadata.hasOwnProperty('ifid') ) {
-
-                    throw new Error("This story does not have an IFID.");
-
-                }
+                throw new Error("This story does not have an IFID.");
 
             }
-        	
+
         }
+        	
 
         // Set the passages to the internal story
         this.story.passages = this.passages;
