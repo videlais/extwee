@@ -4,11 +4,11 @@ const Story = require('./Story.js');
 const StoryFormat = require('./StoryFormat.js');
 /**
  * @class HTMLWriter
- * @module TweeWriter
+ * @module HTMLWriter
  */
 class HTMLWriter {
 	/**
-     * @method TweeWriter
+     * @method HTMLWriter
      * @constructor
      */
     constructor (file, story, storyFormat = null) {
