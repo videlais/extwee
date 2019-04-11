@@ -22,9 +22,6 @@ class Story {
         this.creator = "";
         this.creatorVersion = "";
 
-        // Save the mode
-        // This will affect which
-        this.mode = "twee3";
     }
 
     /**
@@ -82,12 +79,13 @@ class Story {
 
     /**
      * @method getStartingPassage()
+     * @return String
      */
     getStartingPassage() {
 
-        let pid = null;
+        let name = null;
         let searchName = null;
-        let startPid = null;
+        let startName = null;
 
         if(this.metadata.hasOwnProperty("start")) {
 
@@ -103,36 +101,36 @@ class Story {
 
             if(this.passages[passage].name == searchName) {
 
-                pid = passage;
+                name = this.passages[passage].name;
                 break;
 
             }
 
             if(this.passages[passage].name == "Start") {
 
-                startPid = passage;
+                startName = this.passages[passage].name;
 
             }
 
         }
 
 
-        if(searchName == null && pid == null && startPid == null) {
+        if(searchName == null && name == null && startName == null) {
 
             throw new Error("Starting passage not found!");
 
         }
 
         // Start exists
-        // Return its PID
-        if(startPid != null) {
+        // Return its name
+        if(startName != null) {
 
-            return parseInt(startPid, 10) + 1;
+            return startName;
 
         } else {
 
-            // There was an override and here is the correct PID
-            return parseInt(pid, 10) + 1;
+            // There was an override and here is the correct name
+            return name;
 
         }
 
