@@ -146,7 +146,7 @@ class TweeParser {
         		tags = [];
         	}
 
-        	
+
         	// Test for position information
 	        let openingLessPosition = header.lastIndexOf('<');
 	        let closingGreaterPosition = header.lastIndexOf('>');
@@ -201,14 +201,14 @@ class TweeParser {
 
         }
 
-        // Look for StoryMetadata
+        // Look for StoryData
         pos = this.passages.find((el) => {
-        		return el.name == "StoryMetadata";
+        		return el.name == "StoryData";
         });
 
         if(pos != undefined ) {
 
-        	// Try to parse the StoryMetadata
+        	// Try to parse the StoryData
         	try {
 
         		this.story.metadata = JSON.parse(pos.text);
@@ -219,10 +219,10 @@ class TweeParser {
 
         	}
 
-            // Remove the StoryMetadata passage
-            this.passages = this.passages.filter(p => p.name !== "StoryMetadata");
+            // Remove the StoryData passage
+            this.passages = this.passages.filter(p => p.name !== "StoryData");
 
-        }	
+        }
 
         // Set the passages to the internal story
         this.story.passages = this.passages;
