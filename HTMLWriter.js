@@ -20,7 +20,7 @@ class HTMLWriter {
 
         // Store the creator and version
         this.story.creator = "Extwee";
-        this.story.creatorVersion = "1.0.0";
+        this.story.creatorVersion = "1.1.3";
 
         this.writeFile(file);
     }
