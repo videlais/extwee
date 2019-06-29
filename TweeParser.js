@@ -38,14 +38,14 @@ class TweeParser {
     	let parsingPassages = fileContents.split('\n::');
 
     	// Check if any passages exist
-        if(parsingPassages == 0) {
+      if(parsingPassages == 0) {
 
         	throw new Error("No passages were found!");
 
-        }
+      }
 
-        // Fix the first result
-        parsingPassages[0] = parsingPassages[0].slice(2, parsingPassages[0].length);
+      // Fix the first result
+      parsingPassages[0] = parsingPassages[0].slice(2, parsingPassages[0].length);
 
         // Iterate through the passages
         for(let passage of parsingPassages) {

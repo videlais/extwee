@@ -1,10 +1,14 @@
-# ExTwee 1.0
+# ExTwee 1.1
 
 ExTwee is a Twee compiler supporting Twine 2-style formats using the [Twee3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
 
 It will read both Twee2 (Twee2) and Twee3 formatted files, but does not understand or currently support Twee1 (Twine 1.4.2) or Twee2 special passages for Twine 1.X formatting.
 
 *Extwee does not support Twine 1.X story formats.*
+
+## Binary Releases
+
+Compiled versions for Windows, MacOS X, and Linux can be found under [Releases](https://github.com/videlais/extwee/releases)
 
 ## Story Formats
 
@@ -37,5 +41,3 @@ Extwee will attempt to escape and unescape the metacharacters of {, }, [, and ] 
 ## TODO
 
 * Adding support for directory handling. Instead acting on a single file, a directory could be supplied that found found and included the CSS and JS files organized within it.
-
-
