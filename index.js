@@ -26,7 +26,6 @@ if(argv.hasOwnProperty("input") ) {
 
         if(argv.hasOwnProperty("output") ) {
 
-
             let fr = new FileReader(argv.input);
             let tp = new TweeParser(fr.contents);
             let sfp = new StoryFormatParser(argv.format);
@@ -43,7 +42,7 @@ if(argv.hasOwnProperty("input") ) {
         throw new Error("Missing format file");
 
     }
-} else if(argv.hasOwnProperty("decompile") ) { 
+} else if(argv.hasOwnProperty("decompile") ) {
 
     if(argv.hasOwnProperty("output") )
     {
@@ -57,4 +56,3 @@ if(argv.hasOwnProperty("input") ) {
 
     }
 }
-

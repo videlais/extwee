@@ -47,8 +47,11 @@ class TweeParser {
       // Fix the first result
       parsingPassages[0] = parsingPassages[0].slice(2, parsingPassages[0].length);
 
-        // Iterate through the passages
-        for(let passage of parsingPassages) {
+      // Set the initial pid
+      let pid = 0;
+
+      // Iterate through the passages
+      for(let passage of parsingPassages) {
 
         	// Set default values
 	        let tags = "";
@@ -159,7 +162,7 @@ class TweeParser {
 	        	header = header.substring(0, openingLessPosition) + header.substring(closingGreaterPosition+1);
 	        }
 
-	        this.story.metadata.position = position[0] + ", " + position[1];
+	        //this.story.metadata.position = position[0] + ", " + position[1];
 
         	// Trim any remaining whitespace
         	header = header.trim();
@@ -177,7 +180,10 @@ class TweeParser {
         	}
 
         	// Add the new Passage to the internal array
-        	this.passages.push(new Passage(name, tags, metadata, text));
+        	this.passages.push(new Passage(name, tags, metadata, text, pid));
+
+          // Increase pid
+          pid++;
 
         }
 

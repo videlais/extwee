@@ -38,15 +38,15 @@ class HTMLWriter {
         }
 
         // Build <tw-storydata>
-        this.storyData += 
+        this.storyData +=
             '<tw-storydata name="' + this.story.name + '" ' +
             'startnode="' + this.story.getStartingPassage() + '" ' +
             'creator="' + this.story.creator + '" ' +
             'creator-version="' + this.story.creatorVersion + '" ' +
-            'ifid="' + this.story.metadata.ifid + '" ' + 
+            'ifid="' + this.story.metadata.ifid + '" ' +
             'zoom="' + this.story.metadata.zoom + '" ' +
-            'format="' + this.storyFormat.name + '" ' + 
-            'format-version="' + this.storyFormat.version + '" ' + 
+            'format="' + this.storyFormat.name + '" ' +
+            'format-version="' + this.storyFormat.version + '" ' +
             'options hidden>\n';
 
         // Build the STYLE
@@ -64,7 +64,7 @@ class HTMLWriter {
 
         // Build the SCRIPT
         this.storyData += '<script role="script" id="twine-user-script" type="text/twine-javascript">';
-        
+
         // Get any passages tagged with 'script'
         let scriptPassages = this.story.getScriptPassages();
 
@@ -83,18 +83,15 @@ class HTMLWriter {
         // Delete all 'style'-tagged passages
         this.story.deleteAllByTag("style");
 
-        // Create a PID that will be incremented each loop
-        let pid = 1;
-
         // Build the passages
         for(let passage of this.story.passages) {
 
-            this.storyData += '<tw-passagedata pid="' + pid + '" name="' + passage.name + '"';
+            this.storyData += '<tw-passagedata pid="' + passage.pid + '" name="' + passage.name + '"';
 
             // Write out any tags
             if(passage.tags.length > 1) {
 
-                this.storyData += ' tags="'; 
+                this.storyData += ' tags="';
 
                 for(let t of passage.tags) {
 
@@ -103,7 +100,7 @@ class HTMLWriter {
                 }
 
                 this.storyData += '" ';
-            
+
             } else if(passage.tags.length == 1) {
 
                 this.storyData += ' tags="' + passage.tags[0] + '" ';
@@ -117,7 +114,7 @@ class HTMLWriter {
             // Write out position
             if(passage.metadata.hasOwnProperty("position")) {
 
-                this.storyData += 'position="' + 
+                this.storyData += 'position="' +
                     passage.metadata.position + '" ';
 
             } else {
@@ -143,7 +140,6 @@ class HTMLWriter {
             }
 
             this.storyData += '>' + passage.text + '</tw-passagedata>\n';
-            pid++;
 
         }
 

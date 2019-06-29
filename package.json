@@ -1,9 +1,9 @@
 {
   "name": "extwee",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "A Twee compiler written in JS.",
   "author": "Dan Cox",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "mocha test/test.js"

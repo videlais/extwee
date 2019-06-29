@@ -83,12 +83,13 @@ class Story {
      */
     getStartingPassage() {
 
-        let name = null;
+        let pid = null;
         let searchName = null;
-        let startName = null;
 
         if(this.metadata.hasOwnProperty("start")) {
 
+            // Check if the property is an empty string
+            // If so, ignore it.
             if(this.metadata.start != "") {
 
                 searchName = this.metadata.start;
@@ -101,36 +102,26 @@ class Story {
 
             if(this.passages[passage].name == searchName) {
 
-                name = this.passages[passage].name;
+                pid = this.passages[passage].pid;
                 break;
 
             }
 
             if(this.passages[passage].name == "Start") {
 
-                startName = this.passages[passage].name;
+                pid = this.passages[passage].pid;
 
             }
 
         }
 
-
-        if(searchName == null && name == null && startName == null) {
+        if(pid == null) {
 
             throw new Error("Starting passage not found!");
 
-        }
-
-        // Start exists
-        // Return its name
-        if(startName != null) {
-
-            return startName;
-
         } else {
 
-            // There was an override and here is the correct name
-            return name;
+          return pid;
 
         }
 
