@@ -25,7 +25,7 @@ class HTMLParser {
         // Enable getting the content of 'script', 'style', and 'pre' elements
         // Get back a DOM
         this.dom = new htmlparser(
-                        content, 
+                        content,
                         {
                                   lowerCaseTagName: false,
                                   script: true,
@@ -65,9 +65,9 @@ class HTMLParser {
         // Add StoryTitle
         this.story.passages.push(
             new Passage(
-                "StoryTitle", 
+                "StoryTitle",
                 "",
-                {}, 
+                {},
                 this.story.name
             )
         );
@@ -103,13 +103,13 @@ class HTMLParser {
             // Add a new Passage into an array
             this.story.passages.push(
                 new Passage(
-                        name, 
+                        name,
                         tags,
                         {
                             "position": position,
                             "size": size
 
-                        }, 
+                        },
                         text
                     )
             );
@@ -126,14 +126,14 @@ class HTMLParser {
             // Add UserStylesheet
             this.story.passages.push(
                 new Passage(
-                    "UserStylesheet", 
+                    "UserStylesheet",
                     "style",
-                    {}, 
+                    {},
                     styleElement.rawText
                 )
             );
         }
-        
+
         // Look for the script element
         let scriptElement = this.dom.querySelector('#twine-user-script');
 
@@ -144,9 +144,9 @@ class HTMLParser {
             // Add UserScript
             this.story.passages.push(
                 new Passage(
-                    "UserScript", 
+                    "UserScript",
                     "script",
-                    {}, 
+                    {},
                     scriptElement.rawText
                 )
             );
@@ -160,9 +160,9 @@ class HTMLParser {
         // Add StoryMetadata
         this.story.passages.push(
             new Passage(
-                "StoryMetadata", 
+                "StoryData", 
                 "",
-                {}, 
+                {},
                 JSON.stringify(this.story.metadata, null, 4)
             )
         );
@@ -174,9 +174,9 @@ class HTMLParser {
         let result = text;
 
         let leftCurly = text.indexOf('\{');
-       
+
         if(leftCurly != -1) {
-           
+
             result = result.substring(0, leftCurly) + '\\' + result.substring(leftCurly);
         }
 
@@ -206,7 +206,7 @@ class HTMLParser {
         // (We need to check that we haven't already escaped metacharacters.)
         if(leftCurly == -1 &&
            rightCurly == -1 &&
-           leftSquare == -1 && 
+           leftSquare == -1 &&
            rightSquare == -1) {
 
             let pos = text.indexOf("\\");
