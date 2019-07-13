@@ -17,8 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "mocha": "^6.1.4",
-    "node-html-parser": "^1.1.12",
-    "yargs": "^13.2.2"
+    "node-html-parser": "^1.1.16",
+    "yargs": "^13.2.4"
   },
   "devDependencies": {},
   "repository": {
