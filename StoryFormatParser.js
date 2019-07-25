@@ -21,7 +21,9 @@ class StoryFormatParser {
         this.parse();
     }
 
-    readFile(file) {
+    readFile(path) {
+
+        const file = fs.realpathSync(path);
 
         // Attempt to find the file
         if(fs.existsSync(file) ) {
@@ -31,7 +33,7 @@ class StoryFormatParser {
         } else {
 
             throw new Error("Error: Source file not found!");
-        
+
         }
 
     }
@@ -50,7 +52,7 @@ class StoryFormatParser {
                 this.contents = this.contents.slice(0, setupPosition) + '}';
 
             }
-            
+
         }
 
         let openingCurlyBracketPosition = this.contents.indexOf('{');
@@ -60,7 +62,7 @@ class StoryFormatParser {
 
             // Slice out the JSON
             this.contents = this.contents.slice(openingCurlyBracketPosition, closingCurlyBracketPosition+1);
-            
+
         } else {
 
             throw new Error("Unable to find Twine2 JSON chunk!");

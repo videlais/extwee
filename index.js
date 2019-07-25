@@ -4,13 +4,14 @@ const argv = require('yargs')
     .describe('f', 'Story Format')
     .describe('d', 'File to decompile')
     .describe('o', 'Output File')
+    .describe('r', 'Directory')
     .alias('v', 'version')
     .alias('i', 'input')
     .alias('f', 'format')
     .alias('d', 'decompile')
     .alias('o', 'output')
     .alias('h', 'help')
-    .demandOption(['o'])
+    .alias('r', 'dir')
     .argv;
 
 const FileReader = require('./FileReader.js');
@@ -19,6 +20,7 @@ const TweeWriter = require('./TweeWriter.js');
 const StoryFormatParser = require('./StoryFormatParser.js');
 const HTMLParser = require('./HTMLParser.js');
 const HTMLWriter = require('./HTMLWriter.js');
+const DirectoryReader = require('./DirectoryReader.js');
 
 if(argv.hasOwnProperty("input") ) {
 
@@ -55,4 +57,28 @@ if(argv.hasOwnProperty("input") ) {
         throw new Error("Missing output file!");
 
     }
+} else if(argv.hasOwnProperty("dir") ) {
+
+  const dir = new DirectoryReader(argv.dir);
+
+  if(argv.hasOwnProperty("format") ) {
+
+      if(argv.hasOwnProperty("output") ) {
+
+          let tp = new TweeParser(dir.tweeContents);
+          let sfp = new StoryFormatParser(argv.format);
+          let hw = new HTMLWriter(argv.output, tp.story, sfp.JSON, dir.CSScontents, dir.JScontents);
+
+      } else {
+
+          throw new Error("Missing output file!");
+
+      }
+
+  } else {
+
+      throw new Error("Missing format file");
+
+  }
+
 }

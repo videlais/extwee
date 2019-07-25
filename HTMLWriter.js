@@ -11,12 +11,14 @@ class HTMLWriter {
      * @method HTMLWriter
      * @constructor
      */
-    constructor (file, story, storyFormat = null) {
+    constructor (file, story, storyFormat = null, cssContent = null, jsContent = null) {
         this.file = file;
         this.story = story;
         this.storyFormat = storyFormat;
         this.outputContents = "";
         this.storyData = "";
+        this.cssContent = cssContent;
+        this.jsContent = jsContent;
 
         // Store the creator and version
         this.story.creator = "Extwee";
@@ -55,6 +57,10 @@ class HTMLWriter {
         // Get any passages tagged with 'style'
         let stylePassages = this.story.getStylePassages();
 
+        if(this.cssContent != null) {
+          this.storyData += this.cssContent;
+        }
+
         // Iterate through the collection and add to storyData
         for(let content of stylePassages) {
             this.storyData += content.text;
@@ -67,6 +73,10 @@ class HTMLWriter {
 
         // Get any passages tagged with 'script'
         let scriptPassages = this.story.getScriptPassages();
+
+        if(this.jsContent != null) {
+          this.storyData += this.jsContent;
+        }
 
         // Iterate through the collection and add to storyData
         for(let content of scriptPassages) {
