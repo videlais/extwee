@@ -56,8 +56,10 @@ class DirectoryReader {
       this.JScontents += this.processJS();
       // Look for Twee files
       this.tweeContents += this.getGlob("tw");
+      this.tweeContents += this.getGlob("tw2");
       this.tweeContents += this.getGlob("twee");
       this.tweeContents += this.getGlob("twee2");
+      this.tweeContents += this.getGlob("tw3");
       this.tweeContents += this.getGlob("twee3");
 
     }

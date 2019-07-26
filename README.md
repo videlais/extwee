@@ -1,6 +1,6 @@
 # ExTwee 1.1.4
 
-ExTwee is a Twee compiler supporting Twine 2-style formats using the [Twee 3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
+Extwee is a Twee compiler supporting Twine 2-style formats using the [Twee 3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
 
 It will read both Twee2 (Twee2) and Twee 3 formatted files, but does not understand or currently support Twee 1 (Twine 1.4.2) or Twee2 special passages for Twine 1.X formatting.
 
@@ -32,12 +32,8 @@ Because of potentially conflicting licenses, Extwee does not come with any Twine
 
 ## File Formats
 
-Extwee decides how to parse a file based on its extension. It understands Twee2 files to have either `.tw2` or `.twee2` extensions. Files created for Twee3 parsers should have the `.tw3` or `.twee3` file extension.
+When watching a directory, Extwee will look for `tw`, `tw2`, `tw3`, `twee`, `twee2`, and `twee3` files. All other modes will accept any text files as input.
 
 ## Escaping Metacharacters
 
 Extwee will attempt to escape the metacharacters of `{`, `}`, `[`, and `]` when moving to and from Twee notation. However, even with this support, it *highly recommended* to avoid these characters in passage name and tags to avoid confusion and potential issues.
-
-## TODO
-
-* Adding support for directory handling. Instead acting on a single file, a directory could be supplied that found and included the CSS and JS files organized within it.
