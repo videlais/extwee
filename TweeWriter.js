@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require('path');
+const Story = require('./Story.js');
 
 /**
  * @class TweeWriter
@@ -14,6 +15,10 @@ class TweeWriter {
         this.story = story;
         this.outputFile = outputFile;
         this.outputContents = "";
+
+        if( !(this.story instanceof Story) ) {
+          throw new Error("Not a Story object!");
+        }
 
         this.writeFile(this.outputFile);
     }
@@ -48,7 +53,13 @@ class TweeWriter {
         }
 
         // Write the entire contents out
-        fs.writeFileSync(file, this.outputContents);
+        fs.writeFileSync(file, this.outputContents, (err) => {
+          if (err) {
+            throw err;
+          } else {
+            console.info("Created " + fs.realpathSync(file) );
+          }
+        });
 
     }
 }

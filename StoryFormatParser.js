@@ -1,7 +1,7 @@
-
 const fs = require("fs");
 const path = require('path');
 const StoryFormat = require('./StoryFormat.js');
+const FileReader = require('./FileReader.js');
 /**
  * @class StoryFormatParser
  * @module StoryFormatParser
@@ -16,26 +16,10 @@ class StoryFormatParser {
         this.contents = "";
         this.extentsion = "";
         this.storyformat = null;
+        // Load the file contents
+        this.contents = new FileReader(this.file).contents;
 
-        this.readFile(this.file);
         this.parse();
-    }
-
-    readFile(path) {
-
-        const file = fs.realpathSync(path);
-
-        // Attempt to find the file
-        if(fs.existsSync(file) ) {
-
-            this.contents = fs.readFileSync(file, 'utf8');
-
-        } else {
-
-            throw new Error("Error: Source file not found!");
-
-        }
-
     }
 
     parse() {
@@ -80,7 +64,6 @@ class StoryFormatParser {
         }
 
         this.storyformat = new StoryFormat(this.JSON);
-
 
     }
 

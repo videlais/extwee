@@ -10,7 +10,7 @@ class FileReader {
      * @constructor
      */
     constructor (file) {
-        
+
         this.contents = "";
         this.readFile(file);
     }
@@ -21,14 +21,16 @@ class FileReader {
         if(fs.existsSync(file) ) {
 
             // The file exists.
-            // It is of a known type.
-            // Time to read the file.
-            this.contents = fs.readFileSync(file, 'utf8');
+            this.contents = fs.readFileSync(file, 'utf8', (err) => {
+              if (err) {
+                throw err;
+              }
+            });
 
         } else {
 
             throw new Error("Error: File not found!");
-        
+
         }
 
     }

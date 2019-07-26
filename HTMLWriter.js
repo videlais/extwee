@@ -164,8 +164,13 @@ class HTMLWriter {
         this.outputContents += this.storyFormat.source
 
         // Write the entire contents out
-        fs.writeFileSync(file, this.outputContents);
-        console.info("Created " + fs.realpathSync(file) );
+        fs.writeFileSync(file, this.outputContents, (err) => {
+          if (err) {
+            throw err;
+          } else {
+            console.info("Created " + fs.realpathSync(file) );
+          }
+        });
 
     }
 
