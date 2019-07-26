@@ -1,6 +1,9 @@
 const fs = require("fs");
 const FileReader = require('./FileReader.js');
-const glob = require("glob");
+const shell = require('shelljs');
+// Tell shelljs to be quiet about warnings
+shell.config.silent = true;
+const CleanCSS = require('clean-css');
 
 /**
  * @class DirectoryReader
@@ -13,22 +16,26 @@ class DirectoryReader {
      */
     constructor (directory) {
 
-      this.directory = directory;
+      this.directory = fs.realpathSync(directory);
       this.CSScontents = "";
       this.JScontents = "";
       this.tweeContents = "";
       // Read the directory
-      this.update();
+      if(fs.existsSync(this.directory) ) {
+            this.update();
+      } else {
+          throw new Error("Error: Directory does not exist!");
+      }
 
     }
 
-    getGlob(dir, type) {
+    getGlob(type) {
 
       let fileContents = "";
 
-      glob.sync(dir + "/**/*." + type).forEach( (value, key, map) => {
-          const file = new FileReader(value);
-          fileContents += file.contents;
+      shell.ls('-R', this.directory + '/**/*.' + type).forEach(function (value) {
+        const file = new FileReader(value);
+        fileContents += file.contents;
       });
 
       return fileContents;
@@ -42,26 +49,31 @@ class DirectoryReader {
       this.JScontents = "";
       this.tweeContents = "";
 
-      // Resolve symbolics
-      const dir = fs.realpathSync(this.directory);
+      // Look for CSS files
+      this.CSScontents += this.processCSS();
+      // Look for JS files
+      this.JScontents += this.getGlob("js");
+      // Look for Twee files
+      this.tweeContents += this.getGlob("tw");
+      this.tweeContents += this.getGlob("twee");
+      this.tweeContents += this.getGlob("twee2");
+      this.tweeContents += this.getGlob("twee3");
 
-      // Does it exist?
-      if(fs.existsSync(dir) ) {
+    }
 
-        // Look for CSS files
-        this.CSScontents += this.getGlob(dir, "css");
-        // Look for JS files
-        this.JScontents += this.getGlob(dir, "js");
-        // Look for Twee files
-        this.tweeContents += this.getGlob(dir, "tw");
-        this.tweeContents += this.getGlob(dir, "twee");
-        this.tweeContents += this.getGlob(dir, "twee2");
-        this.tweeContents += this.getGlob(dir, "twee3");
+    processCSS() {
 
-      } else {
-          throw new Error("Error: Directory does not exist!");
-      }
+      let fileContents = "";
 
+      console.info("Processing CSS files...");
+      shell.ls('-R', this.directory + '/**/*.css').forEach(function (value) {
+        console.info("  Loading " + value);
+        const file = new FileReader(value);
+        fileContents += file.contents;
+      });
+
+       const output = new CleanCSS({level: 2}).minify(fileContents);
+       return output.styles;
     }
 
 }

@@ -17,9 +17,10 @@
   "license": "MIT",
   "dependencies": {
     "chokidar": "^3.0.2",
-    "glob": "^7.1.4",
+    "clean-css": "^4.2.1",
     "mocha": "^6.2.0",
     "node-html-parser": "^1.1.16",
+    "shelljs": "^0.8.3",
     "yargs": "^13.3.0"
   },
   "devDependencies": {},

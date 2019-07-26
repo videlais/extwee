@@ -24,6 +24,7 @@ class DirectoryWatcher {
       if(this.check() ) {
 
         console.info("Watching " + this.directory + " for changes.");
+        console.info("Press CTRL+C to stop.");
 
         // Setup the Chokidar watcher
         let watcher = chokidar.watch(this.directory, {
