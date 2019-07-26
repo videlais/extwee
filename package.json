@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "mocha test/test.js"
+    "test": "nyc mocha test/test.js"
   },
   "keywords": [
     "twine",
@@ -24,7 +24,9 @@
     "uglify-js": "^3.6.0",
     "yargs": "^13.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nyc": "^14.1.1"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/videlais/extwee"

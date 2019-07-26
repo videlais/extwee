@@ -21,11 +21,7 @@ class FileReader {
         if(fs.existsSync(file) ) {
 
             // The file exists.
-            this.contents = fs.readFileSync(file, 'utf8', (err) => {
-              if (err) {
-                throw err;
-              }
-            });
+            this.contents = fs.readFileSync(file, 'utf8');
 
         } else {
 
