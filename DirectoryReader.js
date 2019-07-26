@@ -13,12 +13,37 @@ class DirectoryReader {
      */
     constructor (directory) {
 
+      this.directory = directory;
+      this.CSScontents = "";
+      this.JScontents = "";
+      this.tweeContents = "";
+      // Read the directory
+      this.update();
+
+    }
+
+    getGlob(dir, type) {
+
+      let fileContents = "";
+
+      glob.sync(dir + "/**/*." + type).forEach( (value, key, map) => {
+          const file = new FileReader(value);
+          fileContents += file.contents;
+      });
+
+      return fileContents;
+
+    }
+
+    update() {
+
+      // Reset
       this.CSScontents = "";
       this.JScontents = "";
       this.tweeContents = "";
 
       // Resolve symbolics
-      const dir = fs.realpathSync(directory);
+      const dir = fs.realpathSync(this.directory);
 
       // Does it exist?
       if(fs.existsSync(dir) ) {
@@ -36,19 +61,6 @@ class DirectoryReader {
       } else {
           throw new Error("Error: Directory does not exist!");
       }
-
-    }
-
-    getGlob(dir, type) {
-
-      let fileContents = "";
-
-      glob.sync(dir + "/**/*." + type).forEach( (value, key, map) => {
-          const file = new FileReader(value);
-          fileContents += file.contents;
-      });
-
-      return fileContents;
 
     }
 

@@ -165,6 +165,7 @@ class HTMLWriter {
 
         // Write the entire contents out
         fs.writeFileSync(file, this.outputContents);
+        console.info("Created " + file);
 
     }
 
