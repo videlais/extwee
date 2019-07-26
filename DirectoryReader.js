@@ -4,6 +4,7 @@ const shell = require('shelljs');
 // Tell shelljs to be quiet about warnings
 shell.config.silent = true;
 const CleanCSS = require('clean-css');
+const UglifyJS = require("uglify-js");
 
 /**
  * @class DirectoryReader
@@ -52,12 +53,34 @@ class DirectoryReader {
       // Look for CSS files
       this.CSScontents += this.processCSS();
       // Look for JS files
-      this.JScontents += this.getGlob("js");
+      this.JScontents += this.processJS();
       // Look for Twee files
       this.tweeContents += this.getGlob("tw");
       this.tweeContents += this.getGlob("twee");
       this.tweeContents += this.getGlob("twee2");
       this.tweeContents += this.getGlob("twee3");
+
+    }
+
+    processJS() {
+
+      let fileContents = "";
+
+      console.info("Processing JS files...");
+      shell.ls('-R', this.directory + '/**/*.js').forEach(function (value) {
+        console.info("  Loading " + value);
+        const file = new FileReader(value);
+
+        let result = UglifyJS.minify(file.contents);
+
+        if(result.error != undefined) {
+          console.info("Error processing JS: " + result.error);
+        }
+
+        fileContents += result.code;
+      });
+
+      return fileContents;
 
     }
 

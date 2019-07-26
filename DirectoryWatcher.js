@@ -33,9 +33,15 @@ class DirectoryWatcher {
             ignoreInitial: true
           });
 
-       // Catch all events
+       // Catch change events
        watcher.on('change', (path) => {
             console.info("Change detected on " + path);
+            callback();
+       });
+
+       // Catch add events
+       watcher.on('add', (path) => {
+            console.info("Addition detected on " + path);
             callback();
        });
 
