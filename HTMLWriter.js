@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require('path');
 const Story = require('./Story.js');
 const StoryFormat = require('./StoryFormat.js');
+const pkg = require('./package.json');
 /**
  * @class HTMLWriter
  * @module HTMLWriter
@@ -11,9 +12,15 @@ class HTMLWriter {
      * @method HTMLWriter
      * @constructor
      */
-    constructor (file, story, storyFormat = null, cssContent = null, jsContent = null) {
+    constructor (file = "", story, storyFormat = null, cssContent = null, jsContent = null) {
         this.file = file;
+
         this.story = story;
+
+        if( !(this.story instanceof Story) ) {
+          throw new Error("Error: story is not a Story object!");
+        }
+
         this.storyFormat = storyFormat;
         this.outputContents = "";
         this.storyData = "";
@@ -21,8 +28,8 @@ class HTMLWriter {
         this.jsContent = jsContent;
 
         // Store the creator and version
-        this.story.creator = "Extwee";
-        this.story.creatorVersion = "1.1.3";
+        this.story.creator = pkg.name;
+        this.story.creatorVersion = pkg.version;
 
         this.writeFile(file);
     }
@@ -166,7 +173,7 @@ class HTMLWriter {
         // Write the entire contents out
         fs.writeFileSync(file, this.outputContents, (err) => {
           if (err) {
-            throw err;
+            throw new Error("Error: Cannot write HTML!");
           } else {
             console.info("Created " + fs.realpathSync(file) );
           }

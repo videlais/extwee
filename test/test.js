@@ -8,6 +8,8 @@ const HTMLParser = require('../HTMLParser.js');
 const HTMLWriter = require('../HTMLWriter.js');
 const Story = require('../Story.js');
 const Passage = require('../Passage.js');
+const DirectoryReader = require('../DirectoryReader.js');
+const DirectoryWatcher = require('../DirectoryWatcher.js');
 
 describe('FileReader', function() {
 
@@ -97,6 +99,17 @@ describe('TweeWriter', function() {
 
      });
 
+		 it('Should write Twee file', function() {
+
+			 let s = new Story();
+			 s.name = "TweeWriter";
+			 let tw = new TweeWriter(s, "test/TweeWriter/test.twee");
+			 let fr = new FileReader("test/TweeWriter/test.twee");
+			 let tp = new TweeParser(fr.contents);
+			 assert.equal(tp.story.name,"TweeWriter");
+
+     });
+
    });
 
 });
@@ -171,6 +184,39 @@ describe('Passage', function() {
 
     	let p = new Passage();
 			assert.equal(p.name, "");
+
+    });
+
+  });
+
+});
+
+describe('HTMLWriter', function() {
+
+  describe('#constructor()', function() {
+
+		it('Should throw error if file writing fails', function() {
+
+    	assert.throws( () => new HTMLWriter(), Error );
+
+    });
+
+		it('story should be instanceof Story', function() {
+
+			assert.throws( () => new HTMLWriter("test/HTMLWriter/test.html", {}), Error );
+
+    });
+
+		it('Should produce HTML readable by HTMLParser and find story name of "twineExample"', function() {
+
+			let fr = new FileReader("test/TweeParser/example.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test.html", tp.story, sfp.JSON);
+			let frh = new FileReader("test/HTMLWriter/test.html");
+			let hp = new HTMLParser(frh.contents);
+
+			assert.equal(hp.story.name, "twineExample");
 
     });
 
