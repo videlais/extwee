@@ -30,12 +30,7 @@ class StoryFormatParser {
         if(harlowePosition != -1) {
             // The 'setup' property is malformed
             let setupPosition = this.contents.lastIndexOf(',"setup": function');
-
-            if(setupPosition != -1) {
-
-                this.contents = this.contents.slice(0, setupPosition) + '}';
-
-            }
+            this.contents = this.contents.slice(0, setupPosition) + '}';
 
         }
 
