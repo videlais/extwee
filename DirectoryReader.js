@@ -5,6 +5,7 @@ const shell = require('shelljs');
 shell.config.silent = true;
 const CleanCSS = require('clean-css');
 const UglifyJS = require("uglify-js");
+const babel = require("@babel/core");
 
 /**
  * @class DirectoryReader
@@ -30,37 +31,17 @@ class DirectoryReader {
 
     }
 
-    getGlob(type) {
-
-      let fileContents = "";
-
-      shell.ls('-R', this.directory + '/**/*.' + type).forEach(function (value) {
-        const file = new FileReader(value);
-        fileContents += file.contents;
-      });
-
-      return fileContents;
-
-    }
-
     update() {
 
       // Reset
-      this.CSScontents = "";
-      this.JScontents = "";
-      this.tweeContents = "";
+      this.CSScontents = this.JScontents = this.tweeContents = "";
 
       // Look for CSS files
       this.CSScontents += this.processCSS();
       // Look for JS files
       this.JScontents += this.processJS();
       // Look for Twee files
-      this.tweeContents += this.getGlob("tw");
-      this.tweeContents += this.getGlob("tw2");
-      this.tweeContents += this.getGlob("twee");
-      this.tweeContents += this.getGlob("twee2");
-      this.tweeContents += this.getGlob("tw3");
-      this.tweeContents += this.getGlob("twee3");
+      this.tweeContents += this.processTwee();
 
     }
 
@@ -73,13 +54,30 @@ class DirectoryReader {
         console.info("  Loading " + value);
         const file = new FileReader(value);
 
-        let result = UglifyJS.minify(file.contents);
+        let babelResult = {
+          code: ""
+        };
 
-        if(result.error != undefined) {
-          console.info("Error processing JS: " + result.error);
+        try {
+
+          babelResult = babel.transformSync(file.contents, {
+            "presets": ["@babel/preset-env"],
+          });
+
+        } catch(event) {
+
+          console.info("Error Babel processing " + file + ". Skipping contents.");
+
         }
 
-        fileContents += result.code;
+        let uglyResult = UglifyJS.minify(babelResult.code);
+
+        if(uglyResult.error != undefined) {
+          console.info("Error processing JS: " + uglyResult.error);
+        }
+
+        fileContents += uglyResult.code;
+
       });
 
       return fileContents;
@@ -99,6 +97,27 @@ class DirectoryReader {
 
        const output = new CleanCSS({level: 2}).minify(fileContents);
        return output.styles;
+    }
+
+    processTwee() {
+
+      let fileType = ["tw", "tw2", "twee", "twee2", "tw3", "twee3"];
+
+      let fileContents = "";
+
+      console.info("Processing Twee files...");
+      for(let i = 0; i < fileType.length; i++) {
+
+        shell.ls('-R', this.directory + '/**/*.' + fileType[i]).forEach(function (value) {
+          const file = new FileReader(value);
+          console.info("  Loading " + value);
+          fileContents += file.contents;
+        });
+
+      }
+
+      return fileContents;
+
     }
 
 }
