@@ -17,6 +17,8 @@ class Story {
             "start": ""
         };
         this.passages = null;
+        this.tagColors = "";
+        this.zoom = "";
         this.creator = "";
         this.creatorVersion = "";
 
