@@ -15,6 +15,8 @@ class TweeParser {
         this.contents = content;
         this.style = "";
         this.script = "";
+        this._passageMetadatError = false;
+        this._storydataError = false;
 
         this.parse(this.contents);
     }
@@ -90,7 +92,7 @@ class TweeParser {
 
 	        	} catch(event) {
 
-	        		console.warn("Unable to parse passage JSON.");
+              this._passageMetadatError = true;
 
 	        	}
 
@@ -113,10 +115,18 @@ class TweeParser {
 
         		// Eat the opening and closing square brackets
         		tags = tags.substring(1, tags.length-1);
-        		let tagsArray = tags.split(" ");
+
+            // Set empty default
+            let tagsArray = [];
+
+            // Test if tags is not single, empty string
+            if( !(tags == "") ) {
+
+                tagsArray = tags.split(" ");
+            }
 
         		// There are multiple tags
-        		if(tagsArray.length > 0) {
+        		if(tagsArray.length > 1) {
 
         			// Create future array
         			let futureTagArray = [];
@@ -132,7 +142,7 @@ class TweeParser {
         			// Set the tags back to the future array
         			tags = futureTagArray;
 
-        		} else {
+        		} else if (tagsArray.length == 1) {
 
         			// There was only one tag
         			// Store it
@@ -142,27 +152,18 @@ class TweeParser {
         			tags = new Array();
         			// Push the single entry
         			tags.push(temp);
-        		}
+
+            } else {
+
+              // Make sure tags is set to empty array if no tags were found
+              tags = [];
+
+            }
 
         	} else {
         		// There were no tags, so set it to an empty array;
         		tags = [];
         	}
-
-
-        	// Test for position information
-	        let openingLessPosition = header.lastIndexOf('<');
-	        let closingGreaterPosition = header.lastIndexOf('>');
-
-	        if(openingLessPosition != -1 && closingGreaterPosition != -1) {
-
-	        	position = header.slice(openingLessPosition, closingGreaterPosition+1);
-
-	        	// Remove the position information from the header
-	        	header = header.substring(0, openingLessPosition) + header.substring(closingGreaterPosition+1);
-	        }
-
-	        //this.story.metadata.position = position[0] + ", " + position[1];
 
         	// Trim any remaining whitespace
         	header = header.trim();
@@ -178,6 +179,12 @@ class TweeParser {
         		throw new Error("Malformed passage header!");
 
         	}
+
+          if(this._passageMetadatError) {
+
+            console.warn('Error parsing metadata for "' + name + '". It was ignored.');
+
+          }
 
         	// Add the new Passage to the internal array
         	this.passages.push(new Passage(name, tags, metadata, text, pid));
@@ -222,12 +229,18 @@ class TweeParser {
         	} catch(event) {
 
         		// Silently fail with default values
-            console.warn("Error with processing StoryData JSON data. Ignoring it.");
+            this._storydataError = true;
 
         	}
 
             // Remove the StoryData passage
             this.passages = this.passages.filter(p => p.name !== "StoryData");
+
+        }
+
+        if(this._storydataError) {
+
+            console.warn("Error with processing StoryData JSON data. It was ignored.");
 
         }
 

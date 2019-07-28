@@ -58,9 +58,49 @@ describe('TweeParser', function() {
 
 			it('Should record and erase the StoryTitle and StoryData passages', function() {
 
-	    	let fr = new FileReader("test/Story/test.twee");
+	    	let fr = new FileReader("test/TweeParser/test.twee");
 	    	let tp = new TweeParser(fr.contents);
 	    	assert.equal(tp.story.passages.length,5);
+
+	    });
+
+			it('Should parse empty passage tags', function() {
+
+	    	let fr = new FileReader("test/TweeParser/emptytags.twee");
+	    	let tp = new TweeParser(fr.contents);
+	    	assert.equal(tp.story.passages[0].tags.length, 0);
+
+	    });
+
+			it('Should parse single passage tag', function() {
+
+	    	let fr = new FileReader("test/TweeParser/singletag.twee");
+	    	let tp = new TweeParser(fr.contents);
+	    	assert.equal(tp.story.passages[0].tags.length, 1);
+
+	    });
+
+			it('Should parse multiple passage tags', function() {
+
+	    	let fr = new FileReader("test/TweeParser/multipletags.twee");
+	    	let tp = new TweeParser(fr.contents);
+	    	assert.equal(tp.story.passages[0].tags.length, 2);
+
+	    });
+
+			it('Should record passage metadata error', function() {
+
+	    	let fr = new FileReader("test/TweeParser/pasagemetadataerror.twee");
+	    	let tp = new TweeParser(fr.contents);
+	    	assert.equal(tp._passageMetadatError, true);
+
+	    });
+
+			it('Should record StoryData error', function() {
+
+	    	let fr = new FileReader("test/TweeParser/storydataerror.twee");
+	    	let tp = new TweeParser(fr.contents);
+	    	assert.equal(tp._storydataError, true);
 
 	    });
 

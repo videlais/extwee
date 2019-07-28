@@ -1,0 +1,25 @@
+:: StoryTitle
+twineExample
+
+:: Start
+Some content.
+
+:: StoryData
+{
+    "ifid": "2B68ECD6-348F-4CF5-96F8-549A512A8128",
+    "format": "Harlowe",
+    "formatVersion": "2.1.0",
+    "zoom": "1"
+}
+
+:: Script1 [script]
+// Some code
+
+:: Script2 [script]
+//More code here!
+
+:: Style1 [stylesheet]
+body {font-size: 1.2em}
+
+:: Style2 [stylesheet]
+p {font-style: italic;}
