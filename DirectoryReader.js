@@ -3,8 +3,8 @@ const FileReader = require('./FileReader.js');
 const shell = require('shelljs');
 // Tell shelljs to be quiet about warnings
 shell.config.silent = true;
+const UglifyJS = require('uglify-js');
 const CleanCSS = require('clean-css');
-const UglifyJS = require("uglify-js");
 const babel = require("@babel/core");
 
 /**
@@ -18,16 +18,22 @@ class DirectoryReader {
      */
     constructor (directory) {
 
-      this.directory = fs.realpathSync(directory);
+      try {
+
+        this.directory = fs.realpathSync(directory);
+
+      } catch(event) {
+
+        throw new Error("Error: Cannot resolve to real path!");
+
+      }
+
       this.CSScontents = "";
       this.JScontents = "";
       this.tweeContents = "";
+
       // Read the directory
-      if(fs.existsSync(this.directory) ) {
-            this.update();
-      } else {
-          throw new Error("Error: Directory does not exist!");
-      }
+      this.update();
 
     }
 
@@ -66,15 +72,11 @@ class DirectoryReader {
 
         } catch(event) {
 
-          console.info("Error Babel processing " + file + ". Skipping contents.");
+          console.info("Error Babel processing " + value + ". Skipping contents.");
 
         }
 
         let uglyResult = UglifyJS.minify(babelResult.code);
-
-        if(uglyResult.error != undefined) {
-          console.info("Error processing JS: " + uglyResult.error);
-        }
 
         fileContents += uglyResult.code;
 
@@ -95,8 +97,9 @@ class DirectoryReader {
         fileContents += file.contents;
       });
 
-       const output = new CleanCSS({level: 2}).minify(fileContents);
-       return output.styles;
+      const output = new CleanCSS({level: 2}).minify(fileContents);
+      return output.styles;
+
     }
 
     processTwee() {

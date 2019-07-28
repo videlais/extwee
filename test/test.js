@@ -536,3 +536,51 @@ describe('Story', function() {
   });
 
 });
+
+describe('DirectoryReader', function() {
+
+	describe('#constructor()', function() {
+
+		it("Should throw error if not a real path", function() {
+
+			assert.throws( () => new DirectoryReader("#"), Error );
+
+		});
+
+		it("Should throw error if directory does not exist", function() {
+
+			assert.throws( () => new DirectoryReader("test/DirectoryReader/error/"), Error );
+
+		});
+
+		it("Should read all CSS files recursively", function() {
+
+			let dr = new DirectoryReader("test/DirectoryReader/");
+			assert.equal(dr.CSScontents.length > 0, true);
+
+		});
+
+		it("Should read all JS files recursively", function() {
+
+			let dr = new DirectoryReader("test/DirectoryReader1/");
+			assert.equal(dr.JScontents.length > 0, true);
+
+		});
+
+		it("Should trigger error if Babel fails JS processing", function() {
+
+			let dr = new DirectoryReader("test/DirectoryReader2/");
+			assert.equal(dr.JScontents.length == "", true);
+
+		});
+
+		it("Should read all Twee files recursively", function() {
+
+			let dr = new DirectoryReader("test/DirectoryReader3/");
+			assert.equal(dr.tweeContents.length > 0, true);
+
+		});
+
+	});
+
+});

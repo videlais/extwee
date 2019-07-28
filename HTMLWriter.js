@@ -11,7 +11,7 @@ class HTMLWriter {
      * @method HTMLWriter
      * @constructor
      */
-    constructor (file = "", story = null, storyFormat = null, cssContent = null, jsContent = null) {
+    constructor (file, story = null, storyFormat = null, cssContent = null, jsContent = null) {
         this.file = file;
 
         this.story = story;
