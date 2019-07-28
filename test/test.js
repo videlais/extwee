@@ -10,6 +10,8 @@ const Story = require('../Story.js');
 const Passage = require('../Passage.js');
 const DirectoryReader = require('../DirectoryReader.js');
 const DirectoryWatcher = require('../DirectoryWatcher.js');
+const shelljs = require('shelljs');
+const fs = require("fs");
 
 describe('FileReader', function() {
 
@@ -578,6 +580,26 @@ describe('DirectoryReader', function() {
 
 			let dr = new DirectoryReader("test/DirectoryReader3/");
 			assert.equal(dr.tweeContents.length > 0, true);
+
+		});
+
+	});
+
+});
+
+describe('DirectoryWatcher', function() {
+
+	describe('#constructor()', function() {
+
+		it("Should throw error if not a real path", function() {
+
+			assert.throws( () => new DirectoryWatcher("#", function(){}), Error );
+
+		});
+
+		it("Should throw error if callback not a function", function() {
+
+			assert.throws( () => new DirectoryWatcher("test/DirectoryWatcher/", 2), Error );
 
 		});
 

@@ -14,55 +14,47 @@ class DirectoryWatcher {
     constructor (directory, callback) {
 
       this.directory = directory;
+      this.watcher = null;
+      this.callback = callback;
 
       // Test if callback is a function or not
-      if( !(callback instanceof Function) ) {
+      if( !(this.callback instanceof Function) ) {
+
         throw new Error("Error: Expected function!");
+
       }
 
-      // Verify that directory exists before watching it
-      if(this.check() ) {
+      try {
 
-        console.info("Watching " + this.directory + " for changes.");
-        console.info("Press CTRL+C to stop.");
+        this.directory = fs.realpathSync(this.directory);
 
-        // Setup the Chokidar watcher
-        let watcher = chokidar.watch(this.directory, {
-            ignored: /.html/,
-            persistent: true,
-            ignoreInitial: true
-          });
+      } catch(event) {
+
+        throw new Error("Error: Directory does not exist!");
+
+      }
+
+      console.info("Watching " + this.directory + " for changes.");
+      console.info("Press CTRL+C to stop.");
+
+      // Setup the Chokidar watcher
+      this.watcher = chokidar.watch(this.directory, {
+          ignored: /.html/,
+          persistent: true,
+          ignoreInitial: false
+      });
 
        // Catch change events
-       watcher.on('change', (path) => {
+       this.watcher.on('change', (path) => {
             console.info("Change detected on " + path);
             callback();
        });
 
        // Catch add events
-       watcher.on('add', (path) => {
+       this.watcher.on('add', (path) => {
             console.info("Addition detected on " + path);
             callback();
        });
-
-      }
-
-    }
-
-    check() {
-
-      // Resolve symbolics
-      this.directory = fs.realpathSync(this.directory);
-
-      // Does it exist?
-      if(fs.existsSync(this.directory) ) {
-
-        return true;
-
-      } else {
-          throw new Error("Error: Directory does not exist!");
-          return false;
-      }
 
     }
 
