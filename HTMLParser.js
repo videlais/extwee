@@ -185,57 +185,18 @@ class HTMLParser {
 
     }
 
-    _escapeMetacharacters(text) {
+    _escapeMetacharacters(result) {
 
-        let result = text;
-
-        let leftCurly = text.indexOf('\{');
-
-        if(leftCurly != -1) {
-
-            result = result.substring(0, leftCurly) + '\\' + result.substring(leftCurly);
-        }
-
-        let rightCurly = text.indexOf('\}');
-
-        if(rightCurly != -1) {
-
-            result = result.substring(0, rightCurly) + '\\' + result.substring(rightCurly);
-        }
-
-        let leftSquare = text.indexOf('\[');
-
-        if(leftSquare != -1) {
-
-            result = result.substring(0, leftSquare) + '\\' + result.substring(leftSquare);
-        }
-
-        let rightSquare = text.indexOf('\]');
-
-        if(rightSquare != -1) {
-
-            result = result.substring(0, rightSquare) + '\\' + result.substring(rightSquare);
-
-        }
-
-        // To avoid ambiguity, non-escape backslashes must also be escaped
-        // (We need to check that we haven't already escaped metacharacters.)
-        if(leftCurly == -1 &&
-           rightCurly == -1 &&
-           leftSquare == -1 &&
-           rightSquare == -1) {
-
-            let pos = text.indexOf("\\");
-
-            if(pos != -1) {
-
-                // Escape any single backslashes
-                result = result.substring(0, pos-1) + '\\' + result.substring(pos);
-
-            }
-
-        }
-
+        // Replace any single backslash with two of them
+        result = result.replace(/\\/g, "\\");
+        // Double-escape escaped {
+        result = result.replace(/\\\{/g, "\\\\{");
+        // Double-escape escaped }
+        result = result.replace(/\\\}/g, "\\\\}");
+        // Double-escape escaped [
+        result = result.replace(/\\\[/g, "\\\\[");
+        // Double-escape escaped ]
+        result = result.replace(/\\\]/g, "\\\\]");
 
         return result;
 

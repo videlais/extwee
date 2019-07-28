@@ -129,6 +129,18 @@ describe('HTMLParser', function() {
 
   	});
 
+	describe('#_escapeMetacharacters()', function() {
+
+		it('Should escape metacharacters', function() {
+
+			let fr = new FileReader("test/HTMLParser/twineExample.html");
+			let tp = new HTMLParser(fr.contents);
+			assert.equal(tp._escapeMetacharacters('\\\{\\\}\\\[\\\]\\\\'), "\\\\{\\\\}\\\\[\\\\]\\\\");
+
+		});
+
+	 });
+
 });
 
 describe('TweeWriter', function() {
