@@ -31,13 +31,17 @@ class Story {
 
         let stylePassages = [];
 
-        stylePassages = this.passages.filter(function(passage){
+        if(this.passages != null && this.passages.length > 0) {
 
-            let results = passage.tags.filter(tag => tag == "style");
+          stylePassages = this.passages.filter(function(passage){
 
-            return (results.length > 0);
+              let results = passage.tags.filter(tag => tag == "stylesheet");
 
-        });
+              return (results.length > 0);
+
+          });
+
+        }
 
         return stylePassages;
 
@@ -50,13 +54,17 @@ class Story {
 
         let scriptPassages = [];
 
-        scriptPassages = this.passages.filter(function(passage) {
+        if(this.passages != null && this.passages.length > 0) {
 
-            let results = passage.tags.filter(tag => tag == "script");
+          scriptPassages = this.passages.filter(function(passage) {
 
-            return (results.length > 0);
+              let results = passage.tags.filter(tag => tag == "script");
 
-        });
+              return (results.length > 0);
+
+          });
+
+        }
 
         return scriptPassages;
 
@@ -67,13 +75,15 @@ class Story {
      */
     deleteAllByTag(searchTag) {
 
-        this.passages = this.passages.filter(function(passage) {
+      if(this.passages != null && this.passages.length > 0) {
 
-            let results = passage.tags.filter(tag => tag != searchTag);
+          this.passages = this.passages.filter(function(passage) {
 
-            return (results.length == 0);
+              return !passage.tags.includes(searchTag);
 
-        });
+          });
+
+      }
 
     }
 
@@ -98,20 +108,24 @@ class Story {
 
         }
 
-        for(let passage in this.passages) {
+        if(this.passages != null && this.passages.length > 0) {
 
-            if(this.passages[passage].name == searchName) {
+          for(let passage in this.passages) {
 
-                pid = this.passages[passage].pid;
-                break;
+              if(this.passages[passage].name == searchName) {
 
-            }
+                  pid = this.passages[passage].pid;
+                  break;
 
-            if(this.passages[passage].name == "Start") {
+              }
 
-                pid = this.passages[passage].pid;
+              if(this.passages[passage].name == "Start") {
 
-            }
+                  pid = this.passages[passage].pid;
+
+              }
+
+          }
 
         }
 

@@ -222,6 +222,7 @@ class TweeParser {
         	} catch(event) {
 
         		// Silently fail with default values
+            console.warn("Error with processing StoryData JSON data. Ignoring it.");
 
         	}
 

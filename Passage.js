@@ -7,7 +7,7 @@ class Passage {
      * @method Passage
      * @constructor
      */
-    constructor (name = "", tags = "", metadata = {}, text = "", pid = 1) {
+    constructor (name = "", tags = [], metadata = {}, text = "", pid = 1) {
         this.name = name;
         this.tags = tags;
         this.metadata = metadata;

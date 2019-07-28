@@ -56,6 +56,14 @@ describe('TweeParser', function() {
 
 	    });
 
+			it('Should record and erase the StoryTitle and StoryData passages', function() {
+
+	    	let fr = new FileReader("test/Story/test.twee");
+	    	let tp = new TweeParser(fr.contents);
+	    	assert.equal(tp.story.passages.length,5);
+
+	    });
+
   	});
 
 });
@@ -217,6 +225,108 @@ describe('HTMLWriter', function() {
 			let hp = new HTMLParser(frh.contents);
 
 			assert.equal(hp.story.name, "twineExample");
+
+    });
+
+  });
+
+});
+
+describe('Story', function() {
+
+  describe('#constructor()', function() {
+
+		it('Should have default values', function() {
+
+    	let s = new Story();
+			assert.equal(s.creatorVersion, "");
+
+    });
+
+  });
+
+	describe('#getStylePassages()', function() {
+
+		it('Should return empty array when no stylesheet-tagged passages are present', function() {
+
+    	let s = new Story();
+			assert.equal(s.getStylePassages().length, 0);
+
+    });
+
+		it('Should return correct number of stylesheet-tagged passages', function() {
+
+			let fr = new FileReader("test/Story/test.twee");
+			let tp = new TweeParser(fr.contents);
+			assert.equal(tp.story.getStylePassages().length, 2);
+
+    });
+
+  });
+
+	describe('#getScriptPassages()', function() {
+
+		it('Should return empty array when no script-tagged passages are present', function() {
+
+    	let s = new Story();
+			assert.equal(s.getScriptPassages().length, 0);
+
+    });
+
+		it('Should return correct number of script-tagged passages', function() {
+
+			let fr = new FileReader("test/Story/test.twee");
+			let tp = new TweeParser(fr.contents);
+			assert.equal(tp.story.getScriptPassages().length, 2);
+
+    });
+
+  });
+
+	describe('#deleteAllByTag()', function() {
+
+		it('Should do nothing if internal passages array is empty', function() {
+
+    	let s = new Story();
+			s.passages = [];
+			s.deleteAllByTag();
+			assert.equal(s.passages.length, 0);
+
+    });
+
+		it('Should remove passages based on tag', function() {
+
+			let fr = new FileReader("test/Story/test.twee");
+			let tp = new TweeParser(fr.contents);
+			tp.story.deleteAllByTag("script");
+			assert.equal(tp.story.getScriptPassages().length, 0);
+
+    });
+
+  });
+
+	describe('#getStartingPassage()', function() {
+
+		it('Should throw error if no passages exist', function() {
+
+			let s = new Story();
+    	assert.throws( () => s.getStartingPassage(), Error );
+
+    });
+
+		it('Should return correct PID of Start passage (skipping numbering of StoryTitle and StoryData passages)', function() {
+
+			let fr = new FileReader("test/Story/test.twee");
+			let tp = new TweeParser(fr.contents);
+			assert.equal(tp.story.getStartingPassage(), 1);
+
+    });
+
+		it('Should return correct PID of Start metadata passage (skipping numbering of StoryTitle and StoryData passages)', function() {
+
+			let fr = new FileReader("test/Story/startmeta.twee");
+			let tp = new TweeParser(fr.contents);
+			assert.equal(tp.story.getStartingPassage(), 1);
 
     });
 

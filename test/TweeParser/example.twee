@@ -9,7 +9,7 @@ twineExample
 :: Another passage {"position":"353,60","size":"100,100"}
 [[A fourth passage]]
 
-[[A third passage]] 
+[[A third passage]]
 
 :: A third passage {"position":"350,288","size":"100,100"}
 [[Start]]
@@ -20,12 +20,10 @@ twineExample
 :: A fifth passage {"position":"800,306","size":"100,100"}
 Double-click this passage to edit it.
 
-:: StoryMetadata
+:: StoryData
 {
     "ifid": "2B68ECD6-348F-4CF5-96F8-549A512A8128",
     "format": "Harlowe",
     "formatVersion": "2.1.0",
-    "zoom": "1",
-    "start": "Start"
+    "zoom": "1"
 }
-

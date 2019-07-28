@@ -98,7 +98,7 @@ class HTMLWriter {
 
         // All the style data has been written.
         // Delete all 'style'-tagged passages
-        this.story.deleteAllByTag("style");
+        this.story.deleteAllByTag("stylesheet");
 
         // Build the passages
         for(let passage of this.story.passages) {
