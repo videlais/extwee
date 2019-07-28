@@ -34,7 +34,7 @@ if(argv.hasOwnProperty("input") ) {
             let fr = new FileReader(argv.input);
             let tp = new TweeParser(fr.contents);
             let sfp = new StoryFormatParser(argv.format);
-            let hw = new HTMLWriter(argv.output, tp.story, sfp.JSON);
+            let hw = new HTMLWriter(argv.output, tp.story, sfp.storyformat);
 
         } else {
             throw new Error("Missing output file!");
@@ -64,7 +64,7 @@ if(argv.hasOwnProperty("input") ) {
 
           let tp = new TweeParser(dir.tweeContents);
           let sfp = new StoryFormatParser(argv.format);
-          let hw = new HTMLWriter(argv.output, tp.story, sfp.JSON, dir.CSScontents, dir.JScontents);
+          let hw = new HTMLWriter(argv.output, tp.story, sfp.storyformat, dir.CSScontents, dir.JScontents);
 
       } else {
           throw new Error("Missing output file!");
@@ -88,7 +88,7 @@ if(argv.hasOwnProperty("input") ) {
           dir.update();
           let tp = new TweeParser(dir.tweeContents);
           let sfp = new StoryFormatParser(argv.format);
-          let hw = new HTMLWriter(argv.output, tp.story, sfp.JSON, dir.CSScontents, dir.JScontents);
+          let hw = new HTMLWriter(argv.output, tp.story, sfp.storyformat, dir.CSScontents, dir.JScontents);
 
         });
 

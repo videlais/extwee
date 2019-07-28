@@ -1,5 +1,4 @@
 const fs = require("fs");
-const path = require('path');
 const Story = require('./Story.js');
 const StoryFormat = require('./StoryFormat.js');
 const pkg = require('./package.json');
@@ -12,16 +11,23 @@ class HTMLWriter {
      * @method HTMLWriter
      * @constructor
      */
-    constructor (file = "", story, storyFormat = null, cssContent = null, jsContent = null) {
+    constructor (file = "", story = null, storyFormat = null, cssContent = null, jsContent = null) {
         this.file = file;
 
         this.story = story;
 
         if( !(this.story instanceof Story) ) {
-          throw new Error("Error: story is not a Story object!");
+          throw new Error("Error: story must be a Story object!");
         }
 
         this.storyFormat = storyFormat;
+
+        if( !(this.storyFormat instanceof StoryFormat)) {
+
+          throw new Error("storyFormat must be a StoryFormat object!");
+
+        }
+
         this.outputContents = "";
         this.storyData = "";
         this.cssContent = cssContent;
@@ -35,16 +41,6 @@ class HTMLWriter {
     }
 
     writeFile(file) {
-
-        // Check if this.storyFormat was overwritten.
-        // If not, use the values from this.story
-        if(this.storyFormat == null) {
-
-            this.storyFormat = {};
-            this.storyFormat.name = this.story.metadata.format;
-            this.storyFormat.version = this.story.metadata.formatVersion;
-
-        }
 
         // Build <tw-storydata>
         this.storyData +=
@@ -61,9 +57,10 @@ class HTMLWriter {
         // Build the STYLE
         this.storyData += '<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
 
-        // Get any passages tagged with 'style'
+        // Get any passages tagged with 'stylesheet'
         let stylePassages = this.story.getStylePassages();
 
+        // CSS passed through from DirectoryReader
         if(this.cssContent != null) {
           this.storyData += this.cssContent;
         }
@@ -81,6 +78,7 @@ class HTMLWriter {
         // Get any passages tagged with 'script'
         let scriptPassages = this.story.getScriptPassages();
 
+        // JS passed through from DirectoryReader
         if(this.jsContent != null) {
           this.storyData += this.jsContent;
         }
@@ -170,14 +168,17 @@ class HTMLWriter {
 
         this.outputContents += this.storyFormat.source
 
-        // Write the entire contents out
-        fs.writeFileSync(file, this.outputContents, (err) => {
-          if (err) {
-            throw new Error("Error: Cannot write HTML!");
-          } else {
-            console.info("Created " + fs.realpathSync(file) );
-          }
-        });
+        try {
+
+          // Try to write
+          fs.writeFileSync(file, this.outputContents);
+
+        } catch(event) {
+
+          // Throw error
+          throw new Error("Error: Cannot write HTML file!");
+
+        }
 
     }
 

@@ -62,15 +62,22 @@ class HTMLParser {
         // Create an empty array
         this.story.passages = new Array();
 
+          // Set default pid
+        let pid = 1;
+
         // Add StoryTitle
         this.story.passages.push(
             new Passage(
                 "StoryTitle",
                 [],
                 {},
-                this.story.name
+                this.story.name,
+                pid
             )
         );
+
+       // Increase PID by one before parsing any other passages
+       pid++;
 
         // Move through the passages
         for(let passage in storyPassages) {
@@ -116,9 +123,12 @@ class HTMLParser {
                             "size": size
 
                         },
-                        text
+                        text,
+                        pid
                     )
             );
+
+            pid++;
 
         }
 
@@ -133,7 +143,7 @@ class HTMLParser {
             this.story.passages.push(
                 new Passage(
                     "UserStylesheet",
-                    ["style"],
+                    ["stylesheet"],
                     {},
                     styleElement.rawText
                 )
@@ -160,10 +170,10 @@ class HTMLParser {
         }
 
         // Now that all passages have been handled,
-        //  change the start name from number to string.
+        //  change the start name
         this.story.metadata.start = this.story.getStartingPassage();
 
-        // Add StoryMetadata
+        // Add StoryData
         this.story.passages.push(
             new Passage(
                 "StoryData",

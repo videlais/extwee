@@ -278,7 +278,10 @@ describe('HTMLWriter', function() {
 
 		it('Should throw error if file writing fails', function() {
 
-    	assert.throws( () => new HTMLWriter(), Error );
+			let fr = new FileReader("test/HTMLWriter/example.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			assert.throws( () => new HTMLWriter("", tp.story, sfp.storyformat), Error );
 
     });
 
@@ -288,16 +291,131 @@ describe('HTMLWriter', function() {
 
     });
 
+		it('storyFormat should be instanceof StoryFormat', function() {
+
+			let s = new Story();
+			assert.throws( () => new HTMLWriter("test/HTMLWriter/test.html", s, {}), Error );
+
+    });
+
 		it('Should produce HTML readable by HTMLParser and find story name of "twineExample"', function() {
 
-			let fr = new FileReader("test/TweeParser/example.twee");
+			let fr = new FileReader("test/HTMLWriter/example.twee");
 			let tp = new TweeParser(fr.contents);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test.html", tp.story, sfp.JSON);
-			let frh = new FileReader("test/HTMLWriter/test.html");
+			let hw = new HTMLWriter("test/HTMLWriter/test2.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test2.html");
 			let hp = new HTMLParser(frh.contents);
 
 			assert.equal(hp.story.name, "twineExample");
+
+    });
+
+		it('Should correctly write default values for "position" and "size"', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test3.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test3.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.passages[1].metadata.position, "100,100");
+
+    });
+
+		it('Should correctly write defined values for "position"', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example2.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test4.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test4.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.passages[1].metadata.position, "200,200");
+
+    });
+
+		it('Should correctly write single "tag"', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example3.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test5.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test5.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.passages[1].tags.includes("tag"), true);
+
+    });
+
+		it('Should correctly write defined values for "size"', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example4.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test6.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test6.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.passages[1].metadata.size, "100,100");
+
+    });
+
+		it('Should correctly write multiple tags', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example5.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test6.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test6.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.passages[1].tags.length, 2);
+
+    });
+
+		it('Should correctly write stylesheet-tagged passages', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example6.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test7.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test7.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.getStylePassages().length, 1);
+
+    });
+
+		it('Should correctly write script-tagged passages', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example7.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test8.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test8.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.getScriptPassages().length, 1);
+
+    });
+
+		it('Should correctly write extra CSS code', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example7.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test9.html", tp.story, sfp.storyformat, "body{background:grey}");
+			let frh = new FileReader("test/HTMLWriter/test9.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.getStylePassages()[0].text.includes("body{background:grey}"), true);
+
+    });
+
+		it('Should correctly write extra JS code', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example6.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test10.html", tp.story, sfp.storyformat, "", "console.log('Test!')");
+			let frh = new FileReader("test/HTMLWriter/test10.html");
+			let hp = new HTMLParser(frh.contents);
+			assert.equal(hp.story.getScriptPassages()[0].text.includes("console.log('Test!')"), true);
 
     });
 

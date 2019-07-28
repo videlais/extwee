@@ -1,0 +1,29 @@
+:: StoryTitle
+twineExample
+
+:: Start
+[[Another passage]]
+
+[[A third passage]]
+
+:: Another passage
+[[A fourth passage]]
+
+[[A third passage]]
+
+:: A third passage
+[[Start]]
+
+:: A fourth passage
+[[A fifth passage]]
+
+:: A fifth passage
+Double-click this passage to edit it.
+
+:: StoryData
+{
+    "ifid": "2B68ECD6-348F-4CF5-96F8-549A512A8128",
+    "format": "Harlowe",
+    "formatVersion": "2.1.0",
+    "zoom": "1"
+}

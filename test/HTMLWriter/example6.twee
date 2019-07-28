@@ -1,0 +1,16 @@
+:: StoryTitle
+twineExample
+
+:: Start [tag tags] {"position": "200,200", "size": "100,100"}
+Content
+
+:: Style1 [stylesheet]
+body {background-color: green;}
+
+:: StoryData
+{
+    "ifid": "2B68ECD6-348F-4CF5-96F8-549A512A8128",
+    "format": "Harlowe",
+    "formatVersion": "2.1.0",
+    "zoom": "1"
+}
