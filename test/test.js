@@ -150,11 +150,44 @@ describe('TweeWriter', function() {
 		 it('Should write Twee file', function() {
 
 			 let s = new Story();
-			 s.name = "TweeWriter";
-			 let tw = new TweeWriter(s, "test/TweeWriter/test.twee");
-			 let fr = new FileReader("test/TweeWriter/test.twee");
+			 let tw = new TweeWriter(s, "test/TweeWriter/test1.twee");
+			 let fr = new FileReader("test/TweeWriter/test1.twee");
 			 let tp = new TweeParser(fr.contents);
-			 assert.equal(tp.story.name,"TweeWriter");
+			 assert.equal(tp.story.name, "Unknown");
+
+     });
+
+		 it('Should correctly write Twee file with passage metadata', function() {
+
+			 let s = new Story();
+			 let p = new Passage("Start", [], {position: "100,100"});
+			 s.passages = [];
+			 s.passages.push(p);
+			 let tw = new TweeWriter(s, "test/TweeWriter/test2.twee");
+			 let fr = new FileReader("test/TweeWriter/test2.twee");
+			 let tp = new TweeParser(fr.contents);
+			 assert.equal(tp.story.passages[0].metadata.position,"100,100");
+
+     });
+
+		 it('Should correctly write Twee file with passage tags', function() {
+
+			 let s = new Story();
+			 s.name = "TweeWriter";
+			 let p = new Passage("Start", ["tag", "tags"], {position: "100,100"});
+			 s.passages.push(p);
+			 let tw = new TweeWriter(s, "test/TweeWriter/test3.twee");
+			 let fr = new FileReader("test/TweeWriter/test3.twee");
+			 let tp = new TweeParser(fr.contents);
+			 assert.equal(tp.story.passages[0].tags.length, 2);
+
+     });
+
+		 it('Should throw error if story.metadata is not an object', function() {
+
+			 let s = new Story();
+			 s.metadata = 2;
+			 assert.throws( () => new TweeWriter(s, "test/TweeWriter/test4.twee"), Error );
 
      });
 

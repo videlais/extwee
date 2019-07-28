@@ -66,7 +66,7 @@ class HTMLParser {
         this.story.passages.push(
             new Passage(
                 "StoryTitle",
-                "",
+                [],
                 {},
                 this.story.name
             )
@@ -80,17 +80,17 @@ class HTMLParser {
             // Get the passage text
             let text = storyPassages[passage].rawText;
 
-            // Split the string into an array
+            // Save position
             let position = attr.position;
 
-            // Split the string into an array
+            // Save size
             let size = attr.size;
 
             // Escape the name
             let name = this._escapeMetacharacters(attr.name);
 
             // Create empty tags
-            let tags = new String();
+            let tags = "";
 
             // Escape any tags
             // (Attributes can, themselves, be emtpy strings.)
@@ -99,6 +99,12 @@ class HTMLParser {
                 tags = this._escapeMetacharacters(attr.tags);
 
             }
+
+            // Split by spaces
+            tags = tags.split(" ");
+
+            // Remove any empty strings
+            tags = tags.filter(tag => tag != "");
 
             // Add a new Passage into an array
             this.story.passages.push(
@@ -127,7 +133,7 @@ class HTMLParser {
             this.story.passages.push(
                 new Passage(
                     "UserStylesheet",
-                    "style",
+                    ["style"],
                     {},
                     styleElement.rawText
                 )
@@ -145,7 +151,7 @@ class HTMLParser {
             this.story.passages.push(
                 new Passage(
                     "UserScript",
-                    "script",
+                    ["script"],
                     {},
                     scriptElement.rawText
                 )
@@ -160,8 +166,8 @@ class HTMLParser {
         // Add StoryMetadata
         this.story.passages.push(
             new Passage(
-                "StoryData", 
-                "",
+                "StoryData",
+                [],
                 {},
                 JSON.stringify(this.story.metadata, null, 4)
             )

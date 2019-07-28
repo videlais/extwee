@@ -165,6 +165,9 @@ class TweeParser {
         		tags = [];
         	}
 
+          // Filter out any empty string tags
+          tags = tags.filter(tag => tag != "");
+
         	// Trim any remaining whitespace
         	header = header.trim();
 

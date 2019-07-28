@@ -25,66 +25,88 @@ class TweeWriter {
 
     writeFile(file) {
 
-        if(this.story.passages != null) {
+      // Write StoryTitle first
+      this.outputContents += ":: StoryTitle\n" + this.story.name + "\n\n";
 
-          // Build the contents
-          for(let passage of this.story.passages) {
+      // Write the StoryData second
+      this.outputContents += ":: StoryData\n"
 
-              // Write the name
-              this.outputContents += ":: " + passage.name;
+      // Borrowed from Underscore
+      // https://github.com/jashkenas/underscore/blob/master/underscore.js#L1319-L1323
+      let isObject = function(obj) {
+        var type = typeof obj;
+        return type === 'function' || type === 'object' && !!obj;
+      };
 
-              // Test if it has any tags
-              if(passage.tags != "") {
+      // Test if story.metadata is an object or not
+      if(isObject(this.story.metadata) ) {
 
-                  // Write the tag string
-                  this.outputContents += " [" + passage.tags + "]";
+        // Write any metadata in pretty format
+        this.outputContents += " " + JSON.stringify(this.story.metadata, undefined, 2);
 
-              }
+      } else {
 
-              // Test if its metadata is not just an empty object
-              if(Object.keys(passage.metadata).length > 0) {
+        // If, for whatever reason, story.metadata is not an object, throw error.
+        throw new Error("Story Metadata MUST be an object!");
 
-                  // We are decompiling, so there will always be metadata
-                  this.outputContents += " " + JSON.stringify(passage.metadata);
+      }
 
-              }
+      // Add two newlines
+      this.outputContents += "\n\n";
 
-              // Add the text and two newlines
-              this.outputContents += "\n" + passage.text + "\n\n";
+      // Are there any passages?
+      if(this.story.passages.length > 0) {
+
+        // Build the contents
+        for(let passage in this.story.passages) {
+
+          // Write the name
+          this.outputContents += ":: " + this.story.passages[passage].name;
+
+          // Test if it has any tags
+          if(this.story.passages[passage].tags.length > 0) {
+
+            this.outputContents += " [";
+
+            for(let tag of this.story.passages[passage].tags) {
+
+              this.outputContents += " " + tag;
+
+            }
+
+            this.outputContents += "]";
 
           }
 
-        } else if(this.story.name != "") {
-          // Write StoryTitle
-          this.outputContents += ":: StoryTitle\n" + this.story.name;
+          // Write out any passage metadata
+          this.outputContents += JSON.stringify(this.story.passages[passage].metadata);
 
-          // Add two newlines
-          this.outputContents += "\n\n";
-
-          // Test if its metadata is not just an empty object
-          if(Object.keys(this.story.metadata).length > 0) {
-              // Create StoryData passage
-              this.outputContents += ":: StoryData\n"
-              // Write any metadata in pretty format
-              this.outputContents += " " + JSON.stringify(this.story.metadata, undefined, 2);
-              // Write two newlines
-              this.outputContents += "\n\n";
-
-          }
-
-          // Create empty Start passage
-          this.outputContents += ":: Start\n";
+          // Add the text and two newlines
+          this.outputContents += "\n" + this.story.passages[passage].text + "\n\n";
 
         }
 
-        // Write the entire contents out
-        fs.writeFileSync(file, this.outputContents, (err) => {
-          if (err) {
-            throw new Error("Error: Cannot write Twee file!");
-          } else {
-            console.info("Created " + fs.realpathSync(file) );
-          }
-        });
+      } else {
+
+        // Create empty Start passage
+        this.outputContents += ":: Start\n";
+
+      }
+
+      try {
+
+        // Try to write
+        fs.writeFileSync(file, this.outputContents);
+
+      } catch(event) {
+
+        // Throw error
+        throw new Error("Error: Cannot write Twee file!");
+
+      }
+
+      // Writing was successful
+      console.info("Created " + fs.realpathSync(file) );
 
     }
 }

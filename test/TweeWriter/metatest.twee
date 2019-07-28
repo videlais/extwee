@@ -1,0 +1,12 @@
+:: StoryTitle
+TweeWriter
+
+:: StoryData
+ {
+  "ifid": "",
+  "format": "",
+  "formatVersion": "",
+  "zoom": ""
+}
+
+:: Start {"position": "100,100"}

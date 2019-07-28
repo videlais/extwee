@@ -8,7 +8,7 @@ class Story {
      * @constructor
      */
     constructor () {
-        this.name = "";
+        this.name = "Unknown";
         this.metadata = {
             "ifid": "",
             "format": "",
@@ -16,7 +16,7 @@ class Story {
             "zoom": "",
             "start": ""
         };
-        this.passages = null;
+        this.passages = [];
         this.tagColors = "";
         this.zoom = "";
         this.creator = "";
@@ -31,7 +31,7 @@ class Story {
 
         let stylePassages = [];
 
-        if(this.passages != null && this.passages.length > 0) {
+        if(this.passages.length > 0) {
 
           stylePassages = this.passages.filter(function(passage){
 
@@ -54,7 +54,7 @@ class Story {
 
         let scriptPassages = [];
 
-        if(this.passages != null && this.passages.length > 0) {
+        if(this.passages.length > 0) {
 
           scriptPassages = this.passages.filter(function(passage) {
 
@@ -75,7 +75,7 @@ class Story {
      */
     deleteAllByTag(searchTag) {
 
-      if(this.passages != null && this.passages.length > 0) {
+      if(this.passages.length > 0) {
 
           this.passages = this.passages.filter(function(passage) {
 
@@ -108,7 +108,7 @@ class Story {
 
         }
 
-        if(this.passages != null && this.passages.length > 0) {
+        if(this.passages.length > 0) {
 
           for(let passage in this.passages) {
 
