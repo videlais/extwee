@@ -1,3 +1,4 @@
+const pkg = require('./package.json');
 /**
  * @class Story
  * @module Story
@@ -16,11 +17,12 @@ class Story {
             "zoom": "",
             "start": ""
         };
+
         this.passages = [];
-        this.tagColors = "";
-        this.zoom = "";
-        this.creator = "";
-        this.creatorVersion = "";
+
+        // Store the creator and version
+        this.creator = pkg.name;
+        this.creatorVersion = pkg.version;
 
     }
 

@@ -444,7 +444,7 @@ describe('Story', function() {
 		it('Should have default values', function() {
 
     	let s = new Story();
-			assert.equal(s.creatorVersion, "");
+			assert.equal(s.name, "Unknown");
 
     });
 

@@ -10,15 +10,11 @@ class TweeParser {
      * @constructor
      */
     constructor (content) {
-        this.passages = [];
         this.story = new Story();
-        this.contents = content;
-        this.style = "";
-        this.script = "";
         this._passageMetadatError = false;
         this._storydataError = false;
 
-        this.parse(this.contents);
+        this.parse(content);
     }
 
     /**
@@ -26,6 +22,8 @@ class TweeParser {
      * @returns Array or Null on error
      */
     parse(fileContents) {
+
+      let passages = [];
 
     	// Check if there are extra content in the files
     	// If so, cut it all out for the parser
@@ -190,7 +188,7 @@ class TweeParser {
           }
 
         	// Add the new Passage to the internal array
-        	this.passages.push(new Passage(name, tags, metadata, text, pid));
+        	passages.push(new Passage(name, tags, metadata, text, pid));
 
           // Increase pid
           pid++;
@@ -199,7 +197,7 @@ class TweeParser {
 
         // All formats share StoryTitle
         // Find it and set it
-        let pos = this.passages.find((el) => {
+        let pos = passages.find((el) => {
         	return el.name == "StoryTitle";
         });
 
@@ -207,7 +205,7 @@ class TweeParser {
 
         	this.story.name = pos.text;
             // Remove the StoryTitle passage
-            this.passages = this.passages.filter(p => p.name !== "StoryTitle");
+            passages = passages.filter(p => p.name !== "StoryTitle");
 
         } else {
 
@@ -218,7 +216,7 @@ class TweeParser {
         }
 
         // Look for StoryData
-        pos = this.passages.find((el) => {
+        pos = passages.find((el) => {
         		return el.name == "StoryData";
         });
 
@@ -237,7 +235,7 @@ class TweeParser {
         	}
 
             // Remove the StoryData passage
-            this.passages = this.passages.filter(p => p.name !== "StoryData");
+            passages = passages.filter(p => p.name !== "StoryData");
 
         }
 
@@ -248,7 +246,7 @@ class TweeParser {
         }
 
         // Set the passages to the internal story
-        this.story.passages = this.passages;
+        this.story.passages = passages;
 
     }
 

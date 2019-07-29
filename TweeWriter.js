@@ -11,25 +11,22 @@ class TweeWriter {
      * @method TweeWriter
      * @constructor
      */
-    constructor (story, outputFile) {
-        this.story = story;
-        this.outputFile = outputFile;
-        this.outputContents = "";
+    constructor (story, file) {
 
-        if( !(this.story instanceof Story) ) {
+        if( !(story instanceof Story) ) {
           throw new Error("Not a Story object!");
         }
 
-        this.writeFile(this.outputFile);
+        this.writeFile(file, story);
     }
 
-    writeFile(file) {
+    writeFile(file, story) {
 
       // Write StoryTitle first
-      this.outputContents += ":: StoryTitle\n" + this.story.name + "\n\n";
+      let outputContents = ":: StoryTitle\n" + story.name + "\n\n";
 
       // Write the StoryData second
-      this.outputContents += ":: StoryData\n"
+      outputContents += ":: StoryData\n"
 
       // Borrowed from Underscore
       // https://github.com/jashkenas/underscore/blob/master/underscore.js#L1319-L1323
@@ -39,10 +36,10 @@ class TweeWriter {
       };
 
       // Test if story.metadata is an object or not
-      if(isObject(this.story.metadata) ) {
+      if(isObject(story.metadata) ) {
 
         // Write any metadata in pretty format
-        this.outputContents += " " + JSON.stringify(this.story.metadata, undefined, 2);
+        outputContents += " " + JSON.stringify(story.metadata, undefined, 2);
 
       } else {
 
@@ -52,51 +49,51 @@ class TweeWriter {
       }
 
       // Add two newlines
-      this.outputContents += "\n\n";
+      outputContents += "\n\n";
 
       // Are there any passages?
-      if(this.story.passages.length > 0) {
+      if(story.passages.length > 0) {
 
         // Build the contents
-        for(let passage in this.story.passages) {
+        for(let passage in story.passages) {
 
           // Write the name
-          this.outputContents += ":: " + this.story.passages[passage].name;
+          outputContents += ":: " + story.passages[passage].name;
 
           // Test if it has any tags
-          if(this.story.passages[passage].tags.length > 0) {
+          if(story.passages[passage].tags.length > 0) {
 
-            this.outputContents += " [";
+            outputContents += " [";
 
-            for(let tag of this.story.passages[passage].tags) {
+            for(let tag of story.passages[passage].tags) {
 
-              this.outputContents += " " + tag;
+              outputContents += " " + tag;
 
             }
 
-            this.outputContents += "]";
+            outputContents += "]";
 
           }
 
           // Write out any passage metadata
-          this.outputContents += JSON.stringify(this.story.passages[passage].metadata);
+          outputContents += JSON.stringify(story.passages[passage].metadata);
 
           // Add the text and two newlines
-          this.outputContents += "\n" + this.story.passages[passage].text + "\n\n";
+          outputContents += "\n" + story.passages[passage].text + "\n\n";
 
         }
 
       } else {
 
         // Create empty Start passage
-        this.outputContents += ":: Start\n";
+        outputContents += ":: Start\n";
 
       }
 
       try {
 
         // Try to write
-        fs.writeFileSync(file, this.outputContents);
+        fs.writeFileSync(file, outputContents);
 
       } catch(event) {
 

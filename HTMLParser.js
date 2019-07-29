@@ -13,7 +13,6 @@ class HTMLParser {
      */
     constructor (content) {
 
-        this.dom = null;
         this.story = null;
 
         this.parse(content);
@@ -24,7 +23,7 @@ class HTMLParser {
         // Send to node-html-parser
         // Enable getting the content of 'script', 'style', and 'pre' elements
         // Get back a DOM
-        this.dom = new htmlparser(
+        let dom = new htmlparser(
                         content,
                         {
                                   lowerCaseTagName: false,
@@ -34,7 +33,7 @@ class HTMLParser {
                         });
 
         // Pull out the tw-storydata element
-        let storyData = this.dom.querySelector('tw-storydata');
+        let storyData = dom.querySelector('tw-storydata');
 
         if(storyData != null) {
 
@@ -57,7 +56,7 @@ class HTMLParser {
         }
 
         // Pull out the tw-passagedata elements
-        let storyPassages = this.dom.querySelectorAll("tw-passagedata");
+        let storyPassages = dom.querySelectorAll("tw-passagedata");
 
         // Create an empty array
         this.story.passages = new Array();
@@ -133,7 +132,7 @@ class HTMLParser {
         }
 
         // Look for the style element
-        let styleElement = this.dom.querySelector('#twine-user-stylesheet');
+        let styleElement = dom.querySelector('#twine-user-stylesheet');
 
         // Check if there is any content.
         // If not, we won't add empty passages
@@ -151,7 +150,7 @@ class HTMLParser {
         }
 
         // Look for the script element
-        let scriptElement = this.dom.querySelector('#twine-user-script');
+        let scriptElement = dom.querySelector('#twine-user-script');
 
         // Check if there is any content.
         // If not, we won't add empty passages
