@@ -1,4 +1,4 @@
-# Extwee 1.5.1
+# Extwee 1.5.0
 
 Extwee is a Twee compiler supporting Twine 2-style formats using the [Twee 3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
 
@@ -77,7 +77,7 @@ Extwee can be used via NPM.
 
 `npm i extwee`
 
-As a NPM package Extwee's objects can also be used independent of the binary builds as part of other projects. Extwee exposes the following objects and their properties and functions.
+As a NPM package, Extwee's objects can also be used independent of the binary builds as part of other projects. It exposes the following objects and their properties and functions.
 
 ### *FileReader*
 
