@@ -1,4 +1,4 @@
-# Extwee 1.5.2
+# Extwee 1.5.3
 
 Extwee is a Twee compiler supporting Twine 2-style formats using the [Twee 3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
 

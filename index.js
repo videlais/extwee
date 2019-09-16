@@ -22,5 +22,5 @@ module.exports = {
   HTMLParser: HTMLParser,
   HTMLWriter: HTMLWriter,
   DirectoryReader: DirectoryReader,
-  DirectoryWacher: DirectoryWacher
+  DirectoryWatcher: DirectoryWatcher
 };
