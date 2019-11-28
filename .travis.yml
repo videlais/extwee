@@ -4,8 +4,10 @@ node_js:
   - "node"
 
 install:
-  - npm install -g codecov
+  - npm install
+  - npm install codecov
 
 script:
+  - npm run test
   - npm run report-coverage
   - codecov
