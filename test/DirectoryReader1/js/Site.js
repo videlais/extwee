@@ -1,5 +1,1 @@
-class Site {
-  constructor() {
-    this.name = "Dan";
-  }
-}
+console.log("Test")

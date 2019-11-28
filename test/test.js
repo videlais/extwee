@@ -555,31 +555,59 @@ describe('DirectoryReader', function() {
 
 		});
 
-		it("Should read all CSS files recursively", function() {
+		it("Should read all CSS files recursively", function(done) {
 
-			let dr = new DirectoryReader("test/DirectoryReader/");
-			assert.equal(dr.CSScontents.length > 0, true);
+			const resolvingPromise = new Promise((resolve) => {
+				let dr = new DirectoryReader("test/DirectoryReader/");
+				resolve(dr);
+			});
 
-		});
-
-		it("Should read all JS files recursively", function() {
-
-			let dr = new DirectoryReader("test/DirectoryReader1/");
-			assert.equal(dr.JScontents.length > 0, true);
-
-		});
-
-		it("Should trigger error if Babel fails JS processing", function() {
-
-			let dr = new DirectoryReader("test/DirectoryReader2/");
-			assert.equal(dr.JScontents.length == "", true);
+			resolvingPromise.then( (result) => {
+				assert.equal(result.CSScontents.length > 0, true);
+				done();
+			});
 
 		});
 
-		it("Should read all Twee files recursively", function() {
+		it("Should read all JS files recursively", function(done) {
 
-			let dr = new DirectoryReader("test/DirectoryReader3/");
-			assert.equal(dr.tweeContents.length > 0, true);
+			const resolvingPromise = new Promise((resolve) => {
+				let dr = new DirectoryReader("test/DirectoryReader1/");
+				resolve(dr);
+			});
+
+			resolvingPromise.then( (result) => {
+				assert.equal(result.JScontents.length > 0, true);
+				done();
+			});
+
+		});
+
+		it("Should trigger error if Babel fails JS processing", function(done) {
+
+			const resolvingPromise = new Promise((resolve) => {
+				let dr = new DirectoryReader("test/DirectoryReader2/");
+				resolve(dr);
+			});
+
+			resolvingPromise.then( (result) => {
+				assert.equal(result.JScontents.length == "", true);
+				done();
+			});
+
+		});
+
+		it("Should read all Twee files recursively", function(done) {
+
+			const resolvingPromise = new Promise((resolve) => {
+				let dr = new DirectoryReader("test/DirectoryReader3/");
+				resolve(dr);
+			});
+
+			resolvingPromise.then( (result) => {
+				assert.equal(result.tweeContents.length > 0, true);
+				done();
+			});
 
 		});
 
