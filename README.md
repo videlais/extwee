@@ -1,6 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/videlais/extwee/badge.svg?branch=master)](https://coveralls.io/github/videlais/extwee?branch=master)
-
-[![Build Status](https://travis-ci.org/videlais/extwee.svg?branch=master)](https://travis-ci.org/videlais/extwee)
+[![Build Status](https://travis-ci.org/videlais/extwee.svg?branch=master)](https://travis-ci.org/videlais/extwee) [![Coverage Status](https://coveralls.io/repos/github/videlais/extwee/badge.svg?branch=master)](https://coveralls.io/github/videlais/extwee?branch=master)
 
 # Extwee 1.5.3
 
