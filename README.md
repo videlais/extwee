@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/videlais/extwee.svg?branch=master)](https://travis-ci.org/videlais/extwee) [![codecov](https://codecov.io/gh/videlais/extwee/branch/master/graph/badge.svg)](https://codecov.io/gh/videlais/extwee)
 
+[![NPM Badge](https://nodei.co/npm/extwee.png?downloads=true)](https://www.npmjs.com/package/extwee)
+
 # Extwee 1.5.3
 
 Extwee is a Twee compiler supporting Twine 2-style formats using the [Twee 3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
