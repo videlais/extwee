@@ -19,7 +19,7 @@
   "dependencies": {
     "chokidar": "^3.3.0",
     "clean-css": "^4.2.3",
-    "node-html-parser": "^1.2.1",
+    "node-html-parser": "^1.2.3",
     "shelljs": "^0.8.3",
     "yargs": "^15.0.2"
   },
