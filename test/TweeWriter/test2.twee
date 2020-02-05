@@ -1,0 +1,15 @@
+:: StoryTitle
+Unknown
+
+:: StoryData
+ {
+  "ifid": "",
+  "format": "",
+  "formatVersion": "",
+  "zoom": "",
+  "start": ""
+}
+
+:: Start{"position":"100,100"}
+
+

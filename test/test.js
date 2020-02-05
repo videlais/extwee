@@ -607,10 +607,6 @@ describe('DirectoryReader', function() {
 
 describe('DirectoryWatcher', function() {
 
-	afterEach(function() {
-		shell.rm("test/DirectoryWatcher/*.*");
-	});
-
 	describe('#constructor()', function() {
 
 		it("Should throw error if not a real path", function() {
