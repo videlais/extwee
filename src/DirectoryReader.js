@@ -44,8 +44,6 @@ class DirectoryReader {
       // Look for Twee files
       this.tweeContents = this.processTwee();
 
-      console.log("Some words", this.CSScontents, this.JScontents, this.tweeContents);
-
     }
 
     processJS() {

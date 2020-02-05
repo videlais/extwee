@@ -74,12 +74,16 @@ class DirectoryWatcher {
 
       } else {
 
-        this.watcher.close().then(() => {
-          console.log('Stopped watching.');
-        });
+        // If this is a function, call it
+        if(typeof this.watcher.close == "function") {
+
+          this.watcher.close().then(() => {
+            console.log('Stopped watching.');
+          });
+
+        }
 
       }
-
       
     }
 

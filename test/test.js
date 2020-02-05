@@ -607,6 +607,10 @@ describe('DirectoryReader', function() {
 
 describe('DirectoryWatcher', function() {
 
+	afterEach(function() {
+		shell.rm("test/DirectoryWatcher/*.*");
+	});
+
 	describe('#constructor()', function() {
 
 		it("Should throw error if not a real path", function() {
@@ -623,74 +627,90 @@ describe('DirectoryWatcher', function() {
 
 	});
 
-	describe('#watch()', function() {
+	describe('#watch() - ready', function() {
+
+		let dw = new DirectoryWatcher("test/DirectoryWatcher/", (event) => {
+
+			if(event == 'ready') {
+				assert(dw.directory.length > 0);
+			}
+
+		});
+
+		before(function() {
+
+			shell.touch("test/DirectoryWatcher/test.txt");
+
+		});
 
 		it("Should report ready", function() {
 
-			let dw = new DirectoryWatcher("test/DirectoryWatcher1/", (event) => {
-
-				if(event == 'ready') {
-					dw.stopWatching();
-					assert(dw.directory.length > 0);
-				}
-
-			});
-
 			dw.watch();
+
+		});
+
+		after(function() {
+			dw.stopWatching();
+		});
+
+	});
+
+	describe('#watch() - add', function() {
+
+		let dw = new DirectoryWatcher("test/DirectoryWatcher/", (event) => {
+
+			if(event == 'add') {
+				shell.rm("test/DirectoryWatcher/test.txt");
+				assert(dw.directory.length > 0);
+			}
+
+			shell.touch("test/DirectoryWatcher/test.txt");
 
 		});
 
 		it("Should detect add", function() {
 
-			let dw = new DirectoryWatcher("test/DirectoryWatcher/", (event) => {
+			dw.watch();
 
-				if(event == 'add') {
-					shell.rm("test/DirectoryWatcher/test.txt");
-					dw.stopWatching();
-					assert(dw.directory.length > 0);
-				}
+		});
 
-				shell.touch("test/DirectoryWatcher/test.txt");
+		after(function() {
+			dw.stopWatching();
+		});
 
-			});
+	});
+
+	describe('#watch() - change', function() {
+
+		let dw = new DirectoryWatcher("test/DirectoryWatcher/", (event) => {
+
+			if(event == 'change') {
+				shell.rm("test/DirectoryWatcher/test1.txt");
+				assert(dw.directory.length > 0);
+				
+			}
+
+			shell.cat('Example').toEnd('test/DirectoryWatcher/test1.txt');
+
+		});
+
+		before(function() {
+			shell.touch("test/DirectoryWatcher/test1.txt");
+		});
+
+		it("Should detect change", function() {
 
 			dw.watch();
 
 		});
 
-		it("Should detect change", function() {
-
-			let dw1 = new DirectoryWatcher("test/DirectoryWatcher/", (event) => {
-
-				if(event == 'change') {
-					dw1.stopWatching();
-					shell.rm("test/DirectoryWatcher/test.txt");
-					shell.touch("test/DirectoryWatcher/test.txt");
-					assert(dw1.directory.length > 0);
-				}
-
-				shell.cat('Example').toEnd('test/DirectoryWatcher/test.txt');
-
-			});
-
-			dw1.watch();
-
+		after(function(){
+			dw.stopWatching();
 		});
 
 	});
 
 	describe('#stopWatching()', function() {
-
-		it("Should stop watching", function() {
-
-			let dw = new DirectoryWatcher("test/DirectoryWatcher/", () => {
-				dw.stopWatching();
-				assert(dw.directory.length > 0);
-			});
-
-			dw.watch();
-	
-		});
 
 		it("Should throw error if watcher null", function() {
 
