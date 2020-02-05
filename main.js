@@ -16,14 +16,14 @@ const argv = require('yargs')
     .alias('w', 'watch')
     .argv;
 
-const FileReader = require('./FileReader.js');
-const TweeParser = require('./TweeParser.js');
-const TweeWriter = require('./TweeWriter.js');
-const StoryFormatParser = require('./StoryFormatParser.js');
-const HTMLParser = require('./HTMLParser.js');
-const HTMLWriter = require('./HTMLWriter.js');
-const DirectoryReader = require('./DirectoryReader.js');
-const DirectoryWatcher = require('./DirectoryWatcher.js');
+const FileReader = require('./src/FileReader.js');
+const TweeParser = require('./src/TweeParser.js');
+const TweeWriter = require('./src/TweeWriter.js');
+const StoryFormatParser = require('./src/StoryFormatParser.js');
+const HTMLParser = require('./src/HTMLParser.js');
+const HTMLWriter = require('./src/HTMLWriter.js');
+const DirectoryReader = require('./src/DirectoryReader.js');
+const DirectoryWatcher = require('./src/DirectoryWatcher.js');
 
 if(argv.hasOwnProperty("input") ) {
 
@@ -62,9 +62,10 @@ if(argv.hasOwnProperty("input") ) {
 
       if(argv.hasOwnProperty("output") ) {
 
-          let tp = new TweeParser(dir.tweeContents);
-          let sfp = new StoryFormatParser(argv.format);
-          let hw = new HTMLWriter(argv.output, tp.story, sfp.storyformat, dir.CSScontents, dir.JScontents);
+        dir.watch();
+        let tp = new TweeParser(dir.tweeContents);
+        let sfp = new StoryFormatParser(argv.format);
+        let hw = new HTMLWriter(argv.output, tp.story, sfp.storyformat, dir.CSScontents, dir.JScontents);
 
       } else {
           throw new Error("Missing output file!");
@@ -91,6 +92,8 @@ if(argv.hasOwnProperty("input") ) {
           let hw = new HTMLWriter(argv.output, tp.story, sfp.storyformat, dir.CSScontents, dir.JScontents);
 
         });
+
+        dw.watch();
 
       } else {
           throw new Error("Missing output file!");

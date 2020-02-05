@@ -1,17 +1,16 @@
 const assert = require('assert');
-const FileReader = require('../FileReader.js');
-const TweeParser = require('../TweeParser.js');
-const TweeWriter = require('../TweeWriter.js');
-const StoryFormatParser = require('../StoryFormatParser.js');
-const StoryFormat = require('../StoryFormat.js');
-const HTMLParser = require('../HTMLParser.js');
-const HTMLWriter = require('../HTMLWriter.js');
-const Story = require('../Story.js');
-const Passage = require('../Passage.js');
-const DirectoryReader = require('../DirectoryReader.js');
-const DirectoryWatcher = require('../DirectoryWatcher.js');
-const shelljs = require('shelljs');
-const fs = require("fs");
+const shell = require('shelljs');
+const FileReader = require('../src/FileReader.js');
+const TweeParser = require('../src/TweeParser.js');
+const TweeWriter = require('../src/TweeWriter.js');
+const StoryFormatParser = require('../src/StoryFormatParser.js');
+const StoryFormat = require('../src/StoryFormat.js');
+const HTMLParser = require('../src/HTMLParser.js');
+const HTMLWriter = require('../src/HTMLWriter.js');
+const Story = require('../src/Story.js');
+const Passage = require('../src/Passage.js');
+const DirectoryReader = require('../src/DirectoryReader.js');
+const DirectoryWatcher = require('../src/DirectoryWatcher.js');
 
 describe('FileReader', function() {
 
@@ -506,18 +505,18 @@ describe('Story', function() {
 			tp.story.deleteAllByTag("script");
 			assert.equal(tp.story.getScriptPassages().length, 0);
 
-    });
+    	});
 
-  });
+  	});
 
 	describe('#getStartingPassage()', function() {
 
 		it('Should throw error if no passages exist', function() {
 
 			let s = new Story();
-    	assert.throws( () => s.getStartingPassage(), Error );
+    		assert.throws( () => s.getStartingPassage(), Error );
 
-    });
+    	});
 
 		it('Should return correct PID of Start passage (skipping numbering of StoryTitle and StoryData passages)', function() {
 
@@ -525,7 +524,7 @@ describe('Story', function() {
 			let tp = new TweeParser(fr.contents);
 			assert.equal(tp.story.getStartingPassage(), 1);
 
-    });
+    	});
 
 		it('Should return correct PID of Start metadata passage (skipping numbering of StoryTitle and StoryData passages)', function() {
 
@@ -533,9 +532,9 @@ describe('Story', function() {
 			let tp = new TweeParser(fr.contents);
 			assert.equal(tp.story.getStartingPassage(), 1);
 
-    });
+    	});
 
-  });
+  	});
 
 });
 
@@ -555,60 +554,51 @@ describe('DirectoryReader', function() {
 
 		});
 
-		it("Should read all CSS files recursively", function(done) {
+	});
 
-			const resolvingPromise = new Promise((resolve) => {
-				let dr = new DirectoryReader("test/DirectoryReader/");
-				resolve(dr);
-			});
+	describe('#processJS()', function() {
 
-			resolvingPromise.then( (result) => {
-				assert.equal(result.CSScontents.length > 0, true);
-				done();
-			});
+		it("Should process JS", async () => {
 
+			let dr = new DirectoryReader("test/DirectoryReader1/");
+			let content = await dr.processJS();
+			assert(content.length > 0);
 		});
 
-		it("Should read all JS files recursively", function(done) {
+	});
 
-			const resolvingPromise = new Promise((resolve) => {
-				let dr = new DirectoryReader("test/DirectoryReader1/");
-				resolve(dr);
-			});
+	describe('#processCSS()', function() {
 
-			resolvingPromise.then( (result) => {
-				assert.equal(result.JScontents.length > 0, true);
-				done();
-			});
+		it("Should process CSS", async () => {
 
+			let dr = new DirectoryReader("test/DirectoryReader/");
+			let content = await dr.processCSS();
+			assert(content.length > 0);
 		});
 
-		it("Should trigger error if Babel fails JS processing", function(done) {
+	});
 
-			const resolvingPromise = new Promise((resolve) => {
-				let dr = new DirectoryReader("test/DirectoryReader2/");
-				resolve(dr);
-			});
+	describe('#processTwee()', function() {
 
-			resolvingPromise.then( (result) => {
-				assert.equal(result.JScontents.length == "", true);
-				done();
-			});
+		it("Should process Twee", async () => {
 
+			let dr = new DirectoryReader("test/DirectoryReader3/");
+			let content = await dr.processTwee();
+			assert(content.length > 0);
 		});
 
-		it("Should read all Twee files recursively", function(done) {
+	});
 
-			const resolvingPromise = new Promise((resolve) => {
-				let dr = new DirectoryReader("test/DirectoryReader3/");
-				resolve(dr);
-			});
+	describe('#watch()', function() {
 
-			resolvingPromise.then( (result) => {
-				assert.equal(result.tweeContents.length > 0, true);
-				done();
-			});
+		it("Should process Twee + CSS + JS", function() {
 
+			let dr = new DirectoryReader("test/DirectoryReader2/");
+			dr.watch();
+			assert(
+				dr.CSScontents.length > 0 &&
+				dr.JScontents.length > 0 &&
+				dr.tweeContents.length > 0);
 		});
 
 	});
@@ -629,6 +619,86 @@ describe('DirectoryWatcher', function() {
 
 			assert.throws( () => new DirectoryWatcher("test/DirectoryWatcher/", 2), Error );
 
+		});
+
+	});
+
+	describe('#watch()', function() {
+
+		it("Should report ready", function() {
+
+			let dw = new DirectoryWatcher("test/DirectoryWatcher1/", (event) => {
+
+				if(event == 'ready') {
+					dw.stopWatching();
+					assert(dw.directory.length > 0);
+				}
+
+			});
+
+			dw.watch();
+
+		});
+
+		it("Should detect add", function() {
+
+			let dw = new DirectoryWatcher("test/DirectoryWatcher/", (event) => {
+
+				if(event == 'add') {
+					shell.rm("test/DirectoryWatcher/test.txt");
+					dw.stopWatching();
+					assert(dw.directory.length > 0);
+				}
+
+				shell.touch("test/DirectoryWatcher/test.txt");
+
+			});
+
+			dw.watch();
+
+		});
+
+		it("Should detect change", function() {
+
+			let dw1 = new DirectoryWatcher("test/DirectoryWatcher/", (event) => {
+
+				if(event == 'change') {
+					dw1.stopWatching();
+					shell.rm("test/DirectoryWatcher/test.txt");
+					shell.touch("test/DirectoryWatcher/test.txt");
+					assert(dw1.directory.length > 0);
+				}
+
+				shell.cat('Example').toEnd('test/DirectoryWatcher/test.txt');
+
+			});
+
+			dw1.watch();
+
+		});
+
+	});
+
+	describe('#stopWatching()', function() {
+
+		it("Should stop watching", function() {
+
+			let dw = new DirectoryWatcher("test/DirectoryWatcher/", () => {
+				dw.stopWatching();
+				assert(dw.directory.length > 0);
+			});
+
+			dw.watch();
+	
+		});
+
+		it("Should throw error if watcher null", function() {
+
+			let dw = new DirectoryWatcher("test/DirectoryWatcher/", () => {
+			});
+
+			assert.throws( () => {dw.stopWatching()}, Error);
+	
 		});
 
 	});

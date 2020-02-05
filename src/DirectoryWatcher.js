@@ -1,5 +1,4 @@
 const fs = require("fs");
-const FileReader = require('./FileReader.js');
 const chokidar = require('chokidar');
 
 /**
@@ -34,6 +33,10 @@ class DirectoryWatcher {
 
       }
 
+    }
+
+    watch() {
+
       console.info("Watching " + this.directory + " for changes.");
       console.info("Press CTRL+C to stop.");
 
@@ -44,18 +47,40 @@ class DirectoryWatcher {
           ignoreInitial: false
       });
 
-       // Catch change events
-       this.watcher.on('change', (path) => {
-            console.info("Change detected on " + path);
-            callback();
-       });
+      // Catch initial scan
+      this.watcher.on('ready', () => {
+        this.callback('ready');
+      });
 
-       // Catch add events
-       this.watcher.on('add', (path) => {
-            console.info("Addition detected on " + path);
-            callback();
-       });
+      // Catch change events
+      this.watcher.on('change', (path) => {
+        console.info("Change detected on " + path);
+        this.callback('change');
+      });
 
+      // Catch add events
+      this.watcher.on('add', (path) => {
+        console.info("Addition detected on " + path);
+        this.callback('add');
+      });
+
+    }
+
+    stopWatching() {
+
+      if(this.watcher == null) {
+
+        throw new Error("Invalid watcher object!");
+
+      } else {
+
+        this.watcher.close().then(() => {
+          console.log('Stopped watching.');
+        });
+
+      }
+
+      
     }
 
 }

@@ -3,9 +3,7 @@ const FileReader = require('./FileReader.js');
 const shell = require('shelljs');
 // Tell shelljs to be quiet about warnings
 shell.config.silent = true;
-const UglifyJS = require('uglify-js');
 const CleanCSS = require('clean-css');
-const babel = require("@babel/core");
 
 /**
  * @class DirectoryReader
@@ -32,22 +30,21 @@ class DirectoryReader {
       this.JScontents = "";
       this.tweeContents = "";
 
-      // Read the directory
-      this.update();
-
     }
 
-    update() {
+    watch() {
 
-      // Reset
+      // Reset content
       this.CSScontents = this.JScontents = this.tweeContents = "";
 
       // Look for CSS files
-      this.CSScontents += this.processCSS();
+      this.CSScontents = this.processCSS();
       // Look for JS files
-      this.JScontents += this.processJS();
+      this.JScontents = this.processJS();
       // Look for Twee files
-      this.tweeContents += this.processTwee();
+      this.tweeContents = this.processTwee();
+
+      console.log("Some words", this.CSScontents, this.JScontents, this.tweeContents);
 
     }
 
@@ -56,29 +53,12 @@ class DirectoryReader {
       let fileContents = "";
 
       console.info("Processing JS files...");
+      
       shell.ls('-R', this.directory + '/**/*.js').forEach(function (value) {
+        
         console.info("  Loading " + value);
         const file = new FileReader(value);
-
-        let babelResult = {
-          code: ""
-        };
-
-        try {
-
-          babelResult = babel.transformSync(file.contents, {
-            "presets": ["@babel/preset-env"],
-          });
-
-        } catch(event) {
-
-          console.info("Error Babel processing " + value + ". Skipping contents.");
-
-        }
-
-        let uglyResult = UglifyJS.minify(babelResult.code);
-
-        fileContents += uglyResult.code;
+        fileContents += file.contents;
 
       });
 
@@ -97,8 +77,9 @@ class DirectoryReader {
         fileContents += file.contents;
       });
 
-      const output = new CleanCSS({level: 2}).minify(fileContents);
-      return output.styles;
+      const output = new CleanCSS({level: 2});
+      let {styles} = output.minify(fileContents);
+      return styles;
 
     }
 

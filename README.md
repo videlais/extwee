@@ -2,7 +2,7 @@
 
 [![NPM Badge](https://nodei.co/npm/extwee.png?downloads=true)](https://www.npmjs.com/package/extwee)
 
-# Extwee 1.5.3
+# Extwee 1.6.0
 
 Extwee is a Twee compiler supporting Twine 2-style formats using the [Twee 3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
 
@@ -57,8 +57,6 @@ For simple, single-file decompiling of HTML into Twee code, the arguments `d` an
 
 For more complex, multiple file usage, the argument `r` can be used to read a directory. This is used with the `o` and `f` options to specify what output file and which story format to use.
 
-When operating in directory reading mode, all CSS files will be processed using [CleanCSS](https://github.com/jakubpawlowicz/clean-css) using the Level-2 minification. All JS files are first processed using [Babel](https://www.npmjs.com/package/@babel/core) to transpile any ES6 code into ES5. Additional post-processing is done using [UglifyJS](https://www.npmjs.com/package/uglify-js).
-
 `extwee-[OS] -r path/ -o output.html -f path/format.js`
 
 * Directory Watching
@@ -77,7 +75,7 @@ Extwee will attempt to escape the metacharacters of `{`, `}`, `[`, and `]` when 
 
 ## API Usage
 
-Extwee can be used via NPM.
+Extwee can be installed via NPM.
 
 `npm i extwee`
 

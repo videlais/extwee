@@ -1,1 +1,1 @@
-le t = 12;
+console.log("Example!");
