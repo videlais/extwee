@@ -2,7 +2,7 @@
 
 [![NPM Badge](https://nodei.co/npm/extwee.png?downloads=true)](https://www.npmjs.com/package/extwee)
 
-# Extwee 1.6.0
+# Extwee 1.6.2
 
 Extwee is a Twee compiler supporting Twine 2-style formats using the [Twee 3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
 
