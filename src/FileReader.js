@@ -1,36 +1,35 @@
-const fs = require("fs");
-const path = require('path');
+const fs = require('fs');
 /**
  * @class FileReader
  * @module FileReader
  */
 class FileReader {
-	/**
-     * @method FileReader
-     * @constructor
-     */
-    constructor (file) {
+  /**
+   * @function FileReader
+   * @class
+   * @param {string} file - File to read
+   */
+  constructor (file) {
+    this.contents = '';
+    this.readFile(file);
+  }
 
-        this.contents = "";
-        this.readFile(file);
+  /**
+   * Read a text file
+   *
+   * @function readFile
+   * @param {string} file - File to read
+   * @returns {void}
+   */
+  readFile (file) {
+    // Attempt to find the file
+    if (fs.existsSync(file)) {
+      // The file exists.
+      this.contents = fs.readFileSync(file, 'utf8');
+    } else {
+      throw new Error('Error: File not found!');
     }
-
-    readFile(file) {
-
-        // Attempt to find the file
-        if(fs.existsSync(file) ) {
-
-            // The file exists.
-            this.contents = fs.readFileSync(file, 'utf8');
-
-        } else {
-
-            throw new Error("Error: File not found!");
-
-        }
-
-    }
-
+  }
 }
 
 module.exports = FileReader;

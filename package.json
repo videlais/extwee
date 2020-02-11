@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node main.js",
     "test": "nyc mocha test/test.js",
+    "lint": "eslint src/**/*.js --fix",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
   },
   "keywords": [
@@ -24,6 +25,13 @@
     "yargs": "^15.0.2"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsdoc": "^21.0.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "mocha": "^7.0.1",
     "nyc": "^15.0.0"
   },

@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require('fs');
 const chokidar = require('chokidar');
 
 /**
@@ -6,87 +6,82 @@ const chokidar = require('chokidar');
  * @module DirectoryWatcher
  */
 class DirectoryWatcher {
-	/**
-     * @method DirectoryWatcher
-     * @constructor
-     */
-    constructor (directory, callback) {
+  /**
+   * @function DirectoryWatcher
+   * @class
+   * @param {string} directory - Directory to watch
+   * @param {Function} callback - Function to call when a file event happens
+   */
+  constructor (directory, callback) {
+    this.directory = directory;
+    this.watcher = null;
+    this.callback = callback;
 
-      this.directory = directory;
-      this.watcher = null;
-      this.callback = callback;
-
-      // Test if callback is a function or not
-      if( !(this.callback instanceof Function) ) {
-
-        throw new Error("Error: Expected function!");
-
-      }
-
-      try {
-
-        this.directory = fs.realpathSync(this.directory);
-
-      } catch(event) {
-
-        throw new Error("Error: Directory does not exist!");
-
-      }
-
+    // Test if callback is a function or not
+    if (!(this.callback instanceof Function)) {
+      throw new Error('Error: Expected function!');
     }
 
-    watch() {
-
-      console.info("Watching " + this.directory + " for changes.");
-      console.info("Press CTRL+C to stop.");
-
-      // Setup the Chokidar watcher
-      this.watcher = chokidar.watch(this.directory, {
-          ignored: /.html/,
-          persistent: true,
-          ignoreInitial: false
-      });
-
-      // Catch initial scan
-      this.watcher.on('ready', () => {
-        this.callback('ready');
-      });
-
-      // Catch change events
-      this.watcher.on('change', (path) => {
-        console.info("Change detected on " + path);
-        this.callback('change');
-      });
-
-      // Catch add events
-      this.watcher.on('add', (path) => {
-        console.info("Addition detected on " + path);
-        this.callback('add');
-      });
-
+    try {
+      this.directory = fs.realpathSync(this.directory);
+    } catch (event) {
+      throw new Error('Error: Directory does not exist!');
     }
+  }
 
-    stopWatching() {
+  /**
+   * Begin to watch files
+   *
+   * @function watch
+   * @returns {void}
+   */
+  watch () {
+    console.info('Watching ' + this.directory + ' for changes.');
+    console.info('Press CTRL+C to stop.');
 
-      if(this.watcher == null) {
+    // Setup the Chokidar watcher
+    this.watcher = chokidar.watch(this.directory, {
+      ignored: /.html/,
+      persistent: true,
+      ignoreInitial: false
+    });
 
-        throw new Error("Invalid watcher object!");
+    // Catch initial scan
+    this.watcher.on('ready', () => {
+      this.callback('ready');
+    });
 
-      } else {
+    // Catch change events
+    this.watcher.on('change', (path) => {
+      console.info('Change detected on ' + path);
+      this.callback('change');
+    });
 
-        // If this is a function, call it
-        if(typeof this.watcher.close == "function") {
+    // Catch add events
+    this.watcher.on('add', (path) => {
+      console.info('Addition detected on ' + path);
+      this.callback('add');
+    });
+  }
 
-          this.watcher.close().then(() => {
-            console.log('Stopped watching.');
-          });
-
-        }
-
+  /**
+   * Stop watching files
+   *
+   * @function stopWatching
+   * @returns {void}
+   */
+  stopWatching () {
+    if (this.watcher == null) {
+      throw new Error('Invalid watcher object!');
+    } else {
+      // If this is a function, call it
+      if (typeof this.watcher.close === 'function') {
+        this.watcher.close().then(() => {
+          console.log('Stopped watching.');
+        });
       }
-      
     }
-
+  }
 }
 
 module.exports = DirectoryWatcher;

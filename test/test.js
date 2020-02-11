@@ -37,9 +37,23 @@ describe('TweeParser', function() {
 
 	describe('#parse()', function() {
 
+		it('Should throw error if empty string is used', function() {
+
+	    	assert.throws( function() {let t = new TweeParser(); }, Error );
+
+		});
+
 	    it('Should throw error if no passages are present', function() {
 
-	    	assert.throws( () => new TweeParser(""), Error );
+	    	assert.throws( function() {let t = new TweeParser("()()"); }, Error );
+
+		});
+		
+		it('Should cut notes before passages', function() {
+
+			let fr = new FileReader("test/TweeParser/notes.twee");
+			let tp = new TweeParser(fr.contents);
+	    	assert.equal(tp.story.name,"twineExample");
 
 	    });
 
@@ -93,7 +107,7 @@ describe('TweeParser', function() {
 
 	    	let fr = new FileReader("test/TweeParser/pasagemetadataerror.twee");
 	    	let tp = new TweeParser(fr.contents);
-	    	assert.equal(tp._passageMetadatError, true);
+	    	assert.equal(tp._passageMetadataError, true);
 
 	    });
 
