@@ -23,7 +23,7 @@ class StoryFormatParser {
    * @returns {void}
    */
   parse (file) {
-    let contents = new FileReader(file).contents;
+    let contents = FileReader.read(file);
 
     // Harlowe has malformed JSON, so we have to test for it
     const harlowePosition = contents.indexOf('harlowe');

@@ -16,14 +16,14 @@ describe('FileReader', function() {
 
 	    it('Should throw error if file not found', function() {
 
-	    	assert.throws( () => new FileReader("test/FileReader/t2.txt"), Error );
+	    	assert.throws( () => FileReader.read("test/FileReader/t2.txt"), Error );
 
 	    });
 
       it('Should read the contents of a file', function() {
 
-	    	let fr = new FileReader("test/FileReader/t1.txt");
-	    	assert.equal(fr.contents,"Gibberish");
+	    	let fr = FileReader.read("test/FileReader/t1.txt");
+	    	assert.equal(fr,"Gibberish");
 
 	    });
 
@@ -49,8 +49,8 @@ describe('TweeParser', function() {
 		
 		it('Should cut notes before passages', function() {
 
-			let fr = new FileReader("test/TweeParser/notes.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/TweeParser/notes.twee");
+			let tp = new TweeParser(fr);
 	    	assert.equal(tp.story.name,"twineExample");
 
 	    });
@@ -63,56 +63,56 @@ describe('TweeParser', function() {
 
 	    it('Should be able to parse Twee file for Story Name', function() {
 
-	    	let fr = new FileReader("test/TweeParser/example.twee");
-	    	let tp = new TweeParser(fr.contents);
+	    	let fr = FileReader.read("test/TweeParser/example.twee");
+	    	let tp = new TweeParser(fr);
 	    	assert.equal(tp.story.name,"twineExample");
 
 	    });
 
 			it('Should record and erase the StoryTitle and StoryData passages', function() {
 
-	    	let fr = new FileReader("test/TweeParser/test.twee");
-	    	let tp = new TweeParser(fr.contents);
+	    	let fr = FileReader.read("test/TweeParser/test.twee");
+	    	let tp = new TweeParser(fr);
 	    	assert.equal(tp.story.passages.length,5);
 
 	    });
 
 			it('Should parse empty passage tags', function() {
 
-	    	let fr = new FileReader("test/TweeParser/emptytags.twee");
-	    	let tp = new TweeParser(fr.contents);
+	    	let fr = FileReader.read("test/TweeParser/emptytags.twee");
+	    	let tp = new TweeParser(fr);
 	    	assert.equal(tp.story.passages[0].tags.length, 0);
 
 	    });
 
 			it('Should parse single passage tag', function() {
 
-	    	let fr = new FileReader("test/TweeParser/singletag.twee");
-	    	let tp = new TweeParser(fr.contents);
+	    	let fr = FileReader.read("test/TweeParser/singletag.twee");
+	    	let tp = new TweeParser(fr);
 	    	assert.equal(tp.story.passages[0].tags.length, 1);
 
 	    });
 
 			it('Should parse multiple passage tags', function() {
 
-	    	let fr = new FileReader("test/TweeParser/multipletags.twee");
-	    	let tp = new TweeParser(fr.contents);
+	    	let fr = FileReader.read("test/TweeParser/multipletags.twee");
+	    	let tp = new TweeParser(fr);
 	    	assert.equal(tp.story.passages[0].tags.length, 2);
 
 	    });
 
 			it('Should record passage metadata error', function() {
 
-	    	let fr = new FileReader("test/TweeParser/pasagemetadataerror.twee");
-	    	let tp = new TweeParser(fr.contents);
+	    	let fr = FileReader.read("test/TweeParser/pasagemetadataerror.twee");
+	    	let tp = new TweeParser(fr);
 	    	assert.equal(tp._passageMetadataError, true);
 
 	    });
 
 			it('Should record StoryData error', function() {
 
-	    	let fr = new FileReader("test/TweeParser/storydataerror.twee");
-	    	let tp = new TweeParser(fr.contents);
+	    	let fr = FileReader.read("test/TweeParser/storydataerror.twee");
+	    	let tp = new TweeParser(fr);
 	    	assert.equal(tp._storydataError, true);
 
 	    });
@@ -133,8 +133,8 @@ describe('HTMLParser', function() {
 
 	    it('Should be able to parse Twine 2 HTML for story name', function() {
 
-	    	let fr = new FileReader("test/HTMLParser/twineExample.html");
-	    	let tp = new HTMLParser(fr.contents);
+	    	let fr = FileReader.read("test/HTMLParser/twineExample.html");
+	    	let tp = new HTMLParser(fr);
 
 	    	assert.equal(tp.story.name, "twineExample");
 
@@ -146,8 +146,8 @@ describe('HTMLParser', function() {
 
 		it('Should escape metacharacters', function() {
 
-			let fr = new FileReader("test/HTMLParser/twineExample.html");
-			let tp = new HTMLParser(fr.contents);
+			let fr = FileReader.read("test/HTMLParser/twineExample.html");
+			let tp = new HTMLParser(fr);
 			assert.equal(tp._escapeMetacharacters('\\\{\\\}\\\[\\\]\\\\'), "\\\\{\\\\}\\\\[\\\\]\\\\");
 
 		});
@@ -176,8 +176,8 @@ describe('TweeWriter', function() {
 
 			 let s = new Story();
 			 let tw = new TweeWriter(s, "test/TweeWriter/test1.twee");
-			 let fr = new FileReader("test/TweeWriter/test1.twee");
-			 let tp = new TweeParser(fr.contents);
+			 let fr = FileReader.read("test/TweeWriter/test1.twee");
+			 let tp = new TweeParser(fr);
 			 assert.equal(tp.story.name, "Unknown");
 
      });
@@ -189,8 +189,8 @@ describe('TweeWriter', function() {
 			 s.passages = [];
 			 s.passages.push(p);
 			 let tw = new TweeWriter(s, "test/TweeWriter/test2.twee");
-			 let fr = new FileReader("test/TweeWriter/test2.twee");
-			 let tp = new TweeParser(fr.contents);
+			 let fr = FileReader.read("test/TweeWriter/test2.twee");
+			 let tp = new TweeParser(fr);
 			 assert.equal(tp.story.passages[0].metadata.position,"100,100");
 
      });
@@ -202,8 +202,8 @@ describe('TweeWriter', function() {
 			 let p = new Passage("Start", ["tag", "tags"], {position: "100,100"});
 			 s.passages.push(p);
 			 let tw = new TweeWriter(s, "test/TweeWriter/test3.twee");
-			 let fr = new FileReader("test/TweeWriter/test3.twee");
-			 let tp = new TweeParser(fr.contents);
+			 let fr = FileReader.read("test/TweeWriter/test3.twee");
+			 let tp = new TweeParser(fr);
 			 assert.equal(tp.story.passages[0].tags.length, 2);
 
      });
@@ -303,8 +303,8 @@ describe('HTMLWriter', function() {
 
 		it('Should throw error if file writing fails', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			assert.throws( () => new HTMLWriter("", tp.story, sfp.storyformat), Error );
 
@@ -325,12 +325,12 @@ describe('HTMLWriter', function() {
 
 		it('Should produce HTML readable by HTMLParser and find story name of "twineExample"', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test2.html", tp.story, sfp.storyformat);
-			let frh = new FileReader("test/HTMLWriter/test2.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test2.html");
+			let hp = new HTMLParser(frh);
 
 			assert.equal(hp.story.name, "twineExample");
 
@@ -338,108 +338,108 @@ describe('HTMLWriter', function() {
 
 		it('Should correctly write default values for "position" and "size"', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test3.html", tp.story, sfp.storyformat);
-			let frh = new FileReader("test/HTMLWriter/test3.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test3.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.passages[1].metadata.position, "100,100");
 
     });
 
 		it('Should correctly write defined values for "position"', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example2.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example2.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test4.html", tp.story, sfp.storyformat);
-			let frh = new FileReader("test/HTMLWriter/test4.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test4.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.passages[1].metadata.position, "200,200");
 
     });
 
 		it('Should correctly write single "tag"', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example3.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example3.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test5.html", tp.story, sfp.storyformat);
-			let frh = new FileReader("test/HTMLWriter/test5.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test5.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.passages[1].tags.includes("tag"), true);
 
     });
 
 		it('Should correctly write defined values for "size"', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example4.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example4.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test6.html", tp.story, sfp.storyformat);
-			let frh = new FileReader("test/HTMLWriter/test6.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test6.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.passages[1].metadata.size, "100,100");
 
     });
 
 		it('Should correctly write multiple tags', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example5.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example5.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test6.html", tp.story, sfp.storyformat);
-			let frh = new FileReader("test/HTMLWriter/test6.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test6.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.passages[1].tags.length, 2);
 
     });
 
 		it('Should correctly write stylesheet-tagged passages', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example6.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example6.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test7.html", tp.story, sfp.storyformat);
-			let frh = new FileReader("test/HTMLWriter/test7.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test7.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.getStylePassages().length, 1);
 
     });
 
 		it('Should correctly write script-tagged passages', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example7.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example7.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test8.html", tp.story, sfp.storyformat);
-			let frh = new FileReader("test/HTMLWriter/test8.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test8.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.getScriptPassages().length, 1);
 
     });
 
 		it('Should correctly write extra CSS code', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example7.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example7.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test9.html", tp.story, sfp.storyformat, "body{background:grey}");
-			let frh = new FileReader("test/HTMLWriter/test9.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test9.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.getStylePassages()[0].text.includes("body{background:grey}"), true);
 
     });
 
 		it('Should correctly write extra JS code', function() {
 
-			let fr = new FileReader("test/HTMLWriter/example6.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/HTMLWriter/example6.twee");
+			let tp = new TweeParser(fr);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test10.html", tp.story, sfp.storyformat, "", "console.log('Test!')");
-			let frh = new FileReader("test/HTMLWriter/test10.html");
-			let hp = new HTMLParser(frh.contents);
+			let frh = FileReader.read("test/HTMLWriter/test10.html");
+			let hp = new HTMLParser(frh);
 			assert.equal(hp.story.getScriptPassages()[0].text.includes("console.log('Test!')"), true);
 
     });
@@ -472,8 +472,8 @@ describe('Story', function() {
 
 		it('Should return correct number of stylesheet-tagged passages', function() {
 
-			let fr = new FileReader("test/Story/test.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/Story/test.twee");
+			let tp = new TweeParser(fr);
 			assert.equal(tp.story.getStylePassages().length, 2);
 
     });
@@ -491,8 +491,8 @@ describe('Story', function() {
 
 		it('Should return correct number of script-tagged passages', function() {
 
-			let fr = new FileReader("test/Story/test.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/Story/test.twee");
+			let tp = new TweeParser(fr);
 			assert.equal(tp.story.getScriptPassages().length, 2);
 
     });
@@ -512,8 +512,8 @@ describe('Story', function() {
 
 		it('Should remove passages based on tag', function() {
 
-			let fr = new FileReader("test/Story/test.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/Story/test.twee");
+			let tp = new TweeParser(fr);
 			tp.story.deleteAllByTag("script");
 			assert.equal(tp.story.getScriptPassages().length, 0);
 
@@ -532,16 +532,16 @@ describe('Story', function() {
 
 		it('Should return correct PID of Start passage (skipping numbering of StoryTitle and StoryData passages)', function() {
 
-			let fr = new FileReader("test/Story/test.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/Story/test.twee");
+			let tp = new TweeParser(fr);
 			assert.equal(tp.story.getStartingPassage(), 1);
 
     	});
 
 		it('Should return correct PID of Start metadata passage (skipping numbering of StoryTitle and StoryData passages)', function() {
 
-			let fr = new FileReader("test/Story/startmeta.twee");
-			let tp = new TweeParser(fr.contents);
+			let fr = FileReader.read("test/Story/startmeta.twee");
+			let tp = new TweeParser(fr);
 			assert.equal(tp.story.getStartingPassage(), 1);
 
     	});
