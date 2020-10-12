@@ -6,28 +6,23 @@ const Story = require('./Story.js');
  */
 class TweeParser {
   /**
-   * @function TweeParser
-   * @class
-   * @param {string} content - Twee content to parse
-   */
-  constructor (content = '') {
-    this.story = new Story();
-    this._passageMetadataError = false;
-    this._storydataError = false;
-
-    this.parse(content);
-  }
-
-  /**
    * Parse Twee
    *
    * @function parse
    * @param {string} fileContents - File contents to parse
+   * @returns {Story} story
    */
-  parse (fileContents) {
+  static parse (fileContents) {
+    const story = new Story();
+
+    // Check if argument is a string
+    const isString = (x) => {
+      return Object.prototype.toString.call(x) === '[object String]';
+    };
+
     // Throw error if fileContents is empty
-    if (fileContents.length === 0) {
-      throw new Error('No file contents!');
+    if (!isString(fileContents)) {
+      throw new Error('Contents not a String');
     }
 
     let passages = [];
@@ -83,7 +78,6 @@ class TweeParser {
         try {
           metadata = JSON.parse(metadata);
         } catch (event) {
-          this._passageMetadataError = true;
         }
       }
 
@@ -154,10 +148,6 @@ class TweeParser {
         throw new Error('Malformed passage header!');
       }
 
-      if (this._passageMetadataError) {
-        console.warn('Error parsing metadata for "' + name + '". It was ignored.');
-      }
-
       // Add the new Passage to the internal array
       passages.push(new Passage(name, tags, metadata, text, pid));
 
@@ -170,13 +160,13 @@ class TweeParser {
     let pos = passages.find((el) => { return el.name === 'StoryTitle'; });
 
     if (pos !== undefined) {
-      this.story.name = pos.text;
+      story.name = pos.text;
       // Remove the StoryTitle passage
       passages = passages.filter(p => p.name !== 'StoryTitle');
     } else {
     // There was no StoryTitle passage
     // Set a value of "Unknown"
-      this.story.name = 'Unknown';
+      story.name = 'Unknown';
     }
 
     // Look for StoryData
@@ -185,22 +175,19 @@ class TweeParser {
     if (pos !== undefined) {
     // Try to parse the StoryData
       try {
-        this.story.metadata = JSON.parse(pos.text);
+        story.metadata = JSON.parse(pos.text);
       } catch (event) {
         // Silently fail with default values
-        this._storydataError = true;
       }
 
       // Remove the StoryData passage
       passages = passages.filter(p => p.name !== 'StoryData');
     }
 
-    if (this._storydataError) {
-      console.warn('Error with processing StoryData JSON data. It was ignored.');
-    }
-
     // Set the passages to the internal story
-    this.story.passages = passages;
+    story.passages = passages;
+
+    return story;
   }
 }
 
