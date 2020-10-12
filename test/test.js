@@ -162,20 +162,20 @@ describe('TweeWriter', function() {
 
      it('Should throw error if object passed is not instanceof Story', function() {
 
-       assert.throws( () => new TweeWriter({}), Error );
+       assert.throws( () => TweeWriter.write({}), Error );
 
      });
 
      it('Should throw error if output file invalid', function() {
 
-       assert.throws( () => new TweeWriter(new Story(), ""), Error );
+       assert.throws( () => TweeWriter.write(new Story(), ""), Error );
 
      });
 
 		 it('Should write Twee file', function() {
 
 			 let s = new Story();
-			 let tw = new TweeWriter(s, "test/TweeWriter/test1.twee");
+			 let tw = TweeWriter.write(s, "test/TweeWriter/test1.twee");
 			 let fr = FileReader.read("test/TweeWriter/test1.twee");
 			 let tp = new TweeParser(fr);
 			 assert.equal(tp.story.name, "Unknown");
@@ -188,7 +188,7 @@ describe('TweeWriter', function() {
 			 let p = new Passage("Start", [], {position: "100,100"});
 			 s.passages = [];
 			 s.passages.push(p);
-			 let tw = new TweeWriter(s, "test/TweeWriter/test2.twee");
+			 let tw = TweeWriter.write(s, "test/TweeWriter/test2.twee");
 			 let fr = FileReader.read("test/TweeWriter/test2.twee");
 			 let tp = new TweeParser(fr);
 			 assert.equal(tp.story.passages[0].metadata.position,"100,100");
@@ -201,7 +201,7 @@ describe('TweeWriter', function() {
 			 s.name = "TweeWriter";
 			 let p = new Passage("Start", ["tag", "tags"], {position: "100,100"});
 			 s.passages.push(p);
-			 let tw = new TweeWriter(s, "test/TweeWriter/test3.twee");
+			 let tw = TweeWriter.write(s, "test/TweeWriter/test3.twee");
 			 let fr = FileReader.read("test/TweeWriter/test3.twee");
 			 let tp = new TweeParser(fr);
 			 assert.equal(tp.story.passages[0].tags.length, 2);
@@ -212,7 +212,7 @@ describe('TweeWriter', function() {
 
 			 let s = new Story();
 			 s.metadata = 2;
-			 assert.throws( () => new TweeWriter(s, "test/TweeWriter/test4.twee"), Error );
+			 assert.throws( () => TweeWriter.write(s, "test/TweeWriter/test4.twee"), Error );
 
      });
 

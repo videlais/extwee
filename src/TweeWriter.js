@@ -12,27 +12,17 @@ const Story = require('./Story.js');
  */
 class TweeWriter {
   /**
-   * @function TweeWriter
-   * @class
-   * @param {Story} story - Story object to write
+   * Write to a file using a Story object
+   *
+   * @param {Story} story - Story format to write
    * @param {string} file - File to write to
+   * @returns {void}
    */
-  constructor (story, file) {
+  static write (story, file) {
     if (!(story instanceof Story)) {
       throw new Error('Not a Story object!');
     }
 
-    this.writeFile(file, story);
-  }
-
-  /**
-   * Write to a file using a Story object
-   *
-   * @param {string} file - File to write to
-   * @param {Story} story - Story format to write
-   * @returns {void}
-   */
-  writeFile (file, story) {
     // Write StoryTitle first
     let outputContents = ':: StoryTitle\n' + story.name + '\n\n';
 
