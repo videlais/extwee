@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node main.js",
-    "test": "nyc mocha test/test.js",
+    "test": "nyc mocha test/*.test.js",
     "lint": "eslint src/**/*.js --fix",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
   },
