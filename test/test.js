@@ -209,23 +209,23 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			assert.throws( () => new HTMLWriter("", tp, sfp), Error );
+			assert.throws( () => HTMLWriter.write("", tp, sfp), Error );
     });
 
 		it('story should be instanceof Story', function() {
-			assert.throws( () => new HTMLWriter("test/HTMLWriter/test.html", {}), Error );
+			assert.throws( () => HTMLWriter.write("test/HTMLWriter/test.html", {}), Error );
     });
 
 		it('storyFormat should be instanceof StoryFormat', function() {
 			let s = new Story();
-			assert.throws( () => new HTMLWriter("test/HTMLWriter/test.html", s, {}), Error );
+			assert.throws( () => HTMLWriter.write("test/HTMLWriter/test.html", s, {}), Error );
     });
 
 		it('Should produce HTML readable by HTMLParser and find story name of "twineExample"', function() {
 			let fr = FileReader.read("test/HTMLWriter/example.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test2.html", tp, sfp);
+			let hw = HTMLWriter.write("test/HTMLWriter/test2.html", tp, sfp);
 			let frh = FileReader.read("test/HTMLWriter/test2.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.name, "twineExample");
@@ -235,7 +235,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test3.html", tp, sfp);
+			let hw = HTMLWriter.write("test/HTMLWriter/test3.html", tp, sfp);
 			let frh = FileReader.read("test/HTMLWriter/test3.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.passages[1].metadata.position, "100,100");
@@ -245,7 +245,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example2.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test4.html", tp, sfp);
+			HTMLWriter.write("test/HTMLWriter/test4.html", tp, sfp);
 			let frh = FileReader.read("test/HTMLWriter/test4.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.passages[1].metadata.position, "200,200");
@@ -255,7 +255,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example3.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test5.html", tp, sfp);
+			HTMLWriter.write("test/HTMLWriter/test5.html", tp, sfp);
 			let frh = FileReader.read("test/HTMLWriter/test5.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.passages[1].tags.includes("tag"), true);
@@ -265,7 +265,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example4.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test6.html", tp, sfp);
+			HTMLWriter.write("test/HTMLWriter/test6.html", tp, sfp);
 			let frh = FileReader.read("test/HTMLWriter/test6.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.passages[1].metadata.size, "100,100");
@@ -275,7 +275,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example5.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test6.html", tp, sfp);
+			HTMLWriter.write("test/HTMLWriter/test6.html", tp, sfp);
 			let frh = FileReader.read("test/HTMLWriter/test6.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.passages[1].tags.length, 2);
@@ -285,7 +285,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example6.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test7.html", tp, sfp);
+			HTMLWriter.write("test/HTMLWriter/test7.html", tp, sfp);
 			let frh = FileReader.read("test/HTMLWriter/test7.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.getStylePassages().length, 1);
@@ -295,7 +295,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example7.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test8.html", tp, sfp);
+			HTMLWriter.write("test/HTMLWriter/test8.html", tp, sfp);
 			let frh = FileReader.read("test/HTMLWriter/test8.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.getScriptPassages().length, 1);
@@ -305,7 +305,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example7.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test9.html", tp, sfp, "body{background:grey}");
+			HTMLWriter.write("test/HTMLWriter/test9.html", tp, sfp, "body{background:grey}");
 			let frh = FileReader.read("test/HTMLWriter/test9.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.getStylePassages()[0].text.includes("body{background:grey}"), true);
@@ -315,7 +315,7 @@ describe('HTMLWriter', function() {
 			let fr = FileReader.read("test/HTMLWriter/example6.twee");
 			let tp = TweeParser.parse(fr);
 			let sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test10.html", tp, sfp, "", "console.log('Test!')");
+			HTMLWriter.write("test/HTMLWriter/test10.html", tp, sfp, "", "console.log('Test!')");
 			let frh = FileReader.read("test/HTMLWriter/test10.html");
 			let hp = HTMLParser.parse(frh);
 			assert.equal(hp.getScriptPassages()[0].text.includes("console.log('Test!')"), true);
