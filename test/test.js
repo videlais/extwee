@@ -81,21 +81,19 @@ describe('TweeParser', function() {
 describe('HTMLParser', function() {
 	describe('#parse()', function() {
 	    it('Should throw error if content is not Twine-2 style HTML', function() {
-	    	assert.throws( () => new HTMLParser(""), Error );
+	    	assert.throws( () => HTMLParser.parse(""), Error );
 	    });
 
 	    it('Should be able to parse Twine 2 HTML for story name', function() {
 	    	let fr = FileReader.read("test/HTMLParser/twineExample.html");
-	    	let tp = new HTMLParser(fr);
-	    	assert.equal(tp.story.name, "twineExample");
+	    	let tp = HTMLParser.parse(fr);
+	    	assert.equal(tp.name, "twineExample");
 	    });
   	});
 
-	describe('#_escapeMetacharacters()', function() {
+	describe('#escapeMetacharacters()', function() {
 		it('Should escape metacharacters', function() {
-			let fr = FileReader.read("test/HTMLParser/twineExample.html");
-			let tp = new HTMLParser(fr);
-			assert.equal(tp._escapeMetacharacters('\\\{\\\}\\\[\\\]\\\\'), "\\\\{\\\\}\\\\[\\\\]\\\\");
+			assert.equal(HTMLParser.escapeMetacharacters('\\\{\\\}\\\[\\\]\\\\'), "\\\\{\\\\}\\\\[\\\\]\\\\");
 		});
 	 });
 });
@@ -233,8 +231,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test2.html", tp, sfp.storyformat);
 			let frh = FileReader.read("test/HTMLWriter/test2.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.name, "twineExample");
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.name, "twineExample");
     });
 
 		it('Should correctly write default values for "position" and "size"', function() {
@@ -243,8 +241,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test3.html", tp, sfp.storyformat);
 			let frh = FileReader.read("test/HTMLWriter/test3.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.passages[1].metadata.position, "100,100");
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.passages[1].metadata.position, "100,100");
     });
 
 		it('Should correctly write defined values for "position"', function() {
@@ -253,8 +251,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test4.html", tp, sfp.storyformat);
 			let frh = FileReader.read("test/HTMLWriter/test4.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.passages[1].metadata.position, "200,200");
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.passages[1].metadata.position, "200,200");
     });
 
 		it('Should correctly write single "tag"', function() {
@@ -263,8 +261,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test5.html", tp, sfp.storyformat);
 			let frh = FileReader.read("test/HTMLWriter/test5.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.passages[1].tags.includes("tag"), true);
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.passages[1].tags.includes("tag"), true);
     });
 
 		it('Should correctly write defined values for "size"', function() {
@@ -273,8 +271,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test6.html", tp, sfp.storyformat);
 			let frh = FileReader.read("test/HTMLWriter/test6.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.passages[1].metadata.size, "100,100");
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.passages[1].metadata.size, "100,100");
     });
 
 		it('Should correctly write multiple tags', function() {
@@ -283,8 +281,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test6.html", tp, sfp.storyformat);
 			let frh = FileReader.read("test/HTMLWriter/test6.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.passages[1].tags.length, 2);
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.passages[1].tags.length, 2);
     });
 
 		it('Should correctly write stylesheet-tagged passages', function() {
@@ -293,8 +291,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test7.html", tp, sfp.storyformat);
 			let frh = FileReader.read("test/HTMLWriter/test7.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.getStylePassages().length, 1);
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.getStylePassages().length, 1);
     });
 
 		it('Should correctly write script-tagged passages', function() {
@@ -303,8 +301,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test8.html", tp, sfp.storyformat);
 			let frh = FileReader.read("test/HTMLWriter/test8.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.getScriptPassages().length, 1);
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.getScriptPassages().length, 1);
     });
 
 		it('Should correctly write extra CSS code', function() {
@@ -313,8 +311,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test9.html", tp, sfp.storyformat, "body{background:grey}");
 			let frh = FileReader.read("test/HTMLWriter/test9.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.getStylePassages()[0].text.includes("body{background:grey}"), true);
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.getStylePassages()[0].text.includes("body{background:grey}"), true);
     });
 
 		it('Should correctly write extra JS code', function() {
@@ -323,8 +321,8 @@ describe('HTMLWriter', function() {
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format.js');
 			let hw = new HTMLWriter("test/HTMLWriter/test10.html", tp, sfp.storyformat, "", "console.log('Test!')");
 			let frh = FileReader.read("test/HTMLWriter/test10.html");
-			let hp = new HTMLParser(frh);
-			assert.equal(hp.story.getScriptPassages()[0].text.includes("console.log('Test!')"), true);
+			let hp = HTMLParser.parse(frh);
+			assert.equal(hp.getScriptPassages()[0].text.includes("console.log('Test!')"), true);
     });
   });
 });

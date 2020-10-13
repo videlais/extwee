@@ -13,22 +13,14 @@ const Passage = require('./Passage.js');
  */
 class HTMLParser {
   /**
-   * @function HTMLParser
-   * @class
-   * @param {HTML} content - HTML to parse
-   */
-  constructor (content) {
-    this.story = null;
-    this.parse(content);
-  }
-
-  /**
    * Parse HTML text into a JS DOM-like object
    *
    * @param {string} content - Content to parse
-   * @returns {void}
+   * @returns {Story} story
    */
-  parse (content) {
+  static parse (content) {
+    let story = null;
+
     // Send to node-html-parser
     // Enable getting the content of 'script', 'style', and 'pre' elements
     // Get back a DOM
@@ -45,17 +37,17 @@ class HTMLParser {
     const storyData = dom.querySelector('tw-storydata');
 
     if (storyData != null) {
-      this.story = new Story();
-      this.story.name = storyData.attributes.name;
-      this.story.creator = storyData.attributes.creator;
-      this.story.creatorVersion = storyData.attributes['creator-version'];
+      story = new Story();
+      story.name = storyData.attributes.name;
+      story.creator = storyData.attributes.creator;
+      story.creatorVersion = storyData.attributes['creator-version'];
 
-      this.story.metadata = {};
-      this.story.metadata.ifid = storyData.attributes.ifid;
-      this.story.metadata.format = storyData.attributes.format;
-      this.story.metadata.formatVersion = storyData.attributes['format-version'];
-      this.story.metadata.zoom = storyData.attributes.zoom;
-      this.story.metadata.start = storyData.attributes.startnode;
+      story.metadata = {};
+      story.metadata.ifid = storyData.attributes.ifid;
+      story.metadata.format = storyData.attributes.format;
+      story.metadata.formatVersion = storyData.attributes['format-version'];
+      story.metadata.zoom = storyData.attributes.zoom;
+      story.metadata.start = storyData.attributes.startnode;
     } else {
       throw new Error('Error: Not a Twine 2-style file!');
     }
@@ -64,18 +56,18 @@ class HTMLParser {
     const storyPassages = dom.querySelectorAll('tw-passagedata');
 
     // Create an empty array
-    this.story.passages = [];
+    story.passages = [];
 
     // Set default pid
     let pid = 1;
 
     // Add StoryTitle
-    this.story.passages.push(
+    story.passages.push(
       new Passage(
         'StoryTitle',
         [],
         {},
-        this.story.name,
+        story.name,
         pid
       )
     );
@@ -97,7 +89,7 @@ class HTMLParser {
       const size = attr.size;
 
       // Escape the name
-      const name = this._escapeMetacharacters(attr.name);
+      const name = HTMLParser.escapeMetacharacters(attr.name);
 
       // Create empty tags
       let tags = '';
@@ -105,7 +97,7 @@ class HTMLParser {
       // Escape any tags
       // (Attributes can, themselves, be emtpy strings.)
       if (attr.tags.length > 0 && attr.tags !== '""') {
-        tags = this._escapeMetacharacters(attr.tags);
+        tags = HTMLParser.escapeMetacharacters(attr.tags);
       }
 
       // Split by spaces
@@ -115,7 +107,7 @@ class HTMLParser {
       tags = tags.filter(tag => tag !== '');
 
       // Add a new Passage into an array
-      this.story.passages.push(
+      story.passages.push(
         new Passage(
           name,
           tags,
@@ -139,7 +131,7 @@ class HTMLParser {
     // If not, we won't add empty passages
     if (styleElement.rawText.length > 0) {
       // Add UserStylesheet
-      this.story.passages.push(
+      story.passages.push(
         new Passage(
           'UserStylesheet',
           ['stylesheet'],
@@ -156,7 +148,7 @@ class HTMLParser {
     // If not, we won't add empty passages
     if (scriptElement.rawText.length > 0) {
       // Add UserScript
-      this.story.passages.push(
+      story.passages.push(
         new Passage(
           'UserScript',
           ['script'],
@@ -168,17 +160,19 @@ class HTMLParser {
 
     // Now that all passages have been handled,
     //  change the start name
-    this.story.metadata.start = this.story.getStartingPassage();
+    story.metadata.start = story.getStartingPassage();
 
     // Add StoryData
-    this.story.passages.push(
+    story.passages.push(
       new Passage(
         'StoryData',
         [],
         {},
-        JSON.stringify(this.story.metadata, null, 4)
+        JSON.stringify(story.metadata, null, 4)
       )
     );
+
+    return story;
   }
 
   /**
@@ -187,7 +181,7 @@ class HTMLParser {
    * @param {string} result - Text to parse
    * @returns {string} Escaped characters
    */
-  _escapeMetacharacters (result) {
+  static escapeMetacharacters (result) {
     // Replace any single backslash with two of them
     result = result.replace(/\\/g, '\\');
     // Double-escape escaped {
