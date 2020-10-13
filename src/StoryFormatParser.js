@@ -6,23 +6,12 @@ const FileReader = require('./FileReader.js');
  */
 class StoryFormatParser {
   /**
-   * @function StoryFormatParser
-   * @class
-   * @param {string} file - Story Format file to read
-   */
-  constructor (file) {
-    this.storyformat = null;
-
-    this.parse(file);
-  }
-
-  /**
    * Parse a Story Format file
    *
    * @param {string} file - File to read
-   * @returns {void}
+   * @returns {StoryFormat} storyformat
    */
-  parse (file) {
+  static parse (file) {
     let contents = FileReader.read(file);
 
     // Harlowe has malformed JSON, so we have to test for it
@@ -52,7 +41,7 @@ class StoryFormatParser {
       throw new Error('Unable to parse Twine2 JSON chunk!');
     }
 
-    this.storyformat = new StoryFormat(jsonContent);
+    return new StoryFormat(jsonContent);
   }
 }
 
