@@ -20,16 +20,7 @@ class StoryFormat {
       this.proofing = object.proofing || null;
       this.source = object.source || null;
     } else {
-      // Set all properties to null
-      this.name = null;
-      this.version = null;
-      this.description = null;
-      this.author = null;
-      this.image = null;
-      this.url = null;
-      this.license = null;
-      this.proofing = null;
-      this.source = null;
+      throw new Error("StoryFormat must be constructed from object literal!");
     }
   }
 }

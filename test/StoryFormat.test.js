@@ -2,14 +2,20 @@ const StoryFormat = require('../src/StoryFormat.js');
 
 describe('StoryFormat', function () {
   describe('#constructor()', function () {
-    it('Accept object values', function () {
+    it('Should accept object values', function () {
       const sf = new StoryFormat({ name: 'testing' });
       expect(sf.name).toBe('testing');
     });
 
-    it('Defaults to null values', function () {
+    it('Should defaults to null values', function () {
       const sf = new StoryFormat({});
       expect(sf.name).toBe(null);
+    });
+
+    it('Should throw error if non-object passed to it', function () {
+      expect(() => {
+        const sf = new StoryFormat(1);
+      }).toThrow();
     });
   });
 });
