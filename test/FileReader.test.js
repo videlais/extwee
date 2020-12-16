@@ -1,15 +1,14 @@
-const assert = require('assert');
 const FileReader = require('../src/FileReader.js');
 
-describe('FileReader', function() {
-	describe('#readFile()', function() {
-	    it('Should throw error if file not found', function() {
-	    	assert.throws( () => FileReader.read("test/FileReader/t2.txt"), Error );
-	    });
+describe('FileReader', function () {
+  describe('#readFile()', function () {
+    it('Should throw error if file not found', function () {
+      expect(() => { FileReader.read('test/FileReader/t2.txt'); }).toThrow();
+    });
 
-      it('Should read the contents of a file', function() {
-	    	let fr = FileReader.read("test/FileReader/t1.txt");
-	    	assert.equal(fr,"Gibberish");
-	    });
-  	});
+    it('Should read the contents of a file', function () {
+      const fr = FileReader.read('test/FileReader/t1.txt');
+      expect(fr).toBe('Gibberish');
+    });
+  });
 });

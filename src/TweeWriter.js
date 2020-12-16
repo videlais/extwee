@@ -77,9 +77,6 @@ class TweeWriter {
       // Throw error
       throw new Error('Error: Cannot write Twee file!');
     }
-
-    // Writing was successful
-    console.info('Created ' + fs.realpathSync(file));
   }
 }
 

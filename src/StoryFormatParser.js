@@ -23,14 +23,19 @@ class StoryFormatParser {
       contents = contents.slice(0, setupPosition) + '}';
     }
 
+    // Find the start of story format or -1, if not found
     const openingCurlyBracketPosition = contents.indexOf('{');
+    // Find the end of story format or -1, if not found
     const closingCurlyBracketPosition = contents.lastIndexOf('}');
 
-    if (openingCurlyBracketPosition !== -1 && closingCurlyBracketPosition !== -1) {
-      // Slice out the JSON
-      contents = contents.slice(openingCurlyBracketPosition, closingCurlyBracketPosition + 1);
-    } else {
+    // Look for JSON among the story format
+    // If either is -1, this is not valid JSON
+    if (openingCurlyBracketPosition === -1 || closingCurlyBracketPosition === -1) {
+      // Either start or end curly brackets were now found!
       throw new Error('Unable to find Twine2 JSON chunk!');
+    } else {
+      // Slice out the JSON based on curly brackets
+      contents = contents.slice(openingCurlyBracketPosition, closingCurlyBracketPosition + 1);
     }
 
     let jsonContent = '';

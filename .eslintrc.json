@@ -2,11 +2,13 @@
     "env": {
         "commonjs": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
     "extends": [
         "standard",
-        "plugin:jsdoc/recommended"
+        "plugin:jsdoc/recommended",
+        "plugin:jest/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -16,9 +18,15 @@
         "ecmaVersion": 2018
     },
     "rules": {
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
     },
     "plugins": [
-        "jsdoc"
+        "jsdoc",
+        "jest"
     ]
 }
