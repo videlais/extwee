@@ -1,0 +1,18 @@
+:: StoryTitle
+Example1
+
+:: UserScript[script]
+
+
+:: UserStylesheet[stylesheet]
+
+
+:: Start
+[[Another passage]]
+
+:: Another passage
+[[A third]]
+
+:: A third
+Double-click this passage to edit it.
+

@@ -90,32 +90,37 @@ class Story {
     let pid = null;
     let searchName = null;
 
+    // Is there a start?
     if (Object.prototype.hasOwnProperty.call(this.metadata, 'start')) {
       // Check if the property is an empty string
       // If so, ignore it.
       if (this.metadata.start !== '') {
         searchName = this.metadata.start;
+      } else {
+        // We don't have a start, so look for Start
+        searchName = "Start";
       }
+    } else {
+      // We don't have a start, so look for Start
+      searchName = "Start";
     }
 
+    // Do we have multiple passages?
     if (this.passages.length > 0) {
+      // We have a 'start' passage to find
       for (const passage in this.passages) {
+        // Is this the passage we are searching for?
         if (this.passages[passage].name === searchName) {
+          // It is! Return its PID
           pid = this.passages[passage].pid;
+          // Stop searching
           break;
         }
-
-        if (this.passages[passage].name === 'Start') {
-          pid = this.passages[passage].pid;
-        }
       }
     }
 
-    if (pid === null) {
-      throw new Error('Starting passage not found!');
-    } else {
-      return pid;
-    }
+    // We either found it or this will be null
+    return pid;
   }
 }
 

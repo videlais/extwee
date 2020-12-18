@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "jest --collectCoverage",
+    "test": "jest --coverage --colors",
+    "test:watch": "jest --watch",
     "lint": "eslint ./src/**/*.js --fix",
     "test-lint": "eslint ./test/*.test.js --fix"
   },

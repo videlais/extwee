@@ -1,22 +1,27 @@
 const StoryFormatParser = require('../src/StoryFormatParser.js');
+const FileReader = require('../src/FileReader');
 
 describe('StoryFormatParser', function () {
   describe('#parse()', function () {
-    it('Should throw error if JSON missing', function () {
-      expect(() => { StoryFormatParser.parse('test/StoryFormatParser/example.js'); }).toThrow();
+    test('Should throw error if JSON missing', function () {
+      const fr = FileReader.read('test/StoryFormatParser/example.js');
+      expect(() => { StoryFormatParser.parse(fr); }).toThrow();
     });
 
-    it('Should throw error if JSON malformed', function () {
-      expect(() => { StoryFormatParser.parse('test/StoryFormatParser/example2.js'); }).toThrow();
+    test('Should throw error if JSON malformed', function () {
+      const fr = FileReader.read('test/StoryFormatParser/example2.js');
+      expect(() => { StoryFormatParser.parse(fr); }).toThrow();
     });
 
-    it('Should correctly parse a StoryFormat name', function () {
-      const sfp = StoryFormatParser.parse('test/StoryFormatParser/format.js');
+    test('Should correctly parse a StoryFormat name', function () {
+      const fr = FileReader.read('test/StoryFormatParser/format.js');
+      const sfp = StoryFormatParser.parse(fr);
       expect(sfp.name).toBe('Snowman');
     });
 
-    it('Should correctly parse Harlowe story format', function () {
-      const sfp = StoryFormatParser.parse('test/StoryFormatParser/harlowe.js');
+    test('Should correctly parse Harlowe story format', function () {
+      const fr = FileReader.read('test/StoryFormatParser/harlowe.js');
+      const sfp = StoryFormatParser.parse(fr);
       expect(sfp.name).toBe('Harlowe');
     });
   });

@@ -1,5 +1,4 @@
 const StoryFormat = require('./StoryFormat.js');
-const FileReader = require('./FileReader.js');
 /**
  * @class StoryFormatParser
  * @module StoryFormatParser
@@ -8,12 +7,10 @@ class StoryFormatParser {
   /**
    * Parse a Story Format file
    *
-   * @param {string} file - File to read
+   * @param {string} contents - Content
    * @returns {StoryFormat} storyformat
    */
-  static parse (file) {
-    let contents = FileReader.read(file);
-
+  static parse (contents) {
     // Harlowe has malformed JSON, so we have to test for it
     const harlowePosition = contents.indexOf('harlowe');
 

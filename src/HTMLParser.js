@@ -55,25 +55,8 @@ class HTMLParser {
     // Pull out the tw-passagedata elements
     const storyPassages = dom.querySelectorAll('tw-passagedata');
 
-    // Create an empty array
-    story.passages = [];
-
     // Set default pid
     let pid = 1;
-
-    // Add StoryTitle
-    story.passages.push(
-      new Passage(
-        'StoryTitle',
-        [],
-        {},
-        story.name,
-        pid
-      )
-    );
-
-    // Increase PID by one before parsing any other passages
-    pid++;
 
     // Move through the passages
     for (const passage in storyPassages) {
@@ -161,16 +144,6 @@ class HTMLParser {
     // Now that all passages have been handled,
     //  change the start name
     story.metadata.start = story.getStartingPassage();
-
-    // Add StoryData
-    story.passages.push(
-      new Passage(
-        'StoryData',
-        [],
-        {},
-        JSON.stringify(story.metadata, null, 4)
-      )
-    );
 
     return story;
   }
