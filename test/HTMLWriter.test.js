@@ -27,7 +27,7 @@ describe('HTMLWriter', function () {
     test('Should produce HTML readable by HTMLParser and find story name of "twineExample"', function () {
       const fr = FileReader.read('test/HTMLWriter/example.twee');
       const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js')
+      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
       const sfp = StoryFormatParser.parse(fr2);
       HTMLWriter.write('test/HTMLWriter/test2.html', tp, sfp);
       const frh = FileReader.read('test/HTMLWriter/test2.html');
@@ -115,7 +115,7 @@ describe('HTMLWriter', function () {
     test('Should correctly write extra CSS code', function () {
       const fr = FileReader.read('test/HTMLWriter/example7.twee');
       const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js')
+      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
       const sfp = StoryFormatParser.parse(fr2);
       HTMLWriter.write('test/HTMLWriter/test9.html', tp, sfp, 'body{background:grey}');
       const frh = FileReader.read('test/HTMLWriter/test9.html');

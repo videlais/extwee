@@ -12,7 +12,7 @@ class Passage {
    * @param {string} text - Passage Content
    * @param {number} pid - Passage ID (PID)
    */
-  constructor (name = '', tags = [], metadata = {}, text = '', pid = 1) {
+  constructor (name = '', tags = [], metadata = {}, text = '', pid = -1) {
     this.name = name;
     this.tags = tags;
     this.metadata = metadata;

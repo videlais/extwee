@@ -15,7 +15,7 @@ class Story {
       format: '',
       formatVersion: '',
       zoom: '',
-      start: ''
+      start: null
     };
 
     this.passages = [];
@@ -37,7 +37,6 @@ class Story {
     if (this.passages.length > 0) {
       stylePassages = this.passages.filter(function (passage) {
         const results = passage.tags.filter(tag => tag === 'stylesheet');
-
         return (results.length > 0);
       });
     }
@@ -57,7 +56,6 @@ class Story {
     if (this.passages.length > 0) {
       scriptPassages = this.passages.filter(function (passage) {
         const results = passage.tags.filter(tag => tag === 'script');
-
         return (results.length > 0);
       });
     }
@@ -81,6 +79,34 @@ class Story {
   }
 
   /**
+   * Find passage by name
+   *
+   * @function getPassageByName
+   * @param {string} name - Passage name to search for
+   * @returns {object | null} Return passage or null
+   */
+  getPassageByName (name = '') {
+    // Look through passages
+    const results = this.passages.filter((passage) => passage.name === name);
+    // Return first entry or null, if not found
+    return results.length > 0 ? results[0] : null;
+  }
+
+  /**
+   * Find passage by PID
+   *
+   * @function getPassageByPID
+   * @param {number} pid - Passage PID to search for
+   * @returns {object | null} Return passage or null
+   */
+  getPassageByPID (pid = -1) {
+    // Look through passages
+    const results = this.passages.filter((passage) => passage.pid === pid);
+    // Return first entry or null, if not found
+    return results.length > 0 ? results[0] : null;
+  }
+
+  /**
    * Find the starting passages
    *
    * @function getStartingPassage
@@ -88,34 +114,25 @@ class Story {
    */
   getStartingPassage () {
     let pid = null;
-    let searchName = null;
 
-    // Is there a start?
+    // Is there a start property?
     if (Object.prototype.hasOwnProperty.call(this.metadata, 'start')) {
-      // Check if the property is an empty string
-      // If so, ignore it.
-      if (this.metadata.start !== '') {
-        searchName = this.metadata.start;
-      } else {
-        // We don't have a start, so look for Start
-        searchName = "Start";
+      // Check if the property is null
+      if (this.metadata.start !== null) {
+        // Look for the passage by name
+        const result = this.getPassageByName(this.metadata.start);
+        // If the search found something, save the PID
+        if (result !== null) {
+          pid = result.pid;
+        }
       }
     } else {
-      // We don't have a start, so look for Start
-      searchName = "Start";
-    }
-
-    // Do we have multiple passages?
-    if (this.passages.length > 0) {
-      // We have a 'start' passage to find
-      for (const passage in this.passages) {
-        // Is this the passage we are searching for?
-        if (this.passages[passage].name === searchName) {
-          // It is! Return its PID
-          pid = this.passages[passage].pid;
-          // Stop searching
-          break;
-        }
+      // Since there was not a 'start' property, look for Start passage
+      const results = this.getPassageByName('Start');
+      // Did we get any results?
+      if (results !== null) {
+        // Save the first one
+        pid = results.pid;
       }
     }
 

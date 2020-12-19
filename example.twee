@@ -7,15 +7,15 @@ Example1
   "format": "Chapbook",
   "formatVersion": "1.1.0",
   "zoom": "1",
-  "start": "Untitled Passage"
+  "start": null
 }
 
-:: Untitled Passage  {"position":"200,102","size":"100,100"}
+:: Untitled Passage {"position":"200,102","size":"100,100"}
 [[Another passage]]
 
-:: Another passage  {"position":"200,252","size":"100,100"}
+:: Another passage {"position":"200,252","size":"100,100"}
 [[A third]]
 
-:: A third  {"position":"200,402","size":"100,100"}
+:: A third {"position":"200,402","size":"100,100"}
 Double-click this passage to edit it.
 

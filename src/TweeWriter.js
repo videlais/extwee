@@ -24,7 +24,7 @@ class TweeWriter {
     }
 
     // Write StoryTitle first
-    let outputContents = ':: StoryTitle\n' + story.name + '\n\n';
+    let outputContents = `:: StoryTitle\n${story.name}\n\n`;
 
     // Write the StoryData second
     outputContents += ':: StoryData\n';
@@ -32,7 +32,7 @@ class TweeWriter {
     // Test if story.metadata is an object or not
     if (typeof story.metadata === 'object') {
       // Write any metadata in pretty format
-      outputContents += ' ' + JSON.stringify(story.metadata, undefined, 2);
+      outputContents += ` ${JSON.stringify(story.metadata, undefined, 2)}`;
     } else {
       // If, for whatever reason, story.metadata is not an object, throw error.
       throw new Error('Story Metadata MUST be an object!');
@@ -46,24 +46,19 @@ class TweeWriter {
       // Build the contents
       for (const passage in story.passages) {
         // Write the name
-        outputContents += ':: ' + story.passages[passage].name;
+        outputContents += `:: ${story.passages[passage].name} `;
 
         // Test if it has any tags
         if (story.passages[passage].tags.length > 0) {
-          outputContents += ' [';
-
-          for (const tag of story.passages[passage].tags) {
-            outputContents += ' ' + tag;
-          }
-
-          outputContents += ']';
+          // Write output of tags
+          outputContents += `[${story.passages[passage].tags.join(' ')}]`;
         }
 
-        // Write out any passage metadata
-        outputContents += JSON.stringify(story.passages[passage].metadata);
+        // Write out a space and then passage metadata
+        outputContents += ` ${JSON.stringify(story.passages[passage].metadata)}`;
 
-        // Add the text and two newlines
-        outputContents += '\n' + story.passages[passage].text + '\n\n';
+        // Add newline, text, and two newlines
+        outputContents += `\n${story.passages[passage].text}\n\n`;
       }
     } else {
       // Create empty Start passage

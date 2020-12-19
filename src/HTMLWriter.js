@@ -93,44 +93,36 @@ class HTMLWriter {
 
     // Build the passages
     for (const passage of story.passages) {
-      storyData += '<tw-passagedata pid="' + passage.pid + '" name="' + passage.name + '"';
+      storyData += `<tw-passagedata pid="${passage.pid}" name="${passage.name}"`;
 
       // Write out any tags
       if (passage.tags.length > 1) {
-        storyData += ' tags="';
-
-        for (const t of passage.tags) {
-          storyData += t + ', ';
-        }
-
-        storyData += '" ';
+        storyData += ` tags="${passage.tags.join(', ')}" `;
       } else if (passage.tags.length === 1) {
-        storyData += ' tags="' + passage.tags[0] + '" ';
+        storyData += ` tags="${passage.tags[0]}" `;
       } else {
         storyData += ' tags ';
       }
 
       // Write out position
       if (Object.prototype.hasOwnProperty.call(passage.metadata, 'position')) {
-        storyData += 'position="' +
-                    passage.metadata.position + '" ';
+        storyData += ` position="${passage.metadata.position}" `;
       } else {
         // Didn't have a position.
         // Make one up.
-        storyData += 'position="100,100" ';
+        storyData += ' position="100,100" ';
       }
 
       // Write out size
       if (Object.prototype.hasOwnProperty.call(passage.metadata, 'size')) {
-        storyData += 'size="' +
-                    passage.metadata.size + '" ';
+        storyData += `size="${passage.metadata.size}" `;
       } else {
         // Didn't have a size.
         // Make one up.
         storyData += 'size="100,100" ';
       }
 
-      storyData += '>' + passage.text + '</tw-passagedata>\n';
+      storyData += `>${passage.text}</tw-passagedata>\n`;
     }
 
     storyData += '</tw-storydata>';

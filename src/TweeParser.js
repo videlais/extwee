@@ -43,7 +43,7 @@ class TweeParser {
     parsingPassages[0] = parsingPassages[0].slice(2, parsingPassages[0].length);
 
     // Set the initial pid
-    let pid = 0;
+    let pid = 1;
 
     // Iterate through the passages
     parsingPassages.forEach((passage) => {
@@ -172,6 +172,7 @@ class TweeParser {
     // Look for StoryData
     pos = passages.find((el) => { return el.name === 'StoryData'; });
 
+    // There was a StoryData, attempt to parse it
     if (pos !== undefined) {
     // Try to parse the StoryData
       try {
@@ -182,6 +183,17 @@ class TweeParser {
 
       // Remove the StoryData passage
       passages = passages.filter(p => p.name !== 'StoryData');
+    } else {
+      // There wasn't a StoryData. Look for "Start"
+      const results = passages.filter((passage) => passage.name === 'Start');
+      // Was it found?
+      if (results.length > 0) {
+        // Assume "Start", since it exists
+        story.metadata.start = 'Start';
+      } else {
+        // There is no StoryData or Start passage! Error!
+        throw new Error('Unable to find StoryData or Start passage!');
+      }
     }
 
     // Set the passages to the internal story

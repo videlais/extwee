@@ -54,5 +54,12 @@ describe('TweeParser', function () {
       const tp = TweeParser.parse(fr);
       expect(tp.passages[0].tags).toHaveLength(2);
     });
+
+    test('Should throw error if no StoryData or Story passage', function () {
+      const fr = FileReader.read('test/TweeParser/missing.twee');
+      expect(() => {
+        TweeParser.parse(fr);
+      }).toThrow();
+    });
   });
 });

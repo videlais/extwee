@@ -25,6 +25,8 @@ describe('Round-trip testing', () => {
     expect(s2.passages).toHaveLength(s.passages.length);
     // IFID should be the same
     expect(s.metadata.ifid).toBe(s2.metadata.ifid);
+    // Should have same 'start' PID
+    expect(s.metadata.start).toBe(s2.metadata.start);
   });
 
   test('Should round-trip Twee-to-HTML', () => {
@@ -48,5 +50,7 @@ describe('Round-trip testing', () => {
     expect(story2.passages).toHaveLength(story.passages.length);
     // IFID should be the same
     expect(story.metadata.ifid).toBe(story2.metadata.ifid);
+    // Should have same 'start' PID
+    expect(story.metadata.start).toBe(story2.metadata.start);
   });
 });

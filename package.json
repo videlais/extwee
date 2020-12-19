@@ -11,8 +11,9 @@
     "start": "node main.js",
     "test": "jest --coverage --colors",
     "test:watch": "jest --watch",
+    "lint-and-test": "npm run lint && npm run lint:test && npm run test",
     "lint": "eslint ./src/**/*.js --fix",
-    "test-lint": "eslint ./test/*.test.js --fix"
+    "lint:test": "eslint ./test/*.test.js --fix"
   },
   "keywords": [
     "twine",

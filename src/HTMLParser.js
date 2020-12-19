@@ -47,16 +47,14 @@ class HTMLParser {
       story.metadata.format = storyData.attributes.format;
       story.metadata.formatVersion = storyData.attributes['format-version'];
       story.metadata.zoom = storyData.attributes.zoom;
-      story.metadata.start = storyData.attributes.startnode;
+      // Take string value and convert to Int
+      story.metadata.start = parseInt(storyData.attributes.startnode);
     } else {
       throw new Error('Error: Not a Twine 2-style file!');
     }
 
     // Pull out the tw-passagedata elements
     const storyPassages = dom.querySelectorAll('tw-passagedata');
-
-    // Set default pid
-    let pid = 1;
 
     // Move through the passages
     for (const passage in storyPassages) {
@@ -78,7 +76,7 @@ class HTMLParser {
       let tags = '';
 
       // Escape any tags
-      // (Attributes can, themselves, be emtpy strings.)
+      // (Attributes can, themselves, be empty strings.)
       if (attr.tags.length > 0 && attr.tags !== '""') {
         tags = HTMLParser.escapeMetacharacters(attr.tags);
       }
@@ -100,11 +98,9 @@ class HTMLParser {
 
           },
           text,
-          pid
+          parseInt(attr.pid)
         )
       );
-
-      pid++;
     }
 
     // Look for the style element
@@ -142,8 +138,8 @@ class HTMLParser {
     }
 
     // Now that all passages have been handled,
-    //  change the start name
-    story.metadata.start = story.getStartingPassage();
+    //  change the start value to passage name instead of PID
+    story.metadata.start = story.getPassageByPID(story.metadata.start).name;
 
     return story;
   }
