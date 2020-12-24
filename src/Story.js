@@ -1,4 +1,6 @@
-const pkg = require('../package.json');
+import { name, version } from '../package.json';
+import Passage from './Passage';
+
 /**
  * @class Story
  * @module Story
@@ -9,7 +11,10 @@ class Story {
    * @class
    */
   constructor () {
+    // Name of the story
     this.name = 'Unknown';
+
+    // Story metadata
     this.metadata = {
       ifid: '',
       format: '',
@@ -18,64 +23,50 @@ class Story {
       start: null
     };
 
+    // Internal passages
     this.passages = [];
 
+    // Store the user script separately
+    this.scriptPassage = null;
+
+    // Store the user stylesheet separately
+    this.stylesheetPassage = null;
+
     // Store the creator and version
-    this.creator = pkg.name;
-    this.creatorVersion = pkg.version;
+    this.creator = name;
+    this.creatorVersion = version;
   }
 
   /**
-   * Search for passages with the 'stylesheet' tag
+   * Add a passage to the story
    *
-   * @function getStylePassages
-   * @returns {Array} - Empty or array of passages
+   * @function addPassage
+   * @param {Passage} p - Passage to add to Story
    */
-  getStylePassages () {
-    let stylePassages = [];
-
-    if (this.passages.length > 0) {
-      stylePassages = this.passages.filter(function (passage) {
-        const results = passage.tags.filter(tag => tag === 'stylesheet');
-        return (results.length > 0);
-      });
+  addPassage (p) {
+    // Check if passed argument is a PAssage
+    if (p instanceof Passage) {
+      // Push the passage to the array
+      this.passages.push(p);
+    } else {
+      // Throw an error
+      throw new Error('Can only add Passages to the story!');
     }
-
-    return stylePassages;
   }
 
   /**
-   * Search for passages with the 'script' tag
+   * Find passages by tags
    *
-   * @function getScriptPassages
-   * @returns {Array}  - Empty or array of passages
+   * @function getPassagesByTag
+   * @param {string} t - Passage name to search for
+   * @returns {Array} Return array of passages
    */
-  getScriptPassages () {
-    let scriptPassages = [];
-
-    if (this.passages.length > 0) {
-      scriptPassages = this.passages.filter(function (passage) {
-        const results = passage.tags.filter(tag => tag === 'script');
-        return (results.length > 0);
-      });
-    }
-
-    return scriptPassages;
-  }
-
-  /**
-   * Delete specific passages by their tag
-   *
-   * @function deleteAllByTag
-   * @param {string} searchTag - Tag to search for
-   * @returns {void}
-   */
-  deleteAllByTag (searchTag) {
-    if (this.passages.length > 0) {
-      this.passages = this.passages.filter(function (passage) {
-        return !passage.tags.includes(searchTag);
-      });
-    }
+  getPassagesByTag (t = '') {
+    // Look through passages
+    return this.passages.filter((passage) => {
+      // Look through each passage's tags
+      return passage.tags.some((tag) => t === tag);
+    });
   }
 
   /**
@@ -141,4 +132,4 @@ class Story {
   }
 }
 
-module.exports = Story;
+export default Story;

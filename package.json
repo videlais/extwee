@@ -9,11 +9,11 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "jest --coverage --colors",
+    "test": "jest --runInBand test/Story.test.js --coverage --colors",
     "test:watch": "jest --watch",
-    "lint-and-test": "npm run lint && npm run lint:test && npm run test",
     "lint": "eslint ./src/**/*.js --fix",
-    "lint:test": "eslint ./test/*.test.js --fix"
+    "lint:test": "eslint ./test/*.test.js --fix",
+    "all": "npm run lint && npm run lint:test && npm run test"
   },
   "keywords": [
     "twine",
@@ -27,6 +27,16 @@
     "node-html-parser": "^1.2.16"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/eslint-parser": "^7.12.1",
+    "@babel/eslint-plugin": "^7.12.1",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^8.2.2",
+    "core-js": "^3.8.1",
     "eslint": "^7.7.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
@@ -43,5 +53,6 @@
   },
   "bugs": {
     "url": "https://github.com/videlais/extwee/issues"
-  }
+  },
+  "type": "module"
 }

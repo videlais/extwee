@@ -98,7 +98,7 @@ describe('HTMLWriter', function () {
       HTMLWriter.write('test/HTMLWriter/test7.html', tp, sfp);
       const frh = FileReader.read('test/HTMLWriter/test7.html');
       const hp = HTMLParser.parse(frh);
-      expect(hp.getStylePassages()).toHaveLength(1);
+      expect(hp.stylesheetPassage).not.toBe(null);
     });
 
     test('Should correctly write script-tagged passages', function () {
@@ -109,7 +109,7 @@ describe('HTMLWriter', function () {
       HTMLWriter.write('test/HTMLWriter/test8.html', tp, sfp);
       const frh = FileReader.read('test/HTMLWriter/test8.html');
       const hp = HTMLParser.parse(frh);
-      expect(hp.getScriptPassages()).toHaveLength(1);
+      expect(hp.stylesheetPassage).not.toBe(null);
     });
 
     test('Should correctly write extra CSS code', function () {
@@ -120,7 +120,7 @@ describe('HTMLWriter', function () {
       HTMLWriter.write('test/HTMLWriter/test9.html', tp, sfp, 'body{background:grey}');
       const frh = FileReader.read('test/HTMLWriter/test9.html');
       const hp = HTMLParser.parse(frh);
-      expect(hp.getStylePassages()[0].text.includes('body{background:grey}')).toBe(true);
+      expect(hp.stylesheetPassage.text.includes('body{background:grey}')).toBe(true);
     });
 
     test('Should correctly write extra JS code', function () {
@@ -131,7 +131,7 @@ describe('HTMLWriter', function () {
       HTMLWriter.write('test/HTMLWriter/test10.html', tp, sfp, '', "console.log('Test!')");
       const frh = FileReader.read('test/HTMLWriter/test10.html');
       const hp = HTMLParser.parse(frh);
-      expect(hp.getScriptPassages()[0].text.includes("console.log('Test!')")).toBe(true);
+      expect(hp.scriptPassage.text.includes("console.log('Test!')")).toBe(true);
     });
   });
 });

@@ -148,8 +148,17 @@ class TweeParser {
         throw new Error('Malformed passage header!');
       }
 
-      // Add the new Passage to the internal array
-      passages.push(new Passage(name, tags, metadata, text, pid));
+      const isScript = tags.some((tag) => tag === 'script');
+      const isStylesheet = tags.some((tag) => tag === 'stylesheet');
+
+      if (isScript) {
+        story.scriptPassage = text;
+      } else if (isStylesheet) {
+        story.stylesheetPassage = text;
+      } else {
+        // Add the new Passage to the internal array
+        passages.push(new Passage(name, tags, metadata, text, pid));
+      }
 
       // Increase pid
       pid++;

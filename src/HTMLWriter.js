@@ -47,49 +47,29 @@ class HTMLWriter {
             'format-version="' + storyFormat.version + '" ' +
             'options hidden>\n';
 
-    // Build the STYLE
+    // Start the STYLE
     storyData += '<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
 
-    // Get any passages tagged with 'stylesheet'
-    const stylePassages = story.getStylePassages();
-
-    // CSS passed through from DirectoryReader
-    if (cssContent != null) {
-      storyData += cssContent;
+    // Check if there is stylesheet content
+    if (story.stylesheetPassage !== null) {
+      // Get the text
+      storyData += story.stylesheetPassage.text;
     }
 
-    // Iterate through the collection and add to storyData
-    for (const content of stylePassages) {
-      storyData += content.text;
-    }
-
+    // Close the STYLE
     storyData += '</style>\n';
 
-    // Build the SCRIPT
+    // Start the SCRIPT
     storyData += '<script role="script" id="twine-user-script" type="text/twine-javascript">';
 
-    // Get any passages tagged with 'script'
-    const scriptPassages = story.getScriptPassages();
-
-    // JS passed through from DirectoryReader
-    if (jsContent != null) {
-      storyData += jsContent;
+    // Check if there is script content
+    if (story.scriptPassage !== null) {
+      // Get the text
+      storyData += story.scriptPassage.text;
     }
 
-    // Iterate through the collection and add to storyData
-    for (const content of scriptPassages) {
-      storyData += content.text;
-    }
-
+    // Close SCRIPT
     storyData += '</script>\n';
-
-    // All the script data has been written.
-    // Delete all 'script'-tagged passages
-    story.deleteAllByTag('script');
-
-    // All the style data has been written.
-    // Delete all 'style'-tagged passages
-    story.deleteAllByTag('stylesheet');
 
     // Build the passages
     for (const passage of story.passages) {

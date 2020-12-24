@@ -1,32 +1,25 @@
 {
     "env": {
-        "commonjs": true,
-        "es6": true,
-        "node": true,
+        "browser": true,
+        "es2020": true,
         "jest/globals": true
     },
     "extends": [
         "standard",
-        "plugin:jsdoc/recommended",
-        "plugin:jest/recommended"
+        "plugin:jest/recommended",
+        "plugin:jsdoc/recommended"
     ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
     "parserOptions": {
-        "ecmaVersion": 2018
+        "ecmaVersion": 11,
+        "sourceType": "module"
     },
     "rules": {
-        "semi": ["error", "always"],
-        "jest/no-disabled-tests": "warn",
-        "jest/no-focused-tests": "error",
-        "jest/no-identical-title": "error",
-        "jest/prefer-to-have-length": "warn",
-        "jest/valid-expect": "error"
+        "semi": ["error", "always"]
     },
     "plugins": [
-        "jsdoc",
-        "jest"
-    ]
+        "jest",
+        "@babel",
+        "jsdoc"
+    ],
+    "parser": "@babel/eslint-parser"
 }

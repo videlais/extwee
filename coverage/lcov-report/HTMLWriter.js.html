@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>47/47</span>
+                <span class='fraction'>39/39</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>47/47</span>
+                <span class='fraction'>39/39</span>
             </div>
         
             
@@ -185,27 +185,7 @@
 <a name='L126'></a><a href='#L126'>126</a>
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a>
-<a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L129'></a><a href='#L129'>129</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -260,18 +240,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -280,19 +251,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -402,49 +362,29 @@ class HTMLWriter {
             'format-version="' + storyFormat.version + '" ' +
             'options hidden&gt;\n';
 &nbsp;
-    // Build the STYLE
+    // Start the STYLE
     storyData += '&lt;style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"&gt;';
 &nbsp;
-    // Get any passages tagged with 'stylesheet'
-    const stylePassages = story.getStylePassages();
-&nbsp;
-    // CSS passed through from DirectoryReader
-    if (cssContent != null) {
-      storyData += cssContent;
+    // Check if there is stylesheet content
+    if (story.stylesheetPassage !== null) {
+      // Get the text
+      storyData += story.stylesheetPassage.text;
     }
 &nbsp;
-    // Iterate through the collection and add to storyData
-    for (const content of stylePassages) {
-      storyData += content.text;
-    }
-&nbsp;
+    // Close the STYLE
     storyData += '&lt;/style&gt;\n';
 &nbsp;
-    // Build the SCRIPT
+    // Start the SCRIPT
     storyData += '&lt;script role="script" id="twine-user-script" type="text/twine-javascript"&gt;';
 &nbsp;
-    // Get any passages tagged with 'script'
-    const scriptPassages = story.getScriptPassages();
-&nbsp;
-    // JS passed through from DirectoryReader
-    if (jsContent != null) {
-      storyData += jsContent;
+    // Check if there is script content
+    if (story.scriptPassage !== null) {
+      // Get the text
+      storyData += story.scriptPassage.text;
     }
 &nbsp;
-    // Iterate through the collection and add to storyData
-    for (const content of scriptPassages) {
-      storyData += content.text;
-    }
-&nbsp;
+    // Close SCRIPT
     storyData += '&lt;/script&gt;\n';
-&nbsp;
-    // All the script data has been written.
-    // Delete all 'script'-tagged passages
-    story.deleteAllByTag('script');
-&nbsp;
-    // All the style data has been written.
-    // Delete all 'style'-tagged passages
-    story.deleteAllByTag('stylesheet');
 &nbsp;
     // Build the passages
     for (const passage of story.passages) {
@@ -508,7 +448,7 @@ module.exports = HTMLWriter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Dec 19 2020 05:00:03 GMT-0500 (Eastern Standard Time)
+                at Wed Dec 23 2020 22:05:06 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

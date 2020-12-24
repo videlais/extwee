@@ -109,15 +109,7 @@ class HTMLParser {
     // Check if there is any content.
     // If not, we won't add empty passages
     if (styleElement.rawText.length > 0) {
-      // Add UserStylesheet
-      story.passages.push(
-        new Passage(
-          'UserStylesheet',
-          ['stylesheet'],
-          {},
-          styleElement.rawText
-        )
-      );
+      story.stylesheetPassage = styleElement.rawText;
     }
 
     // Look for the script element
@@ -126,15 +118,7 @@ class HTMLParser {
     // Check if there is any content.
     // If not, we won't add empty passages
     if (scriptElement.rawText.length > 0) {
-      // Add UserScript
-      story.passages.push(
-        new Passage(
-          'UserScript',
-          ['script'],
-          {},
-          scriptElement.rawText
-        )
-      );
+      story.scriptPassage = scriptElement.rawText;
     }
 
     // Now that all passages have been handled,
