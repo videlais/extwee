@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "jest --runInBand test/Story.test.js test/Passage.test.js test/StoryFormat.test.js test/FileReader.test.js --coverage --colors",
+    "test": "jest --runInBand test/Story.test.js test/Passage.test.js test/StoryFormat.test.js test/FileReader.test.js test/StoryFormatParser.test.js --coverage --colors",
     "test:watch": "jest --watch",
     "lint": "eslint ./src/**/*.js --fix",
     "lint:test": "eslint ./test/*.test.js --fix",
@@ -45,7 +45,8 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^26.6.3"
+    "jest": "^26.6.3",
+    "semver": "^5.7.1"
   },
   "repository": {
     "type": "git",

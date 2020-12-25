@@ -10,8 +10,9 @@ export default class FileReader {
    * @function readFile
    * @static
    * @public
-   * @param {string} file - File to read
-   * @returns {string} content
+   * @memberof FileReader
+   * @param {string} file - Path of file to read
+   * @returns {string} Content of file
    */
   static read (file) {
     // Setup default value

@@ -76,7 +76,7 @@ export default class StoryFormat {
    * @param {string} image - Image
    * @param {string} url - URL
    * @param {string} license - License
-   * @param {string} proofing - Proofing
+   * @param {boolean} proofing - If proofing or not
    * @param {string} source - Source
    */
   constructor (
@@ -87,7 +87,7 @@ export default class StoryFormat {
     image = '',
     url = '',
     license = '',
-    proofing = '',
+    proofing = false,
     source = ''
   ) {
     // Set name
@@ -263,18 +263,18 @@ export default class StoryFormat {
    *
    * @public
    * @memberof StoryFormat
-   * @returns {string} Proofing
+   * @returns {boolean} Proofing
    */
   get proofing () { return this.#_proofing; }
 
   /**
-   * @param {string} p - Replacement proofing
+   * @param {boolean} p - Replacement proofing
    */
   set proofing (p) {
-    if (typeof p === 'string') {
+    if (typeof p === 'boolean') {
       this.#_proofing = p;
     } else {
-      throw new Error('Proofing must be a String!');
+      throw new Error('Proofing must be a Boolean!');
     }
   }
 

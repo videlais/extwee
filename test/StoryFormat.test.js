@@ -10,7 +10,7 @@ describe('StoryFormat', function () {
       expect(sf.image).toBe('');
       expect(sf.url).toBe('');
       expect(sf.license).toBe('');
-      expect(sf.proofing).toBe('');
+      expect(sf.proofing).toBe(false);
       expect(sf.source).toBe('');
     });
   });
@@ -108,8 +108,8 @@ describe('StoryFormat', function () {
   describe('proofing', function () {
     test('Set new String', function () {
       const sf = new StoryFormat();
-      sf.proofing = 'New';
-      expect(sf.proofing).toBe('New');
+      sf.proofing = true;
+      expect(sf.proofing).toBe(true);
     });
 
     test('Throw error if non-String', function () {
