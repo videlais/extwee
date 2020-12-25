@@ -1,13 +1,15 @@
-const fs = require('fs');
+import fs from 'fs';
 /**
  * @class FileReader
  * @module FileReader
  */
-class FileReader {
+export default class FileReader {
   /**
    * Read a text file
    *
    * @function readFile
+   * @static
+   * @public
    * @param {string} file - File to read
    * @returns {string} content
    */
@@ -20,6 +22,7 @@ class FileReader {
       // The file exists.
       contents = fs.readFileSync(file, 'utf8');
     } else {
+      // Throw error if file does not exist
       throw new Error('Error: File not found!');
     }
 
@@ -27,5 +30,3 @@ class FileReader {
     return contents;
   }
 }
-
-module.exports = FileReader;

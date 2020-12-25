@@ -1,4 +1,4 @@
-const FileReader = require('../src/FileReader.js');
+import FileReader from '../src/FileReader.js';
 
 describe('FileReader', function () {
   describe('#readFile()', function () {
