@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "jest --runInBand test/Story.test.js test/Passage.test.js --coverage --colors",
+    "test": "jest --runInBand test/Story.test.js test/Passage.test.js test/StoryFormat.test.js --coverage --colors",
     "test:watch": "jest --watch",
     "lint": "eslint ./src/**/*.js --fix",
     "lint:test": "eslint ./test/*.test.js --fix",
