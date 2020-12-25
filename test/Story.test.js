@@ -15,6 +15,36 @@ describe('Story', function () {
     });
   });
 
+  describe('creator', function () {
+    test('Set using String', function () {
+      const s = new Story();
+      s.creator = 'New';
+      expect(s.creator).toBe('New');
+    });
+
+    test('Should throw error if not String', function () {
+      const s = new Story();
+      expect(() => {
+        s.creator = 1;
+      }).toThrow();
+    });
+  });
+
+  describe('creatorVersion', function () {
+    test('Set using String', function () {
+      const s = new Story();
+      s.creatorVersion = 'New';
+      expect(s.creatorVersion).toBe('New');
+    });
+
+    test('Should throw error if not String', function () {
+      const s = new Story();
+      expect(() => {
+        s.creatorVersion = 1;
+      }).toThrow();
+    });
+  });
+
   describe('IFID', function () {
     test('Set using String', function () {
       const s = new Story();

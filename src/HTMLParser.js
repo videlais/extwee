@@ -3,15 +3,14 @@
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML|HTML}
  */
 
-const { parse } = require('node-html-parser');
-const HtmlParser = parse;
-const Story = require('./Story.js');
-const Passage = require('./Passage.js');
+import { parse as HtmlParser } from 'node-html-parser';
+import Story from './Story.js';
+import Passage from './Passage.js';
 /**
  * @class HTMLParser
  * @module HTMLParser
  */
-class HTMLParser {
+export default class HTMLParser {
   /**
    * Parse HTML text into a JS DOM-like object
    *
@@ -20,6 +19,7 @@ class HTMLParser {
    */
   static parse (content) {
     let story = null;
+    let startNode = null;
 
     // Send to node-html-parser
     // Enable getting the content of 'script', 'style', and 'pre' elements
@@ -42,13 +42,12 @@ class HTMLParser {
       story.creator = storyData.attributes.creator;
       story.creatorVersion = storyData.attributes['creator-version'];
 
-      story.metadata = {};
-      story.metadata.ifid = storyData.attributes.ifid;
-      story.metadata.format = storyData.attributes.format;
-      story.metadata.formatVersion = storyData.attributes['format-version'];
-      story.metadata.zoom = storyData.attributes.zoom;
+      story.IFID = storyData.attributes.ifid;
+      story.format = storyData.attributes.format;
+      story.formatVersion = storyData.attributes['format-version'];
+      story.zoom = storyData.attributes.zoom;
       // Take string value and convert to Int
-      story.metadata.start = parseInt(storyData.attributes.startnode);
+      startNode = parseInt(storyData.attributes.startnode);
     } else {
       throw new Error('Error: Not a Twine 2-style file!');
     }
@@ -88,7 +87,7 @@ class HTMLParser {
       tags = tags.filter(tag => tag !== '');
 
       // Add a new Passage into an array
-      story.passages.push(
+      story.addPassage(
         new Passage(
           name,
           tags,
@@ -109,7 +108,11 @@ class HTMLParser {
     // Check if there is any content.
     // If not, we won't add empty passages
     if (styleElement.rawText.length > 0) {
-      story.stylesheetPassage = styleElement.rawText;
+      story.stylesheetPassage = new Passage(
+        'UserStyleSheet',
+        ['stylesheet'],
+        {},
+        styleElement.rawText);
     }
 
     // Look for the script element
@@ -118,12 +121,16 @@ class HTMLParser {
     // Check if there is any content.
     // If not, we won't add empty passages
     if (scriptElement.rawText.length > 0) {
-      story.scriptPassage = scriptElement.rawText;
+      story.scriptPassage = new Passage(
+        'UserScript',
+        ['script'],
+        {},
+        scriptElement.rawText);
     }
 
     // Now that all passages have been handled,
-    //  change the start value to passage name instead of PID
-    story.metadata.start = story.getPassageByPID(story.metadata.start).name;
+    //  change the start value to passage
+    story.start = story.getPassageByPID(startNode);
 
     return story;
   }
@@ -149,5 +156,3 @@ class HTMLParser {
     return result;
   }
 }
-
-module.exports = HTMLParser;

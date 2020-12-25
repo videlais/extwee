@@ -169,21 +169,41 @@ class Story {
    * Program used to create Story
    *
    * @public
-   * @readonly
    * @memberof Story
    * @returns {string} Creator Program
    */
   get creator () { return this.#_creator; }
 
   /**
+   * @param {string} c - Creator Program of Story
+   */
+  set creator (c) {
+    if (typeof c === 'string') {
+      this.#_creator = c;
+    } else {
+      throw new Error('Creator must be String');
+    }
+  }
+
+  /**
    * Version used to create Story
    *
    * @public
-   * @readonly
    * @memberof Story
    * @returns {string} Version
    */
   get creatorVersion () { return this.#_creatorVersion; }
+
+  /**
+   * @param {string} c - Version of creator program
+   */
+  set creatorVersion (c) {
+    if (typeof c === 'string') {
+      this.#_creatorVersion = c;
+    } else {
+      throw new Error('Creator version must be a string!');
+    }
+  }
 
   /**
    * Name

@@ -1,5 +1,5 @@
-const FileReader = require('../src/FileReader.js');
-const HTMLParser = require('../src/HTMLParser.js');
+import FileReader from '../src/FileReader.js';
+import HTMLParser from '../src/HTMLParser.js';
 
 describe('HTMLParser', function () {
   describe('#parse()', function () {
@@ -13,10 +13,34 @@ describe('HTMLParser', function () {
       expect(tp.name).toBe('twineExample');
     });
 
-    test('Should find startnode with no explicit Start passage', function () {
-      const fr = FileReader.read('test/HTMLParser/Example1.html');
+    test('Should be able to parse Twine 2 HTML for correct number of passages', function () {
+      const fr = FileReader.read('test/HTMLParser/twineExample.html');
       const tp = HTMLParser.parse(fr);
-      expect(tp.passages).toHaveLength(3);
+      expect(tp.size()).toBe(5);
+    });
+
+    test('Should be able to set correct starting passage', function () {
+      const fr = FileReader.read('test/HTMLParser/twineExample.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.start.name).toBe('Start');
+    });
+
+    test('Should be able to correctly parse story CSS', function () {
+      const fr = FileReader.read('test/HTMLParser/twineExample2.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.stylesheetPassage.text).toBe('html{font-size: 1.2em;}');
+    });
+
+    test('Should be able to correctly parse story JS', function () {
+      const fr = FileReader.read('test/HTMLParser/twineExample3.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.scriptPassage.text).toBe('window.test = {};');
+    });
+
+    test('Should be able to correctly parse passage tags', function () {
+      const fr = FileReader.read('test/HTMLParser/Tags.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.start.tags).toHaveLength(2);
     });
   });
 
