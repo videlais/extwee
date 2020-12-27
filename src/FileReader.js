@@ -7,9 +7,9 @@ export default class FileReader {
   /**
    * Read a text file
    *
-   * @function readFile
    * @static
    * @public
+   * @function readFile
    * @memberof FileReader
    * @param {string} file - Path of file to read
    * @returns {string} Content of file

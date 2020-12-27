@@ -67,8 +67,8 @@ export default class StoryFormat {
   #_source = '';
 
   /**
-   * @function StoryFormat
    * @class
+   * @function StoryFormat
    * @param {string} name - Name
    * @param {string} version - Version
    * @param {string} description - Description

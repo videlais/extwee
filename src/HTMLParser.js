@@ -14,6 +14,9 @@ export default class HTMLParser {
   /**
    * Parse HTML text into a JS DOM-like object
    *
+   * @public
+   * @static
+   * @function parse
    * @param {string} content - Content to parse
    * @returns {Story} story
    */
@@ -266,6 +269,9 @@ export default class HTMLParser {
   /**
    * Try to escape meta-characters
    *
+   * @public
+   * @static
+   * @function escapeMetacharacters
    * @param {string} result - Text to parse
    * @returns {string} Escaped characters
    */
