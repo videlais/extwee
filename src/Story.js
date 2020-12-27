@@ -13,6 +13,13 @@ export default class Story {
   #_name = 'Unknown';
 
   /**
+   * Author
+   *
+   * @private
+   */
+  #_author = '';
+
+  /**
    * Internal IFID
    *
    * @private
@@ -162,6 +169,27 @@ export default class Story {
       this.#_format = f;
     } else {
       throw new Error('Story format must be a String!');
+    }
+  }
+
+  /**
+   * Author of Story
+   *
+   * @public
+   * @readonly
+   * @memberof Story
+   * @returns {string} author
+   */
+  get author () { return this.#_author; }
+
+  /**
+   * @param {string} a - Replacement author
+   */
+  set author (a) {
+    if (typeof a === 'string') {
+      this.#_author = a;
+    } else {
+      throw new Error('Story author must be a String!');
     }
   }
 
@@ -455,6 +483,7 @@ export default class Story {
    * forEach-style iterator of passages in Story
    *
    * @public
+   * @function forEach
    * @memberof Story
    * @param {Function} callback - Callback function
    */

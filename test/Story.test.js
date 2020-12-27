@@ -200,6 +200,21 @@ describe('Story', function () {
     });
   });
 
+  describe('author', function () {
+    test('Set author', function () {
+      const s = new Story();
+      s.author = 'Dan';
+      expect(s.author).toBe('Dan');
+    });
+
+    test('Should throw error if not String', function () {
+      const s = new Story();
+      expect(() => {
+        s.author = 1;
+      }).toThrow();
+    });
+  });
+
   describe('addPassage()', function () {
     test('addPassage() - should increase size', function () {
       const s = new Story();
