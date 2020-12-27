@@ -3,17 +3,18 @@
  * @see Story.js
  */
 
-const fs = require('fs');
-const Story = require('./Story.js');
+import fs from 'fs';
+import Story from './Story.js';
 
 /**
  * @class TweeWriter
  * @module TweeWriter
  */
-class TweeWriter {
+export default class TweeWriter {
   /**
    * Write to a file using a Story object
    *
+   * @static
    * @param {Story} story - Story format to write
    * @param {string} file - File to write to
    * @returns {void}
@@ -74,5 +75,3 @@ class TweeWriter {
     }
   }
 }
-
-module.exports = TweeWriter;

@@ -301,6 +301,26 @@ describe('Story', function () {
     });
   });
 
+  describe('forEach()', function () {
+    test('forEach() - should return if non-function', function () {
+      const s = new Story();
+      s.addPassage(new Passage('A'));
+      s.addPassage(new Passage('B'));
+      let passageNames = '';
+      s.forEach((p) => {
+        passageNames += p.name;
+      });
+      expect(passageNames).toBe('AB');
+    });
+
+    test('forEach() - should throw error if non-function', function () {
+      const s = new Story();
+      expect(() => {
+        s.forEach(null);
+      }).toThrow();
+    });
+  });
+
   describe('size()', function () {
     test('size() - should report number of passages', function () {
       // Create a Story

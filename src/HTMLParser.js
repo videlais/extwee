@@ -36,20 +36,97 @@ export default class HTMLParser {
     // Pull out the tw-storydata element
     const storyData = dom.querySelector('tw-storydata');
 
-    if (storyData != null) {
+    // Does the <tw-storydata> element exist?
+    if (storyData !== null) {
+      // Create a Story.
       story = new Story();
-      story.name = storyData.attributes.name;
-      story.creator = storyData.attributes.creator;
-      story.creatorVersion = storyData.attributes['creator-version'];
 
-      story.IFID = storyData.attributes.ifid;
-      story.format = storyData.attributes.format;
-      story.formatVersion = storyData.attributes['format-version'];
-      story.zoom = storyData.attributes.zoom;
-      // Take string value and convert to Int
-      startNode = parseInt(storyData.attributes.startnode);
+      /**
+       * name: (string) Required.
+       *   The name of the story.
+       */
+      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'name')) {
+        // Update story name
+        story.name = storyData.attributes.name;
+      } else {
+        // Name is a required filed. Warn user.
+        console.warn('Twine 2 HTML must have a name!');
+        // Set a default name to test against
+        story.name = '';
+      }
+
+      /**
+       * ifid: (string) Required.
+       *   An IFID is a sequence of between 8 and 63 characters,
+       *   each of which shall be a digit, a capital letter or a
+       *   hyphen that uniquely identify a story (see Treaty of Babel).
+       */
+      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'ifid')) {
+        // Update story IFID
+        story.IFID = storyData.attributes.ifid;
+      } else {
+        // Name is a required filed. Warn user.
+        console.warn('Twine 2 HTML must have an IFID!');
+        // Set a default IFID to test against
+        story.IFID = '';
+      }
+
+      /**
+       * creator: (string) Optional.
+       *   The name of program used to create the file.
+       */
+      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'creator')) {
+        // Update story creator
+        story.creator = storyData.attributes.creator;
+      }
+
+      /**
+       * creator-version: (string) Optional.
+       *   The version of the program used to create the file.
+       */
+      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'creator-version')) {
+        // Update story creator version
+        story.creatorVersion = storyData.attributes['creator-version'];
+      }
+
+      /**
+       * format: (string) Optional.
+       *   The story format used to create the story.
+       */
+      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'format')) {
+        // Update story format
+        story.format = storyData.attributes.format;
+      }
+
+      /**
+       * format-version: (string) Optional.
+       *   The version of the story format used to create the story.
+       */
+      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'format-version')) {
+        // Update story format version
+        story.formatVersion = storyData.attributes['format-version'];
+      }
+
+      /**
+       * zoom: (string) Optional.
+       *   The decimal level of zoom (i.e. 1.0 is 100% and 1.2 would be 120% zoom level).
+       */
+      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'zoom')) {
+        // Update story zoom
+        story.zoom = storyData.attributes.zoom;
+      }
+
+      /**
+       * startnode: (string) Optional.
+       *   The PID matching a <tw-passagedata> element whose content should be displayed first.
+       */
+      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'startnode')) {
+        // Take string value and convert to Int
+        startNode = Number.parseInt(storyData.attributes.startnode, 10);
+      }
     } else {
-      throw new Error('Error: Not a Twine 2-style file!');
+      // If there is not a <tw-storydata> element, this is not a Twine 2 story!
+      throw new Error('Not a Twine 2-style file!');
     }
 
     // Pull out the tw-passagedata elements
@@ -62,42 +139,82 @@ export default class HTMLParser {
       // Get the passage text
       const text = storyPassages[passage].rawText;
 
-      // Save position
-      const position = attr.position;
-
-      // Save size
-      const size = attr.size;
-
-      // Escape the name
-      const name = HTMLParser.escapeMetacharacters(attr.name);
-
-      // Create empty tags
-      let tags = '';
-
-      // Escape any tags
-      // (Attributes can, themselves, be empty strings.)
-      if (attr.tags.length > 0 && attr.tags !== '""') {
-        tags = HTMLParser.escapeMetacharacters(attr.tags);
+      // Set a default position.
+      let position = null;
+      // Does position exist?
+      if (Object.prototype.hasOwnProperty.call(attr, 'position')) {
+        // Update position.
+        position = attr.position;
       }
 
-      // Split by spaces
-      tags = tags.split(' ');
+      // Set a default size.
+      let size = null;
+      // Does size exist?
+      if (Object.prototype.hasOwnProperty.call(attr, 'size')) {
+        // Update size.
+        size = attr.size;
+      }
 
-      // Remove any empty strings
-      tags = tags.filter(tag => tag !== '');
+      // Create a default name
+      let name = '';
+      // Does name exist?
+      if (Object.prototype.hasOwnProperty.call(attr, 'name')) {
+        // Escape the name
+        name = HTMLParser.escapeMetacharacters(attr.name);
+      } else {
+        // Warn user about missing name
+        console.warn('Passage is required to have name');
+      }
+
+      // Create empty tag array.
+      let tags = [];
+      // Does the tags attribute exist?
+      if (Object.prototype.hasOwnProperty.call(attr, 'tags')) {
+        // Escape any tags
+        // (Attributes can, themselves, be empty strings.)
+        if (attr.tags.length > 0 && attr.tags !== '""') {
+          // Escape the tags
+          tags = HTMLParser.escapeMetacharacters(attr.tags);
+          // Split by spaces into an array
+          tags = tags.split(' ');
+        }
+
+        // Remove any empty strings.
+        tags = tags.filter(tag => tag !== '');
+      }
+
+      // Create metadata for passage.
+      const metadata = {};
+
+      // Does position exist?
+      if (position !== null) {
+        // Add the property to metadata
+        metadata.position = position;
+      }
+
+      // Does size exist?
+      if (size !== null) {
+        // Add the property to metadata
+        metadata.size = size;
+      }
+
+      // Create a default PID
+      let pid = -1;
+      // Does pid exist?
+      if (Object.prototype.hasOwnProperty.call(attr, 'pid')) {
+        // Parse string into int
+        // Update PID
+        pid = Number.parseInt(attr.pid, 10);
+      }
 
       // Add a new Passage into an array
       story.addPassage(
         new Passage(
           name,
           tags,
-          {
-            position: position,
-            size: size
-
-          },
+          metadata,
           text,
-          parseInt(attr.pid)
+          pid
         )
       );
     }
@@ -105,33 +222,44 @@ export default class HTMLParser {
     // Look for the style element
     const styleElement = dom.querySelector('#twine-user-stylesheet');
 
-    // Check if there is any content.
-    // If not, we won't add empty passages
-    if (styleElement.rawText.length > 0) {
-      story.stylesheetPassage = new Passage(
-        'UserStyleSheet',
-        ['stylesheet'],
-        {},
-        styleElement.rawText);
+    // Does the style element exist?
+    if (styleElement !== null) {
+      // Check if there is any content.
+      if (styleElement.rawText.length > 0) {
+        // Update stylesheet passage
+        story.stylesheetPassage = new Passage(
+          'UserStyleSheet',
+          ['stylesheet'],
+          {},
+          styleElement.rawText);
+      }
     }
 
     // Look for the script element
     const scriptElement = dom.querySelector('#twine-user-script');
 
-    // Check if there is any content.
-    // If not, we won't add empty passages
-    if (scriptElement.rawText.length > 0) {
-      story.scriptPassage = new Passage(
-        'UserScript',
-        ['script'],
-        {},
-        scriptElement.rawText);
+    // Does the script element exist?
+    if (scriptElement !== null) {
+      // Check if there is any content.
+      if (scriptElement.rawText.length > 0) {
+        story.scriptPassage = new Passage(
+          'UserScript',
+          ['script'],
+          {},
+          scriptElement.rawText);
+      }
     }
 
-    // Now that all passages have been handled,
-    //  change the start value to passage
-    story.start = story.getPassageByPID(startNode);
+    // Try to find starting passage by PID.
+    const startingPassage = story.getPassageByPID(startNode);
 
+    // Is there a starting passage?
+    if (startingPassage !== null) {
+      // If so, update property.
+      story.start = startingPassage;
+    }
+
+    // Return the parsed story
     return story;
   }
 

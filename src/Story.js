@@ -4,7 +4,7 @@ import Passage from './Passage.js';
  * @class Story
  * @module Story
  */
-class Story {
+export default class Story {
   /**
    * Name
    *
@@ -362,7 +362,7 @@ class Story {
         this.#_passages.push(p);
       } else {
         // Warn user
-        console.warn('Ignored passage with same name as existing one!');
+        // console.warn('Ignored passage with same name as existing one!');
       }
     } else {
       // We can only add passages to array
@@ -450,6 +450,25 @@ class Story {
   size () {
     return this.#_passages.length;
   }
-}
 
-export default Story;
+  /**
+   * forEach-style iterator of passages in Story
+   *
+   * @public
+   * @memberof Story
+   * @param {Function} callback - Callback function
+   */
+  forEach (callback) {
+    // Check if argument is a function
+    if (typeof callback !== 'function') {
+      // Throw error
+      throw new Error('Callback must be a function!');
+    }
+
+    // Use internal forEach
+    this.#_passages.forEach((element, index) => {
+      // Call callback function with element and index
+      callback(element, index);
+    });
+  }
+}

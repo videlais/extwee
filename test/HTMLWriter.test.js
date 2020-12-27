@@ -1,20 +1,12 @@
-const FileReader = require('../src/FileReader.js');
-const TweeParser = require('../src/TweeParser.js');
-const StoryFormatParser = require('../src/StoryFormatParser.js');
-const HTMLParser = require('../src/HTMLParser.js');
-const HTMLWriter = require('../src/HTMLWriter.js');
-const Story = require('../src/Story.js');
+import FileReader from '../src/FileReader.js';
+import StoryFormatParser from '../src/StoryFormatParser.js';
+import HTMLParser from '../src/HTMLParser.js';
+import HTMLWriter from '../src/HTMLWriter.js';
+import Story from '../src/Story.js';
+import Passage from '../src/Passage.js';
 
 describe('HTMLWriter', function () {
-  describe('#constructor()', function () {
-    test('Should throw error if file writing fails', function () {
-      const fr = FileReader.read('test/HTMLWriter/example.twee');
-      const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      expect(() => { HTMLWriter.write('', tp, sfp); }).toThrow();
-    });
-
+  describe('#write()', function () {
     test('story should be instanceof Story', function () {
       expect(() => { HTMLWriter.write('test/HTMLWriter/test.html', {}); }).toThrow();
     });
@@ -24,114 +16,114 @@ describe('HTMLWriter', function () {
       expect(() => { HTMLWriter.write('test/HTMLWriter/test.html', s, {}); }).toThrow();
     });
 
-    test('Should produce HTML readable by HTMLParser and find story name of "twineExample"', function () {
-      const fr = FileReader.read('test/HTMLWriter/example.twee');
-      const tp = TweeParser.parse(fr);
+    test('Read, write, and read HTML', function () {
+      // Read HTML.
+      const fr = FileReader.read('test/HTMLParser/twineExample3.html');
+      // Parse HTML.
+      const story = HTMLParser.parse(fr);
+
+      // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test2.html', tp, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test2.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.name).toBe('twineExample');
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
+
+      // Write HTML.
+      HTMLWriter.write('test/HTMLWriter/test2.html', story, storyFormat);
+
+      // Read HTML.
+      const fr3 = FileReader.read('test/HTMLWriter/test2.html');
+      // Parse HTML.
+      const story2 = HTMLParser.parse(fr3);
+
+      // Test both names to be the same
+      expect(story.name).toBe(story2.name);
     });
 
-    test('Should correctly write default values for "position" and "size"', function () {
-      const fr = FileReader.read('test/HTMLWriter/example.twee');
-      const tp = TweeParser.parse(fr);
+    test('Should write one and two-tag passages', function () {
+      // Read HTML.
+      const fr = FileReader.read('test/HTMLWriter/TestTags.html');
+      // Parse HTML.
+      const story = HTMLParser.parse(fr);
+
+      // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test3.html', tp, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test3.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.passages[0].metadata.position).toBe('100,100');
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
+
+      // Write HTML.
+      HTMLWriter.write('test/HTMLWriter/test3.html', story, storyFormat);
+
+      // Read HTML.
+      const fr3 = FileReader.read('test/HTMLWriter/test3.html');
+      // Parse HTML.
+      const story2 = HTMLParser.parse(fr3);
+
+      let tags = '';
+      let tags2 = '';
+
+      // Combine contents of tags.
+      story.forEach((p) => {
+        tags += p.tags.join('');
+      });
+
+      // Combine contents of tags.
+      story2.forEach((p) => {
+        tags2 += p.tags.join('');
+      });
+
+      // Test combination tags.
+      // They should be the same.
+      expect(tags).toBe(tags2);
     });
 
-    test('Should correctly write defined values for "position"', function () {
-      const fr = FileReader.read('test/HTMLWriter/example2.twee');
-      const tp = TweeParser.parse(fr);
+    test('Should throw error if file path invalid', function () {
+      // Read HTML.
+      const fr = FileReader.read('test/HTMLParser/twineExample3.html');
+      // Parse HTML.
+      const story = HTMLParser.parse(fr);
+
+      // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test4.html', tp, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test4.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.passages[0].metadata.position).toBe('200,200');
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
+
+      // Throw error if path is invalid.
+      expect(() => {
+        HTMLWriter.write('test2/HTMLWriter/test2.html', story, storyFormat);
+      }).toThrow();
     });
 
-    test('Should correctly write single "tag"', function () {
-      const fr = FileReader.read('test/HTMLWriter/example3.twee');
-      const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test5.html', tp, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test5.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.passages[0].tags.includes('tag')).toBe(true);
-    });
+    test('Should not add optional position to passages', function () {
+      // Create Story.
+      const story = new Story();
+      // Add passage.
+      story.addPassage(new Passage('A'));
+      // Add passage.
+      story.addPassage(new Passage('B'));
 
-    test('Should correctly write defined values for "size"', function () {
-      const fr = FileReader.read('test/HTMLWriter/example4.twee');
-      const tp = TweeParser.parse(fr);
+      // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test6.html', tp, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test6.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.passages[0].metadata.size).toBe('100,100');
-    });
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
 
-    test('Should correctly write multiple tags', function () {
-      const fr = FileReader.read('test/HTMLWriter/example5.twee');
-      const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test6.html', tp, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test6.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.passages[0].tags).toHaveLength(2);
-    });
+      // Write out HTML with story and storyFormat.
+      // (Will add position to passages without them.)
+      HTMLWriter.write('test/HTMLWriter/test4.html', story, storyFormat);
 
-    test('Should correctly write stylesheet-tagged passages', function () {
-      const fr = FileReader.read('test/HTMLWriter/example6.twee');
-      const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test7.html', tp, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test7.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.stylesheetPassage).not.toBe(null);
-    });
+      // Read new HTML file.
+      const fr3 = FileReader.read('test/HTMLWriter/test4.html');
+      // Parse new HTML file.
+      const story2 = HTMLParser.parse(fr3);
 
-    test('Should correctly write script-tagged passages', function () {
-      const fr = FileReader.read('test/HTMLWriter/example7.twee');
-      const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test8.html', tp, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test8.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.stylesheetPassage).not.toBe(null);
-    });
+      // Verify none of the directly created passages have position
+      story.forEach((passage) => {
+        expect(Object.prototype.hasOwnProperty.call(passage.metadata, 'position')).toBe(false);
+      });
 
-    test('Should correctly write extra CSS code', function () {
-      const fr = FileReader.read('test/HTMLWriter/example7.twee');
-      const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test9.html', tp, sfp, 'body{background:grey}');
-      const frh = FileReader.read('test/HTMLWriter/test9.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.stylesheetPassage.text.includes('body{background:grey}')).toBe(true);
-    });
-
-    test('Should correctly write extra JS code', function () {
-      const fr = FileReader.read('test/HTMLWriter/example6.twee');
-      const tp = TweeParser.parse(fr);
-      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
-      const sfp = StoryFormatParser.parse(fr2);
-      HTMLWriter.write('test/HTMLWriter/test10.html', tp, sfp, '', "console.log('Test!')");
-      const frh = FileReader.read('test/HTMLWriter/test10.html');
-      const hp = HTMLParser.parse(frh);
-      expect(hp.scriptPassage.text.includes("console.log('Test!')")).toBe(true);
+      // Verify none parsed passages have position
+      story2.forEach((passage) => {
+        expect(Object.prototype.hasOwnProperty.call(passage.metadata, 'position')).toBe(false);
+      });
     });
   });
 });

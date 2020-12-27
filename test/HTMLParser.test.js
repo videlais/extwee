@@ -1,5 +1,6 @@
 import FileReader from '../src/FileReader.js';
 import HTMLParser from '../src/HTMLParser.js';
+import { version as packageVersion } from '../package.json';
 
 describe('HTMLParser', function () {
   describe('#parse()', function () {
@@ -41,6 +42,99 @@ describe('HTMLParser', function () {
       const fr = FileReader.read('test/HTMLParser/Tags.html');
       const tp = HTMLParser.parse(fr);
       expect(tp.start.tags).toHaveLength(2);
+    });
+
+    test('Should set a missing name to an empty string', function () {
+      const fr = FileReader.read('test/HTMLParser/missingName.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.name).toBe('');
+    });
+
+    test('Should set a missing IFID to an empty string', function () {
+      const fr = FileReader.read('test/HTMLParser/missingIFID.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.IFID).toBe('');
+    });
+
+    test('Should have Extwee for creator when missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingCreator.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.creator).toBe('extwee');
+    });
+
+    test('Should have correct for creatorVersion when missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingCreatorVersion.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.creatorVersion).toBe(packageVersion);
+    });
+
+    test('Should have empty string as format when missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingFormat.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.format).toBe('');
+    });
+
+    test('Should have empty string as formatVersion when missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingFormatVersion.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.formatVersion).toBe('');
+    });
+
+    test('Should have empty string as zoom when missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingZoom.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.zoom).toBe('');
+    });
+
+    test('Should have null as start with missing startnode', function () {
+      const fr = FileReader.read('test/HTMLParser/missingStartnode.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.start).toBe(null);
+    });
+
+    test('Should not have position if passage does not', function () {
+      const fr = FileReader.read('test/HTMLParser/missingPosition.html');
+      const tp = HTMLParser.parse(fr);
+      expect(Object.prototype.hasOwnProperty.call(tp.start.metadata, 'position')).toBe(false);
+    });
+
+    test('Should not have size if passage does not', function () {
+      const fr = FileReader.read('test/HTMLParser/missingSize.html');
+      const tp = HTMLParser.parse(fr);
+      expect(Object.prototype.hasOwnProperty.call(tp.start.metadata, 'size')).toBe(false);
+    });
+
+    test('Should have empty String as name', function () {
+      const fr = FileReader.read('test/HTMLParser/missingPassageName.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.start.name).toBe('');
+    });
+
+    test('Should have empty array as tags if tags is missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingPassageTags.html');
+      const tp = HTMLParser.parse(fr);
+      expect(tp.start.tags).toHaveLength(0);
+    });
+
+    test('Should have zero PID if missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingPID.html');
+      const tp = HTMLParser.parse(fr);
+      // Start will probably be null
+      expect(tp.start).toBe(null);
+    });
+
+    test('Should have null if style element is missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingStyle.html');
+      const tp = HTMLParser.parse(fr);
+      // Will not be stylesheet passage
+      expect(tp.stylesheetPassage).toBe(null);
+    });
+
+    test('Should have null if script element is missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingScript.html');
+      const tp = HTMLParser.parse(fr);
+      // Will not be script passage
+      expect(tp.scriptPassage).toBe(null);
     });
   });
 
