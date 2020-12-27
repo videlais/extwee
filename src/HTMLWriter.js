@@ -34,19 +34,41 @@ export default class HTMLWriter {
 
     let outputContents = '';
 
-    // Build <tw-storydata>
-    let storyData =
-            `<tw-storydata name="${story.name}" ` +
-            `startnode="${story.start.pid}" ` +
-            `creator="${story.creator}" ` +
-            `creator-version="${story.creatorVersion}" ` +
-            `ifid="${story.IFID}" ` +
-            `zoom="${story.zoom}" ` +
-            `format="${storyFormat.name}" ` +
-            `format-version="${storyFormat.version}" ` +
-            'options hidden>\n';
+    // Build <tw-storydata>.
+    let storyData = `<tw-storydata name="${story.name}"`;
 
-    // Start the STYLE
+    // Test if there is a start passage.
+    if (story.start !== null) {
+      // If so, update the attribute.
+      storyData += `startnode="${story.start.pid}"`;
+    }
+
+    // Defaults to 'extwee' if missing.
+    storyData += `creator="${story.creator}"`;
+
+    // Default to extwee version.
+    storyData += `creator-version="${story.creatorVersion}"`;
+
+    // Check if IFID exists.
+    if (story.IFID !== '') {
+      storyData += `ifid="${story.IFID}"`;
+    } else {
+      // TODO Generate new IFID
+    }
+
+    // Write existing or default value.
+    storyData += `zoom="${story.zoom}"`;
+
+    // Write existing or default value.
+    storyData += `format="${storyFormat.name}"`;
+
+    // Write existing or default value.
+    storyData += `format-version="${storyFormat.version}"`;
+
+    // Add the default.
+    storyData += ' options hidden>\n';
+
+    // Start the STYLE.
     storyData += '<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
 
     // Check if there is stylesheet content
@@ -72,14 +94,22 @@ export default class HTMLWriter {
 
     // Build the passages
     story.forEach((passage) => {
+      // Start the passage element
+      storyData += '<tw-passagedata';
+
       /**
        * pid: (string) Required.
        *   The Passage ID (PID).
-       *
+       */
+      if (passage.pid !== -1) {
+        storyData += ` pid="${passage.pid}"`;
+      }
+
+      /**
        * name: (string) Required.
        *   The name of the passage.
        */
-      storyData += `<tw-passagedata pid="${passage.pid}" name="${passage.name}"`;
+      storyData += ` name="${passage.name}"`;
 
       /**
        * tags: (string) Optional.
@@ -120,10 +150,11 @@ export default class HTMLWriter {
     // Replace the story data
     storyFormat.source = storyFormat.source.replace('{{STORY_DATA}}', storyData);
 
+    // Combine everything together.
     outputContents += storyFormat.source;
 
     try {
-      // Try to write
+      // Try to write.
       fs.writeFileSync(file, outputContents);
     } catch (event) {
       // Throw error

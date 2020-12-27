@@ -35,7 +35,7 @@ describe('HTMLWriter', function () {
       // Parse HTML.
       const story2 = HTMLParser.parse(fr3);
 
-      // Test both names to be the same
+      // Test both names to be the same.
       expect(story.name).toBe(story2.name);
     });
 
@@ -115,15 +115,48 @@ describe('HTMLWriter', function () {
       // Parse new HTML file.
       const story2 = HTMLParser.parse(fr3);
 
-      // Verify none of the directly created passages have position
+      // Verify none of the directly created passages have position.
       story.forEach((passage) => {
         expect(Object.prototype.hasOwnProperty.call(passage.metadata, 'position')).toBe(false);
       });
 
-      // Verify none parsed passages have position
+      // Verify none parsed passages have position.
       story2.forEach((passage) => {
         expect(Object.prototype.hasOwnProperty.call(passage.metadata, 'position')).toBe(false);
       });
+    });
+
+    test("Don't write creator if missing originally", function () {
+      // Create a new story.
+      const story = new Story();
+
+      // Create a passage
+      story.addPassage(new Passage('A'));
+
+      // CReate another passage
+      story.addPassage(new Passage('B'));
+
+      // Read StoryFormat.
+      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
+
+      // Write the HTML.
+      HTMLWriter.write('test/HTMLWriter/creator.html', story, storyFormat);
+
+      // Read HTML.
+      const fr3 = FileReader.read('test/HTMLWriter/creator.html');
+      // Parse HTML.
+      const story2 = HTMLParser.parse(fr3);
+
+      // Test creator (should be default)
+      expect(story.creator).toBe('extwee');
+
+      // Test parsed creator (should be default)
+      expect(story2.creator).toBe('extwee');
+
+      // Creator should be the same
+      expect(story.creator).toBe(story2.creator);
     });
   });
 });
