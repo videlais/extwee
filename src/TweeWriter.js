@@ -1,10 +1,13 @@
 /**
  * @external Story
  * @see Story.js
+ * @external Passage
+ * @see Passage.js
  */
 
 import fs from 'fs';
 import Story from './Story.js';
+import Passage from './Passage.js';
 
 /**
  * @class TweeWriter
@@ -45,21 +48,9 @@ export default class TweeWriter {
     // Are there any passages?
     if (story.passages.length > 0) {
       // Build the contents
-      for (const passage in story.passages) {
-        // Write the name
-        outputContents += `:: ${story.passages[passage].name} `;
-
-        // Test if it has any tags
-        if (story.passages[passage].tags.length > 0) {
-          // Write output of tags
-          outputContents += `[${story.passages[passage].tags.join(' ')}]`;
-        }
-
-        // Write out a space and then passage metadata
-        outputContents += ` ${JSON.stringify(story.passages[passage].metadata)}`;
-
-        // Add newline, text, and two newlines
-        outputContents += `\n${story.passages[passage].text}\n\n`;
+      for (const passage of story.passages) {
+        // Concatenate passage
+        outputContents += this.concatPassage(passage, outputContents);
       }
     } else {
       // Create empty Start passage
@@ -73,5 +64,41 @@ export default class TweeWriter {
       // Throw error
       throw new Error('Error: Cannot write Twee file!');
     }
+  }
+
+  /**
+   * Concatenate a Passage's content to a String value
+   *
+   * @public
+   * @static
+   * @param {Passage} passage - Passage to concatenate
+   * @param {string} content - Existing value to append
+   * @returns {string} Appended string value
+   */
+  static concatPassage (passage, content) {
+    // Test if argument is Passage
+    if (passage instanceof Passage) {
+      // Write the name
+      content += `:: ${passage.name} `;
+
+      // Test if it has any tags
+      if (passage.tags.length > 0) {
+        // Write output of tags
+        content += `[${passage.tags.join(' ')}`;
+      }
+
+      // Write out a space and then passage metadata
+      content += ` ${JSON.stringify(passage.metadata)}`;
+
+      // Add newline, text, and two newlines
+      content += `\n${passage.text}\n\n`;
+    } else {
+      // Can only write Passage.
+      // If this is not a Passage, throw error!
+      throw new Error('Argument must be instance of Passage!');
+    }
+
+    // Return the appended content
+    return content;
   }
 }

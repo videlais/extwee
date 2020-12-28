@@ -1,13 +1,15 @@
-const Passage = require('./Passage.js');
-const Story = require('./Story.js');
+import Passage from './Passage.js';
+import Story from './Story.js';
 /**
  * @class TweeParser
  * @module TweeParser
  */
-class TweeParser {
+export default class TweeParser {
   /**
    * Parse Twee
    *
+   * @public
+   * @static
    * @function parse
    * @param {string} fileContents - File contents to parse
    * @returns {Story} story
@@ -79,6 +81,9 @@ class TweeParser {
           metadata = JSON.parse(metadata);
         } catch (event) {
         }
+      } else {
+        // There wasn't any metadata, so set default
+        metadata = {};
       }
 
       // Test for tags
@@ -117,8 +122,8 @@ class TweeParser {
           // Set the tags back to the future array
           tags = futureTagArray;
         } else if (tagsArray.length === 1) {
-        // There was only one tag
-        // Store it
+          // There was only one tag
+          // Store it
           const temp = tags;
 
           // Switch tags over to an array
@@ -152,9 +157,31 @@ class TweeParser {
       const isStylesheet = tags.some((tag) => tag === 'stylesheet');
 
       if (isScript) {
-        story.scriptPassage = text;
+        // Test if this is the first passage with the tag of 'script'
+        if (story.scriptPassage === null) {
+          // Create passage with name
+          story.scriptPassage = new Passage('UserScript');
+          // Set its tags to include 'script'
+          story.scriptPassage.tags = ['script'];
+          // Set its text
+          story.scriptPassage.text = text;
+        } else {
+          // There is a script passage, so we append to it
+          story.scriptPassage.text += `\n${text}`;
+        }
       } else if (isStylesheet) {
-        story.stylesheetPassage = text;
+        // Test if this is the first passage with the tag 'stylesheet'
+        if (story.stylesheetPassage === null) {
+          // Create passage with name
+          story.stylesheetPassage = new Passage('UserStylesheet');
+          // Set its tags to include 'script'
+          story.stylesheetPassage.tags = ['stylesheet'];
+          // Set its text
+          story.stylesheetPassage.text = text;
+        } else {
+          // There is a stylesheet passage, so we append to it
+          story.stylesheetPassage.text += `\n${text}`;
+        }
       } else {
         // Add the new Passage to the internal array
         passages.push(new Passage(name, tags, metadata, text, pid));
@@ -173,8 +200,8 @@ class TweeParser {
       // Remove the StoryTitle passage
       passages = passages.filter(p => p.name !== 'StoryTitle');
     } else {
-    // There was no StoryTitle passage
-    // Set a value of "Unknown"
+      // There was no StoryTitle passage
+      // Set a value of "Unknown"
       story.name = 'Unknown';
     }
 
@@ -198,7 +225,7 @@ class TweeParser {
       // Was it found?
       if (results.length > 0) {
         // Assume "Start", since it exists
-        story.metadata.start = 'Start';
+        story.start = results[0];
       } else {
         // There is no StoryData or Start passage! Error!
         throw new Error('Unable to find StoryData or Start passage!');
@@ -211,5 +238,3 @@ class TweeParser {
     return story;
   }
 }
-
-module.exports = TweeParser;

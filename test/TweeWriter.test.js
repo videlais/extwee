@@ -1,8 +1,8 @@
-const TweeWriter = require('../src/TweeWriter');
-const FileReader = require('../src/FileReader');
-const TweeParser = require('../src/TweeParser');
-const Story = require('../src/Story');
-const Passage = require('../src/Passage');
+import FileReader from '../src/FileReader';
+import Story from '../src/Story';
+import Passage from '../src/Passage';
+import TweeWriter from '../src/TweeWriter.js';
+import TweeParser from '../src/TweeParser.js';
 
 describe('TweeWriter', function () {
   describe('#write()', function () {
@@ -24,9 +24,7 @@ describe('TweeWriter', function () {
 
     test('Should correctly write Twee file with passage metadata', function () {
       const s = new Story();
-      const p = new Passage('Start', [], { position: '100,100' });
-      s.passages = [];
-      s.passages.push(p);
+      s.addPassage(new Passage('Start', [], { position: '100,100' }, 'Content', 1));
       TweeWriter.write(s, 'test/TweeWriter/test2.twee');
       const fr = FileReader.read('test/TweeWriter/test2.twee');
       const tp = TweeParser.parse(fr);

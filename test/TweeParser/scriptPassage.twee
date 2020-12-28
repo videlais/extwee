@@ -1,0 +1,5 @@
+:: Start
+Content
+
+:: UserScript [script]
+window.example = {}
