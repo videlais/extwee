@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "jest --runInBand test/Story.test.js test/Passage.test.js test/StoryFormat.test.js test/FileReader.test.js test/StoryFormatParser.test.js test/HTMLParser.test.js test/HTMLWriter.test.js test/TweeParser.test.js --coverage --colors",
+    "test": "jest --runInBand test/Story.test.js test/Passage.test.js test/FileReader.test.js test/StoryFormat.test.js test/StoryFormatParser.test.js test/HTMLParser.test.js test/HTMLWriter.test.js --coverage --colors",
     "test:watch": "jest --watch",
     "lint": "eslint ./src/**/*.js --fix",
     "lint:test": "eslint ./test/*.test.js --fix",
@@ -24,7 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "minimist": "^1.2.5",
-    "node-html-parser": "^1.2.16"
+    "node-html-parser": "^1.2.16",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",

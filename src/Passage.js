@@ -8,7 +8,7 @@ export default class Passage {
    *
    * @private
    */
-  #_name = '';
+  #_name = null;
 
   /**
    * Internal array of tags
@@ -42,12 +42,12 @@ export default class Passage {
    * @function Passage
    * @class
    * @param {string} name - Name
+   * @param {string} text - Content
    * @param {Array} tags - Tags
    * @param {object} metadata - Metadata
-   * @param {string} text - Content
    * @param {number} pid - Passage ID (PID)
    */
-  constructor (name = '', tags = [], metadata = {}, text = '', pid = -1) {
+  constructor (name = '', text = '', tags = [], metadata = {}, pid = -1) {
     // Set name
     this.name = name;
 
@@ -166,5 +166,37 @@ export default class Passage {
     } else {
       throw new Error('PID should be a number!');
     }
+  }
+
+  /**
+   * Return a String representation
+   * 
+   * @public
+   * @memberof Passage
+   * @returns {string} String form of passage
+   */
+  toString() {
+    // Start empty string.
+    let content = '';
+    // Write the name
+    content += `:: ${this.name}`;
+
+    // Test if it has any tags
+    if (this.tags.length > 0) {
+      // Write output of tags
+      content += ` [${this.tags.join(' ')}]`;
+    }
+    
+    // Check if any properties exist
+    if(Object.keys(this.metadata).length > 0) {
+      // Write out a space and then passage metadata
+      content += ` ${JSON.stringify(this.metadata)}`;
+    }
+          
+    // Add newline, text, and two newlines
+    content += `\n${this.text}\n\n`;
+
+    // Return string.
+    return content;
   }
 }

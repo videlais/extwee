@@ -86,4 +86,19 @@ describe('Passage', function () {
       }).toThrow();
     });
   });
+
+  describe('toString()', function () {
+    test('Create name string', function () {
+      const p = new Passage("Name", "Test");
+      expect(p.toString()).toBe(':: Name\nTest\n\n');
+    });
+    test('Create tags string', function () {
+      const p = new Passage("Name", "Test", ['tags', 'another']);
+      expect(p.toString()).toBe(':: Name [tags another]\nTest\n\n');
+    });
+    test('Create metadata string', function () {
+      const p = new Passage("Name", "Test", ['tags', 'another'], {position: "100,100"});
+      expect(p.toString()).toBe(':: Name [tags another] {"position":"100,100"}\nTest\n\n');
+    });
+  });
 });
