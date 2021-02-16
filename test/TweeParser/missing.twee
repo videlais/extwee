@@ -1,6 +1,9 @@
 :: StoryTitle
 twineExample
 
+:: Start
+This is the start passage
+
 :: Another passage {"position":"353,60","size":"100,100"}
 [[A fourth passage]]
 

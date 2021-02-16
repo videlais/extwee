@@ -6,20 +6,6 @@ import Passage from './Passage.js';
  */
 export default class Story {
   /**
-   * Name
-   *
-   * @private
-   */
-  #_name = 'Unknown';
-
-  /**
-   * Author
-   *
-   * @private
-   */
-  #_author = '';
-
-  /**
    * Internal IFID
    *
    * @private
@@ -44,46 +30,11 @@ export default class Story {
   #_zoom = '';
 
   /**
-   * Internal state metadata
-   *
-   * @private
-   */
-  #_start = null;
-
-  /**
    * Passages
    *
    * @private
    */
   #_passages = [];
-
-  /**
-   * UserScript Passage
-   *
-   * @private
-   */
-  #_scriptPassage = null;
-
-  /**
-   * UserStylesheet Passage
-   *
-   * @private
-   */
-  #_stylesheetPassage = null;
-
-  /**
-   * StoryTitle Passage
-   *
-   * @private
-   */
-  #_storyTitlePassage = null;
-
-  /**
-   * StoryAuthor Passage
-   *
-   * @private
-   */
-  #_storyAuthorPassage = null;
 
   /**
    * Creator
@@ -98,6 +49,13 @@ export default class Story {
    * @private
    */
   #_creatorVersion = '';
+
+  /**
+   * Metadata
+   *
+   * @private
+   */
+  #_metadata = null;
 
   /**
    * @function Story
@@ -152,6 +110,27 @@ export default class Story {
   }
 
   /**
+   * Metadata of Story
+   *
+   * @public
+   * @readonly
+   * @memberof Story
+   * @returns {object} metadata of story
+   */
+  get metadata () { return this.#_metadata; }
+
+  /**
+   * @param {object} o - Replacement metadata
+   */
+  set metadata (o) {
+    if (typeof o === 'object') {
+      this.#_metadata = o;
+    } else {
+      throw new Error('Story metadata must be Object!');
+    }
+  }
+
+  /**
    * Story format of Story
    *
    * @public
@@ -169,27 +148,6 @@ export default class Story {
       this.#_format = f;
     } else {
       throw new Error('Story format must be a String!');
-    }
-  }
-
-  /**
-   * Author of Story
-   *
-   * @public
-   * @readonly
-   * @memberof Story
-   * @returns {string} author
-   */
-  get author () { return this.#_author; }
-
-  /**
-   * @param {string} a - Replacement author
-   */
-  set author (a) {
-    if (typeof a === 'string') {
-      this.#_author = a;
-    } else {
-      throw new Error('Story author must be a String!');
     }
   }
 
@@ -234,26 +192,6 @@ export default class Story {
   }
 
   /**
-   * Name
-   *
-   * @public
-   * @memberof Story
-   * @returns {string} Name
-   */
-  get name () { return this.#_name; }
-
-  /**
-   * @param {string} n - Replacement name
-   */
-  set name (n) {
-    if (typeof n === 'string') {
-      this.#_name = n;
-    } else {
-      throw new Error('Name must be a String!');
-    }
-  }
-
-  /**
    * Zoom level
    *
    * @public
@@ -274,106 +212,6 @@ export default class Story {
   }
 
   /**
-   * Start passage
-   *
-   * @public
-   * @memberof Story
-   * @returns {Passage|null} Passage or null
-   */
-  get start () { return this.#_start; }
-
-  /**
-   * @param {Passage} p - Replacement start passage
-   */
-  set start (p) {
-    if (p instanceof Passage) {
-      this.#_start = p;
-    } else {
-      throw new Error('Start passage must be an instance of Passage!');
-    }
-  }
-
-  /**
-   * UserScript passage
-   *
-   * @public
-   * @memberof Story
-   * @returns {Passage|null} Passage or null
-   */
-  get scriptPassage () { return this.#_scriptPassage; }
-
-  /**
-   * @param {Passage} p - Replacement UserScript passage
-   */
-  set scriptPassage (p) {
-    if (p instanceof Passage) {
-      this.#_scriptPassage = p;
-    } else {
-      throw new Error('UserScript passage must be an instance of Passage!');
-    }
-  }
-
-  /**
-   * UserStylesheet passage
-   *
-   * @public
-   * @memberof Story
-   * @returns {Passage|null} Passage or null
-   */
-  get stylesheetPassage () { return this.#_stylesheetPassage; }
-
-  /**
-   * @param {Passage} p - Replacement UserStylesheet passage
-   */
-  set stylesheetPassage (p) {
-    if (p instanceof Passage) {
-      this.#_stylesheetPassage = p;
-    } else {
-      throw new Error('UserStylesheet passage must be an instance of Passage!');
-    }
-  }
-
-  /**
-   * StoryTitle passage
-   *
-   * @public
-   * @memberof Story
-   * @returns {Passage|null} Passage or null
-   */
-  get storyTitlePassage () { return this.#_storyTitlePassage; }
-
-  /**
-   * @param {Passage} p - Replacement UserStylesheet passage
-   */
-  set storyTitlePassage (p) {
-    if (p instanceof Passage) {
-      this.#_storyTitlePassage = p;
-    } else {
-      throw new Error('StoryTitle passage must be an instance of Passage!');
-    }
-  }
-
-  /**
-   * StoryAuthor passage
-   *
-   * @public
-   * @memberof Story
-   * @returns {Passage|null} Passage or null
-   */
-  get storyAuthorPassage () { return this.#_storyAuthorPassage; }
-
-  /**
-   * @param {Passage} p - Replacement UserStylesheet passage
-   */
-  set storyAuthorPassage (p) {
-    if (p instanceof Passage) {
-      this.#_storyAuthorPassage = p;
-    } else {
-      throw new Error('StoryAuthor passage must be an instance of Passage!');
-    }
-  }
-
-  /**
    * Add a passage to the story
    *
    * @public
@@ -386,11 +224,23 @@ export default class Story {
     if (p instanceof Passage) {
       // Does this passage already exist in the collection?
       if (this.getPassageByName(p.name) === null) {
-        // Push the passage to the array
-        this.#_passages.push(p);
+        // StoryData is the only passage with special parsing needs.
+        // All other passages are added to the internal passages array.
+        if (p.name === 'StoryData') {
+          // Try to parse JSON
+          try {
+            // Attempt to parse storyData JSON
+            this.metadata = JSON.parse(p.text);
+          } catch (event) {
+            // Ignore errors
+          }
+        } else {
+          // Push the passage to the array
+          this.#_passages.push(p);
+        }
       } else {
         // Warn user
-        // console.warn('Ignored passage with same name as existing one!');
+        console.warn('Ignored passage with same name as existing one!');
       }
     } else {
       // We can only add passages to array
@@ -399,22 +249,15 @@ export default class Story {
   }
 
   /**
-   * Remove a passage from the story
+   * Remove a passage from the story by name
    *
    * @public
    * @function removePassage
    * @memberof Story
-   * @param {Passage} p - Passage to remove
+   * @param {string} name - Passage name to remove
    */
-  removePassage (p) {
-    // Check if passed argument is a Passage
-    if (p instanceof Passage) {
-      // Filter out any passages with the same hash as argument
-      this.#_passages = this.#_passages.filter((passage) => passage.hash !== p.hash);
-    } else {
-      // We can only remove passages
-      throw new Error('Must pass Passage to compare!');
-    }
+  removePassage (name) {
+    this.#_passages = this.#_passages.filter(passage => passage.name !== name);
   }
 
   /**

@@ -1,13 +1,11 @@
 :: StoryTitle
-Unknown
+Title
 
 :: StoryData
- {
-  "ifid": "",
-  "format": "",
-  "formatVersion": "",
-  "zoom": "",
-  "start": null
+{
+  "ifid": "3BD8B9E3-F6C9-4CA1-B62A-71EEB04EB955"
 }
 
-:: Start
+:: Start 
+Title
+

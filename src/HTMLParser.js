@@ -49,13 +49,13 @@ export default class HTMLParser {
        *   The name of the story.
        */
       if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'name')) {
-        // Update story name
-        story.name = storyData.attributes.name;
+        // Create StoryTitle passage based on name
+        story.addPassage(new Passage('StoryTitle', storyData.attributes.name));
       } else {
         // Name is a required filed. Warn user.
         console.warn('Twine 2 HTML must have a name!');
-        // Set a default name to test against
-        story.name = '';
+        // Set a default name
+        story.addPassage(new Passage('StoryTitle', 'Untitled'));
       }
 
       /**
@@ -70,8 +70,6 @@ export default class HTMLParser {
       } else {
         // Name is a required filed. Warn user.
         console.warn('Twine 2 HTML must have an IFID!');
-        // Set a default IFID to test against
-        story.IFID = '';
       }
 
       /**
@@ -164,9 +162,6 @@ export default class HTMLParser {
       if (Object.prototype.hasOwnProperty.call(attr, 'name')) {
         // Escape the name
         name = HTMLParser.escapeMetacharacters(attr.name);
-      } else {
-        // Warn user about missing name
-        console.warn('Passage is required to have name');
       }
 
       // Create empty tag array.
@@ -214,9 +209,9 @@ export default class HTMLParser {
       story.addPassage(
         new Passage(
           name,
+          text,
           tags,
           metadata,
-          text,
           pid
         )
       );
@@ -230,11 +225,11 @@ export default class HTMLParser {
       // Check if there is any content.
       if (styleElement.rawText.length > 0) {
         // Update stylesheet passage
-        story.stylesheetPassage = new Passage(
+        story.addPassage(new Passage(
           'UserStyleSheet',
-          ['stylesheet'],
-          {},
-          styleElement.rawText);
+          styleElement.rawText,
+          ['stylesheet'])
+        );
       }
     }
 
@@ -245,11 +240,11 @@ export default class HTMLParser {
     if (scriptElement !== null) {
       // Check if there is any content.
       if (scriptElement.rawText.length > 0) {
-        story.scriptPassage = new Passage(
+        story.addPassage(new Passage(
           'UserScript',
-          ['script'],
-          {},
-          scriptElement.rawText);
+          scriptElement.rawText,
+          ['script'])
+        );
       }
     }
 

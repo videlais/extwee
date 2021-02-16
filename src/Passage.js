@@ -170,12 +170,12 @@ export default class Passage {
 
   /**
    * Return a String representation
-   * 
+   *
    * @public
    * @memberof Passage
    * @returns {string} String form of passage
    */
-  toString() {
+  toString () {
     // Start empty string.
     let content = '';
     // Write the name
@@ -186,13 +186,13 @@ export default class Passage {
       // Write output of tags
       content += ` [${this.tags.join(' ')}]`;
     }
-    
+
     // Check if any properties exist
-    if(Object.keys(this.metadata).length > 0) {
+    if (Object.keys(this.metadata).length > 0) {
       // Write out a space and then passage metadata
       content += ` ${JSON.stringify(this.metadata)}`;
     }
-          
+
     // Add newline, text, and two newlines
     content += `\n${this.text}\n\n`;
 

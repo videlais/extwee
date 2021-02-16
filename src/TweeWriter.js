@@ -8,6 +8,7 @@
 import fs from 'fs';
 import Story from './Story.js';
 import Passage from './Passage.js';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * @class TweeWriter
@@ -27,35 +28,57 @@ export default class TweeWriter {
       throw new Error('Not a Story object!');
     }
 
-    // Write StoryTitle first
-    let outputContents = `:: StoryTitle\n${story.name}\n\n`;
+    // Write the StoryData first.
+    let outputContents = ':: StoryData\n';
 
-    // Write the StoryData second
-    outputContents += ':: StoryData\n';
+    // Create default object.
+    const metadata = {};
 
-    // Test if story.metadata is an object or not
-    if (typeof story.metadata === 'object') {
-      // Write any metadata in pretty format
-      outputContents += ` ${JSON.stringify(story.metadata, undefined, 2)}`;
+    // Is there an IFID?
+    if (story.IFID === '') {
+      // Generate a new IFID for this work.
+      // Twine 2 uses v4 (random) UUIDs, using only capital letters.
+      metadata.ifid = uuidv4().toUpperCase();
     } else {
-      // If, for whatever reason, story.metadata is not an object, throw error.
-      throw new Error('Story Metadata MUST be an object!');
+      // Use existing (non-default) value.
+      metadata.ifid = story.IFID;
     }
 
-    // Add two newlines
+    // Is there a format?
+    if (story.format !== '') {
+      // Using existing format
+      metadata.format = story.format;
+    }
+
+    // Is there a formatVersion?
+    if (story.formatVersion !== '') {
+      // Using existing format version
+      metadata.formatVersion = story.formatVersion;
+    }
+
+    // Is there a zoom?
+    if (story.zoom !== '') {
+      // Using existing zoom.
+      metadata.zoom = story.zoom;
+    }
+
+    // Is there a start passage?
+    if (story.start instanceof Passage) {
+      // Using existing start passage name.
+      metadata.start = story.start.name;
+    }
+
+    // Write out the story metadata.
+    outputContents += `${JSON.stringify(metadata, undefined, 2)}`;
+
+    // Add two newlines.
     outputContents += '\n\n';
 
-    // Are there any passages?
-    if (story.passages.length > 0) {
-      // Build the contents
-      for (const passage of story.passages) {
-        // Concatenate passage
-        outputContents += this.concatPassage(passage, outputContents);
-      }
-    } else {
-      // Create empty Start passage
-      outputContents += ':: Start\n';
-    }
+    // For each passage, append it to the output.
+    story.forEach((passage) => {
+      // For each passage, append it to the output.
+      outputContents += passage.toString();
+    });
 
     try {
       // Try to write
@@ -64,41 +87,5 @@ export default class TweeWriter {
       // Throw error
       throw new Error('Error: Cannot write Twee file!');
     }
-  }
-
-  /**
-   * Concatenate a Passage's content to a String value
-   *
-   * @public
-   * @static
-   * @param {Passage} passage - Passage to concatenate
-   * @param {string} content - Existing value to append
-   * @returns {string} Appended string value
-   */
-  static concatPassage (passage, content) {
-    // Test if argument is Passage
-    if (passage instanceof Passage) {
-      // Write the name
-      content += `:: ${passage.name} `;
-
-      // Test if it has any tags
-      if (passage.tags.length > 0) {
-        // Write output of tags
-        content += `[${passage.tags.join(' ')}`;
-      }
-
-      // Write out a space and then passage metadata
-      content += ` ${JSON.stringify(passage.metadata)}`;
-
-      // Add newline, text, and two newlines
-      content += `\n${passage.text}\n\n`;
-    } else {
-      // Can only write Passage.
-      // If this is not a Passage, throw error!
-      throw new Error('Argument must be instance of Passage!');
-    }
-
-    // Return the appended content
-    return content;
   }
 }

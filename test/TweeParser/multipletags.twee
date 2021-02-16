@@ -1,2 +1,10 @@
 :: Start [tag tags]
 Content
+
+:: StoryTitle
+Title
+
+:: StoryData
+{
+    "ifid": "2B68ECD6-348F-4CF5-96F8-549A512A8128"
+}

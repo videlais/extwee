@@ -16,36 +16,31 @@ describe('TweeWriter', function () {
 
     test('Should write Twee file', function () {
       const s = new Story();
+      s.addPassage(new Passage('StoryData', '{}'));
+      s.addPassage(new Passage('StoryTitle', 'Title'));
+      s.addPassage(new Passage('Start', 'Title'));
       TweeWriter.write(s, 'test/TweeWriter/test1.twee');
       const fr = FileReader.read('test/TweeWriter/test1.twee');
       const tp = TweeParser.parse(fr);
-      expect(tp.name).toBe('Unknown');
-    });
-
-    test('Should correctly write Twee file with passage metadata', function () {
-      const s = new Story();
-      s.addPassage(new Passage('Start', [], { position: '100,100' }, 'Content', 1));
-      TweeWriter.write(s, 'test/TweeWriter/test2.twee');
-      const fr = FileReader.read('test/TweeWriter/test2.twee');
-      const tp = TweeParser.parse(fr);
-      expect(tp.passages[0].metadata.position).toBe('100,100');
+      expect(tp.storyTitlePassage.text).toBe('Title');
     });
 
     test('Should correctly write Twee file with passage tags', function () {
       const s = new Story();
-      s.name = 'TweeWriter';
-      const p = new Passage('Start', ['tag', 'tags'], { position: '100,100' });
-      s.passages.push(p);
-      TweeWriter.write(s, 'test/TweeWriter/test3.twee');
-      const fr = FileReader.read('test/TweeWriter/test3.twee');
-      const tp = TweeParser.parse(fr);
-      expect(tp.passages[0].tags).toHaveLength(2);
-    });
+      s.addPassage(new Passage('Start', '', ['tag', 'tags']));
+      s.addPassage(new Passage('StoryTitle', 'Title'));
+      s.addPassage(new Passage('StoryData', '{"ifid": "DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A"}'));
+      // Verify only one passage.
+      expect(s.size()).toBe(1);
 
-    test('Should throw error if story.metadata is not an object', function () {
-      const s = new Story();
-      s.metadata = 2;
-      expect(() => { TweeWriter.write(s, 'test/TweeWriter/test4.twee'); }).toThrow();
+      // Write contents to file.
+      TweeWriter.write(s, 'test/TweeWriter/test3.twee');
+      // Read file.
+      const fr = FileReader.read('test/TweeWriter/test3.twee');
+      // Parse file.
+      const tp = TweeParser.parse(fr);
+      // Verify only one passage
+      expect(tp.size()).toBe(1);
     });
   });
 });

@@ -15,6 +15,7 @@ export default class TweeParser {
    * @returns {Story} story
    */
   static parse (fileContents) {
+    // Create Story.
     const story = new Story();
 
     // Check if argument is a string
@@ -27,7 +28,6 @@ export default class TweeParser {
       throw new Error('Contents not a String');
     }
 
-    let passages = [];
     let adjusted = '';
 
     // Check if there are extra content in the files
@@ -153,88 +153,14 @@ export default class TweeParser {
         throw new Error('Malformed passage header!');
       }
 
-      const isScript = tags.some((tag) => tag === 'script');
-      const isStylesheet = tags.some((tag) => tag === 'stylesheet');
-
-      if (isScript) {
-        // Test if this is the first passage with the tag of 'script'
-        if (story.scriptPassage === null) {
-          // Create passage with name
-          story.scriptPassage = new Passage('UserScript');
-          // Set its tags to include 'script'
-          story.scriptPassage.tags = ['script'];
-          // Set its text
-          story.scriptPassage.text = text;
-        } else {
-          // There is a script passage, so we append to it
-          story.scriptPassage.text += `\n${text}`;
-        }
-      } else if (isStylesheet) {
-        // Test if this is the first passage with the tag 'stylesheet'
-        if (story.stylesheetPassage === null) {
-          // Create passage with name
-          story.stylesheetPassage = new Passage('UserStylesheet');
-          // Set its tags to include 'script'
-          story.stylesheetPassage.tags = ['stylesheet'];
-          // Set its text
-          story.stylesheetPassage.text = text;
-        } else {
-          // There is a stylesheet passage, so we append to it
-          story.stylesheetPassage.text += `\n${text}`;
-        }
-      } else {
-        // Add the new Passage to the internal array
-        passages.push(new Passage(name, tags, metadata, text, pid));
-      }
+      // addPassage() method does all the work
+      story.addPassage(new Passage(name, text, tags, metadata, pid));
 
       // Increase pid
       pid++;
     });
 
-    // All formats share StoryTitle
-    // Find it and set it
-    let pos = passages.find((el) => { return el.name === 'StoryTitle'; });
-
-    if (pos !== undefined) {
-      story.name = pos.text;
-      // Remove the StoryTitle passage
-      passages = passages.filter(p => p.name !== 'StoryTitle');
-    } else {
-      // There was no StoryTitle passage
-      // Set a value of "Unknown"
-      story.name = 'Unknown';
-    }
-
-    // Look for StoryData
-    pos = passages.find((el) => { return el.name === 'StoryData'; });
-
-    // There was a StoryData, attempt to parse it
-    if (pos !== undefined) {
-    // Try to parse the StoryData
-      try {
-        story.metadata = JSON.parse(pos.text);
-      } catch (event) {
-        // Silently fail with default values
-      }
-
-      // Remove the StoryData passage
-      passages = passages.filter(p => p.name !== 'StoryData');
-    } else {
-      // There wasn't a StoryData. Look for "Start"
-      const results = passages.filter((passage) => passage.name === 'Start');
-      // Was it found?
-      if (results.length > 0) {
-        // Assume "Start", since it exists
-        story.start = results[0];
-      } else {
-        // There is no StoryData or Start passage! Error!
-        throw new Error('Unable to find StoryData or Start passage!');
-      }
-    }
-
-    // Set the passages to the internal story
-    story.passages = passages;
-
+    // Return Story.
     return story;
   }
 }

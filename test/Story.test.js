@@ -60,21 +60,6 @@ describe('Story', function () {
     });
   });
 
-  describe('name', function () {
-    test('Set using String', function () {
-      const s = new Story();
-      s.name = 'New';
-      expect(s.name).toBe('New');
-    });
-
-    test('Should throw error if not String', function () {
-      const s = new Story();
-      expect(() => {
-        s.name = 1;
-      }).toThrow();
-    });
-  });
-
   describe('format', function () {
     test('Set using String', function () {
       const s = new Story();
@@ -120,97 +105,17 @@ describe('Story', function () {
     });
   });
 
-  describe('start', function () {
-    test('Set using Passage', function () {
+  describe('metadata', function () {
+    test('Set metadata', function () {
       const s = new Story();
-      const p = new Passage();
-      s.start = p;
-      expect(s.start instanceof Passage).toBe(true);
+      s.metadata = {};
+      expect(s.metadata).not.toBe(null);
     });
 
-    test('Should throw error if not Passage', function () {
+    test('Should throw error if not object', function () {
       const s = new Story();
       expect(() => {
-        s.start = 1;
-      }).toThrow();
-    });
-  });
-
-  describe('scriptPassage', function () {
-    test('Set using Passage', function () {
-      const s = new Story();
-      const p = new Passage();
-      s.scriptPassage = p;
-      expect(s.scriptPassage instanceof Passage).toBe(true);
-    });
-
-    test('Should throw error if not Passage', function () {
-      const s = new Story();
-      expect(() => {
-        s.scriptPassage = 1;
-      }).toThrow();
-    });
-  });
-
-  describe('stylesheetPassage', function () {
-    test('Set using Passage', function () {
-      const s = new Story();
-      const p = new Passage();
-      s.stylesheetPassage = p;
-      expect(s.stylesheetPassage instanceof Passage).toBe(true);
-    });
-
-    test('Should throw error if not Passage', function () {
-      const s = new Story();
-      expect(() => {
-        s.stylesheetPassage = 1;
-      }).toThrow();
-    });
-  });
-
-  describe('storyTitlePassage', function () {
-    test('Set using Passage', function () {
-      const s = new Story();
-      const p = new Passage();
-      s.storyTitlePassage = p;
-      expect(s.storyTitlePassage instanceof Passage).toBe(true);
-    });
-
-    test('Should throw error if not Passage', function () {
-      const s = new Story();
-      expect(() => {
-        s.storyTitlePassage = 1;
-      }).toThrow();
-    });
-  });
-
-  describe('storyAuthorPassage', function () {
-    test('Set using Passage', function () {
-      const s = new Story();
-      const p = new Passage();
-      s.storyAuthorPassage = p;
-      expect(s.storyAuthorPassage instanceof Passage).toBe(true);
-    });
-
-    test('Should throw error if not Passage', function () {
-      const s = new Story();
-      expect(() => {
-        s.storyAuthorPassage = 1;
-      }).toThrow();
-    });
-  });
-
-  describe('author', function () {
-    test('Set author', function () {
-      const s = new Story();
-      s.author = 'Dan';
-      expect(s.author).toBe('Dan');
-    });
-
-    test('Should throw error if not String', function () {
-      const s = new Story();
-      expect(() => {
-        s.author = 1;
+        s.metadata = 1;
       }).toThrow();
     });
   });
@@ -243,26 +148,18 @@ describe('Story', function () {
   describe('removePassage()', function () {
     test('removePassage() - should decrease size', function () {
       const s = new Story();
-      const p = new Passage('Find');
-      s.addPassage(p);
-      const passage = s.getPassageByName('Find');
-      s.removePassage(passage);
-      expect(s.size()).toBe(0);
-    });
-
-    test('removePassage() - should throw error if non-Passage', function () {
-      const s = new Story();
-      expect(() => {
-        s.removePassage(null);
-      }).toThrow();
+      s.addPassage(new Passage('Find'));
+      s.addPassage(new Passage('Find2'));
+      s.removePassage('Find');
+      expect(s.size()).toBe(1);
     });
   });
 
   describe('getPassagesByTag()', function () {
     test('getPassagesByTag() - should find passages', function () {
       const s = new Story();
-      const p = new Passage('Find', ['one']);
-      const p2 = new Passage('Find2', ['one']);
+      const p = new Passage('Find', '', ['one']);
+      const p2 = new Passage('Find2', '', ['one']);
       s.addPassage(p);
       s.addPassage(p2);
       const ps = s.getPassagesByTag('one');
@@ -277,8 +174,8 @@ describe('Story', function () {
 
     test('getPassagesByTag() - should find none if no tags match search', function () {
       const s = new Story();
-      const p = new Passage('Find', ['one']);
-      const p2 = new Passage('Find2', ['one']);
+      const p = new Passage('Find', '', ['one']);
+      const p2 = new Passage('Find2', '', ['one']);
       s.addPassage(p);
       s.addPassage(p2);
       const ps = s.getPassagesByTag('two');
@@ -294,17 +191,12 @@ describe('Story', function () {
       const passage = s.getPassageByName('Find');
       expect(passage.name).toBe('Find');
     });
-
-    test('removePassage() - should return null if not found', function () {
-      const s = new Story();
-      expect(s.getPassageByName('Find')).toBe(null);
-    });
   });
 
   describe('getPassageByPID()', function () {
     test('getPassageByPID() - should get passage by PID', function () {
       const s = new Story();
-      const p = new Passage('Find', [], {}, '', 12);
+      const p = new Passage('Find', '', [], {}, 12);
       s.addPassage(p);
       const passage = s.getPassageByPID(12);
       expect(passage.name).toBe('Find');

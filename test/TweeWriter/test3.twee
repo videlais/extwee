@@ -1,15 +1,11 @@
 :: StoryTitle
-TweeWriter
+Title
 
 :: StoryData
- {
-  "ifid": "",
-  "format": "",
-  "formatVersion": "",
-  "zoom": "",
-  "start": null
+{
+  "ifid": "175F62E0-0B64-42D9-A560-79E896B79147"
 }
 
-:: Start [tag tags] {"position":"100,100"}
+:: Start [tag tags]
 
 

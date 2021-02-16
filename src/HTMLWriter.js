@@ -8,6 +8,8 @@
 import fs from 'fs';
 import Story from './Story.js';
 import StoryFormat from './StoryFormat.js';
+import { v4 as uuidv4 } from 'uuid';
+
 /**
  * @class HTMLWriter
  * @module HTMLWriter
@@ -37,10 +39,27 @@ export default class HTMLWriter {
     // Build <tw-storydata>.
     let storyData = `<tw-storydata name="${story.name}"`;
 
+    // Assume there might be a Start passage
+    let startPassage = 'Start';
+
+    // Does metadata exist?
+    if (story.metadata !== null) {
+      // Does the start property exist?
+      if (Object.prototype.hasOwnProperty.call(story.metadata, 'start')) {
+        startPassage = story.metadata.start;
+      }
+    }
+
+    // Look for the starting passage.
+    const start = story.getPassageByName(startPassage);
+
     // Test if there is a start passage.
-    if (story.start !== null) {
+    if (start !== null) {
       // If so, update the attribute.
-      storyData += `startnode="${story.start.pid}"`;
+      storyData += `startnode="${start.pid}"`;
+    } else {
+      // Throw an error
+      throw new Error('No valid start passage found!');
     }
 
     // Defaults to 'extwee' if missing.
@@ -51,9 +70,12 @@ export default class HTMLWriter {
 
     // Check if IFID exists.
     if (story.IFID !== '') {
+      // Write the existing IFID
       storyData += `ifid="${story.IFID}"`;
     } else {
-      // TODO Generate new IFID
+      // Generate a new IFID
+      // Twine 2 uses v4 (random) UUIDs, using only capital letters
+      storyData += `ifid="${uuidv4().toUpperCase()}"`;
     }
 
     // Write existing or default value.
@@ -71,11 +93,16 @@ export default class HTMLWriter {
     // Start the STYLE.
     storyData += '<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
 
-    // Check if there is stylesheet content
-    if (story.stylesheetPassage !== null) {
-      // Get the text
-      storyData += story.stylesheetPassage.text;
-    }
+    // Get stylesheet passages
+    const stylesheetPassages = story.getPassagesByTag('stylesheet');
+
+    // Concatenate passages
+    stylesheetPassages.forEach((passage) => {
+      // Add text of passages
+      storyData += passage.text;
+      // Remove from story
+      story.removePassage(passage);
+    });
 
     // Close the STYLE
     storyData += '</style>\n';
@@ -83,11 +110,16 @@ export default class HTMLWriter {
     // Start the SCRIPT
     storyData += '<script role="script" id="twine-user-script" type="text/twine-javascript">';
 
-    // Check if there is script content
-    if (story.scriptPassage !== null) {
-      // Get the text
-      storyData += story.scriptPassage.text;
-    }
+    // Get stylesheet passages
+    const scriptPassages = story.getPassagesByTag('script');
+
+    // Concatenate passages
+    scriptPassages.forEach((passage) => {
+      // Add text of passages
+      storyData += passage.text;
+      // Remove from story
+      story.removePassage(passage);
+    });
 
     // Close SCRIPT
     storyData += '</script>\n';

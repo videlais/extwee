@@ -1,0 +1,14 @@
+:: StoryTitle
+Example
+
+:: StoryData
+ {
+  "ifid": "A74F654F-3F85-44DE-8A87-9845AECD04B0",
+  "format": "Harlowe",
+  "formatVersion": "3.2.1",
+  "zoom": "1",
+  "start": "Untitled Passage"
+}
+
+:: Untitled Passage {"position":"100,99","size":"100,100"}
+Double-click this passage to edit it.
