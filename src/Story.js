@@ -6,6 +6,13 @@ import Passage from './Passage.js';
  */
 export default class Story {
   /**
+   * Internal start
+   *
+   * @private
+   */
+  #_start = '';
+
+  /**
    * Internal IFID
    *
    * @private
@@ -58,6 +65,13 @@ export default class Story {
   #_metadata = null;
 
   /**
+   * Tag Colors
+   *
+   * @private
+   */
+  #_tagColors = [];
+
+  /**
    * @function Story
    * @class
    */
@@ -65,6 +79,29 @@ export default class Story {
     // Store the creator and version
     this.#_creator = name;
     this.#_creatorVersion = version;
+    // Set metadata to an object
+    this.#_metadata = {};
+  }
+
+  /**
+   * Tag Colors
+   *
+   * @public
+   * @readonly
+   * @memberof Story
+   * @returns {Array} tag colors array
+   */
+  get tagColors () { return this.#_tagColors; }
+
+  /**
+   * @param {Array} a - Replacement tag colors
+   */
+  set tagColors (a) {
+    if (Array.isArray(a)) {
+      this.#_tagColors = a;
+    } else {
+      throw new Error('Tag colors must be an Array!');
+    }
   }
 
   /**
@@ -85,6 +122,27 @@ export default class Story {
       this.#_IFID = i;
     } else {
       throw new Error('IFID must be a String!');
+    }
+  }
+
+  /**
+   * Name of start passage
+   *
+   * @public
+   * @readonly
+   * @memberof Story
+   * @returns {string} start
+   */
+  get start () { return this.#_start; }
+
+  /**
+   * @param {string} s - Replacement start
+   */
+  set start (s) {
+    if (typeof s === 'string') {
+      this.#_start = s;
+    } else {
+      throw new Error('start (passage name) must be a String!');
     }
   }
 
@@ -230,7 +288,32 @@ export default class Story {
           // Try to parse JSON
           try {
             // Attempt to parse storyData JSON
-            this.metadata = JSON.parse(p.text);
+            const metadata = JSON.parse(p.text);
+
+            // IFID
+            if (Object.prototype.hasOwnProperty.call(metadata, 'ifid')) {
+              this.IFID = metadata.ifid;
+            }
+
+            // format
+            if (Object.prototype.hasOwnProperty.call(metadata, 'format')) {
+              this.format = metadata.format;
+            }
+
+            // formatVersion
+            if (Object.prototype.hasOwnProperty.call(metadata, 'formatVersion')) {
+              this.formatVersion = metadata.formatVersion;
+            }
+
+            // zoom
+            if (Object.prototype.hasOwnProperty.call(metadata, 'zoom')) {
+              this.zoom = metadata.zoom;
+            }
+
+            // start
+            if (Object.prototype.hasOwnProperty.call(metadata, 'start')) {
+              this.start = metadata.start;
+            }
           } catch (event) {
             // Ignore errors
           }

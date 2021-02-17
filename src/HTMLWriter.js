@@ -35,31 +35,44 @@ export default class HTMLWriter {
     }
 
     let outputContents = '';
+    let storyData = '';
 
-    // Build <tw-storydata>.
-    let storyData = `<tw-storydata name="${story.name}"`;
+    // Look for StoryTitle
+    const storyTitle = story.getPassageByName('StoryTitle');
+
+    if (storyTitle != null) {
+      // Use StoryTitle for name
+      storyData += `<tw-storydata name="${storyTitle.text}"`;
+    } else {
+      throw new Error("'name' is required attribute. (Add StoryTitle to story.)");
+    }
 
     // Assume there might be a Start passage
     let startPassage = 'Start';
 
-    // Does metadata exist?
-    if (story.metadata !== null) {
-      // Does the start property exist?
-      if (Object.prototype.hasOwnProperty.call(story.metadata, 'start')) {
-        startPassage = story.metadata.start;
-      }
+    // Does start exist?
+    if (story.start !== '') {
+      // Save start passage.
+      startPassage = story.start;
     }
 
     // Look for the starting passage.
-    const start = story.getPassageByName(startPassage);
+    let start = story.getPassageByName(startPassage);
 
     // Test if there is a start passage.
     if (start !== null) {
       // If so, update the attribute.
       storyData += `startnode="${start.pid}"`;
     } else {
-      // Throw an error
-      throw new Error('No valid start passage found!');
+      // Look for Start.
+      start = story.getPassageByName('Start');
+      // Does Start exist?
+      if (start !== null) {
+        storyData += `startnode="${start.pid}"`;
+      } else {
+        // Throw an error
+        throw new Error('No valid start passage found!');
+      }
     }
 
     // Defaults to 'extwee' if missing.

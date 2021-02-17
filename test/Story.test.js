@@ -120,6 +120,21 @@ describe('Story', function () {
     });
   });
 
+  describe('start', function () {
+    test('Set start', function () {
+      const s = new Story();
+      s.start = 'Start';
+      expect(s.start).not.toBe('');
+    });
+
+    test('Should throw error if not String', function () {
+      const s = new Story();
+      expect(() => {
+        s.start = 1;
+      }).toThrow();
+    });
+  });
+
   describe('addPassage()', function () {
     test('addPassage() - should increase size', function () {
       const s = new Story();

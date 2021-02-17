@@ -22,6 +22,8 @@ describe('HTMLWriter', function () {
       // Parse HTML.
       const story = HTMLParser.parse(fr);
 
+      const s1Title = story.getPassageByName('StoryTitle').text;
+
       // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');
       // Parse StoryFormat.
@@ -35,8 +37,10 @@ describe('HTMLWriter', function () {
       // Parse HTML.
       const story2 = HTMLParser.parse(fr3);
 
+      const s2Title = story2.getPassageByName('StoryTitle').text;
+
       // Test both names to be the same.
-      expect(story.name).toBe(story2.name);
+      expect(s1Title).toBe(s2Title);
     });
 
     test('Should write one and two-tag passages', function () {
@@ -93,6 +97,8 @@ describe('HTMLWriter', function () {
       }).toThrow();
     });
 
+    test.todo('Should throw error if name/StoryTitle does not exist');
+
     test('Should not add optional position to passages', function () {
       // Create Story.
       const story = new Story();
@@ -100,6 +106,10 @@ describe('HTMLWriter', function () {
       story.addPassage(new Passage('A'));
       // Add passage.
       story.addPassage(new Passage('B'));
+      // Add StoryTitle
+      story.addPassage(new Passage('StoryTitle', 'Title'));
+      // Add Start
+      story.addPassage(new Passage('Start', 'Content'));
 
       // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');
@@ -130,11 +140,17 @@ describe('HTMLWriter', function () {
       // Create a new story.
       const story = new Story();
 
-      // Create a passage
+      // Create a passage.
       story.addPassage(new Passage('A'));
 
-      // CReate another passage
+      // Create another passage.
       story.addPassage(new Passage('B'));
+
+      // Create another passage.
+      story.addPassage(new Passage('StoryTitle', 'Title'));
+
+      // Add Start
+      story.addPassage(new Passage('Start', 'Content'));
 
       // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');

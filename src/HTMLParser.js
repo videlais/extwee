@@ -156,12 +156,20 @@ export default class HTMLParser {
         size = attr.size;
       }
 
-      // Create a default name
-      let name = '';
+      /**
+       * name: (string) Required.
+       *   The name of the passage.
+       *
+       *   https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md#passages
+       */
+      // Create a default value
+      let name = null;
       // Does name exist?
       if (Object.prototype.hasOwnProperty.call(attr, 'name')) {
         // Escape the name
         name = HTMLParser.escapeMetacharacters(attr.name);
+      } else {
+        console.warn('Encountered passage without a name! Will not add.');
       }
 
       // Create empty tag array.
@@ -196,6 +204,13 @@ export default class HTMLParser {
         metadata.size = size;
       }
 
+      /**
+       * pid: (string) Required.
+       *   The Passage ID (PID).
+       *   (Note: This is subject to change during editing with Twine 2.)
+       *
+       *   https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md#passages
+       */
       // Create a default PID
       let pid = -1;
       // Does pid exist?
@@ -203,18 +218,24 @@ export default class HTMLParser {
         // Parse string into int
         // Update PID
         pid = Number.parseInt(attr.pid, 10);
+      } else {
+        console.warn('Passages are required to have PID. Will not add!');
       }
 
-      // Add a new Passage into an array
-      story.addPassage(
-        new Passage(
-          name,
-          text,
-          tags,
-          metadata,
-          pid
-        )
-      );
+      // If passage is missing name and PID (required attributes),
+      //  they are not added.
+      if (name !== null && pid !== -1) {
+        // Add a new Passage into an array
+        story.addPassage(
+          new Passage(
+            name,
+            text,
+            tags,
+            metadata,
+            pid
+          )
+        );
+      }
     }
 
     // Look for the style element
@@ -226,7 +247,7 @@ export default class HTMLParser {
       if (styleElement.rawText.length > 0) {
         // Update stylesheet passage
         story.addPassage(new Passage(
-          'UserStyleSheet',
+          'UserStylesheet',
           styleElement.rawText,
           ['stylesheet'])
         );
@@ -248,14 +269,47 @@ export default class HTMLParser {
       }
     }
 
-    // Try to find starting passage by PID.
-    const startingPassage = story.getPassageByPID(startNode);
-
-    // Is there a starting passage?
-    if (startingPassage !== null) {
-      // If so, update property.
-      story.start = startingPassage;
+    // Was there a startNode?
+    if (startNode !== null) {
+      // Try to find starting passage by PID.
+      const startingPassage = story.getPassageByPID(startNode);
+      // Does the passage exist (yet)?
+      if (startingPassage !== null) {
+        // If so, update property to name of passage.
+        story.start = startingPassage.name;
+      }
     }
+
+    // Look for all <tw-tag> elements
+    const twTags = dom.querySelectorAll('tw-tag');
+
+    // Parse through the entries
+    twTags.forEach((tags) => {
+      // Parse each tag element
+      const attributes = tags.attributes;
+
+      // Create default value for name
+      let name = '';
+
+      // Create default value for color
+      let color = '';
+
+      // Check for name
+      if (Object.prototype.hasOwnProperty.call(attributes, 'name')) {
+        name = attributes.name;
+      }
+
+      // Check for color
+      if (Object.prototype.hasOwnProperty.call(attributes, 'color')) {
+        color = attributes.color;
+      }
+
+      // If both are not empty strings, use them.
+      if (name !== '' && color !== '') {
+        // Add name and color to the array
+        story.tagColors.push([name, color]);
+      }
+    });
 
     // Return the parsed story
     return story;

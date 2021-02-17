@@ -1,11 +1,18 @@
+:: StoryData
+{
+  "ifid": "D6AB214E-9FE0-406E-9244-BBAF7A57CB38",
+  "format": "Test",
+  "format-version": "1.2.3",
+  "zoom": "1",
+  "start": "Untitled"
+}
+
 :: StoryTitle
 Title
 
-:: StoryData
-{
-  "ifid": "3BD8B9E3-F6C9-4CA1-B62A-71EEB04EB955"
-}
+:: Start
+Content
 
-:: Start 
-Title
+:: Untitled
+Some stuff
 

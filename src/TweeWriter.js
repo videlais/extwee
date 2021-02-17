@@ -7,7 +7,6 @@
 
 import fs from 'fs';
 import Story from './Story.js';
-import Passage from './Passage.js';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -53,7 +52,7 @@ export default class TweeWriter {
     // Is there a formatVersion?
     if (story.formatVersion !== '') {
       // Using existing format version
-      metadata.formatVersion = story.formatVersion;
+      metadata['format-version'] = story.formatVersion;
     }
 
     // Is there a zoom?
@@ -62,10 +61,10 @@ export default class TweeWriter {
       metadata.zoom = story.zoom;
     }
 
-    // Is there a start passage?
-    if (story.start instanceof Passage) {
-      // Using existing start passage name.
-      metadata.start = story.start.name;
+    // Is there a start?
+    if (story.start !== '') {
+      // Using existing start
+      metadata.start = story.start;
     }
 
     // Write out the story metadata.

@@ -73,21 +73,23 @@ describe('HTMLParser', function () {
 
     test('Should not have position if passage does not', function () {
       const fr = FileReader.read('test/HTMLParser/missingPosition.html');
-      const tp = HTMLParser.parse(fr);
-      expect(Object.prototype.hasOwnProperty.call(tp.start.metadata, 'position')).toBe(false);
+      const story = HTMLParser.parse(fr);
+      const p = story.getPassageByName('Untitled Passage');
+      expect(Object.prototype.hasOwnProperty.call(p.metadata, 'position')).toBe(false);
     });
 
     test('Should not have size if passage does not', function () {
       const fr = FileReader.read('test/HTMLParser/missingSize.html');
-      const tp = HTMLParser.parse(fr);
-      expect(Object.prototype.hasOwnProperty.call(tp.start.metadata, 'size')).toBe(false);
+      const story = HTMLParser.parse(fr);
+      const p = story.getPassageByName('Untitled Passage');
+      expect(Object.prototype.hasOwnProperty.call(p.metadata, 'size')).toBe(false);
     });
 
     test('Should have empty array as tags if tags is missing', function () {
       const fr = FileReader.read('test/HTMLParser/missingPassageTags.html');
       const story = HTMLParser.parse(fr);
-      const start = story.getPassageByName('Untitled Passage');
-      expect(start.tags).toHaveLength(0);
+      const p = story.getPassageByName('Untitled Passage');
+      expect(p.tags).toHaveLength(0);
     });
 
     test('Should not have stylesheet tag if no passages exist with it', function () {
@@ -102,6 +104,35 @@ describe('HTMLParser', function () {
       const story = HTMLParser.parse(fr);
       const passages = story.getPassagesByTag('script');
       expect(passages.length).toBe(0);
+    });
+
+    test('Should have script and style tags normally', function () {
+      const fr = FileReader.read('test/HTMLParser/Example1.html');
+      const story = HTMLParser.parse(fr);
+      const scriptPassages = story.getPassagesByTag('script');
+      const stylesheetPassages = story.getPassagesByTag('stylesheet');
+      expect(scriptPassages.length).toBe(1);
+      expect(stylesheetPassages.length).toBe(1);
+    });
+
+    test('Should not have start property if startNode does not exist when parsed', function () {
+      const fr = FileReader.read('test/HTMLParser/missingStartnode.html');
+      const story = HTMLParser.parse(fr);
+      expect(Object.prototype.hasOwnProperty.call(story.metadata, 'start')).toBe(false);
+    });
+
+    test('Should not add passages without names', function () {
+      const fr = FileReader.read('test/HTMLParser/missingPassageName.html');
+      const story = HTMLParser.parse(fr);
+      // There is only one passage, StoryTitle
+      expect(story.size()).toBe(1);
+    });
+
+    test('Should not add passages without PID', function () {
+      const fr = FileReader.read('test/HTMLParser/missingPID.html');
+      const story = HTMLParser.parse(fr);
+      // There is only one passage, StoryTitle
+      expect(story.size()).toBe(1);
     });
   });
 
