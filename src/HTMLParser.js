@@ -114,7 +114,7 @@ export default class HTMLParser {
        */
       if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'zoom')) {
         // Update story zoom
-        story.zoom = storyData.attributes.zoom;
+        story.zoom = Number(Number.parseFloat(storyData.attributes.zoom).toFixed(2));
       }
 
       /**
@@ -306,8 +306,8 @@ export default class HTMLParser {
 
       // If both are not empty strings, use them.
       if (name !== '' && color !== '') {
-        // Add name and color to the array
-        story.tagColors.push([name, color]);
+        // Add name and color to the object
+        story.tagColors[name] = color;
       }
     });
 

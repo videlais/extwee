@@ -54,13 +54,29 @@ describe('TweeWriter', function () {
 
       s.format = 'Test';
       s.formatVersion = '1.2.3';
-      s.zoom = '1';
+      s.zoom = 1;
       s.start = 'Untitled';
 
       TweeWriter.write(s, 'test/TweeWriter/test1.twee');
       const fr = FileReader.read('test/TweeWriter/test1.twee');
-      const story = TweeParser.parse(fr);
-      expect(story.format).toBe('Test');
+      const story2 = TweeParser.parse(fr);
+      expect(story2.format).toBe('Test');
+    });
+
+    test('Should write tag colors', function () {
+      const s = new Story();
+      s.addPassage(new Passage('StoryTitle', 'Title'));
+      s.addPassage(new Passage('Start', 'Content'));
+      s.addPassage(new Passage('Untitled', 'Some stuff'));
+      s.tagColors = {
+        bar: 'green',
+        foo: 'red',
+        qaz: 'blue'
+      };
+      TweeWriter.write(s, 'test/TweeWriter/test5.twee');
+      const fr = FileReader.read('test/TweeWriter/test5.twee');
+      const story2 = TweeParser.parse(fr);
+      expect(story2.tagColors.bar).toBe('green');
     });
   });
 });

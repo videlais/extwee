@@ -34,7 +34,7 @@ export default class Story {
   /**
    * Internal zoom level
    */
-  #_zoom = '';
+  #_zoom = 0;
 
   /**
    * Passages
@@ -69,7 +69,7 @@ export default class Story {
    *
    * @private
    */
-  #_tagColors = [];
+  #_tagColors = {};
 
   /**
    * @function Story
@@ -84,23 +84,23 @@ export default class Story {
   }
 
   /**
-   * Tag Colors
+   * Tag Colors object (each property is a tag and its color)
    *
    * @public
    * @readonly
    * @memberof Story
-   * @returns {Array} tag colors array
+   * @returns {object} tag colors array
    */
   get tagColors () { return this.#_tagColors; }
 
   /**
-   * @param {Array} a - Replacement tag colors
+   * @param {object} a - Replacement tag colors
    */
   set tagColors (a) {
-    if (Array.isArray(a)) {
+    if (a instanceof Object) {
       this.#_tagColors = a;
     } else {
-      throw new Error('Tag colors must be an Array!');
+      throw new Error('Tag colors must be an object!');
     }
   }
 
@@ -254,18 +254,19 @@ export default class Story {
    *
    * @public
    * @memberof Story
-   * @returns {string} Zoom level
+   * @returns {number} Zoom level
    */
   get zoom () { return this.#_zoom; }
 
   /**
-   * @param {string} n - Replacement zoom level
+   * @param {number} n - Replacement zoom level
    */
   set zoom (n) {
-    if (typeof n === 'string') {
-      this.#_zoom = n;
+    if (typeof n === 'number') {
+      // Parse float with a fixed length and then force into Number
+      this.#_zoom = Number(Number.parseFloat(n).toFixed(2));
     } else {
-      throw new Error('Zoom level must be a String!');
+      throw new Error('Zoom level must be a Number!');
     }
   }
 
@@ -313,6 +314,11 @@ export default class Story {
             // start
             if (Object.prototype.hasOwnProperty.call(metadata, 'start')) {
               this.start = metadata.start;
+            }
+
+            // tag colors
+            if (Object.prototype.hasOwnProperty.call(metadata, 'tag-colors')) {
+              this.tagColors = metadata['tag-colors'];
             }
           } catch (event) {
             // Ignore errors

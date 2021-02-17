@@ -1,0 +1,19 @@
+:: StoryData
+{
+  "ifid": "84C1AFFE-E32D-4C3C-A0EF-3B22A98A1A1C",
+  "tag-colors": {
+    "bar": "green",
+    "foo": "red",
+    "qaz": "blue"
+  }
+}
+
+:: StoryTitle
+Title
+
+:: Start
+Content
+
+:: Untitled
+Some stuff
+

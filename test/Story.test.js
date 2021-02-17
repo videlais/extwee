@@ -91,16 +91,16 @@ describe('Story', function () {
   });
 
   describe('zoom', function () {
-    test('Set using String', function () {
+    test('Set using Number', function () {
       const s = new Story();
-      s.zoom = 'New';
-      expect(s.zoom).toBe('New');
+      s.zoom = 1.0;
+      expect(s.zoom).not.toBe(0);
     });
 
     test('Should throw error if not String', function () {
       const s = new Story();
       expect(() => {
-        s.zoom = 1;
+        s.zoom = null;
       }).toThrow();
     });
   });
@@ -131,6 +131,24 @@ describe('Story', function () {
       const s = new Story();
       expect(() => {
         s.start = 1;
+      }).toThrow();
+    });
+  });
+
+  describe('tagColors', function () {
+    test('Set tagColors', function () {
+      const s = new Story();
+      s.tagColors = {
+        bar: 'green'
+      };
+      const count = Object.keys(s.tagColors).length;
+      expect(count).toBe(1);
+    });
+
+    test('Should throw error if not object', function () {
+      const s = new Story();
+      expect(() => {
+        s.tagColors = null;
       }).toThrow();
     });
   });

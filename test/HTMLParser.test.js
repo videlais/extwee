@@ -68,7 +68,7 @@ describe('HTMLParser', function () {
     test('Should have empty string as zoom when missing', function () {
       const fr = FileReader.read('test/HTMLParser/missingZoom.html');
       const tp = HTMLParser.parse(fr);
-      expect(tp.zoom).toBe('');
+      expect(tp.zoom).toBe(0);
     });
 
     test('Should not have position if passage does not', function () {
@@ -118,7 +118,7 @@ describe('HTMLParser', function () {
     test('Should not have start property if startNode does not exist when parsed', function () {
       const fr = FileReader.read('test/HTMLParser/missingStartnode.html');
       const story = HTMLParser.parse(fr);
-      expect(Object.prototype.hasOwnProperty.call(story.metadata, 'start')).toBe(false);
+      expect(story.start).toBe('');
     });
 
     test('Should not add passages without names', function () {

@@ -56,7 +56,7 @@ export default class TweeWriter {
     }
 
     // Is there a zoom?
-    if (story.zoom !== '') {
+    if (story.zoom !== 0) {
       // Using existing zoom.
       metadata.zoom = story.zoom;
     }
@@ -65,6 +65,14 @@ export default class TweeWriter {
     if (story.start !== '') {
       // Using existing start
       metadata.start = story.start;
+    }
+
+    // Get number of colors.
+    const numberOfColors = Object.keys(story.tagColors).length;
+    // Are there any colors?
+    if (numberOfColors > 0) {
+      // Add a tag-colors property
+      metadata['tag-colors'] = story.tagColors;
     }
 
     // Write out the story metadata.
