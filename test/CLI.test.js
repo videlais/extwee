@@ -1,3 +1,5 @@
+
+
 // Test CLI
 describe('CLI', () => {
   test.todo('Should show version with -v');

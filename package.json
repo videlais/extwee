@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "jest --silent --runInBand test/FileReader.test.js test/HTMLParser.test.js test/Passage.test.js test/Story.test.js test/StoryFormat.test.js test/StoryFormatParser.test.js test/TweeParser.test.js test/HTMLWriter.test.js test/TweeWriter.test.js test/Roundtrip.test.js --coverage --colors",
+    "test": "jest --silent --runInBand test/*.test.js --coverage --colors",
     "test:watch": "jest --watch",
     "lint": "eslint ./src/**/*.js --fix",
     "lint:test": "eslint ./test/*.test.js --fix",
@@ -23,7 +23,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "minimist": "^1.2.5",
+    "commander": "^4.1.1",
     "node-html-parser": "^1.2.16",
     "uuid": "^8.3.2"
   },
