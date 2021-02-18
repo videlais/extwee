@@ -1,6 +1,7 @@
 :: StoryData
 {
-  "ifid": "DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A"
+  "ifid": "DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A",
+  "start": "Start"
 }
 
 :: Start [tag tags]

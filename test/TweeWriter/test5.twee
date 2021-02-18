@@ -1,6 +1,7 @@
 :: StoryData
 {
-  "ifid": "84C1AFFE-E32D-4C3C-A0EF-3B22A98A1A1C",
+  "ifid": "79027ABC-5D4B-4236-ACD2-AE15FB379900",
+  "start": "Start",
   "tag-colors": {
     "bar": "green",
     "foo": "red",

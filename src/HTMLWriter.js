@@ -47,64 +47,53 @@ export default class HTMLWriter {
       throw new Error("'name' is required attribute. (Add StoryTitle to story.)");
     }
 
-    // Assume there might be a Start passage
-    let startPassage = 'Start';
-
     // Does start exist?
     if (story.start !== '') {
-      // Save start passage.
-      startPassage = story.start;
-    }
-
-    // Look for the starting passage.
-    let start = story.getPassageByName(startPassage);
-
-    // Test if there is a start passage.
-    if (start !== null) {
-      // If so, update the attribute.
-      storyData += `startnode="${start.pid}"`;
-    } else {
-      // Look for Start.
-      start = story.getPassageByName('Start');
-      // Does Start exist?
-      if (start !== null) {
-        storyData += `startnode="${start.pid}"`;
+      // Try to get starting passage
+      const startingPassage = story.getPassageByName(story.start);
+      // Does it exist currently?
+      if (startingPassage !== null) {
+        // Add the starting passage
+        storyData += ` startnode="${startingPassage.pid}"`;
       } else {
-        // Throw an error
-        throw new Error('No valid start passage found!');
+        // Throw error if no starting passage exists
+        throw new Error('Starting passage not found');
       }
+    } else {
+      // Throw error if no starting passage exists
+      throw new Error('No starting passage found!');
     }
 
     // Defaults to 'extwee' if missing.
-    storyData += `creator="${story.creator}"`;
+    storyData += ` creator="${story.creator}"`;
 
     // Default to extwee version.
-    storyData += `creator-version="${story.creatorVersion}"`;
+    storyData += ` creator-version="${story.creatorVersion}"`;
 
     // Check if IFID exists.
     if (story.IFID !== '') {
       // Write the existing IFID
-      storyData += `ifid="${story.IFID}"`;
+      storyData += ` ifid="${story.IFID}"`;
     } else {
       // Generate a new IFID
       // Twine 2 uses v4 (random) UUIDs, using only capital letters
-      storyData += `ifid="${uuidv4().toUpperCase()}"`;
+      storyData += ` ifid="${uuidv4().toUpperCase()}"`;
     }
 
     // Write existing or default value.
-    storyData += `zoom="${story.zoom}"`;
+    storyData += ` zoom="${story.zoom}"`;
 
     // Write existing or default value.
-    storyData += `format="${storyFormat.name}"`;
+    storyData += ` format="${storyFormat.name}"`;
 
     // Write existing or default value.
-    storyData += `format-version="${storyFormat.version}"`;
+    storyData += ` format-version="${storyFormat.version}"`;
 
     // Add the default.
     storyData += ' options hidden>\n';
 
     // Start the STYLE.
-    storyData += '<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
+    storyData += '\t<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
 
     // Get stylesheet passages
     const stylesheetPassages = story.getPassagesByTag('stylesheet');
@@ -121,7 +110,7 @@ export default class HTMLWriter {
     storyData += '</style>\n';
 
     // Start the SCRIPT
-    storyData += '<script role="script" id="twine-user-script" type="text/twine-javascript">';
+    storyData += '\t<script role="script" id="twine-user-script" type="text/twine-javascript">';
 
     // Get stylesheet passages
     const scriptPassages = story.getPassagesByTag('script');
@@ -140,15 +129,13 @@ export default class HTMLWriter {
     // Build the passages
     story.forEach((passage) => {
       // Start the passage element
-      storyData += '<tw-passagedata';
+      storyData += '\t<tw-passagedata';
 
       /**
        * pid: (string) Required.
        *   The Passage ID (PID).
        */
-      if (passage.pid !== -1) {
-        storyData += ` pid="${passage.pid}"`;
-      }
+      storyData += ` pid="${passage.pid}"`;
 
       /**
        * name: (string) Required.

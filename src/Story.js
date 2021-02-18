@@ -72,6 +72,13 @@ export default class Story {
   #_tagColors = {};
 
   /**
+   * Internal PID counter
+   *
+   * @private
+   */
+  #_PIDCounter = 1;
+
+  /**
    * @function Story
    * @class
    */
@@ -324,6 +331,22 @@ export default class Story {
             // Ignore errors
           }
         } else {
+          // Look for Start
+          if (p.name === 'Start' && this.start === '') {
+            // Set Start as starting passage (unless overwritten by start property)
+            this.start = 'Start';
+          }
+
+          // Test for default value.
+          // (This might occur if using Story directory
+          //  outside of using HTMLParser or TweeParser.)
+          if (p.pid === -1) {
+            // Set the internal counter.
+            p.pid = this.#_PIDCounter;
+            // Update the internal counter.
+            this.#_PIDCounter++;
+          }
+
           // Push the passage to the array
           this.#_passages.push(p);
         }

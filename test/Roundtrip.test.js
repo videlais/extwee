@@ -1,9 +1,9 @@
-const TweeWriter = require('../src/TweeWriter');
-const FileReader = require('../src/FileReader');
-const TweeParser = require('../src/TweeParser');
-const HTMLParser = require('../src/HTMLParser');
-const StoryFormatParser = require('../src/StoryFormatParser');
-const HTMLWriter = require('../src/HTMLWriter');
+import TweeWriter from '../src/TweeWriter';
+import FileReader from '../src/FileReader';
+import TweeParser from '../src/TweeParser';
+import HTMLParser from '../src/HTMLParser';
+import StoryFormatParser from '../src/StoryFormatParser';
+import HTMLWriter from '../src/HTMLWriter';
 // const Story = require('../src/Story');
 // const Passage = require('../src/Passage');
 
@@ -19,14 +19,10 @@ describe('Round-trip testing', () => {
     const fr2 = FileReader.read('test/Roundtrip/example1.twee');
     // Parse the new Twee
     const s2 = TweeParser.parse(fr2);
-    // Name should be the same
-    expect(s.name).toBe(s2.name);
     // Number of passages should be the same, too
-    expect(s2.passages).toHaveLength(s.passages.length);
+    expect(s2.size()).toBe(s.size());
     // IFID should be the same
-    expect(s.metadata.ifid).toBe(s2.metadata.ifid);
-    // Should have same 'start' PID
-    expect(s.metadata.start).toBe(s2.metadata.start);
+    expect(s.ifid).toBe(s2.ifid);
   });
 
   test('Should round-trip Twee-to-HTML', () => {
@@ -44,13 +40,11 @@ describe('Round-trip testing', () => {
     const fr2 = FileReader.read('test/Roundtrip/round.html');
     // Parse HTML
     const story2 = HTMLParser.parse(fr2);
-    // Test name
-    expect(story.name).toBe(story2.name);
     // Number of passages should be the same, too
-    expect(story2.passages).toHaveLength(story.passages.length);
+    expect(story2.size()).toBe(story.size());
     // IFID should be the same
-    expect(story.metadata.ifid).toBe(story2.metadata.ifid);
-    // Should have same 'start' PID
-    expect(story.metadata.start).toBe(story2.metadata.start);
+    expect(story.ifid).toBe(story2.ifid);
+    // Should have same 'start' name
+    expect(story.start).toBe(story2.start);
   });
 });

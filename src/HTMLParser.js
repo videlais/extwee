@@ -277,6 +277,8 @@ export default class HTMLParser {
       if (startingPassage !== null) {
         // If so, update property to name of passage.
         story.start = startingPassage.name;
+      } else {
+        throw new Error('Invalid startnode detected in <tw-storydata>!');
       }
     }
 

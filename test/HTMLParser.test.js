@@ -134,6 +134,35 @@ describe('HTMLParser', function () {
       // There is only one passage, StoryTitle
       expect(story.size()).toBe(1);
     });
+
+    test('Parse tag colors', function () {
+      const fr = FileReader.read('test/HTMLParser/tagColors.html');
+      const story = HTMLParser.parse(fr);
+      // Test for tag colors
+      const tagColors = story.tagColors;
+      expect(tagColors.a).toBe('red');
+    });
+
+    test('Will not set start if startnode is missing', function () {
+      const fr = FileReader.read('test/HTMLParser/missingStartnode.html');
+      const story = HTMLParser.parse(fr);
+      // Test for default start
+      expect(story.start).toBe('');
+    });
+
+    test('Throw error when startnode has PID that does not exist', function () {
+      const fr = FileReader.read('test/HTMLParser/lyingStartnode.html');
+      expect(() => {
+        HTMLParser.parse(fr);
+      }).toThrow();
+    });
+
+    test('Do not update name and color if those attributes do not exist', function () {
+      const fr = FileReader.read('test/HTMLParser/lyingTagColors.html');
+      const story = HTMLParser.parse(fr);
+      const tagColorProperties = Object.keys(story.tagColors).length;
+      expect(tagColorProperties).toBe(0);
+    });
   });
 
   describe('#escapeMetacharacters()', function () {

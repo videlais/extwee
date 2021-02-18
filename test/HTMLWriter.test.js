@@ -97,8 +97,6 @@ describe('HTMLWriter', function () {
       }).toThrow();
     });
 
-    test.todo('Should throw error if name/StoryTitle does not exist');
-
     test('Should not add optional position to passages', function () {
       // Create Story.
       const story = new Story();
@@ -173,6 +171,98 @@ describe('HTMLWriter', function () {
 
       // Creator should be the same
       expect(story.creator).toBe(story2.creator);
+    });
+
+    test('Throw error if StoryTitle does not exist', function () {
+      // Create a new story.
+      const story = new Story();
+
+      // Create a passage.
+      story.addPassage(new Passage('A'));
+
+      // Read StoryFormat.
+      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
+
+      expect(() => {
+        HTMLWriter.write('test', story, storyFormat);
+      }).toThrow();
+    });
+
+    test('Throw error if no start or Start exists', function () {
+      // Create a new story.
+      const story = new Story();
+
+      // Create a passage.
+      story.addPassage(new Passage('A'));
+
+      // Create StoryTitle
+      story.addPassage(new Passage('StoryTitle', 'Name'));
+
+      // Read StoryFormat.
+      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
+
+      // Throws error
+      expect(() => {
+        HTMLWriter.write('test/HTMLWriter/test6.html', story, storyFormat);
+      }).toThrow();
+    });
+
+    test('Write with Start without start', function () {
+      // Create a new story.
+      const story = new Story();
+
+      // Create a passage.
+      story.addPassage(new Passage('A'));
+
+      // Create StoryTitle
+      story.addPassage(new Passage('StoryTitle', 'Name'));
+
+      // Create Start
+      story.addPassage(new Passage('Start', 'Content'));
+
+      // Read StoryFormat.
+      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
+
+      // Write file
+      HTMLWriter.write('test/HTMLWriter/test6.html', story, storyFormat);
+
+      // Read new HTML file.
+      const fr3 = FileReader.read('test/HTMLWriter/test6.html');
+      // Parse new HTML file.
+      const story2 = HTMLParser.parse(fr3);
+
+      // Should not be start
+      expect(story2.start).toBe('Start');
+    });
+
+    test('Throw error if starting passage property does not exist', function () {
+      // Create a new story.
+      const story = new Story();
+
+      // Create a passage.
+      story.addPassage(new Passage('A'));
+
+      // Create StoryTitle
+      story.addPassage(new Passage('StoryTitle', 'Name'));
+
+      // Set a passage that doesn't exist
+      story.start = 'Nope';
+
+      // Read StoryFormat.
+      const fr2 = FileReader.read('test/StoryFormatParser/format.js');
+      // Parse StoryFormat.
+      const storyFormat = StoryFormatParser.parse(fr2);
+
+      // Throws error
+      expect(() => {
+        HTMLWriter.write('test/HTMLWriter/test7.html', story, storyFormat);
+      }).toThrow();
     });
   });
 });
