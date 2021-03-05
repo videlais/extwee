@@ -1,6 +1,9 @@
 import FileReader from '../src/FileReader.js';
 import HTMLParser from '../src/HTMLParser.js';
-import { version as packageVersion } from '../package.json';
+
+// Pull the name and version of this project from package.json.
+// These are used as the 'creator' and 'creator-version'.
+const { version } = JSON.parse(FileReader.read('package.json'));
 
 describe('HTMLParser', function () {
   describe('#parse()', function () {
@@ -50,7 +53,7 @@ describe('HTMLParser', function () {
     test('Should have correct for creatorVersion when missing', function () {
       const fr = FileReader.read('test/HTMLParser/missingCreatorVersion.html');
       const tp = HTMLParser.parse(fr);
-      expect(tp.creatorVersion).toBe(packageVersion);
+      expect(tp.creatorVersion).toBe(version);
     });
 
     test('Should have empty string as format when missing', function () {

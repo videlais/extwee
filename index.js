@@ -1,22 +1,49 @@
-const FileReader = require('./src/FileReader.js');
-const TweeParser = require('./src/TweeParser.js');
-const TweeWriter = require('./src/TweeWriter.js');
-const StoryFormatParser = require('./src/StoryFormatParser.js');
-const HTMLParser = require('./src/HTMLParser.js');
-const HTMLWriter = require('./src/HTMLWriter.js');
-const Story = require('./src/Story.js');
-const Passage = require('./src/Passage.js');
-const StoryFormat = require('./src/StoryFormat.js');
+import FileReader from './src/FileReader.js';
+import TweeParser from './src/TweeParser.js';
+import TweeWriter from './src/TweeWriter.js';
+import StoryFormatParser from './src/StoryFormatParser.js';
+import HTMLParser from './src/HTMLParser.js';
+import HTMLWriter from './src/HTMLWriter.js';
+import Story from './src/Story.js';
+import Passage from './src/Passage.js';
+import StoryFormat from './src/StoryFormat.js';
 
-module.exports = {
-  FileReader: FileReader,
-  TweeParser: TweeParser,
-  TweeWriter: TweeWriter,
-  StoryFormat: StoryFormat,
-  Passage: Passage,
-  Story: Story,
-  StoryFormatParser: StoryFormatParser,
-  FileReader: FileReader,
-  HTMLParser: HTMLParser,
-  HTMLWriter: HTMLWriter,
+// Just FileReader
+export { FileReader };
+
+// Just TweeParser
+export { TweeParser };
+
+// Just TweeWriter
+export { TweeWriter };
+
+// Just StoryFormat
+export { StoryFormat };
+
+// Just StoryFormatParser
+export { StoryFormatParser };
+
+// Just Story
+export { Story };
+
+// Just Passage
+export { Passage };
+
+// Just HTMLWriter
+export { HTMLWriter };
+
+// Just HTMLParser
+export { HTMLParser };
+
+// Export everything by default
+export default {
+  FileReader,
+  TweeParser,
+  TweeWriter,
+  StoryFormat,
+  Passage,
+  Story,
+  StoryFormatParser,
+  HTMLParser,
+  HTMLWriter,
 };

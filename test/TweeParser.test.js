@@ -1,5 +1,4 @@
 import FileReader from '../src/FileReader.js';
-// import Passage from '../src/Passage.js';
 import TweeParser from '../src/TweeParser.js';
 
 describe('TweeParser', function () {

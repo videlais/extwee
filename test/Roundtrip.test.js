@@ -1,11 +1,9 @@
-import TweeWriter from '../src/TweeWriter';
-import FileReader from '../src/FileReader';
-import TweeParser from '../src/TweeParser';
-import HTMLParser from '../src/HTMLParser';
-import StoryFormatParser from '../src/StoryFormatParser';
-import HTMLWriter from '../src/HTMLWriter';
-// const Story = require('../src/Story');
-// const Passage = require('../src/Passage');
+import TweeWriter from '../src/TweeWriter.js';
+import FileReader from '../src/FileReader.js';
+import TweeParser from '../src/TweeParser.js';
+import HTMLParser from '../src/HTMLParser.js';
+import StoryFormatParser from '../src/StoryFormatParser.js';
+import HTMLWriter from '../src/HTMLWriter.js';
 
 describe('Round-trip testing', () => {
   test('Should round-trip HTML-to-Twee', () => {

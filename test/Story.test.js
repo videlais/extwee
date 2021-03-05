@@ -1,6 +1,10 @@
 import Story from '../src/Story.js';
 import Passage from '../src/Passage';
-import { name, version } from '../package.json';
+import FileReader from '../src/FileReader.js';
+
+// Pull the name and version of this project from package.json.
+// These are used as the 'creator' and 'creator-version'.
+const { name, version } = JSON.parse(FileReader.read('package.json'));
 
 describe('Story', function () {
   describe('#constructor()', function () {
