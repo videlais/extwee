@@ -37,13 +37,13 @@ export { HTMLParser };
 
 // Export everything by default
 export default {
-  FileReader,
-  TweeParser,
-  TweeWriter,
+  readFile: FileReader.read,
+  parseTwee: TweeParser.parse,
+  writeTwee: TweeWriter.write,
   StoryFormat,
   Passage,
   Story,
-  StoryFormatParser,
-  HTMLParser,
-  HTMLWriter,
+  parseStoryFormat: StoryFormatParser.parse,
+  parseHTML: HTMLParser.parse,
+  writeHTML: HTMLWriter.write,
 };

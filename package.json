@@ -25,7 +25,6 @@
   "dependencies": {
     "commander": "^4.1.1",
     "node-html-parser": "^1.2.16",
-    "shelljs": "^0.8.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -47,8 +46,10 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "execa": "^4.1.0",
     "jest": "^26.6.3",
-    "semver": "^5.7.1"
+    "semver": "^5.7.1",
+    "shelljs": "^0.8.4"
   },
   "repository": {
     "type": "git",
