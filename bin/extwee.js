@@ -5,7 +5,7 @@
  * @author Dan Cox
  */
 
-// Import everything 
+// Import everything
 import Extwee from '../index.js';
 // Import Commander
 import { Command } from 'commander';
@@ -30,16 +30,15 @@ program.parse(process.argv);
 // Create object of passed arguments parsed by Commander
 const options = program.opts();
 
-if(options.d) {
-    const inputHTML = Extwee.readFile(options.i);
+// Decompile branch
+if(options.D === true) {
+    const inputHTML = Extwee.readFile(options.I);
     const storyObject = Extwee.parseHTML(inputHTML);
-    Extwee.writeTwee(storyObject, options.o);
+    Extwee.writeTwee(storyObject, options.O);
+    process.exit();
 }
 
-if(options.c) {
-    const inputTwee = Extwee.readFile(options.i);
-    const storyObject = Extwee.parseTwee(inputTwee);
-    const inputStoryFormat = Extwee.readFile(options.s);
-    const parsedStoryFormat = Extwee.parseStoryFormat(inputStoryFormat);
-    Extwee.writeHTML(options.o, storyObject, parsedStoryFormat);
+if(options.C === true) {
+    const inputHTML = Extwee.readFile(options.I);
+    
 }

@@ -8,42 +8,24 @@ import Story from './src/Story.js';
 import Passage from './src/Passage.js';
 import StoryFormat from './src/StoryFormat.js';
 
-// Just FileReader
 export { FileReader };
-
-// Just TweeParser
 export { TweeParser };
-
-// Just TweeWriter
-export { TweeWriter };
-
-// Just StoryFormat
 export { StoryFormat };
-
-// Just StoryFormatParser
-export { StoryFormatParser };
-
-// Just Story
-export { Story };
-
-// Just Passage
 export { Passage };
-
-// Just HTMLWriter
-export { HTMLWriter };
-
-// Just HTMLParser
+export { Story };
+export { StoryFormatParser };
 export { HTMLParser };
+export { HTMLWriter };
 
 // Export everything by default
 export default {
-  readFile: FileReader.read,
-  parseTwee: TweeParser.parse,
-  writeTwee: TweeWriter.write,
-  StoryFormat,
-  Passage,
-  Story,
-  parseStoryFormat: StoryFormatParser.parse,
-  parseHTML: HTMLParser.parse,
-  writeHTML: HTMLWriter.write,
+    readFile: FileReader.read,
+    parseTwee: TweeParser.parse,
+    writeTwee: TweeWriter.write,
+    StoryFormat,
+    Passage,
+    Story,
+    parseStoryFormat: StoryFormatParser.parse,
+    parseHTML: HTMLParser.parse,
+    writeHTML: HTMLWriter.writeHTML
 };

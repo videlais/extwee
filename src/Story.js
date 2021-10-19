@@ -1,9 +1,7 @@
-import FileReader from './FileReader.js';
 import Passage from './Passage.js';
 
-// Pull the name and version of this project from package.json.
-// These are used as the 'creator' and 'creator-version'.
-const { name, version } = JSON.parse(FileReader.read('package.json'));
+const name = 'extwee';
+const version = '2.0.0';
 
 /**
  * @class Story
