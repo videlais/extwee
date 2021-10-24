@@ -449,8 +449,8 @@ describe('HTMLWriter', function() {
 			let fr = new FileReader("test/HTMLWriter/example6.twee");
 			let tp = new TweeParser(fr.contents);
 			let sfp = new StoryFormatParser('test/StoryFormatParser/format_doublename.js');
-			let hw = new HTMLWriter("test/HTMLWriter/test10.html", tp.story, sfp.storyformat, "", "console.log('Test!')");
-			let frh = new FileReader("test/HTMLWriter/test10.html");
+			let hw = new HTMLWriter("test/HTMLWriter/test11.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test11.html");
 			assert.equal(frh.contents.indexOf("STORY_NAME"), -1);
 
     });
