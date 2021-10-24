@@ -152,7 +152,7 @@ class HTMLWriter {
     storyData += '</tw-storydata>';
 
     // Replace the story name in the source file
-    storyFormat.source = storyFormat.source.replace('{{STORY_NAME}}', story.name);
+    storyFormat.source = storyFormat.source.replace(/{{STORY_NAME}}/g, story.name);
 
     // Replace the story data
     storyFormat.source = storyFormat.source.replace('{{STORY_DATA}}', storyData);
