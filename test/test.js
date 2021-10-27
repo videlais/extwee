@@ -444,6 +444,17 @@ describe('HTMLWriter', function() {
 
     });
 
+		it('Should correctly replace all instances of STORY_NAME', function() {
+
+			let fr = new FileReader("test/HTMLWriter/example6.twee");
+			let tp = new TweeParser(fr.contents);
+			let sfp = new StoryFormatParser('test/StoryFormatParser/format_doublename.js');
+			let hw = new HTMLWriter("test/HTMLWriter/test11.html", tp.story, sfp.storyformat);
+			let frh = new FileReader("test/HTMLWriter/test11.html");
+			assert.equal(frh.contents.indexOf("STORY_NAME"), -1);
+
+    });
+
   });
 
 });
