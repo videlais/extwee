@@ -38,7 +38,12 @@ if(options.D === true) {
     process.exit();
 }
 
+// Compile branch
 if(options.C === true) {
-    const inputHTML = Extwee.readFile(options.I);
-    
+    const inputTwee = Extwee.readFile(options.I);
+    const story = Extwee.parseTwee(inputTwee);
+    const inputStoryFormat = Extwee.readFile(options.S);
+    const parsedStoryFormat = Extwee.parseStoryFormat(inputStoryFormat);
+    Extwee.writeHTML(options.O, story, parsedStoryFormat);
+    process.exit();
 }

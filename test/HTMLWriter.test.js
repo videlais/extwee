@@ -1,6 +1,7 @@
 import FileReader from '../src/FileReader.js';
 import StoryFormatParser from '../src/StoryFormatParser.js';
 import HTMLParser from '../src/HTMLParser.js';
+import TweeParser from '../src/TweeParser.js';
 import HTMLWriter from '../src/HTMLWriter.js';
 import Story from '../src/Story.js';
 import Passage from '../src/Passage.js';
@@ -263,6 +264,16 @@ describe('HTMLWriter', function () {
       expect(() => {
         HTMLWriter.write('test/HTMLWriter/test7.html', story, storyFormat);
       }).toThrow();
+    });
+
+    test('Should correctly replace all instances of STORY_NAME', function () {
+      const fr = FileReader.read('test/HTMLWriter/example6.twee');
+      const story = TweeParser.parse(fr);
+      const storyFormatFile = FileReader.read('test/StoryFormatParser/format_doublename.js');
+      const sfp = StoryFormatParser.parse(storyFormatFile);
+      HTMLWriter.write('test/HTMLWriter/test11.html', story, sfp);
+      const frh = FileReader.read('test/HTMLWriter/test11.html');
+      expect(frh.indexOf('STORY_NAME')).toBe(-1);
     });
   });
 });

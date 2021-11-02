@@ -27,5 +27,5 @@ export default {
     Story,
     parseStoryFormat: StoryFormatParser.parse,
     parseHTML: HTMLParser.parse,
-    writeHTML: HTMLWriter.writeHTML
+    writeHTML: HTMLWriter.write
 };
