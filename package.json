@@ -8,7 +8,7 @@
     "extwee": "bin/extwee.js"
   },
   "scripts": {
-    "test": "jest --silent --runInBand test/*.test.js --coverage --colors",
+    "test": "jest --silent --runInBand --coverage --colors",
     "test:watch": "jest --watch",
     "lint": "eslint ./src/**/*.js --fix",
     "lint:test": "eslint ./test/*.test.js --fix",
