@@ -171,13 +171,13 @@ export default class HTMLWriter {
         storyData += `size="${passage.metadata.size}" `;
       }
 
-      storyData += `>${passage.text}</tw-passagedata>\n`;
+      storyData += `>${HTMLWriter.escape(passage.text)}</tw-passagedata>\n`;
     });
 
     storyData += '</tw-storydata>';
 
     // Replace the story name in the source file
-    storyFormat.source = storyFormat.source.replace(/{{STORY_NAME}}/g, story.name);
+    storyFormat.source = storyFormat.source.replaceAll(/{{STORY_NAME}}/g, story.name);
 
     // Replace the story data
     storyFormat.source = storyFormat.source.replace('{{STORY_DATA}}', storyData);
@@ -192,5 +192,36 @@ export default class HTMLWriter {
       // Throw error
       throw new Error('Error: Cannot write HTML file!');
     }
+  }
+
+  /**
+   * Escape HTML characters
+   *
+   * @public
+   * @static
+   * @function escape
+   * @param {string} text - Text to escape
+   * @returns {string} Escaped text
+   */
+  static escape (text) {
+    // Throw error if text is not a string
+    if (Object.prototype.toString.call(text) !== '[object String]') {
+      throw new Error('Text argument is not a String');
+    }
+
+    const rules = [
+      ['&', '&amp;'],
+      ['<', '&lt;'],
+      ['>', '&gt;'],
+      ['"', '&quot;'],
+      ["'", '&#x27;'],
+      ['`', '&#x60;']
+    ];
+
+    rules.forEach(([rule, template]) => {
+      text = text.replaceAll(rule, template);
+    });
+
+    return text;
   }
 }

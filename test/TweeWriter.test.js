@@ -4,18 +4,23 @@ import Passage from '../src/Passage.js';
 import TweeWriter from '../src/TweeWriter.js';
 import TweeParser from '../src/TweeParser.js';
 
-describe('TweeWriter', function () {
-  describe('#write()', function () {
-    test('Should throw error if object passed is not instanceof Story', function () {
+describe('TweeWriter', () => {
+  describe('#write()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Should throw error if object passed is not instanceof Story', () => {
       expect(() => { TweeWriter.write({}); }).toThrow();
     });
 
-    test('Should throw error if output file invalid', function () {
+    it('Should throw error if output file invalid', () => {
       expect(() => { TweeWriter.write(new Story(), ''); }).toThrow();
     });
 
-    test('Should write Twee file', function () {
-      const s = new Story();
+    it('Should write Twee file', () => {
       s.addPassage(new Passage('StoryData', '{}'));
       s.addPassage(new Passage('StoryTitle', 'Title'));
       s.addPassage(new Passage('Start', 'Content'));
@@ -26,8 +31,7 @@ describe('TweeWriter', function () {
       expect(p.text).toBe('Title');
     });
 
-    test('Should correctly write Twee file with passage tags', function () {
-      const s = new Story();
+    it('Should correctly write Twee file with passage tags', () => {
       s.addPassage(new Passage('Start', '', ['tag', 'tags']));
       s.addPassage(new Passage('StoryTitle', 'Title'));
       // Verify only one passage.
@@ -46,8 +50,7 @@ describe('TweeWriter', function () {
       expect(tp.size()).toBe(2);
     });
 
-    test('Should write format, formatVersion, zoom, and start', function () {
-      const s = new Story();
+    it('Should write format, formatVersion, zoom, and start', () => {
       s.addPassage(new Passage('StoryTitle', 'Title'));
       s.addPassage(new Passage('Start', 'Content'));
       s.addPassage(new Passage('Untitled', 'Some stuff'));
@@ -60,11 +63,11 @@ describe('TweeWriter', function () {
       TweeWriter.write(s, 'test/TweeWriter/test1.twee');
       const fr = FileReader.read('test/TweeWriter/test1.twee');
       const story2 = TweeParser.parse(fr);
+      console.log(story2);
       expect(story2.format).toBe('Test');
     });
 
-    test('Should write tag colors', function () {
-      const s = new Story();
+    it('Should write tag colors', () => {
       s.addPassage(new Passage('StoryTitle', 'Title'));
       s.addPassage(new Passage('Start', 'Content'));
       s.addPassage(new Passage('Untitled', 'Some stuff'));

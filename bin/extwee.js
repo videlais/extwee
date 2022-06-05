@@ -14,7 +14,7 @@ import { Command } from 'commander';
 const program = new Command();
 
 program
-.version('2.0.0')
+.version('2.0.2')
 .option('-c', 'From Twee into HTML')
 .option('-d', 'From HTML into Twee')
 .option('-s <storyformat>', 'Path to storyformat')

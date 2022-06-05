@@ -6,18 +6,18 @@ import HTMLWriter from '../src/HTMLWriter.js';
 import Story from '../src/Story.js';
 import Passage from '../src/Passage.js';
 
-describe('HTMLWriter', function () {
-  describe('#write()', function () {
-    test('story should be instanceof Story', function () {
+describe('HTMLWriter', () => {
+  describe('#write()', () => {
+    it('story should be instanceof Story', () => {
       expect(() => { HTMLWriter.write('test/HTMLWriter/test.html', {}); }).toThrow();
     });
 
-    test('storyFormat should be instanceof StoryFormat', function () {
+    it('storyFormat should be instanceof StoryFormat', () => {
       const s = new Story();
       expect(() => { HTMLWriter.write('test/HTMLWriter/test.html', s, {}); }).toThrow();
     });
 
-    test('Read, write, and read HTML', function () {
+    it('Read, write, and read HTML', () => {
       // Read HTML.
       const fr = FileReader.read('test/HTMLParser/twineExample3.html');
       // Parse HTML.
@@ -44,7 +44,7 @@ describe('HTMLWriter', function () {
       expect(s1Title).toBe(s2Title);
     });
 
-    test('Should write one and two-tag passages', function () {
+    it('Should write one and two-tag passages', () => {
       // Read HTML.
       const fr = FileReader.read('test/HTMLWriter/TestTags.html');
       // Parse HTML.
@@ -81,7 +81,7 @@ describe('HTMLWriter', function () {
       expect(tags).toBe(tags2);
     });
 
-    test('Should throw error if file path invalid', function () {
+    it('Should throw error if file path invalid', () => {
       // Read HTML.
       const fr = FileReader.read('test/HTMLParser/twineExample3.html');
       // Parse HTML.
@@ -98,7 +98,7 @@ describe('HTMLWriter', function () {
       }).toThrow();
     });
 
-    test('Should not add optional position to passages', function () {
+    it('Should not add optional position to passages', () => {
       // Create Story.
       const story = new Story();
       // Add passage.
@@ -135,7 +135,7 @@ describe('HTMLWriter', function () {
       });
     });
 
-    test("Don't write creator if missing originally", function () {
+    it("Don't write creator if missing originally", () => {
       // Create a new story.
       const story = new Story();
 
@@ -174,7 +174,7 @@ describe('HTMLWriter', function () {
       expect(story.creator).toBe(story2.creator);
     });
 
-    test('Throw error if StoryTitle does not exist', function () {
+    it('Throw error if StoryTitle does not exist', () => {
       // Create a new story.
       const story = new Story();
 
@@ -191,7 +191,7 @@ describe('HTMLWriter', function () {
       }).toThrow();
     });
 
-    test('Throw error if no start or Start exists', function () {
+    it('Throw error if no start or Start exists', () => {
       // Create a new story.
       const story = new Story();
 
@@ -212,7 +212,7 @@ describe('HTMLWriter', function () {
       }).toThrow();
     });
 
-    test('Write with Start without start', function () {
+    it('Write with Start without start', () => {
       // Create a new story.
       const story = new Story();
 
@@ -242,7 +242,7 @@ describe('HTMLWriter', function () {
       expect(story2.start).toBe('Start');
     });
 
-    test('Throw error if starting passage property does not exist', function () {
+    it('Throw error if starting passage property does not exist', () => {
       // Create a new story.
       const story = new Story();
 
@@ -266,7 +266,7 @@ describe('HTMLWriter', function () {
       }).toThrow();
     });
 
-    test('Should correctly replace all instances of STORY_NAME', function () {
+    it('Should correctly replace all instances of STORY_NAME', () => {
       const fr = FileReader.read('test/HTMLWriter/example6.twee');
       const story = TweeParser.parse(fr);
       const storyFormatFile = FileReader.read('test/StoryFormatParser/format_doublename.js');
@@ -274,6 +274,16 @@ describe('HTMLWriter', function () {
       HTMLWriter.write('test/HTMLWriter/test11.html', story, sfp);
       const frh = FileReader.read('test/HTMLWriter/test11.html');
       expect(frh.indexOf('STORY_NAME')).toBe(-1);
+    });
+  });
+
+  describe('escape()', () => {
+    it('Should throw error if argument is not string', () => {
+      expect(() => { HTMLWriter.escape(1); }).toThrow();
+    });
+
+    it('Should escape HTML sequences', () => {
+      expect(HTMLWriter.escape('<script>alert("Hi!");</script>')).toBe('&lt;script&gt;alert(&quot;Hi!&quot;);&lt;/script&gt;');
     });
   });
 });

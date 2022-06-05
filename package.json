@@ -1,6 +1,6 @@
 {
   "name": "extwee",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "A Twee 3 compiler written in JS.",
   "author": "Dan Cox",
   "main": "index.js",
@@ -8,8 +8,7 @@
     "extwee": "bin/extwee.js"
   },
   "scripts": {
-    "test": "jest --silent --runInBand --coverage --colors",
-    "test:watch": "jest --watch",
+    "test": "jest --runInBand --coverage --colors",
     "lint": "eslint ./src/**/*.js --fix",
     "lint:test": "eslint ./test/*.test.js --fix",
     "all": "npm run lint && npm run lint:test && npm run test"

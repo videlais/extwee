@@ -18,13 +18,8 @@ export default class TweeParser {
     // Create Story.
     const story = new Story();
 
-    // Check if argument is a string
-    const isString = (x) => {
-      return Object.prototype.toString.call(x) === '[object String]';
-    };
-
-    // Throw error if fileContents is empty
-    if (!isString(fileContents)) {
+    // Throw error if fileContents is not a string
+    if (Object.prototype.toString.call(fileContents) !== '[object String]') {
       throw new Error('Contents not a String');
     }
 
