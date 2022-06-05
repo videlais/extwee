@@ -1,6 +1,6 @@
 {
   "name": "extwee",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A Twee 3 compiler written in JS.",
   "author": "Dan Cox",
   "main": "index.js",
