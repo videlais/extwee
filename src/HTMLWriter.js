@@ -40,9 +40,13 @@ export default class HTMLWriter {
     // Look for StoryTitle
     const storyTitle = story.getPassageByName('StoryTitle');
 
+    // Does the passage exist?
     if (storyTitle != null) {
-      // Use StoryTitle for name
-      storyData += `<tw-storydata name="${storyTitle.text}"`;
+      // Always overwrite any existing name with StoryTitle (per spec)
+      story.name = storyTitle.text;
+
+      // Use story.name for name.
+      storyData += `<tw-storydata name="${story.name}"`;
     } else {
       throw new Error("'name' is required attribute. (Add StoryTitle to story.)");
     }
@@ -177,10 +181,10 @@ export default class HTMLWriter {
     storyData += '</tw-storydata>';
 
     // Replace the story name in the source file
-    storyFormat.source = storyFormat.source.replaceAll(/{{STORY_NAME}}/g, story.name);
+    storyFormat.source = storyFormat.source.replaceAll(/{{STORY_NAME}}/gm, story.name);
 
     // Replace the story data
-    storyFormat.source = storyFormat.source.replace('{{STORY_DATA}}', storyData);
+    storyFormat.source = storyFormat.source.replaceAll(/{{STORY_DATA}}/gm, storyData);
 
     // Combine everything together.
     outputContents += storyFormat.source;

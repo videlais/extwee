@@ -1,13 +1,21 @@
 import Passage from './Passage.js';
+import FileReader from './FileReader.js';
 
-const name = 'extwee';
-const version = '2.0.2';
+// Pull the name and version of this project from package.json.
+const { name, version } = JSON.parse(FileReader.read('package.json'));
 
 /**
  * @class Story
  * @module Story
  */
 export default class Story {
+  /**
+   * Internal name of story
+   *
+   * @private
+   */
+   #_name = '';
+
   /**
    * Internal start
    *
@@ -91,6 +99,27 @@ export default class Story {
     this.#_creatorVersion = version;
     // Set metadata to an object
     this.#_metadata = {};
+  }
+
+  /**
+   * Each story has a name
+   *
+   * @public
+   * @readonly
+   * @memberof Story
+   * @returns {string} Name
+   */
+  get name () { return this.#_name; }
+
+  /**
+   * @param {string} a - Replacement story name
+   */
+  set name (a) {
+    if (typeof a === 'string') {
+      this.#_name = a;
+    } else {
+      throw new Error('Story name must be a string');
+    }
   }
 
   /**

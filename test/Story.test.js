@@ -6,142 +6,202 @@ import FileReader from '../src/FileReader.js';
 // These are used as the 'creator' and 'creator-version'.
 const { name, version } = JSON.parse(FileReader.read('package.json'));
 
-describe('Story', function () {
-  describe('#constructor()', function () {
-    test('Should have extwee name', function () {
-      const s = new Story();
+describe('Story', () => {
+  describe('#constructor()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Should have extwee name', () => {
       expect(s.creator).toBe(name);
     });
 
-    test('Should have extwee version', function () {
-      const s = new Story();
+    it('Should have extwee version', () => {
       expect(s.creatorVersion).toBe(version);
     });
   });
 
-  describe('creator', function () {
-    test('Set using String', function () {
-      const s = new Story();
+  describe('creator', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set using String', () => {
       s.creator = 'New';
       expect(s.creator).toBe('New');
     });
 
-    test('Should throw error if not String', function () {
-      const s = new Story();
+    it('Should throw error if not String', () => {
       expect(() => {
         s.creator = 1;
       }).toThrow();
     });
   });
 
-  describe('creatorVersion', function () {
-    test('Set using String', function () {
-      const s = new Story();
+  describe('creatorVersion', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set using String', () => {
       s.creatorVersion = 'New';
       expect(s.creatorVersion).toBe('New');
     });
 
-    test('Should throw error if not String', function () {
-      const s = new Story();
+    it('Should throw error if not String', () => {
       expect(() => {
         s.creatorVersion = 1;
       }).toThrow();
     });
   });
 
-  describe('IFID', function () {
-    test('Set using String', function () {
-      const s = new Story();
+  describe('IFID', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set using String', () => {
       s.IFID = 'New';
       expect(s.IFID).toBe('New');
     });
 
-    test('Should throw error if not String', function () {
-      const s = new Story();
+    it('Should throw error if not String', () => {
       expect(() => {
         s.IFID = 1;
       }).toThrow();
     });
   });
 
-  describe('format', function () {
-    test('Set using String', function () {
-      const s = new Story();
+  describe('format', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set using String', () => {
       s.format = 'New';
       expect(s.format).toBe('New');
     });
 
-    test('Should throw error if not String', function () {
-      const s = new Story();
+    it('Should throw error if not String', () => {
       expect(() => {
         s.format = 1;
       }).toThrow();
     });
   });
 
-  describe('formatVersion', function () {
-    test('Set using String', function () {
-      const s = new Story();
+  describe('formatVersion', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set using String', () => {
       s.formatVersion = 'New';
       expect(s.formatVersion).toBe('New');
     });
 
-    test('Should throw error if not String', function () {
-      const s = new Story();
+    it('Should throw error if not String', () => {
       expect(() => {
         s.formatVersion = 1;
       }).toThrow();
     });
   });
 
-  describe('zoom', function () {
-    test('Set using Number', function () {
-      const s = new Story();
+  describe('name', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set using String', () => {
+      s.name = 'New';
+      expect(s.name).toBe('New');
+    });
+
+    it('Should throw error if not String', () => {
+      expect(() => {
+        s.name = 1;
+      }).toThrow();
+    });
+  });
+
+  describe('zoom', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set using Number', () => {
       s.zoom = 1.0;
       expect(s.zoom).not.toBe(0);
     });
 
-    test('Should throw error if not String', function () {
-      const s = new Story();
+    it('Should throw error if not String', () => {
       expect(() => {
         s.zoom = null;
       }).toThrow();
     });
   });
 
-  describe('metadata', function () {
-    test('Set metadata', function () {
-      const s = new Story();
+  describe('metadata', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set metadata', () => {
       s.metadata = {};
       expect(s.metadata).not.toBe(null);
     });
 
-    test('Should throw error if not object', function () {
-      const s = new Story();
+    it('Should throw error if not object', () => {
       expect(() => {
         s.metadata = 1;
       }).toThrow();
     });
   });
 
-  describe('start', function () {
-    test('Set start', function () {
-      const s = new Story();
+  describe('start', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set start', () => {
       s.start = 'Start';
       expect(s.start).not.toBe('');
     });
 
-    test('Should throw error if not String', function () {
-      const s = new Story();
+    it('Should throw error if not String', () => {
       expect(() => {
         s.start = 1;
       }).toThrow();
     });
   });
 
-  describe('tagColors', function () {
-    test('Set tagColors', function () {
-      const s = new Story();
+  describe('tagColors', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set tagColors', () => {
       s.tagColors = {
         bar: 'green'
       };
@@ -149,31 +209,33 @@ describe('Story', function () {
       expect(count).toBe(1);
     });
 
-    test('Should throw error if not object', function () {
-      const s = new Story();
+    it('Should throw error if not object', () => {
       expect(() => {
         s.tagColors = null;
       }).toThrow();
     });
   });
 
-  describe('addPassage()', function () {
-    test('addPassage() - should increase size', function () {
-      const s = new Story();
+  describe('addPassage()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('addPassage() - should increase size', () => {
       const p = new Passage();
       s.addPassage(p);
       expect(s.size()).toBe(1);
     });
 
-    test('addPassage() - should throw error if non-Passage', function () {
-      const s = new Story();
+    it('addPassage() - should throw error if non-Passage', () => {
       expect(() => {
         s.addPassage(null);
       }).toThrow();
     });
 
-    test('addPassage() - should prevent passages with same name being added', function () {
-      const s = new Story();
+    it('addPassage() - should prevent passages with same name being added', () => {
       const p = new Passage('A');
       const p2 = new Passage('A');
       s.addPassage(p);
@@ -182,9 +244,14 @@ describe('Story', function () {
     });
   });
 
-  describe('removePassage()', function () {
-    test('removePassage() - should decrease size', function () {
-      const s = new Story();
+  describe('removePassage()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('removePassage() - should decrease size', () => {
       s.addPassage(new Passage('Find'));
       s.addPassage(new Passage('Find2'));
       s.removePassage('Find');
@@ -192,9 +259,14 @@ describe('Story', function () {
     });
   });
 
-  describe('getPassagesByTag()', function () {
-    test('getPassagesByTag() - should find passages', function () {
-      const s = new Story();
+  describe('getPassagesByTag()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('getPassagesByTag() - should find passages', () => {
       const p = new Passage('Find', '', ['one']);
       const p2 = new Passage('Find2', '', ['one']);
       s.addPassage(p);
@@ -203,14 +275,12 @@ describe('Story', function () {
       expect(ps).toHaveLength(2);
     });
 
-    test('getPassagesByTag() - should find none if none in collection', function () {
-      const s = new Story();
+    it('getPassagesByTag() - should find none if none in collection', () => {
       const ps = s.getPassagesByTag('one');
       expect(ps).toHaveLength(0);
     });
 
-    test('getPassagesByTag() - should find none if no tags match search', function () {
-      const s = new Story();
+    it('getPassagesByTag() - should find none if no tags match search', () => {
       const p = new Passage('Find', '', ['one']);
       const p2 = new Passage('Find2', '', ['one']);
       s.addPassage(p);
@@ -220,9 +290,14 @@ describe('Story', function () {
     });
   });
 
-  describe('getPassageByName()', function () {
-    test('getPassageByName() - should get passage by name', function () {
-      const s = new Story();
+  describe('getPassageByName()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('getPassageByName() - should get passage by name', () => {
       const p = new Passage('Find');
       s.addPassage(p);
       const passage = s.getPassageByName('Find');
@@ -230,24 +305,33 @@ describe('Story', function () {
     });
   });
 
-  describe('getPassageByPID()', function () {
-    test('getPassageByPID() - should get passage by PID', function () {
-      const s = new Story();
+  describe('getPassageByPID()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('getPassageByPID() - should get passage by PID', () => {
       const p = new Passage('Find', '', [], {}, 12);
       s.addPassage(p);
       const passage = s.getPassageByPID(12);
       expect(passage.name).toBe('Find');
     });
 
-    test('getPassageByPID() - should return null if not found', function () {
-      const s = new Story();
+    it('getPassageByPID() - should return null if not found', () => {
       expect(s.getPassageByPID(12)).toBe(null);
     });
   });
 
-  describe('forEach()', function () {
-    test('forEach() - should return if non-function', function () {
-      const s = new Story();
+  describe('forEach()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('forEach() - should return if non-function', () => {
       s.addPassage(new Passage('A'));
       s.addPassage(new Passage('B'));
       let passageNames = '';
@@ -257,18 +341,21 @@ describe('Story', function () {
       expect(passageNames).toBe('AB');
     });
 
-    test('forEach() - should throw error if non-function', function () {
-      const s = new Story();
+    it('forEach() - should throw error if non-function', () => {
       expect(() => {
         s.forEach(null);
       }).toThrow();
     });
   });
 
-  describe('size()', function () {
-    test('size() - should report number of passages', function () {
-      // Create a Story
-      const s = new Story();
+  describe('size()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('size() - should report number of passages', () => {
       // Create a Passage
       const p = new Passage('');
       // Test initial size
