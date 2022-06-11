@@ -14,7 +14,7 @@ export default class Story {
    *
    * @private
    */
-   #_name = '';
+  #_name = '';
 
   /**
    * Internal start
@@ -28,7 +28,7 @@ export default class Story {
    *
    * @private
    */
-  #_IFID = ''
+  #_IFID = '';
 
   /**
    * Internal story format

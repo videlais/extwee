@@ -10,19 +10,17 @@ import Extwee from '../index.js';
 // Import Commander
 import { Command } from 'commander';
 
-// Creat a new Command
+// Create a new Command
 const program = new Command();
 
 program
-.version('2.0.2')
+.name('extwee')
+.version('2.0.4')
 .option('-c', 'From Twee into HTML')
 .option('-d', 'From HTML into Twee')
 .option('-s <storyformat>', 'Path to storyformat')
 .option('-i <inputFile>', 'Path to input file')
 .option('-o <outputFile>', 'Path to output file');
-
-// Set the process title
-process.title = 'extwee';
 
 // Parse the passed arguments
 program.parse(process.argv);
