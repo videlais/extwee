@@ -1,8 +1,8 @@
 :: StoryData
 {
-  "ifid": "2F1D6FAE-7931-441F-9EDF-9A6F855EB9E1",
-  "format": "Test",
-  "format-version": "1.2.3",
+  "ifid": "2EF8F18A-5588-40B0-B0B7-C8D472677B35",
+  "format": "Harlowe",
+  "format-version": "3.0.2",
   "zoom": 1,
   "start": "Untitled"
 }

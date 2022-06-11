@@ -29,19 +29,19 @@ program.parse(process.argv);
 const options = program.opts();
 
 // Decompile branch
-if(options.D === true) {
-    const inputHTML = Extwee.readFile(options.I);
+if(options.d === true) {
+    const inputHTML = Extwee.readFile(options.i);
     const storyObject = Extwee.parseHTML(inputHTML);
-    Extwee.writeTwee(storyObject, options.O);
+    Extwee.writeTwee(storyObject, options.o);
     process.exit();
 }
 
 // Compile branch
-if(options.C === true) {
-    const inputTwee = Extwee.readFile(options.I);
+if(options.c === true) {
+    const inputTwee = Extwee.readFile(options.i);
     const story = Extwee.parseTwee(inputTwee);
-    const inputStoryFormat = Extwee.readFile(options.S);
+    const inputStoryFormat = Extwee.readFile(options.s);
     const parsedStoryFormat = Extwee.parseStoryFormat(inputStoryFormat);
-    Extwee.writeHTML(options.O, story, parsedStoryFormat);
+    Extwee.writeHTML(options.o, story, parsedStoryFormat);
     process.exit();
 }
