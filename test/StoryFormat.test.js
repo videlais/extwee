@@ -1,8 +1,8 @@
 import StoryFormat from '../src/StoryFormat.js';
 
-describe('StoryFormat', function () {
-  describe('#constructor()', function () {
-    test('Should create default values', function () {
+describe('StoryFormat', () => {
+  describe('#constructor()', () => {
+    it('Should create default values', () => {
       const sf = new StoryFormat();
       expect(sf.name).toBe('');
       expect(sf.version).toBe('');
@@ -15,14 +15,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('name', function () {
-    test('Set new String', function () {
+  describe('name', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.name = 'New';
       expect(sf.name).toBe('New');
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.name = 1;
@@ -30,14 +30,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('version', function () {
-    test('Set new String', function () {
+  describe('version', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.version = 'New';
       expect(sf.version).toBe('New');
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.version = 1;
@@ -45,14 +45,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('author', function () {
-    test('Set new String', function () {
+  describe('author', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.author = 'New';
       expect(sf.author).toBe('New');
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.author = 1;
@@ -60,14 +60,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('image', function () {
-    test('Set new String', function () {
+  describe('image', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.image = 'New';
       expect(sf.image).toBe('New');
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.image = 1;
@@ -75,14 +75,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('url', function () {
-    test('Set new String', function () {
+  describe('url', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.url = 'New';
       expect(sf.url).toBe('New');
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.url = 1;
@@ -90,14 +90,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('license', function () {
-    test('Set new String', function () {
+  describe('license', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.license = 'New';
       expect(sf.license).toBe('New');
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.license = 1;
@@ -105,14 +105,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('proofing', function () {
-    test('Set new String', function () {
+  describe('proofing', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.proofing = true;
       expect(sf.proofing).toBe(true);
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.proofing = 1;
@@ -120,14 +120,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('source', function () {
-    test('Set new String', function () {
+  describe('source', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.source = 'New';
       expect(sf.source).toBe('New');
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.source = 1;
@@ -135,14 +135,14 @@ describe('StoryFormat', function () {
     });
   });
 
-  describe('description', function () {
-    test('Set new String', function () {
+  describe('description', () => {
+    it('Set new String', () => {
       const sf = new StoryFormat();
       sf.description = 'New';
       expect(sf.description).toBe('New');
     });
 
-    test('Throw error if non-String', function () {
+    it('Throw error if non-String', () => {
       const sf = new StoryFormat();
       expect(() => {
         sf.description = 1;

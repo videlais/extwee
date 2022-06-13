@@ -22,17 +22,17 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^9.3.0",
-    "node-html-parser": "^1.2.16",
+    "node-html-parser": "^5.3.3",
     "semver": "^7.3.7",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.18.2",
+    "@babel/core": "^7.18.5",
     "@babel/eslint-parser": "^7.12.1",
     "@babel/eslint-plugin": "^7.12.1",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/plugin-transform-runtime": "^7.18.5",
     "@babel/preset-env": "^7.18.2",
     "babel-loader": "^8.2.2",
     "core-js": "^3.22.8",

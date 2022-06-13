@@ -35,7 +35,7 @@ describe('TweeWriter', () => {
       s.addPassage(new Passage('Start', '', ['tag', 'tags']));
       s.addPassage(new Passage('StoryTitle', 'Title'));
       // Verify only one passage.
-      expect(s.size()).toBe(2);
+      expect(s.size()).toBe(1);
 
       // Set an ifid property
       s.IFID = 'DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A';
@@ -47,7 +47,7 @@ describe('TweeWriter', () => {
       // Parse file.
       const tp = TweeParser.parse(fr);
       // Verify only two passages
-      expect(tp.size()).toBe(2);
+      expect(tp.size()).toBe(1);
     });
 
     it('Should write format, formatVersion, zoom, and start', () => {
@@ -80,6 +80,28 @@ describe('TweeWriter', () => {
       const fr = FileReader.read('test/TweeWriter/test5.twee');
       const story2 = TweeParser.parse(fr);
       expect(story2.tagColors.bar).toBe('green');
+    });
+
+    it('Should write Twee file with "script" tags', () => {
+      s.addPassage(new Passage('Test', 'Test', ['script']));
+      s.addPassage(new Passage('StoryTitle', 'Title'));
+      s.addPassage(new Passage('Start', 'Content'));
+      TweeWriter.write(s, 'test/TweeWriter/test6.twee');
+      const fr = FileReader.read('test/TweeWriter/test6.twee');
+      const story = TweeParser.parse(fr);
+      const p = story.getPassagesByTag('script');
+      expect(p[0].text).toBe('Test');
+    });
+
+    it('Should write Twee file with "stylesheet" tags', () => {
+      s.addPassage(new Passage('Test', 'Test', ['stylesheet']));
+      s.addPassage(new Passage('StoryTitle', 'Title'));
+      s.addPassage(new Passage('Start', 'Content'));
+      TweeWriter.write(s, 'test/TweeWriter/test7.twee');
+      const fr = FileReader.read('test/TweeWriter/test7.twee');
+      const story = TweeParser.parse(fr);
+      const p = story.getPassagesByTag('stylesheet');
+      expect(p[0].text).toBe('Test');
     });
   });
 });

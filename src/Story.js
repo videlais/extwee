@@ -369,7 +369,7 @@ export default class Story {
           }
 
           // Test for default value.
-          // (This might occur if using Story directory
+          // (This might occur if using Story directly
           //  outside of using HTMLParser or TweeParser.)
           if (p.pid === -1) {
             // Set the internal counter.
@@ -395,11 +395,11 @@ export default class Story {
    * Remove a passage from the story by name
    *
    * @public
-   * @function removePassage
+   * @function removePassageByName
    * @memberof Story
    * @param {string} name - Passage name to remove
    */
-  removePassage (name) {
+  removePassageByName (name) {
     this.#_passages = this.#_passages.filter(passage => passage.name !== name);
   }
 
@@ -454,7 +454,8 @@ export default class Story {
 
   /**
    * Size (number of passages).
-   * Does not include StoryAuthor, StoryTitle, UserScript, or UserStylesheet passages
+   * Does not include StoryAuthor or StoryTitle.
+   * Does not include passages with 'script' or 'stylesheet' tags.
    *
    * @public
    * @function size
@@ -462,7 +463,26 @@ export default class Story {
    * @returns {number} Return number of passages
    */
   size () {
-    return this.#_passages.length;
+    let count = 0;
+    this.#_passages.forEach((passage) => {
+      // Exclude StoryTitle
+      if (passage.name === 'StoryTitle') {
+        return;
+      }
+
+      // Exclude if 'script' tags exists
+      if (passage.tags.includes('script')) {
+        return;
+      }
+
+      // Exclude if 'stylesheet' exists
+      if (passage.tags.includes('stylesheet')) {
+        return;
+      }
+
+      count++;
+    });
+    return count;
   }
 
   /**
@@ -482,6 +502,20 @@ export default class Story {
 
     // Use internal forEach
     this.#_passages.forEach((element, index) => {
+      // Exclude StoryTitle
+      if (element.name === 'StoryTitle') {
+        return;
+      }
+
+      // Exclude if 'script' tags exists
+      if (element.tags.includes('script')) {
+        return;
+      }
+
+      // Exclude if 'stylesheet' exists
+      if (element.tags.includes('stylesheet')) {
+        return;
+      }
       // Call callback function with element and index
       callback(element, index);
     });

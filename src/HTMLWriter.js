@@ -107,7 +107,7 @@ export default class HTMLWriter {
       // Add text of passages
       storyData += passage.text;
       // Remove from story
-      story.removePassage(passage);
+      story.removePassageByName(passage.name);
     });
 
     // Close the STYLE
@@ -124,7 +124,7 @@ export default class HTMLWriter {
       // Add text of passages
       storyData += passage.text;
       // Remove from story
-      story.removePassage(passage);
+      story.removePassageByName(passage.name);
     });
 
     // Close SCRIPT

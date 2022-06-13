@@ -244,17 +244,17 @@ describe('Story', () => {
     });
   });
 
-  describe('removePassage()', () => {
+  describe('removePassageByName()', () => {
     let s = null;
 
     beforeEach(() => {
       s = new Story();
     });
 
-    it('removePassage() - should decrease size', () => {
+    it('removePassageByName() - should decrease size', () => {
       s.addPassage(new Passage('Find'));
       s.addPassage(new Passage('Find2'));
-      s.removePassage('Find');
+      s.removePassageByName('Find');
       expect(s.size()).toBe(1);
     });
   });
@@ -346,6 +346,27 @@ describe('Story', () => {
         s.forEach(null);
       }).toThrow();
     });
+
+    it('forEach() - should ignore StoryTitle', () => {
+      let count = 0;
+      s.addPassage(new Passage('StoryTitle', 'Test'));
+      s.forEach(() => {count++});
+      expect(count).toBe(0);
+    });
+
+    it('forEach() - should ignore "script" tags', () => {
+      let count = 0;
+      s.addPassage(new Passage('Test', 'Test', ['script']));
+      s.forEach(() => {count++});
+      expect(count).toBe(0);
+    });
+
+    it('forEach() - should ignore "stylesheet" tags', () => {
+      let count = 0;
+      s.addPassage(new Passage('Test', 'Test', ['stylesheet']));
+      s.forEach(() => {count++});
+      expect(count).toBe(0);
+    });
   });
 
   describe('size()', () => {
@@ -364,6 +385,39 @@ describe('Story', () => {
       s.addPassage(p);
       // Test size after adding one
       expect(s.size()).toBe(1);
+    });
+
+    it('size() - should not count StoryTitle', () => {
+      // Create a Passage
+      const p = new Passage('StoryTitle', 'Test');
+      // Test initial size
+      expect(s.size()).toBe(0);
+      // Add a passage
+      s.addPassage(p);
+      // Test size after adding one
+      expect(s.size()).toBe(0);
+    });
+
+    it('size() - should not count script tags', () => {
+      // Create a Passage
+      const p = new Passage('Test', 'Test', ['script']);
+      // Test initial size
+      expect(s.size()).toBe(0);
+      // Add a passage
+      s.addPassage(p);
+      // Test size after adding one
+      expect(s.size()).toBe(0);
+    });
+
+    it('size() - should not count script tags', () => {
+      // Create a Passage
+      const p = new Passage('Test', 'Test', ['stylesheet']);
+      // Test initial size
+      expect(s.size()).toBe(0);
+      // Add a passage
+      s.addPassage(p);
+      // Test size after adding one
+      expect(s.size()).toBe(0);
     });
   });
 });

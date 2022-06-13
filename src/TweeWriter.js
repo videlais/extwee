@@ -81,9 +81,32 @@ export default class TweeWriter {
     // Add two newlines.
     outputContents += '\n\n';
 
+    // Look for StoryTitle
+    const storyTitlePassage = story.getPassageByName('StoryTitle');
+
+    // Does it exist?
+    if (storyTitlePassage !== null) {
+      // Append StoryTitle content
+      outputContents += storyTitlePassage.toString();
+    }
+
     // For each passage, append it to the output.
     story.forEach((passage) => {
       // For each passage, append it to the output.
+      outputContents += passage.toString();
+    });
+
+    // Look for 'script' passages
+    const scriptPassages = story.getPassagesByTag('script');
+    // For each 'script', add it back
+    scriptPassages.forEach(passage => {
+      outputContents += passage.toString();
+    });
+
+    // Look for 'stylesheet' passages
+    const stylesheetPassages = story.getPassagesByTag('stylesheet');
+    // For each 'stylesheet', add it back
+    stylesheetPassages.forEach(passage => {
       outputContents += passage.toString();
     });
 

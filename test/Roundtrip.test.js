@@ -6,7 +6,7 @@ import StoryFormatParser from '../src/StoryFormatParser.js';
 import HTMLWriter from '../src/HTMLWriter.js';
 
 describe('Round-trip testing', () => {
-  test('Should round-trip HTML-to-Twee', () => {
+  it('Should round-trip HTML-to-Twee', () => {
     // Read HTML
     const fr = FileReader.read('test/Roundtrip/Example1.html');
     // Parse HTML
@@ -23,7 +23,7 @@ describe('Round-trip testing', () => {
     expect(s.ifid).toBe(s2.ifid);
   });
 
-  test('Should round-trip Twee-to-HTML', () => {
+  it('Should round-trip Twee-to-HTML', () => {
     // Read StoryFormat
     const storyFormat = FileReader.read('test/Roundtrip/harlowe.js');
     // Parse StoryFormat

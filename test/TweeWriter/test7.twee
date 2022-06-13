@@ -1,0 +1,15 @@
+:: StoryData
+{
+  "ifid": "EAFCF71B-62E7-4E63-80A4-0F76D411DB97",
+  "start": "Start"
+}
+
+:: StoryTitle
+Title
+
+:: Start
+Content
+
+:: Test [stylesheet]
+Test
+

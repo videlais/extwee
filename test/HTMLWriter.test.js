@@ -38,10 +38,8 @@ describe('HTMLWriter', () => {
       // Parse HTML.
       const story2 = HTMLParser.parse(fr3);
 
-      const s2Title = story2.getPassageByName('StoryTitle').text;
-
       // Test both names to be the same.
-      expect(s1Title).toBe(s2Title);
+      expect(s1Title).toBe(story2.name);
     });
 
     it('Should write one and two-tag passages', () => {

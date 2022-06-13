@@ -1,0 +1,27 @@
+:: StoryTitle
+Example4
+
+:: user[script]
+console.log("Hi!");
+
+:: user2[script]
+console.log("Hi!");
+
+:: style1[stylesheet]
+body {
+    color: #ccc;
+}
+
+:: style2[stylesheet]
+html {
+    color: #ccc;
+}
+
+:: Start
+[[Another passage]]
+
+:: Another passage
+[[A third]]
+
+:: A third
+Double-click this passage to edit it.

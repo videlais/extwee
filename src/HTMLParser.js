@@ -51,6 +51,8 @@ export default class HTMLParser {
       if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'name')) {
         // Create StoryTitle passage based on name
         story.addPassage(new Passage('StoryTitle', storyData.attributes.name));
+        // Set the story name
+        story.name = storyData.attributes.name;
       } else {
         // Name is a required filed. Warn user.
         console.warn('Twine 2 HTML must have a name!');
