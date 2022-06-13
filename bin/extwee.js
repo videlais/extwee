@@ -15,7 +15,7 @@ const program = new Command();
 
 program
 .name('extwee')
-.version('2.0.5')
+.version('2.0.6')
 .option('-c', 'From Twee into HTML')
 .option('-d', 'From HTML into Twee')
 .option('-s <storyformat>', 'Path to storyformat')
