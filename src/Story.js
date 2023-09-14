@@ -1,7 +1,7 @@
 import Passage from './Passage.js';
 
 const name = 'extwee';
-const version = '2.0.6';
+const version = '2.2.0';
 
 /**
  * @class Story
