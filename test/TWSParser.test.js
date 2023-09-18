@@ -34,20 +34,41 @@ describe('TWSParser', () => {
             let r = null;
 
             beforeAll(() => {
-                const b = FileReader.readBinaryAsBuffer('./test/TWSParser/Example1.tws');
+                const b = FileReader.readBinaryAsBuffer('./test/TWSParser/Example5.tws');
                 r = TWSParser.parse(b);
             });
 
             it('Should parse passage - tags', function() {
-                
+                let p = r.getPassageByName('Untitled Passage 1');
+                expect(p.tags.length).toBe(3);
             });
     
             it('Should parse passage - text', function() {
-    
+                let p = r.getPassageByName('Untitled Passage 2');
+                expect(p.text).toBe('dd');
             });
     
             it('Should set Story start (to start passage)', function() {
-    
+                expect(r.start).toBe('Start');
+            });
+        });
+
+        describe("Exceptions and parsing issues", function() {
+            it('Should throw error if parsing a Buffer but not pickle data', function() {
+                const b = FileReader.readBinaryAsBuffer('./test/FileReader/t1.txt');
+                expect(() => {TWSParser.parse(b)}).toThrow();
+            });
+
+            it('Should create default Story object if pickle data but not TWS data', function() {
+                const b = FileReader.readBinaryAsBuffer('./test/TWSParser/nostory.tws');
+                let r = TWSParser.parse(b);
+                expect(r.size()).toBe(0);
+            });
+
+            it('Should parse storyPanel but no scale', function() {
+                const b = FileReader.readBinaryAsBuffer('./test/TWSParser/noscale.tws');
+                let r = TWSParser.parse(b);
+                expect(r.zoom).toBe(0);
             });
         });
     });
