@@ -40,42 +40,40 @@ export default class TWSParser {
       
       // Parse storyPanel.widgets.
       if (Object.prototype.hasOwnProperty.call(pythonObject.storyPanel, 'widgets')) {
-
+        // Parse `widgets` for passages.
+        for (const widget of pythonObject.storyPanel.widgets) {
+          // Create a passage.
+          const passage = new Passage();
+    
+          // Get title.
+          passage.name = widget.passage.title;
+    
+          // Get position.
+          //passage.attributes.position = `${widget.pos[0]},${widget.pos[1]}`;
+          
+          // Get tags.
+          passage.tags = widget.passage.tags;
+          
+          // Get source.
+          passage.text = widget.passage.text;
+    
+          // Set startingPassage (if found).
+          if (passage.name === 'Start') {
+            result.start = passage.name;
+          }
+    
+          // Set the story name (if found).
+          if (passage.name === 'StoryTitle') {
+            result.name = passage.text;
+          }
+    
+          // Add the passage.
+          result.addPassage(passage);
+        }
       }
-
-      
     }
 
-    for (const widget of pythonObject.storyPanel.widgets) {
-      // Create a passage.
-      const passage = new Passage();
-
-      // Get title.
-      passage.name = widget.passage.title;
-
-      // Get position.
-      //passage.attributes.position = `${widget.pos[0]},${widget.pos[1]}`;
-      
-      // Get tags.
-      passage.tags = widget.passage.tags;
-      
-      // Get source.
-      passage.text = widget.passage.text;
-
-      // Set startingPassage (if found).
-      if (passage.name === 'Start') {
-        result.start = passage;
-      }
-
-      // Set the story name (if found).
-      if (passage.name === 'StoryTitle') {
-        result.name = passage.text;
-      }
-
-      // Add the passage.
-      result.addPassage(passage);
-    }
-
+    // Return Story.
+    return result;
   }
-
 }

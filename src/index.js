@@ -5,4 +5,9 @@ const example = FileReader.readBinaryAsBuffer('../test/TWSParser/Example1.tws');
 
 const result = TWSParser.parse(example);
 
-console.log(result);
+//
+console.log(result.name);
+
+result.forEach((p) => {
+    console.log(p.toString());
+});
