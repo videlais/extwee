@@ -173,7 +173,7 @@ export default class Passage {
    *
    * @public
    * @memberof Passage
-   * @returns {string} String form of passage
+   * @returns {string} String form of passage.
    */
   toString () {
     // Start empty string.
