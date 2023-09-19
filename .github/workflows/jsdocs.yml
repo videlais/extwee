@@ -17,9 +17,3 @@ jobs:
           config_file: jsdocs.json
           template: clean-jsdoc-theme
           front_page: README.md
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./docs
