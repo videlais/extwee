@@ -350,21 +350,21 @@ describe('Story', () => {
     it('forEach() - should ignore StoryTitle', () => {
       let count = 0;
       s.addPassage(new Passage('StoryTitle', 'Test'));
-      s.forEach(() => {count++});
+      s.forEach(() => { count++; });
       expect(count).toBe(0);
     });
 
     it('forEach() - should ignore "script" tags', () => {
       let count = 0;
       s.addPassage(new Passage('Test', 'Test', ['script']));
-      s.forEach(() => {count++});
+      s.forEach(() => { count++; });
       expect(count).toBe(0);
     });
 
     it('forEach() - should ignore "stylesheet" tags', () => {
       let count = 0;
       s.addPassage(new Passage('Test', 'Test', ['stylesheet']));
-      s.forEach(() => {count++});
+      s.forEach(() => { count++; });
       expect(count).toBe(0);
     });
   });
@@ -409,7 +409,7 @@ describe('Story', () => {
       expect(s.size()).toBe(0);
     });
 
-    it('size() - should not count script tags', () => {
+    it('size() - should not count stylesheet tags', () => {
       // Create a Passage
       const p = new Passage('Test', 'Test', ['stylesheet']);
       // Test initial size

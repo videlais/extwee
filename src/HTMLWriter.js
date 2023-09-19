@@ -17,7 +17,6 @@ import { v4 as uuidv4 } from 'uuid';
 export default class HTMLWriter {
   /**
    * Write story to file using story format and adding any CSS and JS
-   *
    * @public
    * @static
    * @function writeFile
@@ -200,7 +199,6 @@ export default class HTMLWriter {
 
   /**
    * Escape HTML characters
-   *
    * @public
    * @static
    * @function escape

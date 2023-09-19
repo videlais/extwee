@@ -1,33 +1,33 @@
 # Status
 
-[![Build Status](https://travis-ci.org/videlais/extwee.svg?branch=master)](https://travis-ci.org/videlais/extwee)
-
 [![codecov](https://codecov.io/gh/videlais/extwee/branch/master/graph/badge.svg)](https://codecov.io/gh/videlais/extwee) [![npm version](https://badge.fury.io/js/extwee.svg)](https://badge.fury.io/js/extwee)
 
 [![NPM Badge](https://nodei.co/npm/extwee.png?downloads=true)](https://www.npmjs.com/package/extwee)
 
 ## Summary
 
-Extwee is a Twee compiler supporting Twine 2-style formats using the [Twee 3 specification](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md).
+Extwee is a Twee compiler supporting multiple Twine-compatible formats. It will parse many past and present encodings, but prefers newer formats for output.
 
-It will read both Twee 2 (Twee2) and Twee 3 formatted files, but does not understand or currently support Twee 1 (Twine 1.4.2) or Twee2 special passages for Twine 1.X formatting.
-
-*Extwee does not support Twine 1.X story formats.*
-
-## Story Formats
-
-Starting with Extwee 1.5, the latest versions of Twine 2 story formats are included. See each story format for its own license.
+| **Format Support**               | **Input** | **Output** |
+|----------------------------------|-----------|------------|
+| [Twine 1 HTML (2009 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)       | Yes       | No         |
+| [Twine 2 HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)    | Yes       | Yes        |
+| [Twee 3 (2021 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)          | Yes       | Yes        |
+| Twine 1 TWS (2009 - 2015)        | Yes       | No         |
+| Twine 2 Archive (2015 - Present) | Yes       | Yes        |
+| JSON (2023 - Present)            | Yes       | Yes        |
 
 ## Command-Line Usage
 
-Extwee supports NPX commands:
+Extwee supports a CLI interface:
 
-* Compile: `npx extwee -c -i <input twee> -s <input story format JS> -o <output HTML>`
-* Decompile: `npx extwee -d -i <input HTML> -o <output twee>`
+[TBD]
 
-### Escaping Metacharacters
+### Escaping Meta-Characters
 
-Extwee will attempt to escape the metacharacters of `{`, `}`, `[`, and `]` when moving to and from Twee notation. However, even with this support, it *highly recommended* to avoid these characters in passage name and tags to avoid confusion and potential issues.
+Extwee will attempt to escape the meta-characters of `{`, `}`, `[`, and `]` when moving to and from Twee notation. 
+
+It is *highly recommended* to avoid these characters in passage name and tags to avoid confusion and potential issues.
 
 ## Installation
 

@@ -5,35 +5,30 @@
 export default class Passage {
   /**
    * Name of the Passage
-   *
    * @private
    */
   #_name = null;
 
   /**
    * Internal array of tags
-   *
    * @private
    */
   #_tags = [];
 
   /**
    * Internal metadata of passage
-   *
    * @private
    */
   #_metadata = {};
 
   /**
    * Internal text of the passage
-   *
    * @private
    */
   #_text = '';
 
   /**
    * Internal PID of passage
-   *
    * @private
    */
   #_pid = -1;
@@ -66,7 +61,6 @@ export default class Passage {
 
   /**
    * Name
-   *
    * @public
    * @memberof Passage
    * @returns {string} Name
@@ -86,7 +80,6 @@ export default class Passage {
 
   /**
    * Tags
-   *
    * @public
    * @memberof Passage
    * @returns {Array} Tags
@@ -107,7 +100,6 @@ export default class Passage {
 
   /**
    * Metadata
-   *
    * @public
    * @memberof Passage
    * @returns {object} Metadata
@@ -128,7 +120,6 @@ export default class Passage {
 
   /**
    * Text
-   *
    * @public
    * @memberof Passage
    * @returns {string} Text
@@ -149,7 +140,6 @@ export default class Passage {
 
   /**
    * Passage ID (PID)
-   *
    * @public
    * @memberof Passage
    * @returns {number} Passage ID (PID)
@@ -170,7 +160,6 @@ export default class Passage {
 
   /**
    * Return a String representation
-   *
    * @public
    * @memberof Passage
    * @returns {string} String form of passage.

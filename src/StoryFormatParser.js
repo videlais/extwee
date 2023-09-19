@@ -7,7 +7,6 @@ import semver from 'semver';
 export default class StoryFormatParser {
   /**
    * Parse a Story Format file
-   *
    * @public
    * @static
    * @memberof StoryFormatParser

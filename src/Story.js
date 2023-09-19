@@ -10,28 +10,24 @@ const version = '2.2.0';
 export default class Story {
   /**
    * Internal name of story
-   *
    * @private
    */
   #_name = '';
 
   /**
    * Internal start
-   *
    * @private
    */
   #_start = '';
 
   /**
    * Internal IFID
-   *
    * @private
    */
   #_IFID = '';
 
   /**
    * Internal story format
-   *
    * @private
    */
   #_format = '';
@@ -48,42 +44,36 @@ export default class Story {
 
   /**
    * Passages
-   *
    * @private
    */
   #_passages = [];
 
   /**
    * Creator
-   *
    * @private
    */
   #_creator = '';
 
   /**
    * CreatorVersion
-   *
    * @private
    */
   #_creatorVersion = '';
 
   /**
    * Metadata
-   *
    * @private
    */
   #_metadata = null;
 
   /**
    * Tag Colors
-   *
    * @private
    */
   #_tagColors = {};
 
   /**
    * Internal PID counter
-   *
    * @private
    */
   #_PIDCounter = 1;
@@ -102,7 +92,6 @@ export default class Story {
 
   /**
    * Each story has a name
-   *
    * @public
    * @readonly
    * @memberof Story
@@ -123,7 +112,6 @@ export default class Story {
 
   /**
    * Tag Colors object (each property is a tag and its color)
-   *
    * @public
    * @readonly
    * @memberof Story
@@ -144,7 +132,6 @@ export default class Story {
 
   /**
    * Interactive Fiction ID (IFID) of Story
-   *
    * @public
    * @readonly
    * @memberof Story
@@ -165,7 +152,6 @@ export default class Story {
 
   /**
    * Name of start passage
-   *
    * @public
    * @readonly
    * @memberof Story
@@ -186,7 +172,6 @@ export default class Story {
 
   /**
    * Story format version of Story
-   *
    * @public
    * @readonly
    * @memberof Story
@@ -207,7 +192,6 @@ export default class Story {
 
   /**
    * Metadata of Story
-   *
    * @public
    * @readonly
    * @memberof Story
@@ -228,7 +212,6 @@ export default class Story {
 
   /**
    * Story format of Story
-   *
    * @public
    * @readonly
    * @memberof Story
@@ -249,7 +232,6 @@ export default class Story {
 
   /**
    * Program used to create Story
-   *
    * @public
    * @memberof Story
    * @returns {string} Creator Program
@@ -269,7 +251,6 @@ export default class Story {
 
   /**
    * Version used to create Story
-   *
    * @public
    * @memberof Story
    * @returns {string} Version
@@ -289,7 +270,6 @@ export default class Story {
 
   /**
    * Zoom level
-   *
    * @public
    * @memberof Story
    * @returns {number} Zoom level
@@ -310,7 +290,6 @@ export default class Story {
 
   /**
    * Add a passage to the story
-   *
    * @public
    * @function addPassage
    * @memberof Story
@@ -393,7 +372,6 @@ export default class Story {
 
   /**
    * Remove a passage from the story by name
-   *
    * @public
    * @function removePassageByName
    * @memberof Story
@@ -405,7 +383,6 @@ export default class Story {
 
   /**
    * Find passages by tag
-   *
    * @public
    * @function getPassagesByTag
    * @memberof Story
@@ -422,7 +399,6 @@ export default class Story {
 
   /**
    * Find passage by name
-   *
    * @public
    * @function getPassageByName
    * @memberof Story
@@ -438,7 +414,6 @@ export default class Story {
 
   /**
    * Find passage by PID
-   *
    * @public
    * @function getPassageByPID
    * @memberof Story
@@ -456,7 +431,6 @@ export default class Story {
    * Size (number of passages).
    * Does not include StoryAuthor or StoryTitle.
    * Does not include passages with 'script' or 'stylesheet' tags.
-   *
    * @public
    * @function size
    * @memberof Story
@@ -487,7 +461,6 @@ export default class Story {
 
   /**
    * forEach-style iterator of passages in Story
-   *
    * @public
    * @function forEach
    * @memberof Story

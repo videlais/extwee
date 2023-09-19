@@ -5,63 +5,54 @@
 export default class StoryFormat {
   /**
    * Internal name
-   *
    * @private
    */
   #_name = '';
 
   /**
    * Internal version
-   *
    * @private
    */
   #_version = '';
 
   /**
    * Internal description
-   *
    * @private
    */
   #_description = '';
 
   /**
    * Internal author
-   *
    * @private
    */
   #_author = '';
 
   /**
    * Internal image
-   *
    * @private
    */
   #_image = '';
 
   /**
    * Internal URL
-   *
    * @private
    */
   #_url = '';
 
   /**
    * Internal license
-   *
    * @private
    */
   #_license = '';
 
   /**
    * Internal proofing
-   *
    * @private
    */
   #_proofing = '';
 
   /**
    * Internal source
-   *
    * @private
    */
   #_source = '';
@@ -120,7 +111,6 @@ export default class StoryFormat {
 
   /**
    * Name
-   *
    * @public
    * @memberof StoryFormat
    * @returns {string} Name
@@ -140,7 +130,6 @@ export default class StoryFormat {
 
   /**
    * Version
-   *
    * @public
    * @memberof StoryFormat
    * @returns {string} Version
@@ -160,7 +149,6 @@ export default class StoryFormat {
 
   /**
    * Description
-   *
    * @public
    * @memberof StoryFormat
    * @returns {string} Description
@@ -180,7 +168,6 @@ export default class StoryFormat {
 
   /**
    * Author
-   *
    * @public
    * @memberof StoryFormat
    * @returns {string} Author
@@ -200,7 +187,6 @@ export default class StoryFormat {
 
   /**
    * Image
-   *
    * @public
    * @memberof StoryFormat
    * @returns {string} Image
@@ -220,7 +206,6 @@ export default class StoryFormat {
 
   /**
    * URL
-   *
    * @public
    * @memberof StoryFormat
    * @returns {string} URL
@@ -240,7 +225,6 @@ export default class StoryFormat {
 
   /**
    * License
-   *
    * @public
    * @memberof StoryFormat
    * @returns {string} License
@@ -260,7 +244,6 @@ export default class StoryFormat {
 
   /**
    * Proofing
-   *
    * @public
    * @memberof StoryFormat
    * @returns {boolean} Proofing
@@ -280,7 +263,6 @@ export default class StoryFormat {
 
   /**
    * Source
-   *
    * @public
    * @memberof StoryFormat
    * @returns {string} Source

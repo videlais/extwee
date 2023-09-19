@@ -13,7 +13,6 @@ import Passage from './Passage.js';
 export default class HTMLParser {
   /**
    * Parse HTML text into a JS DOM-like object
-   *
    * @public
    * @static
    * @function parse
@@ -321,7 +320,6 @@ export default class HTMLParser {
 
   /**
    * Try to escape meta-characters
-   *
    * @public
    * @static
    * @function escapeMetacharacters

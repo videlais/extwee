@@ -6,7 +6,6 @@ import fs from 'fs';
 export default class FileReader {
   /**
    * Read a text file.
-   *
    * @static
    * @public
    * @function read
@@ -30,9 +29,9 @@ export default class FileReader {
     // Return default or updated values.
     return contents;
   }
+
   /**
    * Read a binary file and return a Buffer of raw data.
-   *
    * @static
    * @public
    * @function readBinaryAsBuffer

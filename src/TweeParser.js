@@ -7,7 +7,6 @@ import Story from './Story.js';
 export default class TweeParser {
   /**
    * Parse Twee
-   *
    * @public
    * @static
    * @function parse

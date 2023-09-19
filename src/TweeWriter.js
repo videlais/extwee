@@ -16,7 +16,6 @@ import { v4 as uuidv4 } from 'uuid';
 export default class TweeWriter {
   /**
    * Write to a file using a Story object
-   *
    * @static
    * @param {Story} story - Story format to write
    * @param {string} file - File to write to
