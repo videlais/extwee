@@ -4,7 +4,6 @@ import Passage from './Passage.js';
 
 export default class JSONWriter {
   /**
-   * fromStory
    * Export Story as JSON string.
    * @public
    * @static
@@ -47,7 +46,6 @@ export default class JSONWriter {
   }
 
   /**
-   * fromPassage
    * Export Passage as JSON string.
    * @public
    * @static
@@ -73,7 +71,6 @@ export default class JSONWriter {
   }
 
   /**
-   * fromStoryFormat
    * Export StoryFormat as JSON string.
    * @public
    * @static
