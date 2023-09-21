@@ -11,10 +11,10 @@ import StoryFormat from './StoryFormat.js';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
- * @class HTMLWriter
- * @module HTMLWriter
+ * @class Twine2HTMLWriter
+ * @module Twine2HTMLWriter
  */
-export default class HTMLWriter {
+export default class Twine2HTMLWriter {
   /**
    * Write story to file using story format and adding any CSS and JS
    * @public
@@ -174,7 +174,7 @@ export default class HTMLWriter {
         storyData += `size="${passage.metadata.size}" `;
       }
 
-      storyData += `>${HTMLWriter.escape(passage.text)}</tw-passagedata>\n`;
+      storyData += `>${Twine2HTMLWriter.escape(passage.text)}</tw-passagedata>\n`;
     });
 
     storyData += '</tw-storydata>';

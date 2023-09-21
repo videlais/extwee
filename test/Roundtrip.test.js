@@ -1,16 +1,16 @@
 import TweeWriter from '../src/TweeWriter.js';
 import FileReader from '../src/FileReader.js';
 import TweeParser from '../src/TweeParser.js';
-import HTMLParser from '../src/HTMLParser.js';
+import Twine2HTMLParser from '../src/Twine2HTMLParser.js';
 import StoryFormatParser from '../src/StoryFormatParser.js';
-import HTMLWriter from '../src/HTMLWriter.js';
+import Twine2HTMLWriter from '../src/Twine2HTMLWriter.js';
 
 describe('Round-trip testing', () => {
   it('Should round-trip HTML-to-Twee', () => {
     // Read HTML
     const fr = FileReader.read('test/Roundtrip/Example1.html');
     // Parse HTML
-    const s = HTMLParser.parse(fr);
+    const s = Twine2HTMLParser.parse(fr);
     // Write Story into Twee
     TweeWriter.write(s, 'test/Roundtrip/example1.twee');
     // Read new Twee file
@@ -33,11 +33,11 @@ describe('Round-trip testing', () => {
     // Parse Twee
     const story = TweeParser.parse(fr);
     // Write HTML
-    HTMLWriter.write('test/Roundtrip/round.html', story, sfp);
+    Twine2HTMLWriter.write('test/Roundtrip/round.html', story, sfp);
     // Read HTML
     const fr2 = FileReader.read('test/Roundtrip/round.html');
     // Parse HTML
-    const story2 = HTMLParser.parse(fr2);
+    const story2 = Twine2HTMLParser.parse(fr2);
     // Number of passages should be the same, too
     expect(story2.size()).toBe(story.size());
     // IFID should be the same

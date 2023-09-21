@@ -2,6 +2,10 @@ import Story from './Story.js';
 import StoryFormat from './StoryFormat.js';
 import Passage from './Passage.js';
 
+/**
+ * @class JSONParser
+ * @module JSONParser
+ */
 export default class JSONParser {
   /**
    * Import JSON string and return Story object.

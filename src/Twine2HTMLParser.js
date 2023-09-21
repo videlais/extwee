@@ -7,10 +7,10 @@ import { parse as HtmlParser } from 'node-html-parser';
 import Story from './Story.js';
 import Passage from './Passage.js';
 /**
- * @class HTMLParser
- * @module HTMLParser
+ * @class Twine2HTMLParser
+ * @module Twine2HTMLParser
  */
-export default class HTMLParser {
+export default class Twine2HTMLParser {
   /**
    * Parse HTML text into a JS DOM-like object
    * @public
@@ -168,7 +168,7 @@ export default class HTMLParser {
       // Does name exist?
       if (Object.prototype.hasOwnProperty.call(attr, 'name')) {
         // Escape the name
-        name = HTMLParser.escapeMetacharacters(attr.name);
+        name = Twine2HTMLParser.escapeMetacharacters(attr.name);
       } else {
         console.warn('Encountered passage without a name! Will not add.');
       }
@@ -181,7 +181,7 @@ export default class HTMLParser {
         // (Attributes can, themselves, be empty strings.)
         if (attr.tags.length > 0 && attr.tags !== '""') {
           // Escape the tags
-          tags = HTMLParser.escapeMetacharacters(attr.tags);
+          tags = Twine2HTMLParser.escapeMetacharacters(attr.tags);
           // Split by spaces into an array
           tags = tags.split(' ');
         }

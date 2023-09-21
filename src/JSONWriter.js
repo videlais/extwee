@@ -2,6 +2,10 @@ import Story from './Story.js';
 import StoryFormat from './StoryFormat.js';
 import Passage from './Passage.js';
 
+/**
+ * @class JSONWriter
+ * @module JSONWriter
+ */
 export default class JSONWriter {
   /**
    * Export Story as JSON string.

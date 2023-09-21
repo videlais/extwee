@@ -2,6 +2,10 @@ import Story from './Story.js';
 import Passage from './Passage.js';
 import { Parser } from 'pickleparser';
 
+/**
+ * @class TWSParser
+ * @module TWSParser
+ */
 export default class TWSParser {
   /**
    * Parse TWS file (as Buffer) into Story.

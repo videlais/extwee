@@ -1,27 +1,27 @@
 import FileReader from '../src/FileReader.js';
 import StoryFormatParser from '../src/StoryFormatParser.js';
-import HTMLParser from '../src/HTMLParser.js';
+import Twine2HTMLParser from '../src/Twine2HTMLParser.js';
 import TweeParser from '../src/TweeParser.js';
-import HTMLWriter from '../src/HTMLWriter.js';
+import Twine2HTMLWriter from '../src/Twine2HTMLWriter.js';
 import Story from '../src/Story.js';
 import Passage from '../src/Passage.js';
 
-describe('HTMLWriter', () => {
+describe('Twine2HTMLWriter', () => {
   describe('#write()', () => {
     it('story should be instanceof Story', () => {
-      expect(() => { HTMLWriter.write('test/HTMLWriter/test.html', {}); }).toThrow();
+      expect(() => { Twine2HTMLWriter.write('test/Twine2HTMLWriter/test.html', {}); }).toThrow();
     });
 
     it('storyFormat should be instanceof StoryFormat', () => {
       const s = new Story();
-      expect(() => { HTMLWriter.write('test/HTMLWriter/test.html', s, {}); }).toThrow();
+      expect(() => { Twine2HTMLWriter.write('test/Twine2HTMLWriter/test.html', s, {}); }).toThrow();
     });
 
     it('Read, write, and read HTML', () => {
       // Read HTML.
-      const fr = FileReader.read('test/HTMLParser/twineExample3.html');
+      const fr = FileReader.read('test/Twine2HTMLParser/twineExample3.html');
       // Parse HTML.
-      const story = HTMLParser.parse(fr);
+      const story = Twine2HTMLParser.parse(fr);
 
       const s1Title = story.getPassageByName('StoryTitle').text;
 
@@ -31,12 +31,12 @@ describe('HTMLWriter', () => {
       const storyFormat = StoryFormatParser.parse(fr2);
 
       // Write HTML.
-      HTMLWriter.write('test/HTMLWriter/test2.html', story, storyFormat);
+      Twine2HTMLWriter.write('test/Twine2HTMLWriter/test2.html', story, storyFormat);
 
       // Read HTML.
-      const fr3 = FileReader.read('test/HTMLWriter/test2.html');
+      const fr3 = FileReader.read('test/Twine2HTMLWriter/test2.html');
       // Parse HTML.
-      const story2 = HTMLParser.parse(fr3);
+      const story2 = Twine2HTMLParser.parse(fr3);
 
       // Test both names to be the same.
       expect(s1Title).toBe(story2.name);
@@ -44,9 +44,9 @@ describe('HTMLWriter', () => {
 
     it('Should write one and two-tag passages', () => {
       // Read HTML.
-      const fr = FileReader.read('test/HTMLWriter/TestTags.html');
+      const fr = FileReader.read('test/Twine2HTMLWriter/TestTags.html');
       // Parse HTML.
-      const story = HTMLParser.parse(fr);
+      const story = Twine2HTMLParser.parse(fr);
 
       // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');
@@ -54,12 +54,12 @@ describe('HTMLWriter', () => {
       const storyFormat = StoryFormatParser.parse(fr2);
 
       // Write HTML.
-      HTMLWriter.write('test/HTMLWriter/test3.html', story, storyFormat);
+      Twine2HTMLWriter.write('test/Twine2HTMLWriter/test3.html', story, storyFormat);
 
       // Read HTML.
-      const fr3 = FileReader.read('test/HTMLWriter/test3.html');
+      const fr3 = FileReader.read('test/Twine2HTMLWriter/test3.html');
       // Parse HTML.
-      const story2 = HTMLParser.parse(fr3);
+      const story2 = Twine2HTMLParser.parse(fr3);
 
       let tags = '';
       let tags2 = '';
@@ -81,9 +81,9 @@ describe('HTMLWriter', () => {
 
     it('Should throw error if file path invalid', () => {
       // Read HTML.
-      const fr = FileReader.read('test/HTMLParser/twineExample3.html');
+      const fr = FileReader.read('test/Twine2HTMLParser/twineExample3.html');
       // Parse HTML.
-      const story = HTMLParser.parse(fr);
+      const story = Twine2HTMLParser.parse(fr);
 
       // Read StoryFormat.
       const fr2 = FileReader.read('test/StoryFormatParser/format.js');
@@ -92,7 +92,7 @@ describe('HTMLWriter', () => {
 
       // Throw error if path is invalid.
       expect(() => {
-        HTMLWriter.write('test2/HTMLWriter/test2.html', story, storyFormat);
+        Twine2HTMLWriter.write('test2/Twine2HTMLWriter/test2.html', story, storyFormat);
       }).toThrow();
     });
 
@@ -115,12 +115,12 @@ describe('HTMLWriter', () => {
 
       // Write out HTML with story and storyFormat.
       // (Will add position to passages without them.)
-      HTMLWriter.write('test/HTMLWriter/test4.html', story, storyFormat);
+      Twine2HTMLWriter.write('test/Twine2HTMLWriter/test4.html', story, storyFormat);
 
       // Read new HTML file.
-      const fr3 = FileReader.read('test/HTMLWriter/test4.html');
+      const fr3 = FileReader.read('test/Twine2HTMLWriter/test4.html');
       // Parse new HTML file.
-      const story2 = HTMLParser.parse(fr3);
+      const story2 = Twine2HTMLParser.parse(fr3);
 
       // Verify none of the directly created passages have position.
       story.forEach((passage) => {
@@ -155,12 +155,12 @@ describe('HTMLWriter', () => {
       const storyFormat = StoryFormatParser.parse(fr2);
 
       // Write the HTML.
-      HTMLWriter.write('test/HTMLWriter/creator.html', story, storyFormat);
+      Twine2HTMLWriter.write('test/Twine2HTMLWriter/creator.html', story, storyFormat);
 
       // Read HTML.
-      const fr3 = FileReader.read('test/HTMLWriter/creator.html');
+      const fr3 = FileReader.read('test/Twine2HTMLWriter/creator.html');
       // Parse HTML.
-      const story2 = HTMLParser.parse(fr3);
+      const story2 = Twine2HTMLParser.parse(fr3);
 
       // Test creator (should be default)
       expect(story.creator).toBe('extwee');
@@ -185,7 +185,7 @@ describe('HTMLWriter', () => {
       const storyFormat = StoryFormatParser.parse(fr2);
 
       expect(() => {
-        HTMLWriter.write('test', story, storyFormat);
+        Twine2HTMLWriter.write('test', story, storyFormat);
       }).toThrow();
     });
 
@@ -206,7 +206,7 @@ describe('HTMLWriter', () => {
 
       // Throws error
       expect(() => {
-        HTMLWriter.write('test/HTMLWriter/test6.html', story, storyFormat);
+        Twine2HTMLWriter.write('test/Twine2HTMLWriter/test6.html', story, storyFormat);
       }).toThrow();
     });
 
@@ -229,12 +229,12 @@ describe('HTMLWriter', () => {
       const storyFormat = StoryFormatParser.parse(fr2);
 
       // Write file
-      HTMLWriter.write('test/HTMLWriter/test6.html', story, storyFormat);
+      Twine2HTMLWriter.write('test/Twine2HTMLWriter/test6.html', story, storyFormat);
 
       // Read new HTML file.
-      const fr3 = FileReader.read('test/HTMLWriter/test6.html');
+      const fr3 = FileReader.read('test/Twine2HTMLWriter/test6.html');
       // Parse new HTML file.
-      const story2 = HTMLParser.parse(fr3);
+      const story2 = Twine2HTMLParser.parse(fr3);
 
       // Should not be start
       expect(story2.start).toBe('Start');
@@ -260,28 +260,28 @@ describe('HTMLWriter', () => {
 
       // Throws error
       expect(() => {
-        HTMLWriter.write('test/HTMLWriter/test7.html', story, storyFormat);
+        Twine2HTMLWriter.write('test/Twine2HTMLWriter/test7.html', story, storyFormat);
       }).toThrow();
     });
 
     it('Should correctly replace all instances of STORY_NAME', () => {
-      const fr = FileReader.read('test/HTMLWriter/example6.twee');
+      const fr = FileReader.read('test/Twine2HTMLWriter/example6.twee');
       const story = TweeParser.parse(fr);
       const storyFormatFile = FileReader.read('test/StoryFormatParser/format_doublename.js');
       const sfp = StoryFormatParser.parse(storyFormatFile);
-      HTMLWriter.write('test/HTMLWriter/test11.html', story, sfp);
-      const frh = FileReader.read('test/HTMLWriter/test11.html');
+      Twine2HTMLWriter.write('test/Twine2HTMLWriter/test11.html', story, sfp);
+      const frh = FileReader.read('test/Twine2HTMLWriter/test11.html');
       expect(frh.indexOf('STORY_NAME')).toBe(-1);
     });
   });
 
   describe('escape()', () => {
     it('Should throw error if argument is not string', () => {
-      expect(() => { HTMLWriter.escape(1); }).toThrow();
+      expect(() => { Twine2HTMLWriter.escape(1); }).toThrow();
     });
 
     it('Should escape HTML sequences', () => {
-      expect(HTMLWriter.escape('<script>alert("Hi!");</script>')).toBe('&lt;script&gt;alert(&quot;Hi!&quot;);&lt;/script&gt;');
+      expect(Twine2HTMLWriter.escape('<script>alert("Hi!");</script>')).toBe('&lt;script&gt;alert(&quot;Hi!&quot;);&lt;/script&gt;');
     });
   });
 });
