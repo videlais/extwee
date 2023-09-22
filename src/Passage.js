@@ -221,7 +221,7 @@ export default class Passage {
    */
   toTwine2HTML() {
     // Start the passage element
-    const passageData = '\t<tw-passagedata';
+    let passageData = '\t<tw-passagedata';
 
     /**
      * pid: (string) Required.
@@ -239,11 +239,7 @@ export default class Passage {
      * tags: (string) Optional.
      *   Any tags for the passage separated by spaces.
      */
-    if (this.#_tags.length > 1) {
-      passageData += ` tags="${this.#_tags.join(' ')}" `;
-    } else if (passage.tags.length === 1) {
-      passageData += ` tags="${this.#_tags[0]}" `;
-    }
+    passageData += ` tags="${this.#_tags.join(' ')}" `;
     
     /**
      * position: (string) Optional.
@@ -260,7 +256,7 @@ export default class Passage {
      *   when viewed within the Twine 2 editor.
      */
     if (Object.prototype.hasOwnProperty.call(this.#_metadata, 'size')) {
-            storyData += `size="${passage.metadata.size}" `;
+      passageData += `size="${this.#_metadata.size}" `;
     }
 
     /**
@@ -269,10 +265,6 @@ export default class Passage {
      * @returns {string} Escaped text.
      */
     const escape = function (text) {
-      // Throw error if text is not a string
-      if (Object.prototype.toString.call(text) !== '[object String]') {
-        throw new Error('Text argument is not a String');
-      }
 
       const rules = [
         ['&', '&amp;'],
@@ -291,9 +283,67 @@ export default class Passage {
     }
     
     // Add the text and close the element.
-    passageData += `>${escape(passage.text)}</tw-passagedata>\n`;
+    passageData += `>${escape(this.text)}</tw-passagedata>\n`;
 
     // Return the Twine 2 HTML element.
+    return passageData;
+  }
+
+  /**
+    * Return Twine 1 HTML representation.
+    * @public
+    * @function toTwine2HTML
+    * @returns {string} Twine 1 HTML string.
+    */
+  toTwine1HTML() {
+    /**
+     * <div 
+        created="202306020121" 
+        modifier="twee" 
+        twine-position="10,10">[[One passage]]</div>
+     */
+     // Start the passage element
+     let passageData = '\t<div';
+
+     /**
+      * tiddler: (string) Required.
+      *   The name of the passage.
+      */
+    passageData += ` tiddler="${this.name}"`;
+    
+    /**
+     * tags: (string) Required.
+     *   Any tags for the passage separated by spaces.
+     */
+    passageData += ` tags="${this.#_tags.join(' ')}" `;
+
+    /**
+     * modifier: (string) Optional. 
+     *  Name of the tool that last edited the passage. 
+     *  Generally, for versions of Twine 1, this value will be "twee". 
+     *  Twee compilers may place their own name (e.g. "tweego" for Tweego).
+     */
+    passageData += ` modifier="extwee"` ;
+
+    /**
+     * twine-position: (string) Required.
+     * Comma-separated X and Y coordinates of the passage within Twine 1.
+     */
+    // If the metadata contains 'position', we will use it.
+    if (Object.prototype.hasOwnProperty.call(this.#_metadata, 'position')) {
+      passageData += ` twine-position="${this.#_metadata.position}"` ;
+    } else {
+      // Default is 10, 10
+      passageData += ` twine-position="10,10"` ;
+    }
+    
+    /**
+     * text: (string) Required.
+     * Text content of the passage.
+     */
+    passageData += `>${this.#_text}</div>`;
+
+    // Return the HTML representation.
     return passageData;
   }
 }

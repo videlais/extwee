@@ -1,7 +1,7 @@
 import Passage from '../src/Passage.js';
 
 describe('Passage', () => {
-  describe('#constructor()', () => {
+  describe('constructor()', () => {
     it('Set default values', () => {
       const p = new Passage();
       expect(p.name).toBe('');
@@ -110,6 +110,83 @@ describe('Passage', () => {
       expect(r.text).toBe('');
       expect(r.tags.length).toBe(0);
       expect(Object.keys(r.metadata).length).toBe(0);
+    });
+  });
+
+  describe('toTwine2HTML()', function() {
+
+    let p = null;
+    let result = null;
+
+    beforeEach(() => {
+      p = new Passage("Test", "Word", ['tag1'], {'some': 'thing'}, 10);
+      result = p.toTwine2HTML();
+    });
+
+    it('Should contain PID', function() {
+      expect(result.includes('pid="10"')).toBe(true);
+    });
+
+    it('Should include name', function() {
+      expect(result.includes('name="Test"')).toBe(true);
+    });
+
+    it('Should include single tag', function() {
+      expect(result.includes('tags="tag1"')).toBe(true);
+    });
+
+    it('Should include multiple tags', function() {
+      p.tags = ['tag1', 'tag2'];
+      result = p.toTwine2HTML();
+      expect(result.includes('tags="tag1 tag2"')).toBe(true);
+    });
+
+    it('Should include position, if it exists', function() {
+      p.metadata = {'position': "102,99"};
+      result = p.toTwine2HTML();
+      expect(result.includes('position="102,99"')).toBe(true);
+    });
+
+    it('Should include size, if it exists', function() {
+      p.metadata = {'size': "100,100"};
+      result = p.toTwine2HTML();
+      expect(result.includes('size="100,100"')).toBe(true);
+    });
+  });
+
+  describe('toTwine1HTML()', function() {
+    let p = null;
+    let result = null;
+
+    beforeEach(() => {
+      p = new Passage("Test", "Word", ['tag1'], {'position': '12, 12'});
+      result = p.toTwine1HTML();
+    });
+
+    it('Should include tiddler', function() {
+      expect(result.includes('tiddler="Test"')).toBe(true);
+    });
+
+    it('Should include single tag', function() {
+      expect(result.includes('tags="tag1"')).toBe(true);
+    });
+
+    it('Should include multiple tags', function() {
+      p.tags = ['tag1', 'tag2'];
+      result = p.toTwine1HTML();
+      expect(result.includes('tags="tag1 tag2"')).toBe(true);
+    });
+
+    it('Should include position, if it exists', function() {
+      p.metadata = {'position': "102,99"};
+      result = p.toTwine1HTML();
+      expect(result.includes('position="102,99"')).toBe(true);
+    });
+
+    it('Should use default position', function() {
+      p.metadata = {};
+      result = p.toTwine1HTML();
+      expect(result.includes('position="10,10"')).toBe(true);
     });
   });
 });
