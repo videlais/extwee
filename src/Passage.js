@@ -34,6 +34,8 @@ export default class Passage {
   #_pid = -1;
 
   /**
+   * A passage is the smallest unit of a story.
+   * (The 'pid' property is only used in Twine 2 HTML.)
    * @function Passage
    * @class
    * @param {string} name - Name
@@ -159,33 +161,139 @@ export default class Passage {
   }
 
   /**
-   * Return a String representation
+   * Return a Twee representation.
    * @public
+   * @function toTwee
    * @memberof Passage
    * @returns {string} String form of passage.
    */
-  toString () {
+  toTwee () {
     // Start empty string.
     let content = '';
-    // Write the name
+    
+    // Write the name.
     content += `:: ${this.name}`;
 
-    // Test if it has any tags
+    // Test if it has any tags.
     if (this.tags.length > 0) {
-      // Write output of tags
+      // Write output of tags.
       content += ` [${this.tags.join(' ')}]`;
     }
 
-    // Check if any properties exist
+    // Check if any properties exist.
     if (Object.keys(this.metadata).length > 0) {
-      // Write out a space and then passage metadata
+      // Write out a space and then passage metadata.
       content += ` ${JSON.stringify(this.metadata)}`;
     }
 
-    // Add newline, text, and two newlines
+    // Add newline, text, and two newlines.
     content += `\n${this.text}\n\n`;
 
     // Return string.
     return content;
+  }
+
+  /**
+   * Return JSON representation.
+   * @public
+   * @function toJSON
+   * @memberof Passage
+   * @returns {string} JSON string.
+   */
+  toJSON() {
+    // Create an initial object for later serialization.
+    const p = {
+      name: this.name,
+      tags: this.tags,
+      metadata: this.metadata,
+      text: this.text
+    };
+
+    // Return stringified JSON from simple object.
+    return JSON.stringify(p);
+  }
+
+  /**
+   * Return Twine 2 HTML representation.
+   * @public
+   * @function toTwine2HTML
+   * @returns {string} Twine 2 HTML string.
+   */
+  toTwine2HTML() {
+    // Start the passage element
+    const passageData = '\t<tw-passagedata';
+
+    /**
+     * pid: (string) Required.
+     *   The Passage ID (PID).
+     */
+    passageData += ` pid="${this.pid}"`;
+    
+    /**
+    * name: (string) Required.
+    *   The name of the passage.
+    */
+    passageData += ` name="${this.name}"`;
+    
+    /**
+     * tags: (string) Optional.
+     *   Any tags for the passage separated by spaces.
+     */
+    if (this.#_tags.length > 1) {
+      passageData += ` tags="${this.#_tags.join(' ')}" `;
+    } else if (passage.tags.length === 1) {
+      passageData += ` tags="${this.#_tags[0]}" `;
+    }
+    
+    /**
+     * position: (string) Optional.
+     *   Comma-separated X and Y position of the upper-left of the passage
+     *   when viewed within the Twine 2 editor.
+     */
+    if (Object.prototype.hasOwnProperty.call(this.#_metadata, 'position')) {
+      passageData += ` position="${this.#_metadata.position}" `;
+    }
+    
+    /**
+     * size: (string) Optional.
+     *   Comma-separated width and height of the passage
+     *   when viewed within the Twine 2 editor.
+     */
+    if (Object.prototype.hasOwnProperty.call(this.#_metadata, 'size')) {
+            storyData += `size="${passage.metadata.size}" `;
+    }
+
+    /**
+     * Escape passage Twine 2 passage text.
+     * @param {string} text - Text to escape.
+     * @returns {string} Escaped text.
+     */
+    const escape = function (text) {
+      // Throw error if text is not a string
+      if (Object.prototype.toString.call(text) !== '[object String]') {
+        throw new Error('Text argument is not a String');
+      }
+
+      const rules = [
+        ['&', '&amp;'],
+        ['<', '&lt;'],
+        ['>', '&gt;'],
+        ['"', '&quot;'],
+        ["'", '&#x27;'],
+        ['`', '&#x60;']
+      ];
+
+      rules.forEach(([rule, template]) => {
+        text = text.replaceAll(rule, template);
+      });
+
+      return text;
+    }
+    
+    // Add the text and close the element.
+    passageData += `>${escape(passage.text)}</tw-passagedata>\n`;
+
+    // Return the Twine 2 HTML element.
+    return passageData;
   }
 }

@@ -1,15 +1,7 @@
 :: StoryData
 {
-  "ifid": "BEBC61C8-ACD1-4B30-B946-4F738D865751",
+  "ifid": "F183E248-D1CD-47FB-8C35-27BABB875CEA",
   "start": "Start"
 }
 
-:: StoryTitle
-Title
-
-:: Start
-Content
-
-:: Test [stylesheet]
-Test
-
+[object Object][object Object][object Object]

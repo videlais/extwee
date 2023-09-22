@@ -13,10 +13,8 @@ describe('JSONParser', () => {
     it('Should parse default Story JSON', function () {
       // Create Story.
       const s = new Story();
-      // Convert to JSON.
-      const js = JSONWriter.fromStory(s);
-      // Convert back to Story.
-      const result = JSONParser.toStory(js);
+      // Convert to JSON and back into object.
+      const result = JSON.parse(s.toJSON());
       // Check all properties.
       expect(result.name).toBe('');
       expect(Object.keys(result.tagColors).length).toBe(0);

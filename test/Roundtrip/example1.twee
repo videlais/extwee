@@ -7,15 +7,4 @@
   "start": "StoryTitle"
 }
 
-:: StoryTitle
-Example1
-
-:: Untitled Passage {"position":"200,102","size":"100,100"}
-[[Another passage]]
-
-:: Another passage {"position":"200,252","size":"100,100"}
-[[A third]]
-
-:: A third {"position":"200,402","size":"100,100"}
-Double-click this passage to edit it.
-
+[object Object][object Object][object Object][object Object]

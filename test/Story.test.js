@@ -324,48 +324,27 @@ describe('Story', () => {
     });
   });
 
-  describe('forEach()', () => {
+  describe('forEachPassage()', () => {
     let s = null;
 
     beforeEach(() => {
       s = new Story();
     });
 
-    it('forEach() - should return if non-function', () => {
+    it('forEachPassage() - should return if non-function', () => {
       s.addPassage(new Passage('A'));
       s.addPassage(new Passage('B'));
       let passageNames = '';
-      s.forEach((p) => {
+      s.forEachPassage((p) => {
         passageNames += p.name;
       });
       expect(passageNames).toBe('AB');
     });
 
-    it('forEach() - should throw error if non-function', () => {
+    it('forEachPassage() - should throw error if non-function', () => {
       expect(() => {
-        s.forEach(null);
+        s.forEachPassage(null);
       }).toThrow();
-    });
-
-    it('forEach() - should ignore StoryTitle', () => {
-      let count = 0;
-      s.addPassage(new Passage('StoryTitle', 'Test'));
-      s.forEach(() => { count++; });
-      expect(count).toBe(0);
-    });
-
-    it('forEach() - should ignore "script" tags', () => {
-      let count = 0;
-      s.addPassage(new Passage('Test', 'Test', ['script']));
-      s.forEach(() => { count++; });
-      expect(count).toBe(0);
-    });
-
-    it('forEach() - should ignore "stylesheet" tags', () => {
-      let count = 0;
-      s.addPassage(new Passage('Test', 'Test', ['stylesheet']));
-      s.forEach(() => { count++; });
-      expect(count).toBe(0);
     });
   });
 
@@ -386,38 +365,35 @@ describe('Story', () => {
       // Test size after adding one
       expect(s.size()).toBe(1);
     });
+  });
 
-    it('size() - should not count StoryTitle', () => {
-      // Create a Passage
-      const p = new Passage('StoryTitle', 'Test');
-      // Test initial size
-      expect(s.size()).toBe(0);
-      // Add a passage
-      s.addPassage(p);
-      // Test size after adding one
-      expect(s.size()).toBe(0);
+  describe('toJSON()', function () {
+    it('Should have default Story values', function () {
+      // Create a new Story.
+      const s = new Story();
+      // Convert to string and then back to object.
+      const result = JSON.parse(s.toJSON());
+      expect(result.name).toBe('');
+      expect(Object.keys(result.tagColors).length).toBe(0);
+      expect(result.ifid).toBe('');
+      expect(result.start).toBe('');
+      expect(result.formatVersion).toBe('');
+      expect(result.format).toBe('');
+      expect(result.creator).toBe('extwee');
+      expect(result.creatorVersion).toBe('2.2.0');
+      expect(result.zoom).toBe(0);
+      expect(Object.keys(result.metadata).length).toBe(0);
     });
 
-    it('size() - should not count script tags', () => {
-      // Create a Passage
-      const p = new Passage('Test', 'Test', ['script']);
-      // Test initial size
-      expect(s.size()).toBe(0);
-      // Add a passage
-      s.addPassage(p);
-      // Test size after adding one
-      expect(s.size()).toBe(0);
-    });
-
-    it('size() - should not count stylesheet tags', () => {
-      // Create a Passage
-      const p = new Passage('Test', 'Test', ['stylesheet']);
-      // Test initial size
-      expect(s.size()).toBe(0);
-      // Add a passage
-      s.addPassage(p);
-      // Test size after adding one
-      expect(s.size()).toBe(0);
+    it('Should have passage data', function () {
+      // Create default Story.
+      const s = new Story();
+      // Add a passage.
+      s.addPassage(new Passage('Example', 'Test'));
+      // Convert to JSON and then back to object.
+      const result = JSON.parse(s.toJSON());
+      // Should have a single passage.
+      expect(result.passages.length).toBe(1);
     });
   });
 });

@@ -87,18 +87,29 @@ describe('Passage', () => {
     });
   });
 
-  describe('toString()', () => {
+  describe('toTwee()', () => {
     it('Create name string', () => {
       const p = new Passage('Name', 'Test');
-      expect(p.toString()).toBe(':: Name\nTest\n\n');
+      expect(p.toTwee()).toBe(':: Name\nTest\n\n');
     });
     it('Create tags string', () => {
       const p = new Passage('Name', 'Test', ['tags', 'another']);
-      expect(p.toString()).toBe(':: Name [tags another]\nTest\n\n');
+      expect(p.toTwee()).toBe(':: Name [tags another]\nTest\n\n');
     });
     it('Create metadata string', () => {
       const p = new Passage('Name', 'Test', ['tags', 'another'], { position: '100,100' });
-      expect(p.toString()).toBe(':: Name [tags another] {"position":"100,100"}\nTest\n\n');
+      expect(p.toTwee()).toBe(':: Name [tags another] {"position":"100,100"}\nTest\n\n');
+    });
+  });
+
+  describe('toJSON()', function () {
+    it('Should hold default values', function () {
+      const p = new Passage();
+      const r = JSON.parse(p.toJSON());
+      expect(r.name).toBe('');
+      expect(r.text).toBe('');
+      expect(r.tags.length).toBe(0);
+      expect(Object.keys(r.metadata).length).toBe(0);
     });
   });
 });

@@ -1,6 +1,6 @@
 :: StoryData
 {
-  "ifid": "369D9840-D64A-4205-9B6D-AACFC9F64F22",
+  "ifid": "BAD36C0B-0BD5-4A81-8EF7-255C9A6912A2",
   "start": "Start",
   "tag-colors": {
     "bar": "green",
@@ -9,12 +9,4 @@
   }
 }
 
-:: StoryTitle
-Title
-
-:: Start
-Content
-
-:: Untitled
-Some stuff
-
+[object Object][object Object][object Object]

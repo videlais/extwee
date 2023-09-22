@@ -9,15 +9,20 @@ import Passage from './Passage.js';
 /**
  * @class Twine2HTMLParser
  * @module Twine2HTMLParser
+ * 
+ * Parses Twine 2 HTML into a Story object.
+ * 
+ * See: Twine 2 HTML Output Specification
+ * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
  */
 export default class Twine2HTMLParser {
   /**
-   * Parse HTML text into a JS DOM-like object
+   * Parse Twine 2 HTML into Story object.
    * @public
    * @static
    * @function parse
-   * @param {string} content - Content to parse
-   * @returns {Story} story
+   * @param {string} content - Twine 2 HTML content to parse.
+   * @returns {Story} Story
    */
   static parse (content) {
     let story = null;
@@ -319,7 +324,7 @@ export default class Twine2HTMLParser {
   }
 
   /**
-   * Try to escape meta-characters
+   * Try to escape Twine 2 meta-characters.
    * @public
    * @static
    * @function escapeMetacharacters
