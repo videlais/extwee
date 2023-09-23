@@ -74,12 +74,6 @@ export default class Story {
   #_tagColors = {};
 
   /**
-   * Internal PID counter
-   * @private
-   */
-  #_PIDCounter = 1;
-
-  /**
    * @function Story
    * @class
    */
@@ -294,80 +288,71 @@ export default class Story {
    * @public
    * @function addPassage
    * @memberof Story
-   * @param {Passage} p - Passage to add to Story
+   * @param {Passage} p - Passage to add to Story.
    */
   addPassage (p) {
-    // Check if passed argument is a Passage
-    if (p instanceof Passage) {
-      // Does this passage already exist in the collection?
-      if (this.getPassageByName(p.name) === null) {
-        // StoryData is the only passage with special parsing needs.
-        // All other passages are added to the internal passages array.
-        if (p.name === 'StoryData') {
-          // Try to parse JSON
-          try {
-            // Attempt to parse storyData JSON
-            const metadata = JSON.parse(p.text);
-
-            // IFID
-            if (Object.prototype.hasOwnProperty.call(metadata, 'ifid')) {
-              this.IFID = metadata.ifid;
-            }
-
-            // format
-            if (Object.prototype.hasOwnProperty.call(metadata, 'format')) {
-              this.format = metadata.format;
-            }
-
-            // formatVersion
-            if (Object.prototype.hasOwnProperty.call(metadata, 'formatVersion')) {
-              this.formatVersion = metadata.formatVersion;
-            }
-
-            // zoom
-            if (Object.prototype.hasOwnProperty.call(metadata, 'zoom')) {
-              this.zoom = metadata.zoom;
-            }
-
-            // start
-            if (Object.prototype.hasOwnProperty.call(metadata, 'start')) {
-              this.start = metadata.start;
-            }
-
-            // tag colors
-            if (Object.prototype.hasOwnProperty.call(metadata, 'tag-colors')) {
-              this.tagColors = metadata['tag-colors'];
-            }
-          } catch (event) {
-            // Ignore errors
-          }
-        } else {
-          // Look for Start
-          if (p.name === 'Start' && this.start === '') {
-            // Set Start as starting passage (unless overwritten by start property)
-            this.start = 'Start';
-          }
-
-          // Test for default value.
-          // (This might occur if using Story directly
-          //  outside of using HTMLParser or TweeParser.)
-          if (p.pid === -1) {
-            // Set the internal counter.
-            p.pid = this.#_PIDCounter;
-            // Update the internal counter.
-            this.#_PIDCounter++;
-          }
-
-          // Push the passage to the array
-          this.#_passages.push(p);
-        }
-      } else {
-        // Warn user
-        console.warn('Ignored passage with same name as existing one!');
-      }
-    } else {
-      // We can only add passages to array
+    // Check if passed argument is a Passage.
+    if (!(p instanceof Passage)) {
+      // We can only add passages to array.
       throw new Error('Can only add Passages to the story!');
+    }
+
+    // Does this passage already exist in the collection?
+    // If it does, we ignore it.
+    if (this.getPassageByName(p.name) === null) {
+      // Parse StoryData.
+      if (p.name === 'StoryData') {
+        // Try to parse JSON.
+        try {
+          // Attempt to parse storyData JSON.
+          const metadata = JSON.parse(p.text);
+
+          // IFID.
+          if (Object.prototype.hasOwnProperty.call(metadata, 'ifid')) {
+            this.IFID = metadata.ifid;
+          }
+
+          // Format.
+          if (Object.prototype.hasOwnProperty.call(metadata, 'format')) {
+            this.format = metadata.format;
+          }
+
+          // formatVersion.
+          if (Object.prototype.hasOwnProperty.call(metadata, 'format-version')) {
+            this.formatVersion = metadata['format-version'];
+          }
+
+          // Zoom.
+          if (Object.prototype.hasOwnProperty.call(metadata, 'zoom')) {
+            this.zoom = metadata.zoom;
+          }
+
+          // Start.
+          if (Object.prototype.hasOwnProperty.call(metadata, 'start')) {
+            this.start = metadata.start;
+          }
+
+          // Tag colors.
+          if (Object.prototype.hasOwnProperty.call(metadata, 'tag-colors')) {
+            this.tagColors = metadata['tag-colors'];
+          }
+        } catch (event) {
+          // Ignore errors.
+        }
+      }
+
+      // Parse StoryTitle.
+      if (p.name === 'StoryTitle') {
+        // If there is a StoryTitle passage, we accept the name.
+        // Set internal name based on StoryTitle.
+        this.#_name = p.text;
+      }
+
+      // Push the passage to the array.
+      this.#_passages.push(p);
+    } else {
+      // Warn user
+      console.warn('Ignored passage with same name as existing one!');
     }
   }
 
@@ -410,21 +395,6 @@ export default class Story {
     // Look through passages
     const results = this.#_passages.find((passage) => passage.name === name);
     // Return entry or null, if not found
-    return results !== undefined ? results : null;
-  }
-
-  /**
-   * Find passage by PID
-   * @public
-   * @function getPassageByPID
-   * @memberof Story
-   * @param {number} pid - Passage PID to search for
-   * @returns {Passage | null} Return passage or null
-   */
-  getPassageByPID (pid) {
-    // Look through passages
-    const results = this.#_passages.find((passage) => passage.pid === pid);
-    // Return passages or null
     return results !== undefined ? results : null;
   }
 
@@ -505,123 +475,122 @@ export default class Story {
   fromJSON (jsonString) {
     // Create future object.
     let result = {};
-  
+
     // Try to parse the string.
     try {
-        result = JSON.parse(jsonString);
-      } catch (error) {
-        throw new Error('Invalid JSON!');
-      }
-  
-      // Name
-      if (Object.prototype.hasOwnProperty.call(result, 'name')) {
-        // Convert to String (if not String).
-        this.name = String(result.name);
-      }
-  
-      // Start Passage
-      if (Object.prototype.hasOwnProperty.call(result, 'start')) {
-        // Convert to String (if not String).
-        this.start = String(result.start);
-      }
-  
-      // IFID
-      if (Object.prototype.hasOwnProperty.call(result, 'ifid')) {
-        // Convert to String (if not String).
-        // Enforce the uppercase rule of Twine 2 and Twee 3.
-        this.IFID = String(result.ifid).toUpperCase();
-      }
-  
-      // Format
-      if (Object.prototype.hasOwnProperty.call(result, 'format')) {
-        // Convert to String (if not String).
-        this.format = String(result.format);
-      }
-  
-      // Format Version
-      if (Object.prototype.hasOwnProperty.call(result, 'formatVersion')) {
-        // Convert to String (if not String).
-        this.formatVersion = String(result.formatVersion);
-      }
-  
-      // Creator
-      if (Object.prototype.hasOwnProperty.call(result, 'creator')) {
-        // Convert to String (if not String).
-        this.creator = String(result.creator);
-      }
-  
-      // Creator Version
-      if (Object.prototype.hasOwnProperty.call(result, 'creatorVersion')) {
-        // Convert to String (if not String).
-        this.creatorVersion = String(result.creatorVersion);
-      }
-  
-      // Zoom
-      if (Object.prototype.hasOwnProperty.call(result, 'zoom')) {
-        // Set Zoom.
-        this.zoom = result.zoom;
-      }
-  
-      // Tag Colors
-      if (Object.prototype.hasOwnProperty.call(result, 'tagColors')) {
-        // Set tagColors.
-        this.tagColors = result.tagColors;
-      }
-  
-      // Metadata
-      if (Object.prototype.hasOwnProperty.call(result, 'metadata')) {
-        // Set metadata.
-        this.metadata = result.metadata;
-      }
-  
-      // Passages
-      if (Object.prototype.hasOwnProperty.call(result, 'passages')) {
-        // Reset internal passages.
-        this.#_passages = [];
-        // Is this an array?
-        if (Array.isArray(result.passages)) {
-          // For each passage, convert into Passage objects.
-          result.passages.forEach((p) => {
-            // Create default passage.
-            const newP = new Passage();
-  
-            // Does this have a name?
-            if (Object.prototype.hasOwnProperty.call(p, 'name')) {
-              // Set name.
-              newP.name = p.name;
-            }
-  
-            // Does this have tags?
-            if (Object.prototype.hasOwnProperty.call(p, 'tags')) {
-              // Set tags.
-              newP.tags = p.tags;
-            }
-  
-            // Does this have metadata?
-            if (Object.prototype.hasOwnProperty.call(p, 'metadata')) {
-              // Set metadata.
-              newP.metadata = p.metadata;
-            }
-  
-            // Does this have text?
-            if (Object.prototype.hasOwnProperty.call(p, 'text')) {
-              // Set text.
-              newP.text = p.text;
-            }
-  
-            // Add the new passage.
-            this.addPassage(newP);
-          });
-        }
+      result = JSON.parse(jsonString);
+    } catch (error) {
+      throw new Error('Invalid JSON!');
+    }
+
+    // Name
+    if (Object.prototype.hasOwnProperty.call(result, 'name')) {
+      // Convert to String (if not String).
+      this.name = String(result.name);
+    }
+
+    // Start Passage
+    if (Object.prototype.hasOwnProperty.call(result, 'start')) {
+      // Convert to String (if not String).
+      this.start = String(result.start);
+    }
+
+    // IFID
+    if (Object.prototype.hasOwnProperty.call(result, 'ifid')) {
+      // Convert to String (if not String).
+      // Enforce the uppercase rule of Twine 2 and Twee 3.
+      this.IFID = String(result.ifid).toUpperCase();
+    }
+
+    // Format
+    if (Object.prototype.hasOwnProperty.call(result, 'format')) {
+      // Convert to String (if not String).
+      this.format = String(result.format);
+    }
+
+    // Format Version
+    if (Object.prototype.hasOwnProperty.call(result, 'formatVersion')) {
+      // Convert to String (if not String).
+      this.formatVersion = String(result.formatVersion);
+    }
+
+    // Creator
+    if (Object.prototype.hasOwnProperty.call(result, 'creator')) {
+      // Convert to String (if not String).
+      this.creator = String(result.creator);
+    }
+
+    // Creator Version
+    if (Object.prototype.hasOwnProperty.call(result, 'creatorVersion')) {
+      // Convert to String (if not String).
+      this.creatorVersion = String(result.creatorVersion);
+    }
+
+    // Zoom
+    if (Object.prototype.hasOwnProperty.call(result, 'zoom')) {
+      // Set Zoom.
+      this.zoom = result.zoom;
+    }
+
+    // Tag Colors
+    if (Object.prototype.hasOwnProperty.call(result, 'tagColors')) {
+      // Set tagColors.
+      this.tagColors = result.tagColors;
+    }
+
+    // Metadata
+    if (Object.prototype.hasOwnProperty.call(result, 'metadata')) {
+      // Set metadata.
+      this.metadata = result.metadata;
+    }
+
+    // Passages
+    if (Object.prototype.hasOwnProperty.call(result, 'passages')) {
+      // Reset internal passages.
+      this.#_passages = [];
+      // Is this an array?
+      if (Array.isArray(result.passages)) {
+        // For each passage, convert into Passage objects.
+        result.passages.forEach((p) => {
+          // Create default passage.
+          const newP = new Passage();
+
+          // Does this have a name?
+          if (Object.prototype.hasOwnProperty.call(p, 'name')) {
+            // Set name.
+            newP.name = p.name;
+          }
+
+          // Does this have tags?
+          if (Object.prototype.hasOwnProperty.call(p, 'tags')) {
+            // Set tags.
+            newP.tags = p.tags;
+          }
+
+          // Does this have metadata?
+          if (Object.prototype.hasOwnProperty.call(p, 'metadata')) {
+            // Set metadata.
+            newP.metadata = p.metadata;
+          }
+
+          // Does this have text?
+          if (Object.prototype.hasOwnProperty.call(p, 'text')) {
+            // Set text.
+            newP.text = p.text;
+          }
+
+          // Add the new passage.
+          this.addPassage(newP);
+        });
       }
     }
+  }
 
   /**
    * Return Twee representation.
-   * 
+   *
    * See: Twee 3 Specification
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
-   * 
    * @function toTwee
    * @memberof Story
    * @returns {string} Twee String
@@ -633,6 +602,9 @@ export default class Story {
     // Create default object.
     const metadata = {};
 
+    /**
+     * ifid: (string) Required. Maps to <tw-storydata ifid>.
+     */
     // Is there an IFID?
     if (this.IFID === '') {
       // Generate a new IFID for this work.
@@ -643,32 +615,33 @@ export default class Story {
       metadata.ifid = this.IFID;
     }
 
-    // Is there a format?
-    if (this.format !== '') {
-      // Using existing format
-      metadata.format = this.format;
-    }
+    /**
+     * format: (string) Optional. Maps to <tw-storydata format>.
+     */
+    metadata.format = this.format;
 
-    // Is there a formatVersion?
-    if (this.formatVersion !== '') {
-      // Using existing format version
-      metadata['format-version'] = this.formatVersion;
-    }
+    /**
+     * format-version: (string) Optional. Maps to <tw-storydata format-version>.
+     */
+    metadata['format-version'] = this.formatVersion;
 
-    // Is there a zoom?
-    if (this.zoom !== 0) {
-      // Using existing zoom.
-      metadata.zoom = this.zoom;
-    }
+    /**
+     * zoom: (decimal) Optional. Maps to <tw-storydata zoom>.
+     */
+    metadata.zoom = this.zoom;
 
-    // Is there a start?
-    if (this.start !== '') {
-      // Using existing start
-      metadata.start = this.start;
-    }
+    /**
+     * start: (string) Optional.
+     * Maps to <tw-passagedata name> of the node whose pid matches <tw-storydata startnode>.
+     */
+    metadata.start = this.start;
 
-    // Get number of colors.
+    /**
+     * tag-colors: (object of tag(string):color(string) pairs) Optional.
+     * Pairs map to <tw-tag> nodes as <tw-tag name>:<tw-tag color>.
+     */
     const numberOfColors = Object.keys(this.tagColors).length;
+
     // Are there any colors?
     if (numberOfColors > 0) {
       // Add a tag-colors property
@@ -681,70 +654,69 @@ export default class Story {
     // Add two newlines.
     outputContents += '\n\n';
 
-    // Look for StoryTitle
-    const storyTitlePassage = this.getPassageByName('StoryTitle');
-
-    // Does it exist?
-    if (storyTitlePassage !== null) {
-      // Append StoryTitle content
-      outputContents += storyTitlePassage.toTwee();
+    // Is there an explicit StoryTitle passage?
+    // (If it does exist, do nothing.)
+    if (this.getPassageByName('StoryTitle') === null) {
+      // We do not have an explicit StoryTitle passage.
+      // Generate one.
+      const p = new Passage('StoryTitle', this.name);
+      // Add to story.
+      this.addPassage(p);
     }
 
     // For each passage, append it to the output.
     this.forEachPassage((passage) => {
-      // For each passage, append it to the output.
       outputContents += passage.toTwee();
     });
 
-   // Return the Twee string.
-   return outputContents;
+    // Return the Twee string.
+    return outputContents;
   }
 
   /**
-   * Combine StoryFormat to create Twine 2 HTML.
+   * Return Twine 2 HTML.
+   *
+   * See: Twine 2 HTML Output
+   * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
    * @public
    * @function toTwine2HTML
-   * @param {StoryFormat} storyFormat - StoryFormat to combine
    * @returns {string} Twine 2 HTML string
    */
-  toTwine2HTML (storyFormat) {
-    if (!(storyFormat instanceof StoryFormat)) {
-      throw new Error('storyFormat must be a StoryFormat object!');
-    }
-
-    let outputContents = '';
-    let storyData = '';
-
-    // Look for StoryTitle
-    const storyTitle = this.getPassageByName('StoryTitle');
-
-    // Does the passage exist?
-    if (storyTitle != null) {
-      // Always overwrite any existing name with StoryTitle (per spec)
-      this.name = storyTitle.text;
-
-      // Use story.name for name.
-      storyData += `<tw-storydata name="${this.name}"`;
-    } else {
-      throw new Error("'name' is required attribute. (Add StoryTitle to story.)");
-    }
+  toTwine2HTML () {
+    // Prepare HTML content.
+    let storyData = `<tw-storydata name="${this.name}"`;
+    // Passage Identification (PID) counter.
+    let PIDcounter = 0;
 
     // Does start exist?
-    if (this.start !== '') {
-      // Try to get starting passage
-      const startingPassage = this.getPassageByName(story.start);
-      // Does it exist currently?
-      if (startingPassage !== null) {
-        // Add the starting passage
-        storyData += ` startnode="${startingPassage.pid}"`;
-      } else {
-        // Throw error if no starting passage exists
-        throw new Error('Starting passage not found');
-      }
-    } else {
-      // Throw error if no starting passage exists
-      throw new Error('No starting passage found!');
+    if (this.start === '') {
+      // We can't create a Twine 2 HTML file without a starting passage.
+      throw new Error('No starting passage!');
     }
+
+    // Try to find starting passage.
+    // If it doesn't exist, we throw an error.
+    if (this.getPassageByName(this.start) === null) {
+      // We can't create a Twine 2 HTML file without a starting passage.
+      throw new Error('Starting passage not found');
+    }
+
+    // Set initial PID value.
+    let startPID = 1;
+    // We have to do a bit of nonsense here.
+    // Twine 2 HTML cares about PID values.
+    this.forEachPassage((p) => {
+      // Have we found the starting passage?
+      if (p.name === this.start) {
+        // If so, set the PID based on index.
+        startPID = PIDcounter;
+      }
+      // Increase and keep looking.
+      PIDcounter++;
+    });
+
+    // Set starting passage PID.
+    storyData += ` startnode="${startPID}"`;
 
     // Defaults to 'extwee' if missing.
     storyData += ` creator="${this.creator}"`;
@@ -766,12 +738,12 @@ export default class Story {
     storyData += ` zoom="${this.zoom}"`;
 
     // Write existing or default value.
-    storyData += ` format="${storyFormat.name}"`;
+    storyData += ` format="${this.#_format}"`;
 
     // Write existing or default value.
-    storyData += ` format-version="${storyFormat.version}"`;
+    storyData += ` format-version="${this.#_formatVersion}"`;
 
-    // Add the default.
+    // Add the default attributes.
     storyData += ' options hidden>\n';
 
     // Start the STYLE.
@@ -801,27 +773,50 @@ export default class Story {
       storyData += passage.text;
     });
 
-    // Close SCRIPT
+    // Close SCRIPT.
     storyData += '</script>\n';
 
-    // Build the passages.
+    // Reset the PID counter.
+    PIDcounter = 1;
+
+    // Build the passages HTML.
     this.forEachPassage((passage) => {
-      // Append each passage element.
-      storyData += passage.toTwine2HTML();
+      // Append each passage element using the PID counter.
+      storyData += passage.toTwine2HTML(PIDcounter);
+      // Increase counter inside loop.
+      PIDcounter++;
     });
 
+    // Close the HTML element.
     storyData += '</tw-storydata>';
 
-    // Replace the story name in the source file.
-    storyFormat.source = storyFormat.source.replaceAll(/{{STORY_NAME}}/gm, this.name);
-
-    // Replace the story data.
-    storyFormat.source = storyFormat.source.replaceAll(/{{STORY_DATA}}/gm, storyData);
-
-    // Combine everything together.
-    outputContents += storyFormat.source;
-
     // Return HTML contents.
+    return storyData;
+  }
+
+  /**
+   * Return Twine 1 HTML.
+   *
+   * See: Twine 1 HTML Output
+   * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)
+   * @public
+   * @function toTwine1HTML
+   * @returns {string} Twine 1 HTML string.
+   */
+  toTwine1HTML () {
+    // Begin HTML output.
+    let outputContents = `<div id="storeArea" data-size="${this.size()}">`;
+
+    // Process passages (if any).
+    this.forEachPassage((p) => {
+      // Output HTML output per passage.
+      outputContents += `\t${p.toTwine1HTML()}`;
+    });
+
+    // Close HTML element.
+    outputContents += '</div>';
+
+    // Return Twine 1 HTML content.
     return outputContents;
   }
 }

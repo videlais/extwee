@@ -3,9 +3,9 @@ import Story from './Story.js';
 /**
  * @class TweeParser
  * @module TweeParser
- * 
+ *
  * Parses Twee 3 text into a Story object.
- * 
+ *
  * See: Twee 3 Specification
  * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
  */
@@ -152,7 +152,7 @@ export default class TweeParser {
         throw new Error('Malformed passage header!');
       }
 
-      // addPassage() method does all the work
+      // addPassage() method does all the work.
       story.addPassage(new Passage(name, text, tags, metadata, pid));
 
       // Increase pid

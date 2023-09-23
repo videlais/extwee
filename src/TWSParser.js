@@ -5,9 +5,9 @@ import { Parser } from 'pickleparser';
 /**
  * @class TWSParser
  * @module TWSParser
- * 
+ *
  * Parse TWS (Python Pickle) into Story object.
- * 
+ *
  * See: Twine 1 TWS Documentation [Approval Pending]
  */
 export default class TWSParser {

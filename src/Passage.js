@@ -28,23 +28,15 @@ export default class Passage {
   #_text = '';
 
   /**
-   * Internal PID of passage
-   * @private
-   */
-  #_pid = -1;
-
-  /**
    * A passage is the smallest unit of a story.
-   * (The 'pid' property is only used in Twine 2 HTML.)
    * @function Passage
    * @class
    * @param {string} name - Name
    * @param {string} text - Content
    * @param {Array} tags - Tags
    * @param {object} metadata - Metadata
-   * @param {number} pid - Passage ID (PID)
    */
-  constructor (name = '', text = '', tags = [], metadata = {}, pid = -1) {
+  constructor (name = '', text = '', tags = [], metadata = {}) {
     // Set name
     this.name = name;
 
@@ -56,9 +48,6 @@ export default class Passage {
 
     // Sets text
     this.text = text;
-
-    // Sets pid
-    this.pid = pid;
   }
 
   /**
@@ -141,26 +130,6 @@ export default class Passage {
   }
 
   /**
-   * Passage ID (PID)
-   * @public
-   * @memberof Passage
-   * @returns {number} Passage ID (PID)
-   */
-  get pid () { return this.#_pid; }
-
-  /**
-   * @param {number} p - Replacement PID
-   */
-  set pid (p) {
-    // Test if PID is a number
-    if (Number.isInteger(p)) {
-      this.#_pid = p;
-    } else {
-      throw new Error('PID should be a number!');
-    }
-  }
-
-  /**
    * Return a Twee representation.
    * @public
    * @function toTwee
@@ -170,7 +139,7 @@ export default class Passage {
   toTwee () {
     // Start empty string.
     let content = '';
-    
+
     // Write the name.
     content += `:: ${this.name}`;
 
@@ -200,7 +169,7 @@ export default class Passage {
    * @memberof Passage
    * @returns {string} JSON string.
    */
-  toJSON() {
+  toJSON () {
     // Create an initial object for later serialization.
     const p = {
       name: this.name,
@@ -215,32 +184,34 @@ export default class Passage {
 
   /**
    * Return Twine 2 HTML representation.
+   * (Default Passage ID is 1.)
    * @public
    * @function toTwine2HTML
+   * @param {number} pid - Passage ID (PID) to record in HTML.
    * @returns {string} Twine 2 HTML string.
    */
-  toTwine2HTML() {
-    // Start the passage element
+  toTwine2HTML (pid = 1) {
+    // Start the passage element.
     let passageData = '\t<tw-passagedata';
 
     /**
      * pid: (string) Required.
      *   The Passage ID (PID).
      */
-    passageData += ` pid="${this.pid}"`;
-    
+    passageData += ` pid="${pid}"`;
+
     /**
-    * name: (string) Required.
-    *   The name of the passage.
-    */
+     * name: (string) Required.
+     *   The name of the passage.
+     */
     passageData += ` name="${this.name}"`;
-    
+
     /**
      * tags: (string) Optional.
      *   Any tags for the passage separated by spaces.
      */
     passageData += ` tags="${this.#_tags.join(' ')}" `;
-    
+
     /**
      * position: (string) Optional.
      *   Comma-separated X and Y position of the upper-left of the passage
@@ -249,7 +220,7 @@ export default class Passage {
     if (Object.prototype.hasOwnProperty.call(this.#_metadata, 'position')) {
       passageData += ` position="${this.#_metadata.position}" `;
     }
-    
+
     /**
      * size: (string) Optional.
      *   Comma-separated width and height of the passage
@@ -265,7 +236,6 @@ export default class Passage {
      * @returns {string} Escaped text.
      */
     const escape = function (text) {
-
       const rules = [
         ['&', '&amp;'],
         ['<', '&lt;'],
@@ -280,8 +250,8 @@ export default class Passage {
       });
 
       return text;
-    }
-    
+    };
+
     // Add the text and close the element.
     passageData += `>${escape(this.text)}</tw-passagedata>\n`;
 
@@ -290,27 +260,27 @@ export default class Passage {
   }
 
   /**
-    * Return Twine 1 HTML representation.
-    * @public
-    * @function toTwine2HTML
-    * @returns {string} Twine 1 HTML string.
-    */
-  toTwine1HTML() {
+   * Return Twine 1 HTML representation.
+   * @public
+   * @function toTwine2HTML
+   * @returns {string} Twine 1 HTML string.
+   */
+  toTwine1HTML () {
     /**
-     * <div 
-        created="202306020121" 
-        modifier="twee" 
+     * <div
+        created="2023 06 02 012 1"
+        modifier="twee"
         twine-position="10,10">[[One passage]]</div>
      */
-     // Start the passage element
-     let passageData = '\t<div';
+    // Start the passage element
+    let passageData = '\t<div';
 
-     /**
-      * tiddler: (string) Required.
-      *   The name of the passage.
-      */
+    /**
+     * tiddler: (string) Required.
+     *   The name of the passage.
+     */
     passageData += ` tiddler="${this.name}"`;
-    
+
     /**
      * tags: (string) Required.
      *   Any tags for the passage separated by spaces.
@@ -318,12 +288,12 @@ export default class Passage {
     passageData += ` tags="${this.#_tags.join(' ')}" `;
 
     /**
-     * modifier: (string) Optional. 
-     *  Name of the tool that last edited the passage. 
-     *  Generally, for versions of Twine 1, this value will be "twee". 
+     * modifier: (string) Optional.
+     *  Name of the tool that last edited the passage.
+     *  Generally, for versions of Twine 1, this value will be "twee".
      *  Twee compilers may place their own name (e.g. "tweego" for Tweego).
      */
-    passageData += ` modifier="extwee"` ;
+    passageData += ' modifier="extwee"';
 
     /**
      * twine-position: (string) Required.
@@ -331,12 +301,12 @@ export default class Passage {
      */
     // If the metadata contains 'position', we will use it.
     if (Object.prototype.hasOwnProperty.call(this.#_metadata, 'position')) {
-      passageData += ` twine-position="${this.#_metadata.position}"` ;
+      passageData += ` twine-position="${this.#_metadata.position}"`;
     } else {
       // Default is 10, 10
-      passageData += ` twine-position="10,10"` ;
+      passageData += ' twine-position="10,10"';
     }
-    
+
     /**
      * text: (string) Required.
      * Text content of the passage.

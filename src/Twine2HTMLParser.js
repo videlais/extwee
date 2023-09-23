@@ -9,9 +9,9 @@ import Passage from './Passage.js';
 /**
  * @class Twine2HTMLParser
  * @module Twine2HTMLParser
- * 
+ *
  * Parses Twine 2 HTML into a Story object.
- * 
+ *
  * See: Twine 2 HTML Output Specification
  * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
  */
