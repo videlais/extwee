@@ -14,8 +14,7 @@ describe('Twine2HTMLParser', () => {
     it('Should be able to parse Twine 2 HTML for story name', () => {
       const fr = FileReader.read('test/Twine2HTMLParser/twineExample.html');
       const story = Twine2HTMLParser.parse(fr);
-      const storyTitle = story.getPassageByName('StoryTitle');
-      expect(storyTitle.text).toBe('twineExample');
+      expect(story.name).toBe('twineExample');
     });
 
     it('Should be able to parse Twine 2 HTML for correct number of passages', () => {
@@ -31,11 +30,10 @@ describe('Twine2HTMLParser', () => {
       expect(p.tags).toHaveLength(2);
     });
 
-    it('Should set a missing name to Untitled', () => {
+    it('Should have default name', () => {
       const fr = FileReader.read('test/Twine2HTMLParser/missingName.html');
       const story = Twine2HTMLParser.parse(fr);
-      const p = story.getPassageByName('StoryTitle');
-      expect(p.text).toBe('Untitled');
+      expect(story.name).toBe('');
     });
 
     it('Should set a missing IFID to an empty string', () => {
@@ -118,27 +116,22 @@ describe('Twine2HTMLParser', () => {
       expect(stylesheetPassages.length).toBe(1);
     });
 
-    it('Should not have start property if startNode does not exist when parsed', () => {
+    it('Should throw error if startNode is missing', () => {
       const fr = FileReader.read('test/Twine2HTMLParser/missingStartnode.html');
-      const story = Twine2HTMLParser.parse(fr);
-      expect(story.start).toBe('');
+      expect(() => { Twine2HTMLParser.parse(fr); }).toThrow();
     });
 
-    it('Should not add passages without names', () => {
+    it('Should throw error if passage name is missing', () => {
       const fr = FileReader.read('test/Twine2HTMLParser/missingPassageName.html');
-      const story = Twine2HTMLParser.parse(fr);
-      // There is only one passage, StoryTitle
-      expect(story.size()).toBe(0);
+      expect(() => { Twine2HTMLParser.parse(fr); }).toThrow();
     });
 
-    it('Should not add passages without PID', () => {
+    it('Should throw error without PID', () => {
       const fr = FileReader.read('test/Twine2HTMLParser/missingPID.html');
-      const story = Twine2HTMLParser.parse(fr);
-      // There is only one passage, StoryTitle
-      expect(story.size()).toBe(0);
+      expect(() => { Twine2HTMLParser.parse(fr); }).toThrow();
     });
 
-    it('Parse tag colors', () => {
+    it('Should parse tag colors', () => {
       const fr = FileReader.read('test/Twine2HTMLParser/tagColors.html');
       const story = Twine2HTMLParser.parse(fr);
       // Test for tag colors
@@ -146,14 +139,12 @@ describe('Twine2HTMLParser', () => {
       expect(tagColors.a).toBe('red');
     });
 
-    it('Will not set start if startnode is missing', () => {
+    it('Should throw error if startnode is missing', () => {
       const fr = FileReader.read('test/Twine2HTMLParser/missingStartnode.html');
-      const story = Twine2HTMLParser.parse(fr);
-      // Test for default start
-      expect(story.start).toBe('');
+      expect(() => { Twine2HTMLParser.parse(fr); }).toThrow();
     });
 
-    it('Throw error when startnode has PID that does not exist', () => {
+    it('Should throw error when startnode has PID that does not exist', () => {
       const fr = FileReader.read('test/Twine2HTMLParser/lyingStartnode.html');
       expect(() => {
         Twine2HTMLParser.parse(fr);

@@ -25,7 +25,10 @@ export default class Twine2HTMLParser {
    * @returns {Story} Story
    */
   static parse (content) {
-    let story = null;
+    // Create new story.
+    const story = new Story();
+
+    // Set default start node.
     let startNode = null;
 
     // Send to node-html-parser
@@ -40,103 +43,99 @@ export default class Twine2HTMLParser {
         pre: true
       });
 
-    // Pull out the tw-storydata element
+    // Pull out the `<tw-storydata>` element.
     const storyData = dom.querySelector('tw-storydata');
 
-    // Does the <tw-storydata> element exist?
-    if (storyData !== null) {
-      // Create a Story.
-      story = new Story();
-
-      /**
-       * name: (string) Required.
-       *   The name of the story.
-       */
-      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'name')) {
-        // Create StoryTitle passage based on name
-        story.addPassage(new Passage('StoryTitle', storyData.attributes.name));
-        // Set the story name
-        story.name = storyData.attributes.name;
-      } else {
-        // Name is a required filed. Warn user.
-        console.warn('Twine 2 HTML must have a name!');
-        // Set a default name
-        story.addPassage(new Passage('StoryTitle', 'Untitled'));
-      }
-
-      /**
-       * ifid: (string) Required.
-       *   An IFID is a sequence of between 8 and 63 characters,
-       *   each of which shall be a digit, a capital letter or a
-       *   hyphen that uniquely identify a story (see Treaty of Babel).
-       */
-      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'ifid')) {
-        // Update story IFID
-        story.IFID = storyData.attributes.ifid;
-      } else {
-        // Name is a required filed. Warn user.
-        console.warn('Twine 2 HTML must have an IFID!');
-      }
-
-      /**
-       * creator: (string) Optional.
-       *   The name of program used to create the file.
-       */
-      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'creator')) {
-        // Update story creator
-        story.creator = storyData.attributes.creator;
-      }
-
-      /**
-       * creator-version: (string) Optional.
-       *   The version of the program used to create the file.
-       */
-      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'creator-version')) {
-        // Update story creator version
-        story.creatorVersion = storyData.attributes['creator-version'];
-      }
-
-      /**
-       * format: (string) Optional.
-       *   The story format used to create the story.
-       */
-      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'format')) {
-        // Update story format
-        story.format = storyData.attributes.format;
-      }
-
-      /**
-       * format-version: (string) Optional.
-       *   The version of the story format used to create the story.
-       */
-      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'format-version')) {
-        // Update story format version
-        story.formatVersion = storyData.attributes['format-version'];
-      }
-
-      /**
-       * zoom: (string) Optional.
-       *   The decimal level of zoom (i.e. 1.0 is 100% and 1.2 would be 120% zoom level).
-       */
-      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'zoom')) {
-        // Update story zoom
-        story.zoom = Number(Number.parseFloat(storyData.attributes.zoom).toFixed(2));
-      }
-
-      /**
-       * startnode: (string) Optional.
-       *   The PID matching a <tw-passagedata> element whose content should be displayed first.
-       */
-      if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'startnode')) {
-        // Take string value and convert to Int
-        startNode = Number.parseInt(storyData.attributes.startnode, 10);
-      }
-    } else {
+    // If there was no element, we cannot continue.
+    if (storyData === null) {
       // If there is not a <tw-storydata> element, this is not a Twine 2 story!
-      throw new Error('Not a Twine 2-style file!');
+      throw new Error('Not Twine 2 HTML content!');
     }
 
-    // Pull out the tw-passagedata elements
+    /**
+     * name: (string) Required.
+     *   The name of the story.
+     */
+    if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'name')) {
+      // Set the story name
+      story.name = storyData.attributes.name;
+    } else {
+      // Name is a required field. Warn user.
+      console.warn('Twine 2 HTML must have a name!');
+    }
+
+    /**
+     * ifid: (string) Required.
+     *   An IFID is a sequence of between 8 and 63 characters,
+     *   each of which shall be a digit, a capital letter or a
+     *   hyphen that uniquely identify a story (see Treaty of Babel).
+     */
+    if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'ifid')) {
+      // Update story IFID.
+      story.IFID = storyData.attributes.ifid;
+    } else {
+      // Name is a required filed. Warn user.
+      console.warn('Twine 2 HTML must have an IFID!');
+    }
+
+    /**
+     * creator: (string) Optional.
+     *   The name of program used to create the file.
+     */
+    if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'creator')) {
+      // Update story creator
+      story.creator = storyData.attributes.creator;
+    }
+
+    /**
+     * creator-version: (string) Optional.
+     *   The version of the program used to create the file.
+     */
+    if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'creator-version')) {
+      // Update story creator version
+      story.creatorVersion = storyData.attributes['creator-version'];
+    }
+
+    /**
+     * format: (string) Optional.
+     *   The story format used to create the story.
+     */
+    if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'format')) {
+      // Update story format
+      story.format = storyData.attributes.format;
+    }
+
+    /**
+     * format-version: (string) Optional.
+     *   The version of the story format used to create the story.
+     */
+    if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'format-version')) {
+      // Update story format version
+      story.formatVersion = storyData.attributes['format-version'];
+    }
+
+    /**
+     * zoom: (string) Optional.
+     *   The decimal level of zoom (i.e. 1.0 is 100% and 1.2 would be 120% zoom level).
+     */
+    if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'zoom')) {
+      // Update story zoom
+      story.zoom = Number(Number.parseFloat(storyData.attributes.zoom).toFixed(2));
+    }
+
+    /**
+     * startnode: (string) Optional.
+     *   The PID matching a `<tw-passagedata>` element whose content should be displayed first.
+     */
+    if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'startnode')) {
+      // Take string value and convert to Int
+      startNode = Number.parseInt(storyData.attributes.startnode, 10);
+    } else {
+      // Throw error without start node.
+      throw new Error('Missing startnode in <tw-storydata>!');
+    }
+
+    // Pull out the `<tw-passagedata>` element.
     const storyPassages = dom.querySelectorAll('tw-passagedata');
 
     // Move through the passages
@@ -146,6 +145,11 @@ export default class Twine2HTMLParser {
       // Get the passage text
       const text = storyPassages[passage].rawText;
 
+      /**
+       * position: (string) Optional.
+       *   Comma-separated X and Y position of the upper-left
+       *   of the passage when viewed within the Twine 2 editor.
+       */
       // Set a default position.
       let position = null;
       // Does position exist?
@@ -154,6 +158,11 @@ export default class Twine2HTMLParser {
         position = attr.position;
       }
 
+      /**
+       * size: (string) Optional.
+       *   Comma-separated width and height of the
+       *   passage when viewed within the Twine 2 editor.
+       */
       // Set a default size.
       let size = null;
       // Does size exist?
@@ -175,7 +184,7 @@ export default class Twine2HTMLParser {
         // Escape the name
         name = Twine2HTMLParser.escapeMetacharacters(attr.name);
       } else {
-        console.warn('Encountered passage without a name! Will not add.');
+        throw new Error('Cannot parse passage data without name!');
       }
 
       // Create empty tag array.
@@ -228,6 +237,13 @@ export default class Twine2HTMLParser {
         console.warn('Passages are required to have PID. Will not add!');
       }
 
+      // Check the current PID against startNode number.
+      if (pid === startNode) {
+        // These match.
+        // Save the passage name.
+        story.start = name;
+      }
+
       // If passage is missing name and PID (required attributes),
       //  they are not added.
       if (name !== null && pid !== -1) {
@@ -237,11 +253,15 @@ export default class Twine2HTMLParser {
             name,
             text,
             tags,
-            metadata,
-            pid
+            metadata
           )
         );
       }
+    }
+
+    // There was an invalid startNode.
+    if (story.start === '') {
+      throw new Error('startNode does not exist within passages!');
     }
 
     // Look for the style element
@@ -275,23 +295,10 @@ export default class Twine2HTMLParser {
       }
     }
 
-    // Was there a startNode?
-    if (startNode !== null) {
-      // Try to find starting passage by PID.
-      const startingPassage = story.getPassageByPID(startNode);
-      // Does the passage exist (yet)?
-      if (startingPassage !== null) {
-        // If so, update property to name of passage.
-        story.start = startingPassage.name;
-      } else {
-        throw new Error('Invalid startnode detected in <tw-storydata>!');
-      }
-    }
-
-    // Look for all <tw-tag> elements
+    // Look for all <tw-tag> elements.
     const twTags = dom.querySelectorAll('tw-tag');
 
-    // Parse through the entries
+    // Parse through the entries.
     twTags.forEach((tags) => {
       // Parse each tag element
       const attributes = tags.attributes;
