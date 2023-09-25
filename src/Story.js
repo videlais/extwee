@@ -534,16 +534,6 @@ export default class Story {
     // Add two newlines.
     outputContents += '\n\n';
 
-    // Is there an explicit StoryTitle passage?
-    // (If it does exist, do nothing.)
-    if (this.getPassageByName('StoryTitle') === null) {
-      // We do not have an explicit StoryTitle passage.
-      // Generate one.
-      const p = new Passage('StoryTitle', this.name);
-      // Add to story.
-      this.addPassage(p);
-    }
-
     // For each passage, append it to the output.
     this.forEachPassage((passage) => {
       outputContents += passage.toTwee();

@@ -326,7 +326,7 @@ export default class Twine2HTMLParser {
       }
     });
 
-    // Return the parsed story
+    // Return the parsed story.
     return story;
   }
 

@@ -427,10 +427,7 @@ describe('Story', () => {
 
     it('Should detect StoryTitle text', function () {
       // Add one passage.
-      s.addPassage(new Passage('Start', 'Content'));
-
-      // Change Story name.
-      s.name = 'Title';
+      s.addPassage(new Passage('StoryTitle', 'Content'));
 
       // Convert to Twee.
       const t = s.toTwee();
@@ -439,7 +436,7 @@ describe('Story', () => {
       const story = TweeParser.parse(t);
 
       // Test for name.
-      expect(story.name).toBe('Title');
+      expect(story.name).toBe('Content');
     });
 
     it('Should encode IFID', () => {
