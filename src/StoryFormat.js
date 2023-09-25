@@ -4,55 +4,55 @@
  */
 export default class StoryFormat {
   /**
-   * Internal name
+   * Internal name.
    * @private
    */
   #_name = '';
 
   /**
-   * Internal version
+   * Internal version.
    * @private
    */
   #_version = '';
 
   /**
-   * Internal description
+   * Internal description.
    * @private
    */
   #_description = '';
 
   /**
-   * Internal author
+   * Internal author.
    * @private
    */
   #_author = '';
 
   /**
-   * Internal image
+   * Internal image.
    * @private
    */
   #_image = '';
 
   /**
-   * Internal URL
+   * Internal URL.
    * @private
    */
   #_url = '';
 
   /**
-   * Internal license
+   * Internal license.
    * @private
    */
   #_license = '';
 
   /**
-   * Internal proofing
+   * Internal proofing.
    * @private
    */
   #_proofing = '';
 
   /**
-   * Internal source
+   * Internal source.
    * @private
    */
   #_source = '';
@@ -303,79 +303,5 @@ export default class StoryFormat {
 
     // Return stringified JSON from object.
     return JSON.stringify(s);
-  }
-
-  /**
-   * Import JSON representation.
-   * (Warning: This will override all current values!)
-   * @public
-   * @function fromJSON
-   * @memberof StoryFormat
-   * @param {string} jsonString - JSON string.
-   */
-  fromJSON (jsonString) {
-    // Create future object.
-    let result = {};
-
-    // Try to parse the string.
-    try {
-      result = JSON.parse(jsonString);
-    } catch (error) {
-      throw new Error('Invalid JSON!');
-    }
-
-    // Name
-    if (Object.prototype.hasOwnProperty.call(result, 'name')) {
-      // Set name.
-      this.name = result.name;
-    }
-
-    // Version
-    if (Object.prototype.hasOwnProperty.call(result, 'version')) {
-      // Set version.
-      this.version = result.version;
-    }
-
-    // Description
-    if (Object.prototype.hasOwnProperty.call(result, 'description')) {
-      // Set description.
-      this.description = result.description;
-    }
-
-    // Author
-    if (Object.prototype.hasOwnProperty.call(result, 'author')) {
-      // Set author.
-      this.author = result.author;
-    }
-
-    // Image
-    if (Object.prototype.hasOwnProperty.call(result, 'image')) {
-      // Set image.
-      this.image = result.image;
-    }
-
-    // URL
-    if (Object.prototype.hasOwnProperty.call(result, 'url')) {
-      // Set URL.
-      this.url = result.url;
-    }
-
-    // License
-    if (Object.prototype.hasOwnProperty.call(result, 'license')) {
-      // Set license.
-      this.license = result.license;
-    }
-
-    // Proofing
-    if (Object.prototype.hasOwnProperty.call(result, 'proofing')) {
-      // Set proofing boolean.
-      this.proofing = result.proofing;
-    }
-
-    // Source
-    if (Object.prototype.hasOwnProperty.call(result, 'source')) {
-      // Set source.
-      this.source = result.source;
-    }
   }
 }
