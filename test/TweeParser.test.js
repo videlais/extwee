@@ -2,7 +2,7 @@ import FileReader from '../src/FileReader.js';
 import TweeParser from '../src/TweeParser.js';
 
 describe('TweeParser', () => {
-  describe('#parse()', () => {
+  describe('parse()', () => {
     it('Should throw error if non-string is used', () => {
       expect(() => { TweeParser.parse(1); }).toThrow();
     });
