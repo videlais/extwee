@@ -4,16 +4,16 @@ import Passage from './Passage.js';
 export default class JSONParser {
   /**
    * Parse JSON representation into Story.
-   * 
    * @function parse
    * @param {string} jsonString - JSON string to convert to Story.
+   * @returns {Story} Story object.
    */
   static parse (jsonString) {
     // Create future object.
     let result = {};
-    
+
     // Create Story.
-    let s = new Story();
+    const s = new Story();
 
     // Try to parse the string.
     try {
