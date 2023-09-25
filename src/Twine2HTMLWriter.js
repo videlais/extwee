@@ -49,7 +49,7 @@ export default class Twine2HTMLWriter {
       fs.writeFileSync(file, outputContents);
     } catch (event) {
       // Throw error
-      throw new Error('Error: Cannot write HTML file!');
+      throw new Error('Error: Cannot write Twine 2 HTML file!');
     }
   }
 }
