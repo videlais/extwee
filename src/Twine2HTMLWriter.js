@@ -1,24 +1,10 @@
-/**
- * @external Story
- * @see Story.js
- * @external StoryFormat
- * @see StoryFormat.js
- */
-
 import fs from 'fs';
 import Story from './Story.js';
 import StoryFormat from './StoryFormat.js';
 
-/**
- * @class Twine2HTMLWriter
- * @module Twine2HTMLWriter
- */
 export default class Twine2HTMLWriter {
   /**
    * Write a combination of Story + StoryFormat into Twine 2 HTML file.
-   * @public
-   * @static
-   * @function writeFile
    * @param {string} file - File to write.
    * @param {Story} story - Story object to write.
    * @param {StoryFormat} storyFormat - StoryFormat to write.

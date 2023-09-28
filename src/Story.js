@@ -4,10 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 const name = 'extwee';
 const version = '2.2.0';
 
-/**
- * @class Story
- * @module Story
- */
 export default class Story {
   /**
    * Internal name of story
@@ -74,8 +70,7 @@ export default class Story {
   #_tagColors = {};
 
   /**
-   * @function Story
-   * @class
+   * Creates a story.
    */
   constructor () {
     // Store the creator and version
@@ -87,9 +82,6 @@ export default class Story {
 
   /**
    * Each story has a name
-   * @public
-   * @readonly
-   * @memberof Story
    * @returns {string} Name
    */
   get name () { return this.#_name; }
@@ -107,9 +99,6 @@ export default class Story {
 
   /**
    * Tag Colors object (each property is a tag and its color)
-   * @public
-   * @readonly
-   * @memberof Story
    * @returns {object} tag colors array
    */
   get tagColors () { return this.#_tagColors; }
@@ -127,9 +116,6 @@ export default class Story {
 
   /**
    * Interactive Fiction ID (IFID) of Story
-   * @public
-   * @readonly
-   * @memberof Story
    * @returns {string} IFID
    */
   get IFID () { return this.#_IFID; }
@@ -146,10 +132,7 @@ export default class Story {
   }
 
   /**
-   * Name of start passage
-   * @public
-   * @readonly
-   * @memberof Story
+   * Name of start passage.
    * @returns {string} start
    */
   get start () { return this.#_start; }
@@ -166,10 +149,7 @@ export default class Story {
   }
 
   /**
-   * Story format version of Story
-   * @public
-   * @readonly
-   * @memberof Story
+   * Story format version of Story.
    * @returns {string} story format version
    */
   get formatVersion () { return this.#_formatVersion; }
@@ -186,10 +166,7 @@ export default class Story {
   }
 
   /**
-   * Metadata of Story
-   * @public
-   * @readonly
-   * @memberof Story
+   * Metadata of Story.
    * @returns {object} metadata of story
    */
   get metadata () { return this.#_metadata; }
@@ -206,10 +183,7 @@ export default class Story {
   }
 
   /**
-   * Story format of Story
-   * @public
-   * @readonly
-   * @memberof Story
+   * Story format of Story.
    * @returns {string} format
    */
   get format () { return this.#_format; }
@@ -226,9 +200,7 @@ export default class Story {
   }
 
   /**
-   * Program used to create Story
-   * @public
-   * @memberof Story
+   * Program used to create Story.
    * @returns {string} Creator Program
    */
   get creator () { return this.#_creator; }
@@ -245,9 +217,7 @@ export default class Story {
   }
 
   /**
-   * Version used to create Story
-   * @public
-   * @memberof Story
+   * Version used to create Story.
    * @returns {string} Version
    */
   get creatorVersion () { return this.#_creatorVersion; }
@@ -264,9 +234,7 @@ export default class Story {
   }
 
   /**
-   * Zoom level
-   * @public
-   * @memberof Story
+   * Zoom level.
    * @returns {number} Zoom level
    */
   get zoom () { return this.#_zoom; }
@@ -284,10 +252,8 @@ export default class Story {
   }
 
   /**
-   * Add a passage to the story
-   * @public
-   * @function addPassage
-   * @memberof Story
+   * Add a passage to the story.
+   * `StoryData` will override story metadata and `StoryTitle` will override story name.
    * @param {Passage} p - Passage to add to Story.
    */
   addPassage (p) {
@@ -298,69 +264,74 @@ export default class Story {
     }
 
     // Does this passage already exist in the collection?
-    // If it does, we ignore it.
-    if (this.getPassageByName(p.name) === null) {
-      // Parse StoryData.
-      if (p.name === 'StoryData') {
-        // Try to parse JSON.
-        try {
-          // Attempt to parse storyData JSON.
-          const metadata = JSON.parse(p.text);
-
-          // IFID.
-          if (Object.prototype.hasOwnProperty.call(metadata, 'ifid')) {
-            this.IFID = metadata.ifid;
-          }
-
-          // Format.
-          if (Object.prototype.hasOwnProperty.call(metadata, 'format')) {
-            this.format = metadata.format;
-          }
-
-          // formatVersion.
-          if (Object.prototype.hasOwnProperty.call(metadata, 'format-version')) {
-            this.formatVersion = metadata['format-version'];
-          }
-
-          // Zoom.
-          if (Object.prototype.hasOwnProperty.call(metadata, 'zoom')) {
-            this.zoom = metadata.zoom;
-          }
-
-          // Start.
-          if (Object.prototype.hasOwnProperty.call(metadata, 'start')) {
-            this.start = metadata.start;
-          }
-
-          // Tag colors.
-          if (Object.prototype.hasOwnProperty.call(metadata, 'tag-colors')) {
-            this.tagColors = metadata['tag-colors'];
-          }
-        } catch (event) {
-          // Ignore errors.
-        }
-      }
-
-      // Parse StoryTitle.
-      if (p.name === 'StoryTitle') {
-        // If there is a StoryTitle passage, we accept the name.
-        // Set internal name based on StoryTitle.
-        this.#_name = p.text;
-      }
-
-      // Push the passage to the array.
-      this.#_passages.push(p);
-    } else {
+    // If it does, we ignore it and return.
+    if (this.getPassageByName(p.name) !== null) {
       // Warn user
       console.warn('Ignored passage with same name as existing one!');
+      //
+      return;
     }
+
+    // Parse StoryData.
+    if (p.name === 'StoryData') {
+      // Try to parse JSON.
+      try {
+        // Attempt to parse storyData JSON.
+        const metadata = JSON.parse(p.text);
+
+        // IFID.
+        if (Object.prototype.hasOwnProperty.call(metadata, 'ifid')) {
+          this.IFID = metadata.ifid;
+        }
+
+        // Format.
+        if (Object.prototype.hasOwnProperty.call(metadata, 'format')) {
+          this.format = metadata.format;
+        }
+
+        // formatVersion.
+        if (Object.prototype.hasOwnProperty.call(metadata, 'format-version')) {
+          this.formatVersion = metadata['format-version'];
+        }
+
+        // Zoom.
+        if (Object.prototype.hasOwnProperty.call(metadata, 'zoom')) {
+          this.zoom = metadata.zoom;
+        }
+
+        // Start.
+        if (Object.prototype.hasOwnProperty.call(metadata, 'start')) {
+          this.start = metadata.start;
+        }
+
+        // Tag colors.
+        if (Object.prototype.hasOwnProperty.call(metadata, 'tag-colors')) {
+          this.tagColors = metadata['tag-colors'];
+        }
+      } catch (event) {
+        // Ignore errors.
+      }
+
+      // Don't add StoryData to passages.
+      return;
+    }
+
+    // Parse StoryTitle.
+    if (p.name === 'StoryTitle') {
+      // If there is a StoryTitle passage, we accept the name.
+      // Set internal name based on StoryTitle.
+      this.name = p.text;
+      // Once we override story.name, return.
+      return;
+    }
+
+    // This is not StoryData or StoryTitle.
+    // Push the passage to the array.
+    this.#_passages.push(p);
   }
 
   /**
-   * Remove a passage from the story by name
-   * @public
-   * @function removePassageByName
-   * @memberof Story
+   * Remove a passage from the story by name.
    * @param {string} name - Passage name to remove
    */
   removePassageByName (name) {
@@ -368,10 +339,7 @@ export default class Story {
   }
 
   /**
-   * Find passages by tag
-   * @public
-   * @function getPassagesByTag
-   * @memberof Story
+   * Find passages by tag.
    * @param {string} t - Passage name to search for
    * @returns {Array} Return array of passages
    */
@@ -384,10 +352,7 @@ export default class Story {
   }
 
   /**
-   * Find passage by name
-   * @public
-   * @function getPassageByName
-   * @memberof Story
+   * Find passage by name.
    * @param {string} name - Passage name to search for
    * @returns {Passage | null} Return passage or null
    */
@@ -400,9 +365,6 @@ export default class Story {
 
   /**
    * Size (number of passages).
-   * @public
-   * @function size
-   * @memberof Story
    * @returns {number} Return number of passages
    */
   size () {
@@ -411,9 +373,6 @@ export default class Story {
 
   /**
    * forEach-style iterator of passages in Story.
-   * @public
-   * @function forEachPassage
-   * @memberof Story
    * @param {Function} callback - Callback function
    */
   forEachPassage (callback) {
@@ -432,8 +391,6 @@ export default class Story {
 
   /**
    * Export Story as JSON representation.
-   * @public
-   * @function toJSON
    * @returns {string} JSON string.
    */
   toJSON () {
@@ -471,8 +428,6 @@ export default class Story {
    *
    * See: Twee 3 Specification
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
-   * @function toTwee
-   * @memberof Story
    * @returns {string} Twee String
    */
   toTwee () {
@@ -534,6 +489,12 @@ export default class Story {
     // Add two newlines.
     outputContents += '\n\n';
 
+    // Write story name as StoryTitle.
+    outputContents += ':: StoryTitle\n' + this.name;
+
+    // Add two newlines.
+    outputContents += '\n\n';
+
     // For each passage, append it to the output.
     this.forEachPassage((passage) => {
       outputContents += passage.toTwee();
@@ -548,8 +509,6 @@ export default class Story {
    *
    * See: Twine 2 HTML Output
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
-   * @public
-   * @function toTwine2HTML
    * @returns {string} Twine 2 HTML string
    */
   toTwine2HTML () {
@@ -670,22 +629,17 @@ export default class Story {
    *
    * See: Twine 1 HTML Output
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)
-   * @public
-   * @function toTwine1HTML
    * @returns {string} Twine 1 HTML string.
    */
   toTwine1HTML () {
     // Begin HTML output.
-    let outputContents = `<div id="storeArea" data-size="${this.size()}">`;
+    let outputContents = '';
 
     // Process passages (if any).
     this.forEachPassage((p) => {
       // Output HTML output per passage.
       outputContents += `\t${p.toTwine1HTML()}`;
     });
-
-    // Close HTML element.
-    outputContents += '</div>';
 
     // Return Twine 1 HTML content.
     return outputContents;

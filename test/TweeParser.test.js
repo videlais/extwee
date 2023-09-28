@@ -22,15 +22,13 @@ describe('TweeParser', () => {
     it('Should cut notes before passages', () => {
       const fr = FileReader.read('test/TweeParser/notes.twee');
       const story = TweeParser.parse(fr);
-      const p = story.getPassageByName('StoryTitle');
-      expect(p.text).toBe('twineExample');
+      expect(story.name).toBe('twineExample');
     });
 
     it('Should be able to parse Twee file for Story Name', () => {
       const fr = FileReader.read('test/TweeParser/example.twee');
       const story = TweeParser.parse(fr);
-      const p = story.getPassageByName('StoryTitle');
-      expect(p.text).toBe('twineExample');
+      expect(story.name).toBe('twineExample');
     });
 
     it('Should parse single tag on Start passage', () => {
@@ -65,8 +63,7 @@ describe('TweeParser', () => {
     it('Should parse StoryTitle', () => {
       const fr = FileReader.read('test/TweeParser/test.twee');
       const story = TweeParser.parse(fr);
-      const p = story.getPassageByName('StoryTitle');
-      expect(p).not.toBe(null);
+      expect(story.name).not.toBe(null);
     });
 
     it('Should parse StoryAuthor', () => {

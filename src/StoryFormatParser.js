@@ -1,16 +1,9 @@
 import StoryFormat from './StoryFormat.js';
 import semver from 'semver';
-/**
- * @class StoryFormatParser
- * @module StoryFormatParser
- */
+
 export default class StoryFormatParser {
   /**
-   * Parse a Story Format file
-   * @public
-   * @static
-   * @memberof StoryFormatParser
-   * @function parse
+   * Parse a Story Format file.
    * @param {string} contents - Content
    * @returns {StoryFormat} StoryFormat object
    */

@@ -1,15 +1,8 @@
 import fs from 'fs';
-/**
- * @class FileReader
- * @module FileReader
- */
+
 export default class FileReader {
   /**
    * Read a text file.
-   * @static
-   * @public
-   * @function read
-   * @memberof FileReader
    * @param {string} file - Path of file to read
    * @returns {string} Content of file
    */
@@ -32,10 +25,6 @@ export default class FileReader {
 
   /**
    * Read a binary file and return a Buffer of raw data.
-   * @static
-   * @public
-   * @function readBinaryAsBuffer
-   * @memberof FileReader
    * @param {string} file - Path of file to read.
    * @returns {string} Content of file.
    */

@@ -627,7 +627,7 @@ describe('Story', () => {
       // Create Twine 1 HTML.
       const result = s.toTwine1HTML();
       // Expect data-size to be 1.
-      expect(result.includes('<div id="storeArea" data-size="1"')).toBe(true);
+      expect(result.includes('<div tiddler="Start"')).toBe(true);
     });
   });
 });

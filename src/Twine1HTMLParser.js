@@ -6,21 +6,13 @@
 import { parse as HtmlParser } from 'node-html-parser';
 import Passage from './Passage.js';
 import Story from './Story.js';
-/**
- * @class Twine1HTMLParser
- * @module Twine1HTMLParser
- *
- * Parses Twine 1 HTML into a Story object.
- *
- * See: Twine 1 HTML Output Documentation
- * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)
- */
+
 export default class Twine1HTMLParser {
   /**
-   * Parse Twine 1 HTML text into a Story object.
-   * @public
-   * @static
-   * @function parse
+   * Parses Twine 1 HTML into a Story object.
+   *
+   * See: Twine 1 HTML Output Documentation
+   * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)
    * @param {string} content - Twine 1 HTML content to parse.
    * @returns {Story} Story object
    */

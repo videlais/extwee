@@ -1,6 +1,5 @@
 /**
- * @class Passage
- * @module Passage
+ * A passage is the smallest unit of a Twine story.
  */
 export default class Passage {
   /**
@@ -28,9 +27,7 @@ export default class Passage {
   #_text = '';
 
   /**
-   * A passage is the smallest unit of a story.
-   * @function Passage
-   * @class
+   * Create a passage.
    * @param {string} name - Name
    * @param {string} text - Content
    * @param {Array} tags - Tags
@@ -52,8 +49,6 @@ export default class Passage {
 
   /**
    * Name
-   * @public
-   * @memberof Passage
    * @returns {string} Name
    */
   get name () { return this.#_name; }
@@ -71,8 +66,6 @@ export default class Passage {
 
   /**
    * Tags
-   * @public
-   * @memberof Passage
    * @returns {Array} Tags
    */
   get tags () { return this.#_tags; }
@@ -91,8 +84,6 @@ export default class Passage {
 
   /**
    * Metadata
-   * @public
-   * @memberof Passage
    * @returns {object} Metadata
    */
   get metadata () { return this.#_metadata; }
@@ -111,8 +102,6 @@ export default class Passage {
 
   /**
    * Text
-   * @public
-   * @memberof Passage
    * @returns {string} Text
    */
   get text () { return this.#_text; }
@@ -131,9 +120,6 @@ export default class Passage {
 
   /**
    * Return a Twee representation.
-   * @public
-   * @function toTwee
-   * @memberof Passage
    * @returns {string} String form of passage.
    */
   toTwee () {
@@ -164,9 +150,6 @@ export default class Passage {
 
   /**
    * Return JSON representation.
-   * @public
-   * @function toJSON
-   * @memberof Passage
    * @returns {string} JSON string.
    */
   toJSON () {
@@ -185,8 +168,6 @@ export default class Passage {
   /**
    * Return Twine 2 HTML representation.
    * (Default Passage ID is 1.)
-   * @public
-   * @function toTwine2HTML
    * @param {number} pid - Passage ID (PID) to record in HTML.
    * @returns {string} Twine 2 HTML string.
    */
@@ -261,8 +242,6 @@ export default class Passage {
 
   /**
    * Return Twine 1 HTML representation.
-   * @public
-   * @function toTwine2HTML
    * @returns {string} Twine 1 HTML string.
    */
   toTwine1HTML () {

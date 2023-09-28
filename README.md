@@ -19,6 +19,7 @@ Input:
 
 Output:
 
+- [Twine 1 HTML (2009 - 2015)]((https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)) (**Note**: Extwee will not parse the `StorySettings` passage and a configuration object must be passed to the associated method to enable limited options.)
 - [Twine 2 HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
 - [Twee 3 (2021 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
 - Twine 2 Archive (2015 - Present) [Documentation Pending Approval]

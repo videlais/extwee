@@ -1,20 +1,12 @@
 import Passage from './Passage.js';
 import Story from './Story.js';
-/**
- * @class TweeParser
- * @module TweeParser
- *
- * Parses Twee 3 text into a Story object.
- *
- * See: Twee 3 Specification
- * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
- */
+
 export default class TweeParser {
   /**
-   * Parse Twee
-   * @public
-   * @static
-   * @function parse
+   * Parses Twee 3 text into a Story object.
+   *
+   * See: Twee 3 Specification
+   * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
    * @param {string} fileContents - File contents to parse
    * @returns {Story} story
    */

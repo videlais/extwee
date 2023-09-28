@@ -17,7 +17,7 @@ describe('Round-trip testing', () => {
 
     // Twee adds StoryData.
     // There will be one extra passage in Twee than HTML.
-    expect(s2.size()).toBe(s.size() + 1);
+    expect(s2.size()).toBe(s.size());
 
     // IFID should be the same
     expect(s.ifid).toBe(s2.ifid);

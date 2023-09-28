@@ -1,26 +1,13 @@
-/**
- * @external HTML
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML|HTML}
- */
-
 import { parse as HtmlParser } from 'node-html-parser';
 import Story from './Story.js';
 import Passage from './Passage.js';
-/**
- * @class Twine2HTMLParser
- * @module Twine2HTMLParser
- *
- * Parses Twine 2 HTML into a Story object.
- *
- * See: Twine 2 HTML Output Specification
- * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
- */
+
 export default class Twine2HTMLParser {
   /**
    * Parse Twine 2 HTML into Story object.
-   * @public
-   * @static
-   * @function parse
+   *
+   * See: Twine 2 HTML Output Specification
+   * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
    * @param {string} content - Twine 2 HTML content to parse.
    * @returns {Story} Story
    */
@@ -332,9 +319,6 @@ export default class Twine2HTMLParser {
 
   /**
    * Try to escape Twine 2 meta-characters.
-   * @public
-   * @static
-   * @function escapeMetacharacters
    * @param {string} result - Text to parse
    * @returns {string} Escaped characters
    */
