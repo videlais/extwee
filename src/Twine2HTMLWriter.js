@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import Story from './Story.js';
 import StoryFormat from './StoryFormat.js';
 

@@ -22,6 +22,11 @@ describe('Story', () => {
     it('Should have extwee version', () => {
       expect(s.creatorVersion).toBe(version);
     });
+
+    it('Should have name', () => {
+      s = new Story('Test');
+      expect(s.name).toBe('Test');
+    });
   });
 
   describe('creator', () => {

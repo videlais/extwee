@@ -1,7 +1,7 @@
 {
   "name": "extwee",
   "version": "2.2.0",
-  "description": "A Twee 3 compiler written in JS.",
+  "description": "A story and Twee compiler tool using Twine-compatible formats",
   "author": "Dan Cox",
   "main": "index.js",
   "bin": {

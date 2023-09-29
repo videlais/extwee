@@ -7,6 +7,10 @@ const { version } = JSON.parse(FileReader.read('package.json'));
 
 describe('Twine2HTMLParser', () => {
   describe('#parse()', () => {
+    it('Should throw error if content is not a string', () => {
+      expect(() => { Twine2HTMLParser.parse({}); }).toThrow();
+    });
+
     it('Should throw error if content is not Twine-2 style HTML', () => {
       expect(() => { Twine2HTMLParser.parse(''); }).toThrow();
     });

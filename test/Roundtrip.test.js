@@ -5,7 +5,7 @@ import Twine2HTMLWriter from '../src/Twine2HTMLWriter.js';
 import StoryFormatParser from '../src/StoryFormatParser.js';
 
 describe('Round-trip testing', () => {
-  it('Should round-trip HTML-to-Twee', () => {
+  it('Should round-trip Twine 2 HTML to Twee', () => {
     // Read HTML.
     const fr = FileReader.read('test/Roundtrip/Example1.html');
 
@@ -23,7 +23,7 @@ describe('Round-trip testing', () => {
     expect(s.ifid).toBe(s2.ifid);
   });
 
-  it('Should round-trip Twee-to-HTML', () => {
+  it('Should round-trip Twee to Twine 2 HTML', () => {
     // Read StoryFormat
     const storyFormat = FileReader.read('test/Roundtrip/harlowe.js');
 

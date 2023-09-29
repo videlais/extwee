@@ -15,6 +15,11 @@ export default class Twine2HTMLParser {
     // Create new story.
     const story = new Story();
 
+    // Can only parse string values.
+    if (typeof content !== 'string') {
+      throw new TypeError('Content is not a string!');
+    }
+
     // Set default start node.
     let startNode = null;
 
@@ -31,13 +36,16 @@ export default class Twine2HTMLParser {
       });
 
     // Pull out the `<tw-storydata>` element.
-    const storyData = dom.querySelector('tw-storydata');
+    const storyDataElements = dom.getElementsByTagName('tw-storydata');
 
-    // If there was no element, we cannot continue.
-    if (storyData === null) {
-      // If there is not a <tw-storydata> element, this is not a Twine 2 story!
+    // Did we find any elements?
+    if (storyDataElements.length === 0) {
+      // If there is not a single `<tw-storydata>` element, this is not a Twine 2 story!
       throw new Error('Not Twine 2 HTML content!');
     }
+
+    // We only parse the first element found.
+    const storyData = storyDataElements[0];
 
     /**
      * name: (string) Required.

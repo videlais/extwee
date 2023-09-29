@@ -1,7 +1,7 @@
 import Passage from './Passage.js';
 import { v4 as uuidv4 } from 'uuid';
 
-const name = 'extwee';
+const creatorName = 'extwee';
 const version = '2.2.0';
 
 export default class Story {
@@ -71,12 +71,15 @@ export default class Story {
 
   /**
    * Creates a story.
+   * @param {string} name - Name of the story.
    */
-  constructor () {
-    // Store the creator and version
-    this.#_creator = name;
+  constructor (name = '') {
+    // Every story has a name.
+    this.name = name;
+    // Store the creator.
+    this.#_creator = creatorName;
     this.#_creatorVersion = version;
-    // Set metadata to an object
+    // Set metadata to an object.
     this.#_metadata = {};
   }
 
@@ -420,7 +423,7 @@ export default class Story {
     });
 
     // Return stringified Story object.
-    return JSON.stringify(s, null, '\t');
+    return JSON.stringify(s, null, 4);
   }
 
   /**
