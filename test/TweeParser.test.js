@@ -1,4 +1,4 @@
-import FileReader from '../src/FileReader.js';
+import fs from 'node:fs';
 import TweeParser from '../src/TweeParser.js';
 
 describe('TweeParser', () => {
@@ -20,40 +20,40 @@ describe('TweeParser', () => {
     });
 
     it('Should cut notes before passages', () => {
-      const fr = FileReader.read('test/TweeParser/notes.twee');
+      const fr = fs.readFileSync('test/TweeParser/notes.twee', 'utf-8');
       const story = TweeParser.parse(fr);
       expect(story.name).toBe('twineExample');
     });
 
     it('Should be able to parse Twee file for Story Name', () => {
-      const fr = FileReader.read('test/TweeParser/example.twee');
+      const fr = fs.readFileSync('test/TweeParser/example.twee', 'utf-8');
       const story = TweeParser.parse(fr);
       expect(story.name).toBe('twineExample');
     });
 
     it('Should parse single tag on Start passage', () => {
-      const fr = FileReader.read('test/TweeParser/singletag.twee');
+      const fr = fs.readFileSync('test/TweeParser/singletag.twee', 'utf-8');
       const story = TweeParser.parse(fr);
       const start = story.getPassageByName('Start');
       expect(start.tags).toHaveLength(1);
     });
 
     it('Should parse multiple tag', () => {
-      const fr = FileReader.read('test/TweeParser/multipletags.twee');
+      const fr = fs.readFileSync('test/TweeParser/multipletags.twee', 'utf-8');
       const story = TweeParser.parse(fr);
       const start = story.getPassageByName('Start');
       expect(start.tags).toHaveLength(2);
     });
 
     it('Should parse single script passage', () => {
-      const fr = FileReader.read('test/TweeParser/scriptPassage.twee');
+      const fr = fs.readFileSync('test/TweeParser/scriptPassage.twee', 'utf-8');
       const story = TweeParser.parse(fr);
       const p = story.getPassageByName('UserScript');
       expect(p.tags).toHaveLength(1);
     });
 
     it('Should parse single stylesheet passage', () => {
-      const fr = FileReader.read('test/TweeParser/stylePassage.twee');
+      const fr = fs.readFileSync('test/TweeParser/stylePassage.twee', 'utf-8');
       const story = TweeParser.parse(fr);
       const p = story.getPassageByName('UserStylesheet');
       expect(p.tags).toHaveLength(1);
@@ -61,13 +61,13 @@ describe('TweeParser', () => {
     });
 
     it('Should parse StoryTitle', () => {
-      const fr = FileReader.read('test/TweeParser/test.twee');
+      const fr = fs.readFileSync('test/TweeParser/test.twee', 'utf-8');
       const story = TweeParser.parse(fr);
       expect(story.name).not.toBe(null);
     });
 
     it('Should parse StoryAuthor', () => {
-      const fr = FileReader.read('test/TweeParser/example.twee');
+      const fr = fs.readFileSync('test/TweeParser/example.twee', 'utf-8');
       const story = TweeParser.parse(fr);
       const p = story.getPassageByName('StoryAuthor');
       expect(p).not.toBe(null);

@@ -1,4 +1,4 @@
-import FileReader from '../src/FileReader.js';
+import fs from 'node:fs';
 import TWSParser from '../src/TWSParser.js';
 
 describe('TWSParser', () => {
@@ -11,7 +11,8 @@ describe('TWSParser', () => {
       let r = null;
 
       beforeAll(() => {
-        const b = FileReader.readBinaryAsBuffer('./test/TWSParser/Example1.tws');
+        const contents = fs.readFileSync('./test/TWSParser/Example1.tws', 'binary');
+        const b = Buffer.from(contents, 'binary');
         r = TWSParser.parse(b);
       });
 
@@ -32,7 +33,8 @@ describe('TWSParser', () => {
       let r = null;
 
       beforeAll(() => {
-        const b = FileReader.readBinaryAsBuffer('./test/TWSParser/Example5.tws');
+        const contents = fs.readFileSync('./test/TWSParser/Example5.tws', 'binary');
+        const b = Buffer.from(contents, 'binary');
         r = TWSParser.parse(b);
       });
 
@@ -53,18 +55,21 @@ describe('TWSParser', () => {
 
     describe('Exceptions and parsing issues', function () {
       it('Should throw error if parsing a Buffer but not pickle data', function () {
-        const b = FileReader.readBinaryAsBuffer('./test/FileReader/t1.txt');
+        const contents = 'Test';
+        const b = Buffer.from(contents);
         expect(() => { TWSParser.parse(b); }).toThrow();
       });
 
       it('Should create default Story object if pickle data but not TWS data', function () {
-        const b = FileReader.readBinaryAsBuffer('./test/TWSParser/nostory.tws');
+        const contents = fs.readFileSync('./test/TWSParser/nostory.tws', 'binary');
+        const b = Buffer.from(contents, 'binary');
         const r = TWSParser.parse(b);
         expect(r.size()).toBe(0);
       });
 
       it('Should parse storyPanel but no scale', function () {
-        const b = FileReader.readBinaryAsBuffer('./test/TWSParser/noscale.tws');
+        const contents = fs.readFileSync('./test/TWSParser/noscale.tws', 'binary');
+        const b = Buffer.from(contents, 'binary');
         const r = TWSParser.parse(b);
         expect(r.zoom).toBe(0);
       });
