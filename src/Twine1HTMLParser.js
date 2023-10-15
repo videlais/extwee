@@ -1,8 +1,3 @@
-/**
- * @external HTML
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML|HTML}
- */
-
 import { parse as HtmlParser } from 'node-html-parser';
 import Passage from './Passage.js';
 import Story from './Story.js';

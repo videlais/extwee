@@ -11,26 +11,8 @@ import Story from './src/Story.js';
 import Passage from './src/Passage.js';
 import StoryFormat from './src/StoryFormat.js';
 
-// Code objects.
-export { StoryFormat };
-export { Passage };
-export { Story };
-
-// Parsers.
-export { TweeParser };
-export { JSONParser };
-export { StoryFormatParser };
-export { Twine2HTMLParser };
-export { Twine1HTMLParser };
-export { Twine2ArchiveHTMLParser };
-
-// Compilers.
-export { Twine2HTMLCompiler };
-export { Twine1HTMLCompiler };
-export { Twine2ArchiveHTMLCompiler };
-
-// Export everything by default.
-export default {
+// Add to global window.
+window.extwee = {
     // Objects
     StoryFormat,
     Passage,

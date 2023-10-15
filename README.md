@@ -1,8 +1,14 @@
-[![codecov](https://codecov.io/gh/videlais/extwee/branch/master/graph/badge.svg)](https://codecov.io/gh/videlais/extwee) [![npm version](https://badge.fury.io/js/extwee.svg)](https://badge.fury.io/js/extwee)
+# Status
+
+[![codecov](https://codecov.io/gh/videlais/extwee/branch/master/graph/badge.svg)](https://codecov.io/gh/videlais/extwee)
+
+[![npm version](https://badge.fury.io/js/extwee.svg)](https://badge.fury.io/js/extwee)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![NPM Badge](https://nodei.co/npm/extwee.png?downloads=true)](https://www.npmjs.com/package/extwee)
 
-# Summary
+## Summary
 
 Extwee is a story compilation tool supporting multiple historical and current Twine-compatible formats.
 
@@ -15,33 +21,48 @@ Extwee is a story compilation tool supporting multiple historical and current Tw
 | [Twee 3 (2021 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)          | Yes       | Yes                             |
 | JSON (2023 - Present)            | Yes       | Yes                             |
 
-## Objects, Parsers, and Writers
+## Node and Web API
 
-Extwee is organized into three categories of classes:
+The following objects and methods are available in Node.js or web contexts.
+
+**Note:** When used in a web context, all objects and methods are part of the `window.extwee` global.
 
 ### Objects
 
-`Passage`, `Story`, and `StoryFormat`. An object must be created using either the `new` keyword in JavaScript or as the result of parsing data.
+An object must be created using either the `new` keyword in JavaScript or as the result of parsing data.
+
+- `StoryFormat`
+- `Passage`
+- `Story`
+
+Story and Passage objects can generate multiple output formats: `toTwee()`, `toTwine1HTML()`, `toTwine2HTML()`, and `toJSON()`. Stories cannot be played in a browser without the corresponding compiler combining it with story format data.
 
 ### Parsers
 
-Translates formats (`Twine1HTMLParser`, `Twine2HTMLParser`, `Twine2ArchiveHTML` `TweeParser`, and `JSONParser`) into `Story` objects or JSONP into a `StoryFormat` object (`StoryFormatParser`).
+Translates formats HTML, Twee, JSON, or JSONP into objects.
 
-Every parser is _static_. They do not need to be created as objects and can be called using their corresponding `parse()` method (i.e. `Twine1HTMLParser.parse()`).
+**Note:** Twine 1 story formats exist across multiple files (`header.html` and optional `code.js`). They cannot be parsed into a `StoryFormat` object.
 
-**Note:** Twine 1 story formats exist only as JavaScript without descriptive metadata. They cannot be parsed into a `StoryFormat` object.
+- `parseTwee()`
+- `parseJSON()`
+- `parseStoryFormat()`
+- `parseTwine1HTML()`
+- `parseTwine2HTML()`
+- `parseTwine2ArchiveHTML()`
 
-### Writers
+### Compilers
 
-Combines story, story formats, or other data into a combination format (`Twine1HTMLWriter`, `Twine2HTMLWriter`, `Twine2ArchiveHTML`).
+Compiles story, story formats, or other data into a combination or playable format.
 
-Every writer is _static_. They do not need to be created as objects and can be called using their corresponding `write()` method (i.e. `Twine2HTMLWriter.write()`).
+- `compileTwine2HTML()`
+- `compileTwine1HTML()`
+- `compileTwine2ArchiveHTML()`
 
-Story and Passage objects can generate multiple representations internally (`toTwee()`, `toTwine1HTML()`, `toTwine2HTML()`, and `toJSON()`) but stories cannot be played in a browser without the corresponding writer combining it with story format data.
+**Note:** In order to create playable Twine 1 HTML, an `engine.js` file must be supplied.
 
 ## Documentation
 
-Extwee has documentation hosted on GitHub Pages.
+Extwee has documentation on individual source files hosted on GitHub Pages.
 
 ## Command-Line Usage
 

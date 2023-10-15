@@ -23,18 +23,18 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "commander": "^11.0.0",
+    "commander": "^11.1.0",
     "node-html-parser": "^6.1.10",
-    "pickleparser": "^0.1.0",
+    "pickleparser": "^0.2.1",
     "semver": "^7.3.7",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
-    "@babel/core": "^7.23.0",
+    "@babel/core": "^7.23.2",
     "@babel/eslint-parser": "^7.22.15",
     "@babel/eslint-plugin": "^7.22.10",
-    "@babel/preset-env": "^7.22.20",
+    "@babel/preset-env": "^7.23.2",
     "babel-loader": "^9.1.3",
     "clean-jsdoc-theme": "^4.2.13",
     "core-js": "^3.33.0",
@@ -49,7 +49,7 @@
     "jsdoc": "^4.0.2",
     "regenerator-runtime": "^0.14.0",
     "shelljs": "^0.8.4",
-    "webpack": "^5.88.2",
+    "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   },
   "repository": {
