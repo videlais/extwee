@@ -7,6 +7,8 @@
 
 // Import everything
 import Extwee from '../index.js';
+// Import fs
+import fs from 'node:fs';
 // Import Commander
 import { Command } from 'commander';
 
@@ -15,9 +17,10 @@ const program = new Command();
 
 program
 .name('extwee')
-.version('2.0.6')
-.option('-c', 'From Twee into HTML')
-.option('-d', 'From HTML into Twee')
+.version('2.2.0')
+.option('-c', 'From Twee into Twine HTML')
+.option('-d', 'From Twine HTML into Twee')
+.option('-twine1', 'Enable Twine 1 processing')
 .option('-s <storyformat>', 'Path to storyformat')
 .option('-i <inputFile>', 'Path to input file')
 .option('-o <outputFile>', 'Path to output file');
@@ -28,20 +31,22 @@ program.parse(process.argv);
 // Create object of passed arguments parsed by Commander
 const options = program.opts();
 
-// Decompile branch
+// Decompile Twine 2 HTML branch. If -d is passed, -i and -o are required.
 if(options.d === true) {
-    const inputHTML = Extwee.readFile(options.i);
-    const storyObject = Extwee.parseHTML(inputHTML);
-    Extwee.writeTwee(storyObject, options.o);
+    const inputHTML = fs.readFileSync(options.i, 'utf-8');
+    const storyObject = Extwee.parseTwine2HTML(inputHTML);
+    fs.writeFileSync(options.o, storyObject.toTwee());
     process.exit();
 }
 
-// Compile branch
+// Compile branch. If -c is passed, -i, -o, and -s are required.
 if(options.c === true) {
-    const inputTwee = Extwee.readFile(options.i);
+    const inputTwee = fs.readFileSync(options.i, 'utf-8');
     const story = Extwee.parseTwee(inputTwee);
-    const inputStoryFormat = Extwee.readFile(options.s);
+    const inputStoryFormat = fs.readFileSync(options.s, 'utf-8');
     const parsedStoryFormat = Extwee.parseStoryFormat(inputStoryFormat);
-    Extwee.writeHTML(options.o, story, parsedStoryFormat);
+    const Twine2HTML = Extwee.compileTwine2HTML(story, parsedStoryFormat);
+    fs.writeFileSync(options.o, Twine2HTML);
     process.exit();
 }
+

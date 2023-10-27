@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^11.1.0",
-    "node-html-parser": "^6.1.10",
+    "node-html-parser": "^6.1.11",
     "pickleparser": "^0.2.1",
     "semver": "^7.3.7",
     "uuid": "^9.0.1"
@@ -41,7 +41,7 @@
     "eslint": "^8.52.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-jest": "^27.4.3",
+    "eslint-plugin-jest": "^27.5.0",
     "eslint-plugin-jsdoc": "^46.8.2",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^6.1.1",
