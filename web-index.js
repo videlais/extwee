@@ -12,7 +12,7 @@ import Passage from './src/Passage.js';
 import StoryFormat from './src/StoryFormat.js';
 
 // Add to global window.
-window.extwee = {
+window.Extwee = {
     // Objects
     StoryFormat,
     Passage,
