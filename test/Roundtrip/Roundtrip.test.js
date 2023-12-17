@@ -1,19 +1,19 @@
-import fs from 'node:fs';
-import TweeParser from '../src/TweeParser.js';
-import Twine2HTMLParser from '../src/Twine2HTMLParser.js';
-import Twine2HTMLCompiler from '../src/Twine2HTMLCompiler.js';
-import StoryFormatParser from '../src/StoryFormatParser.js';
+import { readFileSync } from 'node:fs';
+import { parse as parseTwee } from '../../src/Twee/parse.js';
+import { parse as parseTwine2HTML } from '../../src/Twine2HTML/parse.js';
+import { compile as compileTwine2HTML } from '../../src/Twine2HTML/compile.js';
+import { parse as parseStoryFormat } from '../../src/StoryFormat/parse.js';
 
 describe('Round-trip testing', () => {
   it('Should round-trip Twine 2 HTML to Twee', () => {
     // Read HTML.
-    const fr = fs.readFileSync('test/Roundtrip/Example1.html', 'utf-8');
+    const fr = readFileSync('test/Roundtrip/Files/Example1.html', 'utf-8');
 
     // Parse HTML.
-    const s = Twine2HTMLParser.parse(fr);
+    const s = parseTwine2HTML(fr);
 
     // Parse the new Twee.
-    const s2 = TweeParser.parse(s.toTwee());
+    const s2 = parseTwee(s.toTwee());
 
     // Twee adds StoryData.
     // There will be one extra passage in Twee than HTML.
@@ -25,22 +25,22 @@ describe('Round-trip testing', () => {
 
   it('Should round-trip Twee to Twine 2 HTML', () => {
     // Read StoryFormat.
-    const storyFormat = fs.readFileSync('test/Roundtrip/harlowe.js', 'utf-8');
+    const storyFormat = readFileSync('test/Roundtrip/Files/harlowe.js', 'utf-8');
 
     // Parse StoryFormat.
-    const sfp = StoryFormatParser.parse(storyFormat);
+    const sfp = parseStoryFormat(storyFormat);
 
     // Read Twee.
-    const fr = fs.readFileSync('test/Roundtrip/example2.twee', 'utf-8');
+    const fr = readFileSync('test/Roundtrip/Files/example2.twee', 'utf-8');
 
     // Parse Twee.
-    const story = TweeParser.parse(fr);
+    const story = parseTwee(fr);
 
     // Write HTML.
-    const fr2 = Twine2HTMLCompiler.compile(story, sfp);
+    const fr2 = compileTwine2HTML(story, sfp);
 
     // Parse HTML
-    const story2 = Twine2HTMLParser.parse(fr2);
+    const story2 = parseTwine2HTML(fr2);
 
     // Number of passages should be the same, too
     expect(story2.size()).toBe(story.size());

@@ -1,19 +1,19 @@
 import fs from 'node:fs';
-import TWSParser from '../src/TWSParser.js';
+import { parse as parseTWS } from '../../src/TWS/parse.js';
 
 describe('TWSParser', () => {
   describe('#parse()', () => {
     it('Should throw error if input is not Buffer', function () {
-      expect(() => { TWSParser.parse(0); }).toThrow();
+      expect(() => { parseTWS(0); }).toThrow();
     });
 
     describe('Story parsing', function () {
       let r = null;
 
       beforeAll(() => {
-        const contents = fs.readFileSync('./test/TWSParser/Example1.tws', 'binary');
+        const contents = fs.readFileSync('test/TWS/TWSParser/Example1.tws', 'binary');
         const b = Buffer.from(contents, 'binary');
-        r = TWSParser.parse(b);
+        r = parseTWS(b);
       });
 
       it('Should parse StoryTitle', function () {
@@ -33,9 +33,9 @@ describe('TWSParser', () => {
       let r = null;
 
       beforeAll(() => {
-        const contents = fs.readFileSync('./test/TWSParser/Example5.tws', 'binary');
+        const contents = fs.readFileSync('test/TWS/TWSParser/Example5.tws', 'binary');
         const b = Buffer.from(contents, 'binary');
-        r = TWSParser.parse(b);
+        r = parseTWS(b);
       });
 
       it('Should parse passage - tags', function () {
@@ -57,20 +57,20 @@ describe('TWSParser', () => {
       it('Should throw error if parsing a Buffer but not pickle data', function () {
         const contents = 'Test';
         const b = Buffer.from(contents);
-        expect(() => { TWSParser.parse(b); }).toThrow();
+        expect(() => { parseTWS(b); }).toThrow();
       });
 
       it('Should create default Story object if pickle data but not TWS data', function () {
-        const contents = fs.readFileSync('./test/TWSParser/nostory.tws', 'binary');
+        const contents = fs.readFileSync('test/TWS/TWSParser/nostory.tws', 'binary');
         const b = Buffer.from(contents, 'binary');
-        const r = TWSParser.parse(b);
+        const r = parseTWS(b);
         expect(r.size()).toBe(0);
       });
 
       it('Should parse storyPanel but no scale', function () {
-        const contents = fs.readFileSync('./test/TWSParser/noscale.tws', 'binary');
+        const contents = fs.readFileSync('test/TWS/TWSParser/noscale.tws', 'binary');
         const b = Buffer.from(contents, 'binary');
-        const r = TWSParser.parse(b);
+        const r = parseTWS(b);
         expect(r.zoom).toBe(0);
       });
     });

@@ -1,6 +1,6 @@
 import Story from '../src/Story.js';
 import Passage from '../src/Passage';
-import TweeParser from '../src/TweeParser.js';
+import { parse as parseTwee } from '../src/Twee/parse.js';
 import { readFileSync } from 'node:fs';
 
 // Pull the name and version of this project from package.json.
@@ -438,7 +438,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Parse into a new story.
-      const story = TweeParser.parse(t);
+      const story = parseTwee(t);
 
       // Test for name.
       expect(story.name).toBe('Content');
@@ -456,7 +456,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Parse file.
-      const tp = TweeParser.parse(t);
+      const tp = parseTwee(t);
 
       // Verify IFID.
       expect(tp.IFID).toBe('DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A');
@@ -477,7 +477,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Parse Twee.
-      const story2 = TweeParser.parse(t);
+      const story2 = parseTwee(t);
 
       // Test for format, formatVersion, zoom, and start.
       expect(story2.formatVersion).toBe('1.2.3');
@@ -502,7 +502,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Convert back into Story.
-      const story2 = TweeParser.parse(t);
+      const story2 = parseTwee(t);
 
       // Test for tag colors
       expect(story2.tagColors.bar).toBe('green');
@@ -519,7 +519,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Convert back into Story.
-      const story = TweeParser.parse(t);
+      const story = parseTwee(t);
 
       // Search for 'script'.
       const p = story.getPassagesByTag('script');
@@ -537,7 +537,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Convert back into Story.
-      const story = TweeParser.parse(t);
+      const story = parseTwee(t);
 
       // Search for 'stylesheet'.
       const p = story.getPassagesByTag('stylesheet');

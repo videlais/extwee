@@ -1,12 +1,12 @@
-import Twine1HTMLCompiler from '../src/Twine1HTMLCompiler.js';
-import Story from '../src/Story.js';
-import fs from 'fs';
-import Passage from '../src/Passage.js';
+import { compile as compileTwine1HTML } from '../../src/Twine1HTML/compile.js';
+import Story from '../../src/Story.js';
+import { readFileSync } from 'fs';
+import Passage from '../../src/Passage.js';
 
 describe('Twine1HTMLCompiler', () => {
-  describe('write()', () => {
+  describe('compile()', () => {
     it('story should be instanceof Story', () => {
-      expect(() => { Twine1HTMLCompiler.compile({}); }).toThrow();
+      expect(() => { compileTwine1HTML({}); }).toThrow();
     });
 
     it('Should create an empty file without valid header.html', function () {
@@ -14,7 +14,7 @@ describe('Twine1HTMLCompiler', () => {
       const s = new Story();
 
       // Compile Twine 1.
-      const t1 = Twine1HTMLCompiler.compile(s);
+      const t1 = compileTwine1HTML(s);
 
       // Test.
       expect(t1.length).toBe(0);
@@ -28,13 +28,13 @@ describe('Twine1HTMLCompiler', () => {
       s.creator = 'Test1';
 
       // Read mock header.html
-      const header = fs.readFileSync('test/Twine1HTMLCompiler/test1.html', 'utf-8');
+      const header = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/test1.html', 'utf-8');
 
       // Read engine code.
-      const engine = fs.readFileSync('test/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
+      const engine = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
 
       // Compile file.
-      const result = Twine1HTMLCompiler.compile(s, engine, header);
+      const result = compileTwine1HTML(s, engine, header);
 
       // Test for creator.
       expect(result.includes('Test1')).toBe(true);
@@ -48,16 +48,16 @@ describe('Twine1HTMLCompiler', () => {
       const s = new Story();
 
       // Read mock header.html
-      const header = fs.readFileSync('test/Twine1HTMLCompiler/engineTest.html', 'utf-8');
+      const header = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/engineTest.html', 'utf-8');
 
       // Read engine code.
-      const engine = fs.readFileSync('test/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
+      const engine = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
 
       // Compile file.
-      Twine1HTMLCompiler.compile(s, engine, header);
+      compileTwine1HTML(s, engine, header);
 
       // Read file.
-      const result = fs.readFileSync('test/Twine1HTMLCompiler/test3.html', 'utf-8');
+      const result = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/test3.html', 'utf-8');
 
       // Test for engine.
       expect(result.includes('function clone(a)')).toBe(true);
@@ -74,16 +74,16 @@ describe('Twine1HTMLCompiler', () => {
       s.start = 'Start';
 
       // Read header.html.
-      const header = fs.readFileSync('test/Twine1HTMLCompiler/jonah-1.4.2/header.html', 'utf-8');
+      const header = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/jonah-1.4.2/header.html', 'utf-8');
 
       // Read code.js.
-      const codeJS = fs.readFileSync('test/Twine1HTMLCompiler/jonah-1.4.2/code.js', 'utf-8');
+      const codeJS = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/jonah-1.4.2/code.js', 'utf-8');
 
       // Read engine code.
-      const engine = fs.readFileSync('test/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
+      const engine = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
 
       // Compile file.
-      const result = Twine1HTMLCompiler.compile(s, engine, header, 'jonah', codeJS);
+      const result = compileTwine1HTML(s, engine, header, 'jonah', codeJS);
 
       // Test for code.js.
       expect(result.includes('Tale.prototype.canBookmark')).toBe(true);
@@ -106,22 +106,22 @@ describe('Twine1HTMLCompiler', () => {
       s.start = 'Start';
 
       // Read header.html.
-      const header = fs.readFileSync('test/Twine1HTMLCompiler/jonah-1.4.2/header.html', 'utf-8');
+      const header = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/jonah-1.4.2/header.html', 'utf-8');
 
       // Read code.js.
-      const codeJS = fs.readFileSync('test/Twine1HTMLCompiler/jonah-1.4.2/code.js', 'utf-8');
+      const codeJS = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/jonah-1.4.2/code.js', 'utf-8');
 
       // Read engine code.
-      const engine = fs.readFileSync('test/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
+      const engine = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
 
       // Read Modernizr.
-      const Modernizr = fs.readFileSync('test/Twine1HTMLCompiler/Twine1/modernizr.js');
+      const Modernizr = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/Twine1/modernizr.js');
 
       // Read jQuery.
-      const jQuery = fs.readFileSync('test/Twine1HTMLCompiler/Twine1/jquery.js');
+      const jQuery = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/Twine1/jquery.js');
 
       // Compile file.
-      const result = Twine1HTMLCompiler.compile(s, engine, header, 'jonah', codeJS, { jquery: jQuery, modernizr: Modernizr });
+      const result = compileTwine1HTML(s, engine, header, 'jonah', codeJS, { jquery: jQuery, modernizr: Modernizr });
 
       // Test for code.js.
       expect(result.includes('Tale.prototype.canBookmark')).toBe(true);
@@ -150,16 +150,16 @@ describe('Twine1HTMLCompiler', () => {
       s.start = 'Start';
 
       // Read header.html.
-      const header = fs.readFileSync('test/Twine1HTMLCompiler/jonah-1.4.2/header.html', 'utf-8');
+      const header = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/jonah-1.4.2/header.html', 'utf-8');
 
       // Read code.js.
-      const codeJS = fs.readFileSync('test/Twine1HTMLCompiler/jonah-1.4.2/code.js', 'utf-8');
+      const codeJS = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/jonah-1.4.2/code.js', 'utf-8');
 
       // Read engine code.
-      const engine = fs.readFileSync('test/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
+      const engine = readFileSync('test/Twine1HTML/Twine1HTMLCompiler/Twine1/engine.js', 'utf-8');
 
       // Compile file.
-      const result = Twine1HTMLCompiler.compile(s, engine, header, 'jonah', codeJS, {});
+      const result = compileTwine1HTML(s, engine, header, 'jonah', codeJS, {});
 
       // Test for code.js.
       expect(result.includes('Tale.prototype.canBookmark')).toBe(true);

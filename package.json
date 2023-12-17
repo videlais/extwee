@@ -5,12 +5,12 @@
   "author": "Dan Cox",
   "main": "index.js",
   "bin": {
-    "extwee": "bin/extwee.js"
+    "extwee": "src/extwee.js"
   },
   "scripts": {
     "test": "jest --runInBand --coverage --colors",
     "lint": "eslint ./src/**/*.js --fix",
-    "lint:test": "eslint ./test/*.test.js --fix",
+    "lint:test": "eslint ./test/**/*.test.js --fix",
     "build": "webpack",
     "all": "npm run lint && npm run lint:test && npm run test && npm run build"
   },

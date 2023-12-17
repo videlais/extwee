@@ -1,39 +1,39 @@
-import StoryFormatParser from '../src/StoryFormatParser.js';
-import Twine2HTMLParser from '../src/Twine2HTMLParser.js';
-import Twine2HTMLCompiler from '../src/Twine2HTMLCompiler.js';
-import Story from '../src/Story.js';
-import Passage from '../src/Passage.js';
-import fs from 'node:fs';
+import { parse as parseStoryFormat } from '../../src/StoryFormat/parse.js';
+import { parse as parseTwine2HTML } from '../../src/Twine2HTML/parse.js';
+import { compile as compileTwine2HTML } from '../../src/Twine2HTML/compile.js';
+import Story from '../../src/Story.js';
+import Passage from '../../src/Passage.js';
+import { readFileSync } from 'node:fs';
 
 describe('Twine2HTMLCompiler', () => {
   describe('compile()', () => {
     it('story should be instanceof Story', () => {
-      expect(() => { Twine2HTMLCompiler.compile({}); }).toThrow();
+      expect(() => { compileTwine2HTML({}); }).toThrow();
     });
 
     it('storyFormat should be instanceof StoryFormat', () => {
       const s = new Story();
-      expect(() => { Twine2HTMLCompiler.compile(s, {}); }).toThrow();
+      expect(() => { compileTwine2HTML(s, {}); }).toThrow();
     });
 
     it('Read, write, and read HTML', () => {
       // Read HTML.
-      const fr = fs.readFileSync('test/Twine2HTMLParser/twineExample3.html', 'utf-8');
+      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/twineExample3.html', 'utf-8');
 
       // Parse HTML.
-      const story = Twine2HTMLParser.parse(fr);
+      const story = parseTwine2HTML(fr);
 
       // Read StoryFormat.
-      const fr2 = fs.readFileSync('test/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
 
       // Parse StoryFormat.
-      const storyFormat = StoryFormatParser.parse(fr2);
+      const storyFormat = parseStoryFormat(fr2);
 
       // Write HTML.
-      const fr3 = Twine2HTMLCompiler.compile(story, storyFormat);
+      const fr3 = compileTwine2HTML(story, storyFormat);
 
       // Parse HTML.
-      const story2 = Twine2HTMLParser.parse(fr3);
+      const story2 = parseTwine2HTML(fr3);
 
       // Test both names to be the same.
       expect(story.name).toBe(story2.name);
@@ -41,22 +41,22 @@ describe('Twine2HTMLCompiler', () => {
 
     it('Should write one and two-tag passages', () => {
       // Read HTML.
-      const fr = fs.readFileSync('test/Twine2HTMLCompiler/TestTags.html', 'utf-8');
+      const fr = readFileSync('test/Twine2HTML/Twine2HTMLCompiler/TestTags.html', 'utf-8');
 
       // Parse HTML.
-      const story = Twine2HTMLParser.parse(fr);
+      const story = parseTwine2HTML(fr);
 
       // Read StoryFormat.
-      const fr2 = fs.readFileSync('test/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
 
       // Parse StoryFormat.
-      const storyFormat = StoryFormatParser.parse(fr2);
+      const storyFormat = parseStoryFormat(fr2);
 
       // Write HTML.
-      const fr3 = Twine2HTMLCompiler.compile(story, storyFormat);
+      const fr3 = compileTwine2HTML(story, storyFormat);
 
       // Parse HTML.
-      const story2 = Twine2HTMLParser.parse(fr3);
+      const story2 = parseTwine2HTML(fr3);
 
       let tags = '';
       let tags2 = '';
@@ -89,20 +89,20 @@ describe('Twine2HTMLCompiler', () => {
       story.addPassage(new Passage('Start', 'Content'));
 
       // Read StoryFormat.
-      const fr2 = fs.readFileSync('test/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
 
       // Parse StoryFormat.
-      const storyFormat = StoryFormatParser.parse(fr2);
+      const storyFormat = parseStoryFormat(fr2);
 
       // Set start
       story.start = 'Start';
 
       // Write out HTML with story and storyFormat.
       // (Will add position to passages without them.)
-      const fr3 = Twine2HTMLCompiler.compile(story, storyFormat);
+      const fr3 = compileTwine2HTML(story, storyFormat);
 
       // Parse new HTML file.
-      const story2 = Twine2HTMLParser.parse(fr3);
+      const story2 = parseTwine2HTML(fr3);
 
       // Verify none of the directly created passages have position.
       story.forEachPassage((passage) => {
@@ -135,16 +135,16 @@ describe('Twine2HTMLCompiler', () => {
       story.start = 'Start';
 
       // Read StoryFormat.
-      const fr2 = fs.readFileSync('test/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
 
       // Parse StoryFormat.
-      const storyFormat = StoryFormatParser.parse(fr2);
+      const storyFormat = parseStoryFormat(fr2);
 
       // Write the HTML.
-      const fr3 = Twine2HTMLCompiler.compile(story, storyFormat);
+      const fr3 = compileTwine2HTML(story, storyFormat);
 
       // Parse HTML.
-      const story2 = Twine2HTMLParser.parse(fr3);
+      const story2 = parseTwine2HTML(fr3);
 
       // Test creator (should be default)
       expect(story.creator).toBe('extwee');
@@ -164,13 +164,13 @@ describe('Twine2HTMLCompiler', () => {
       story.addPassage(new Passage('A'));
 
       // Read StoryFormat.
-      const fr2 = fs.readFileSync('test/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
 
       // Parse StoryFormat.
-      const storyFormat = StoryFormatParser.parse(fr2);
+      const storyFormat = parseStoryFormat(fr2);
 
       expect(() => {
-        Twine2HTMLCompiler.compile(story, storyFormat);
+        compileTwine2HTML(story, storyFormat);
       }).toThrow();
     });
 
@@ -185,14 +185,14 @@ describe('Twine2HTMLCompiler', () => {
       story.addPassage(new Passage('StoryTitle', 'Name'));
 
       // Read StoryFormat.
-      const fr2 = fs.readFileSync('test/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
 
       // Parse StoryFormat.
-      const storyFormat = StoryFormatParser.parse(fr2);
+      const storyFormat = parseStoryFormat(fr2);
 
       // Throws error.
       expect(() => {
-        Twine2HTMLCompiler.compile(story, storyFormat);
+        compileTwine2HTML(story, storyFormat);
       }).toThrow();
     });
 
@@ -210,14 +210,14 @@ describe('Twine2HTMLCompiler', () => {
       story.start = 'Nope';
 
       // Read StoryFormat.
-      const fr2 = fs.readFileSync('test/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
 
       // Parse StoryFormat.
-      const storyFormat = StoryFormatParser.parse(fr2);
+      const storyFormat = parseStoryFormat(fr2);
 
       // Throws error.
       expect(() => {
-        Twine2HTMLCompiler.compile(story, storyFormat);
+        compileTwine2HTML(story, storyFormat);
       }).toThrow();
     });
   });

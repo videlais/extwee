@@ -1,49 +1,29 @@
-import TweeParser from './src/TweeParser.js';
-import JSONParser from './src/JSONParser.js';
-import StoryFormatParser from './src/StoryFormatParser.js';
-import Twine1HTMLParser from './src/Twine1HTMLParser.js';
-import Twine2HTMLParser from './src/Twine2HTMLParser.js';
-import Twine2ArchiveHTMLParser from './src/Twine2ArchiveHTMLParser.js';
-import Twine1HTMLCompiler from './src/Twine1HTMLCompiler.js';
-import Twine2ArchiveHTMLCompiler from './src/Twine2ArchiveHTMLCompiler.js';
-import Twine2HTMLCompiler from './src/Twine2HTMLCompiler.js';
+import { parse as parseTwee } from './src/Twee/parse.js';
+import { parse as parseJSON } from './src/JSON/parse.js';
+import { parse as parseStoryFormat } from './src/StoryFormat/parse.js';
+import { parse as parseTwine1HTML } from './src/Twine1HTML/parse.js';
+import { parse as parseTwine2HTML } from './src/Twine2HTML/parse.js';
+import { parse as parseTwine2ArchiveHTML } from './src/Twine2ArchiveHTML/parse.js';
+import { parse as parseTWS } from './src/TWS/parse.js';
+import { compile as compileTwine1HTML } from './src/Twine1HTML/compile.js';
+import { compile as compileTwine2HTML } from './src/Twine2HTML/compile.js';
+import { compile as compileTwine2ArchiveHTML } from './src/Twine2ArchiveHTML/compile.js';
 import Story from './src/Story.js';
 import Passage from './src/Passage.js';
 import StoryFormat from './src/StoryFormat.js';
 
-// Code objects.
-export { StoryFormat };
-export { Passage };
-export { Story };
-
-// Parsers.
-export { TweeParser };
-export { JSONParser };
-export { StoryFormatParser };
-export { Twine2HTMLParser };
-export { Twine1HTMLParser };
-export { Twine2ArchiveHTMLParser };
-
-// Compilers.
-export { Twine2HTMLCompiler };
-export { Twine1HTMLCompiler };
-export { Twine2ArchiveHTMLCompiler };
-
-// Export everything by default.
-export default {
-    // Objects
-    StoryFormat,
-    Passage,
+export {
+    parseTwee,
+    parseJSON,
+    parseTWS,
+    parseStoryFormat,
+    parseTwine1HTML,
+    parseTwine2HTML,
+    parseTwine2ArchiveHTML,
+    compileTwine1HTML,
+    compileTwine2HTML,
+    compileTwine2ArchiveHTML,
     Story,
-    // Parser shortcuts.
-    parseTwee: TweeParser.parse,
-    parseJSON: JSONParser.parse,
-    parseStoryFormat: StoryFormatParser.parse,
-    parseTwine1HTML: Twine1HTMLParser.parse,
-    parseTwine2HTML: Twine2HTMLParser.parse,
-    parseTwine2ArchiveHTML: Twine2ArchiveHTMLParser.parse,
-    // Compiler shortcuts.
-    compileTwine2HTML: Twine2HTMLCompiler.compile,
-    compileTwine1HTML: Twine1HTMLCompiler.compile,
-    compileTwine2ArchiveHTML: Twine2ArchiveHTMLCompiler.compile
+    Passage,
+    StoryFormat
 };

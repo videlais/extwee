@@ -1,16 +1,16 @@
-import Twine1HTMLParser from '../src/Twine1HTMLParser';
+import { parse as parseTwine1HTML } from '../../src/Twine1HTML/parse.js';
 
-describe('Twine1Parser', function () {
+describe('Twine1HTML', function () {
   describe('parse()', function () {
     it('Should throw error if elements cannot be found', function () {
-      expect(() => { Twine1HTMLParser.parse('{'); }).toThrow();
+      expect(() => { parseTwine1HTML('{'); }).toThrow();
     });
 
     it('Should parse a single passage - storeArea', function () {
       const el = '<div id="storeArea"><div tiddler="Untitled Passage 4" tags="" created="202309031439" modifier="twee" twine-position="401,10">dd</div></div>';
 
       // Parse Twine 1 HTML.
-      const s = Twine1HTMLParser.parse(el);
+      const s = parseTwine1HTML(el);
 
       // Expect a single passage.
       expect(s.size()).toBe(1);
@@ -38,7 +38,7 @@ describe('Twine1Parser', function () {
       const el = '<div id="store-area"><div tiddler="Untitled Passage 4" tags="" created="202309031439" modifier="twee" twine-position="401,10">dd</div></div>';
 
       // Parse Twine 1 HTML.
-      const s = Twine1HTMLParser.parse(el);
+      const s = parseTwine1HTML(el);
 
       // Expect a single passage.
       expect(s.size()).toBe(1);
@@ -64,7 +64,7 @@ describe('Twine1Parser', function () {
 
     it('Should override name with StoryTitle', function () {
       const el = '<div id="storeArea"><div tiddler="StoryTitle" tags="" created="202309031438" modifier="twee" twine-position="10,150">Untitled Story</div></div>';
-      const s = Twine1HTMLParser.parse(el);
+      const s = parseTwine1HTML(el);
       expect(s.name).toBe('Untitled Story');
     });
 
@@ -72,7 +72,7 @@ describe('Twine1Parser', function () {
       const el = '<div id="storeArea"><div tiddler="Untitled Passage 1" tags="tag1, tag2, tag3" created="202309031439" modifier="twee" twine-position="262,10">[[Untitled Passage 2]]</div></div>';
 
       // Parse Twine 1 HTML.
-      const s = Twine1HTMLParser.parse(el);
+      const s = parseTwine1HTML(el);
 
       // Expect a single passage.
       expect(s.size()).toBe(1);
@@ -100,7 +100,7 @@ describe('Twine1Parser', function () {
       const el = '<div id="storeArea"><div tiddler="Untitled Passage 1" tags="tag1, tag2, tag3" created="202309031439" modifier="twee">[[Untitled Passage 2]]</div></div>';
 
       // Parse Twine 1 HTML.
-      const s = Twine1HTMLParser.parse(el);
+      const s = parseTwine1HTML(el);
 
       // Expect a single passage.
       expect(s.size()).toBe(1);
@@ -128,7 +128,7 @@ describe('Twine1Parser', function () {
       const el = '<div id="storeArea"><div tiddler="Untitled Passage 1" created="202309031439" modifier="twee">[[Untitled Passage 2]]</div></div>';
 
       // Parse Twine 1 HTML.
-      const s = Twine1HTMLParser.parse(el);
+      const s = parseTwine1HTML(el);
 
       // Expect a single passage.
       expect(s.size()).toBe(1);
@@ -156,7 +156,7 @@ describe('Twine1Parser', function () {
       const el = '<div id="storeArea"><div tiddler="Untitled Passage 1" tags="tag1, tag2, tag3" created="202309031439">[[Untitled Passage 2]]</div></div>';
 
       // Parse Twine 1 HTML.
-      const s = Twine1HTMLParser.parse(el);
+      const s = parseTwine1HTML(el);
 
       // Expect a single passage.
       expect(s.size()).toBe(1);
