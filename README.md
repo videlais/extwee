@@ -32,12 +32,12 @@ Extwee is a story compilation tool supporting multiple historical and current Tw
 
 | **Format Support**               | **Input** | **Output**                      |
 |----------------------------------|-----------|---------------------------------|
-| [Twine 1 HTML (2006 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)       | Yes       | Partial `StorySettings` support via API; not supported via CLI. |
-| Twine 1 TWS (2009 - 2015)        | Yes       | No                              |
-| [Twine 2 HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)    | Yes       | Yes                             |
-| [Twine 2 Archive HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md) | Yes       | Yes                        |
-| [Twee 3 (2021 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)          | Yes       | Yes                             |
-| [Twine 2 JSON (2023 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md)            | Yes       | Yes                             |
+| [Twine 1 HTML (2006 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)       | :white_check_mark:       | Partial `StorySettings` support. |
+| [Twine 1 TWS (2009 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md)        | :white_check_mark:       | :x:                              |
+| [Twine 2 HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)    | :white_check_mark:       | :white_check_mark:                             |
+| [Twine 2 Archive HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md) | :white_check_mark:       | :white_check_mark:                       |
+| [Twee 3 (2021 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)          | :white_check_mark:       | :white_check_mark:                             |
+| [Twine 2 JSON (2023 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md)            | :white_check_mark:       | :white_check_mark:                             |
 
 **Note:** Round-trip translations can present problems because of required fields and properties per format. Some metadata may be added or removed based on the specification being followed.
 
@@ -96,58 +96,18 @@ Extwee has documentation on individual source files hosted on GitHub Pages.
 
 ## Command-Line Usage
 
-Extwee supports a general CLI interface shared across modes:
+Extwee supports a general CLI interface for two general scenarios:
 
-- Input file, `-i <inputFile>`.
-- Output file, `-o <outputFile>`.
-- Compile (`-c`) multiple files into HTML output.
-- De-compile (`-d`) HTML into another format.
+- Compiling Twee 3 + Twine 2 Story Format into Twine 2 HTML.
+- De-compiling Twine 2 HTML into Twee 3.
 
-### Twine 2 HTML
-
-- Compile Twee 3 + StoryFormat into Twine 2 HTML.
+Compile Twee 3 + StoryFormat into Twine 2 HTML:
 
 `extwee -c -i <tweeFile> -s <storyFormat> -o <Twine2HTML>`
 
-- Compile Twine 2 JSON + StoryFormat into Twine 2 HTML.
-
-`extwee -c -json_in -i <JSONFile> -s <storyFormat> -o <Twine2HTML>`
-
-- De-compile Twine 2 HTML into Twee 3.
+De-compile Twine 2 HTML into Twee 3:
 
 `extwee -d -i <twine2HTML> -o <outputTwee>`
-
-- De-compile Twine 2 HTML into Twine 2 JSON.
-
-`extwee -d -i <twine2HTML> -json_out -o <outputJSON>`
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### Twine 1 HTML
-
-Use `-twine1` to enable Twine 1 mode.
-
-- Compile Twee 3 + `engine.js` + `header.html` into Twine 1 HTML.
-
-`extwee -twine1 -c -i <tweeFile> -e <engineJS> -h <headerHTML> -o <Twine1HTML>`
-
-- De-compile Twine 1 HTML into Twee 3.
-
-`extwee -twine1 -d -i <twine1HTML> -o <Twee3File>`
-
-- De-compile Twine 1 HTML into Twine 2 JSON.
-
-`extwee -twine1 -d -i <twine1HTML> -json_out -o <JSONFile>`
-
-- Translate Twine 1 TWS into Twee 3.
-
-`extwee -twine1 -d -tws <twine1TWS> -o <Twee3File>`
-
-## Escaping Meta-Characters
-
-Extwee will attempt to escape the meta-characters of `{`, `}`, `[`, and `]` when moving to and from Twee notation.
-
-It is _highly recommended_ to avoid these characters in passage name and tags to avoid confusion and potential issues.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -157,6 +117,12 @@ Each major version has its own GitHub project:
 
 - [Road to Extwee 2.2.0](https://github.com/users/videlais/projects/2)
 - [Road to Extwee 2.4.0](https://github.com/users/videlais/projects/4)
+
+## Tree Shaking Support
+
+For [advanced tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) patterns, most formats are broke into `compile.js` and `parse.js` files exporting associated `compile()` and `parse()` functions. When using the API, it is possible to only import a single function or object to produce smaller and potentially faster code in projects dependent on Extwee functionality.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## License
 

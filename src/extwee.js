@@ -7,7 +7,6 @@
 
 // Import functions we need.
 import {
-  parseJSON,
   parseTwine2HTML,
   parseTwee,
   parseStoryFormat,
@@ -93,8 +92,6 @@ program
 
     return value;
   })
-  .option('-input:json', 'Enable Twine 2 JSON input')
-  .option('-output:json', 'Enable Twine 2 JSON output')
   .option('-s <storyformat>, --storyformat <storyformat>', 'Path to story format file for Twine 2', (value) => {
     // Does the input file exist?
     if (isFile(value) === false) {
@@ -202,26 +199,3 @@ if (isTwine1Mode === true && isCompileMode === true) {
   // Exit the process.
   process.exit();
 }
-
-// Convert Twine 2 JSON into Twee 3.
-if (isJSONInput === true) {
-  // Read the input file.
-  const inputJSON = readFileSync(options.i, 'utf-8');
-
-  // Parse the input file.
-  const story = parseJSON(inputJSON);
-
-  // Write the output file.
-  writeFileSync(options.o, story.toTwee());
-
-  console.error("STOP!");
-
-  // Exit the process.
-  process.exit();
-}
-
-// TODO: Add Twine 1 de-compilation into Twee 3.
-// TODO: Add Twine 1 de-compilation into Twine 2 JSON.
-// TODO: Add Twine 2 JSON de-compilation.
-// TODO: Add Twine 2 JSON compilation.
-// TODO: Add Twine 2 JSON + StoryFormat compilation.

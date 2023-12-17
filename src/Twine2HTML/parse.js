@@ -326,12 +326,12 @@ function parse (content) {
 
 /**
  * Try to escape Twine 2 meta-characters.
- * @param {string} result - Text to parse
- * @returns {string} Escaped characters
+ * @param {string} result - Text to parse.
+ * @returns {string} Escaped characters.
  */
 function escapeMetacharacters (result) {
-  // Replace any single backslash with two of them
-  result = result.replace(/\\/g, '\\');
+  // Replace any single backslash, \, with two of them, \\.
+  result = result.replace(/\\/g, `\\`);
   // Double-escape escaped {
   result = result.replace(/\\\{/g, '\\\\{');
   // Double-escape escaped }
