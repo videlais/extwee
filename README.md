@@ -32,8 +32,8 @@ Extwee is a story compilation tool supporting multiple historical and current Tw
 
 | **Format Support**               | **Input** | **Output**                      |
 |----------------------------------|-----------|---------------------------------|
-| [Twine 1 HTML (2006 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)       | :white_check_mark:       | Partial `StorySettings` support. |
-| [Twine 1 TWS (2009 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md)        | :white_check_mark:       | :x:                              |
+| [Twine 1 HTML (2006 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)       | :white_check_mark:       | Partial support. Twine 1 HTML can be produced, but the `StorySettings` optional passage introduced in Twine 1.4.0 requires external libraries like jQuery not included with Extwee. |
+| [Twine 1 TWS (2009 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md)        | :white_check_mark:       | While the Python pickle format on which Twine 1 TWS is based can be produced from JavaScript, no current version of Twine supports it.                             |
 | [Twine 2 HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)    | :white_check_mark:       | :white_check_mark:                             |
 | [Twine 2 Archive HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md) | :white_check_mark:       | :white_check_mark:                       |
 | [Twee 3 (2021 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)          | :white_check_mark:       | :white_check_mark:                             |
@@ -45,9 +45,9 @@ Extwee is a story compilation tool supporting multiple historical and current Tw
 
 ## Node and Web API
 
-The following objects and methods are available in Node.js or web contexts.
+The following objects and methods are available in Node.js or browser contexts.
 
-**Note:** When used in a web context, all objects and methods are part of the `window.Extwee` global.
+**Note:** When used in a browser context, all objects and methods are part of the `window.Extwee` global.
 
 ### Objects
 
@@ -78,7 +78,7 @@ Translates output formats such as HTML, Twee, JSON, or JSONP into objects.
 
 ### Compilers
 
-Compiles story, story formats, or other data into a combination or playable format.
+Compiles story, story formats, or other data into an archive or playable format.
 
 - `compileTwine2HTML()`
 - `compileTwine1HTML()`
@@ -96,18 +96,31 @@ Extwee has documentation on individual source files hosted on GitHub Pages.
 
 ## Command-Line Usage
 
-Extwee supports a general CLI interface for two general scenarios:
+Extwee supports a command-line interface for four general scenarios:
 
-- Compiling Twee 3 + Twine 2 Story Format into Twine 2 HTML.
-- De-compiling Twine 2 HTML into Twee 3.
+### Compiling Twee 3 + Twine 2 Story Format into Twine 2 HTML
 
 Compile Twee 3 + StoryFormat into Twine 2 HTML:
 
 `extwee -c -i <tweeFile> -s <storyFormat> -o <Twine2HTML>`
 
+### De-compiling Twine 2 HTML into Twee 3
+
 De-compile Twine 2 HTML into Twee 3:
 
 `extwee -d -i <twine2HTML> -o <outputTwee>`
+
+### Compiling Twee 3 into Twine 1 HTML
+
+Enabling Twine 1 mode requires using the `-t1` or `--twine1` flag.
+
+`extwee -t1 -c -i <tweeFile> -o <Twine1HTML> -engine <engineJS> -name <storyFormatName> -codejs <CodeJS> -header <header>`
+
+### De-compiling Twine 1 HTML into Twee 3
+
+Enabling Twine 1 mode requires using the `-t1` or `--twine1` flag.
+
+`extwee -t1 -d -i <twine1HTML> -o <outputTwee>`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -133,9 +133,6 @@ const isDecompileMode = (options.decompile === true);
 // Check if compile mode is enabled.
 const isCompileMode = (options.compile === true);
 
-// Check if JSON input is enabled.
-const isJSONInput = (options['input:json'] === true);
-
 // De-compile Twine 2 HTML into Twee 3 branch.
 // If -d is passed, -i and -o are required.
 if (isTwine2Mode === true && isDecompileMode === true) {
@@ -195,6 +192,21 @@ if (isTwine1Mode === true && isCompileMode === true) {
 
   // Write the output file.
   writeFileSync(options.o, Twine1HTML);
+
+  // Exit the process.
+  process.exit();
+}
+
+// De-compile Twine 1 HTML into Twee 3 branch.
+if (isTwine1Mode === true && isDecompileMode === true) {
+  // Read the input HTML file.
+  const inputHTML = readFileSync(options.i, 'utf-8');
+
+  // Parse the input HTML file into Story object.
+  const storyObject = parseTwine1HTML(inputHTML);
+
+  // Write the output file from Story as Twee 3.
+  writeFileSync(options.o, storyObject.toTwee());
 
   // Exit the process.
   process.exit();
