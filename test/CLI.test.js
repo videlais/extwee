@@ -9,22 +9,34 @@ const testFilePath = currentPath + '/test/CLI';
 describe('CLI', () => {
   // Remove the test files, if they exist.
   beforeAll(() => {
-    shell.rm(`${testFilePath}/test.*`);
+    // Test for files beginning with "test." in the output directory.
+    if(shell.ls('-A', `${testFilePath}/output/`).length > 0) {
+      // Remove the files.
+      shell.rm(`${testFilePath}/output/*`);
+    }
   });
 
-  // Test generating Twee files.
-  describe('Decompile Twine 2 HTML', () => {
-    it('Decompile: HTML into Twee', () => {
-      shell.exec(`node ${currentPath}/bin/extwee.js -d -i ${testFilePath}/input.html -o ${testFilePath}/test.twee`);
-      expect(shell.test('-e', `${testFilePath}/test.twee`)).toBe(true);
-    });
+  it('De-compile: Twine 2 HTML into Twee 3', () => {
+    shell.exec(`node ${currentPath}/bin/extwee.js -d -i ${testFilePath}/input.html -o ${testFilePath}/output/test.twee`);
+    expect(shell.test('-e', `${testFilePath}/output/test.twee`)).toBe(true);
   });
 
-  // Test generating HTML files.
-  describe('Compile Twee 3 into Twine 2 HTML', () => {
-    it('Compile: Twee + StoryFormat into Twee', () => {
-      shell.exec(`node ${currentPath}/bin/extwee.js -c -i ${testFilePath}/example6.twee -s ${testFilePath}/harlowe.js -o ${testFilePath}/test2.html`);
-      expect(shell.test('-e', `${testFilePath}/test2.html`)).toBe(true);
-    });
+  it('Compile: Twee 3 + StoryFormat into Twine 2 HTML', () => {
+    shell.exec(`node ${currentPath}/bin/extwee.js -c -i ${testFilePath}/example6.twee -s ${testFilePath}/harlowe.js -o ${testFilePath}/output/test2.html`);
+    expect(shell.test('-e', `${testFilePath}/output/test2.html`)).toBe(true);
+  });
+
+  it('Compile: Twee 3 + Twine 1 engine.js + Twine 1 code.js + Twine 1 header.html', () => {
+    shell.exec(`node ${currentPath}/bin/extwee.js -t1 -c -i ${testFilePath}/example6.twee -o ${testFilePath}/output/test3.html -codejs ${testFilePath}/twine1/code.js -engine ${testFilePath}/twine1/engine.js -header ${testFilePath}/twine1/header.html -name Test`);
+    expect(shell.test('-e', `${testFilePath}/output/test3.html`)).toBe(true);
+  });
+
+  // Remove the test files, if they exist.
+  afterAll(() => {
+    // Test for files beginning with "test." in the output directory.
+    if(shell.ls('-A', `${testFilePath}/output/`).length > 0) {
+      // Remove the files.
+      shell.rm(`${testFilePath}/output/*`);
+    }
   });
 });
