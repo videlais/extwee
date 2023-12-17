@@ -1,5 +1,5 @@
 import StoryFormat from '../StoryFormat.js';
-import semver from 'semver';
+import { valid } from 'semver';
 
 /**
  * Parse a Story Format file.
@@ -107,7 +107,7 @@ function parse (contents) {
   }
 
   // Test if version is semantic-style, which is required
-  if (semver.valid(jsonContent.version) === null) {
+  if (valid(jsonContent.version) === null) {
     throw new Error('Processed story format\'s version is not a valid semantic value!');
   }
 

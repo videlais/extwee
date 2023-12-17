@@ -331,7 +331,7 @@ function parse (content) {
  */
 function escapeMetacharacters (result) {
   // Replace any single backslash, \, with two of them, \\.
-  result = result.replace(/\\/g, `\\`);
+  result = result.replace(/\\/g, '\\');
   // Double-escape escaped {
   result = result.replace(/\\\{/g, '\\\\{');
   // Double-escape escaped }
