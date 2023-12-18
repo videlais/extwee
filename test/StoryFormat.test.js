@@ -4,7 +4,7 @@ describe('StoryFormat', () => {
   describe('constructor()', () => {
     it('Should create default values', () => {
       const sf = new StoryFormat();
-      expect(sf.name).toBe('');
+      expect(sf.name).toBe('Untitled Story Format');
       expect(sf.version).toBe('');
       expect(sf.author).toBe('');
       expect(sf.image).toBe('');
@@ -147,27 +147,6 @@ describe('StoryFormat', () => {
       expect(() => {
         sf.description = 1;
       }).toThrow();
-    });
-  });
-
-  describe('toJSON()', function () {
-    let st_ = new StoryFormat();
-
-    beforeEach(() => {
-      st_ = new StoryFormat();
-    });
-
-    it('Should hold default values', function () {
-      const r = JSON.parse(st_.toJSON());
-      expect(r.name).toBe('');
-      expect(r.version).toBe('');
-      expect(r.description).toBe('');
-      expect(r.author).toBe('');
-      expect(r.image).toBe('');
-      expect(r.url).toBe('');
-      expect(r.license).toBe('');
-      expect(r.proofing).toBe(false);
-      expect(r.source).toBe('');
     });
   });
 });

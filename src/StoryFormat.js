@@ -66,7 +66,7 @@ export default class StoryFormat {
    * @param {string} source - Source
    */
   constructor (
-    name = '',
+    name = 'Untitled Story Format',
     version = '',
     description = '',
     author = '',
@@ -255,27 +255,5 @@ export default class StoryFormat {
     } else {
       throw new Error('Source must be a String!');
     }
-  }
-
-  /**
-   * Export as JSON representation.
-   * @returns {string} JSON string.
-   */
-  toJSON () {
-    // Create an initial object for later serialization.
-    const s = {
-      name: this.name,
-      version: this.version,
-      description: this.description,
-      author: this.author,
-      image: this.image,
-      url: this.url,
-      license: this.license,
-      proofing: this.proofing,
-      source: this.source
-    };
-
-    // Return stringified JSON from object.
-    return JSON.stringify(s);
   }
 }
