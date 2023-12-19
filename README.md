@@ -30,14 +30,14 @@
 
 Extwee is a story compilation tool supporting multiple historical and current Twine-compatible formats.
 
-| **Format Support**               | **Input** | **Output**                      |
-|----------------------------------|-----------|---------------------------------|
-| [Twine 1 HTML (2006 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)       | :white_check_mark:       | Partial support. Twine 1 HTML can be produced, but the `StorySettings` optional passage introduced in Twine 1.4.0 requires external libraries like jQuery not included with Extwee. |
-| [Twine 1 TWS (2009 - 2015)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md)        | :white_check_mark:       | While the Python pickle format on which Twine 1 TWS is based can be produced from JavaScript, no current version of Twine supports it.                             |
-| [Twine 2 HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)    | :white_check_mark:       | :white_check_mark:                             |
-| [Twine 2 Archive HTML (2015 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md) | :white_check_mark:       | :white_check_mark:                       |
-| [Twee 3 (2021 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)          | :white_check_mark:       | :white_check_mark:                             |
-| [Twine 2 JSON (2023 - Present)](https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md)            | :white_check_mark:       | :white_check_mark:                             |
+| Format                                                                                                                           | Input | Output                                                                                                                                                                                |
+|----------------------------------------------------------------------------------------------------------------------------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [ Twine 1 HTML (2006 - 2015) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md )          | Yes   | Partial support. Twine 1 HTML can be produced, but the  `StorySettings`  optional passage introduced in Twine 1.4.0 requires external libraries like jQuery not included with Extwee. |
+| [ Twine 1 TWS (2009 - 2015) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md )                | Yes   | While the Python pickle format on which Twine 1 TWS is based can be produced from JavaScript, no current version of Twine supports it.                                                |
+| [ Twine 2 HTML (2015 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md )      | Yes   | Yes                                                                                                                                                                                   |
+| [ Twine 2 Archive HTML (2015 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md ) | Yes   | Yes                                                                                                                                                                                   |
+| [ Twee 3 (2021 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md )               | Yes   | Yes                                                                                                                                                                                   |
+| [ Twine 2 JSON (2023 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md )       | Yes   | Yes                                                                                                                                                                                   |
 
 **Note:** Round-trip translations can present problems because of required fields and properties per format. Some metadata may be added or removed based on the specification being followed.
 
