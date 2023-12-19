@@ -10,6 +10,7 @@ import {
   parseTwine2HTML,
   parseTwee,
   parseStoryFormat,
+  parseTwine1HTML,
   compileTwine2HTML,
   compileTwine1HTML
 } from '../index.js';
@@ -51,19 +52,11 @@ const isFile = (path) => {
 
 program
   .name('extwee')
-  .version('2.2.0')
+  .description('CLI for Extwee')
+  .version('2.2.0', '-v, -V, --version', 'Output the current version')
   .option('-c, --compile', 'Compile input into output')
   .option('-d, --decompile', 'De-compile input into output')
   .option('-t1, --twine1', 'Enable Twine 1 processing')
-  .option('-tws <TWSFile>', 'Path to Twine 1 TWS file', (value) => {
-    // Does the input file exist?
-    if (isFile(value) === false) {
-      // We cannot do anything without valid input.
-      throw new InvalidArgumentError(`Twine 1 TWS ${value} does not exist.`);
-    }
-
-    return value;
-  })
   .option('-name <storyFormatName>', 'Name of the Twine 1 story format (needed for `code.js` inclusion)')
   .option('-codejs <codeJSFile>', 'Twine 1 code.js file for use with Twine 1 HTML', (value) => {
     // Does the input file exist?

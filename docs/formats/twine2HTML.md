@@ -6,7 +6,7 @@ Extwee can perform two actions with Twine 2 HTML.
 
 ## Parsing
 
-When using the `parseTwine2HTML()` function (or `Twine2HTML/parse.js` export), incoming Twine 2 HTML will be converted into a [**Story** object](/objects/story.md).
+When using the `parseTwine2HTML()` function (or `Twine2HTML/parse.js` export), incoming Twine 2 HTML will be converted into a [**Story**](/objects/story.md) object.
 
 ## Compilation
 

@@ -43,5 +43,7 @@ describe('CLI', () => {
       // Remove the files.
       shell.rm(`${testFilePath}/output/*`);
     }
+    // Create one file to prevent git from ignoring the folder.
+    shell.touch(`${testFilePath}/output/test.twee`);
   });
 });

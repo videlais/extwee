@@ -6,7 +6,7 @@ Extwee can perform two actions with Twine 2 archive HTML.
 
 ## Parsing
 
-When using the `parseTwine2ArchiveHTML()` function (or `Twine2ArchiveHTML/parse.js` export), incoming Twine 2 Archive HTML will be converted into an array of [**Story** objects](/objects/story.md).
+When using the `parseTwine2ArchiveHTML()` function (or `Twine2ArchiveHTML/parse.js` export), incoming Twine 2 Archive HTML will be converted into an array of [**Story**](/objects/story.md) objects.
 
 ## Compilation
 

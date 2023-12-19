@@ -6,7 +6,7 @@ Extwee can perform two actions with Twee.
 
 ## Parse
 
-When using the `parseTwee()` function (or `Twee/parse.js` export), incoming Twee will be converted into a [**Story** object](/objects/story.md).
+When using the `parseTwee()` function (or `Twee/parse.js` export), incoming Twee will be converted into a [**Story**](/objects/story.md) object.
 
 ## Output
 

@@ -1,12 +1,7 @@
 - Installation and General Usage
   - [Binaries (stand alone)](/install/binaries.md)
-  - [Using NPX (use with or within Node.js projects)](/install/npx.md)
-  - [Using NPM (as part of a Node.js project via API)](/install/npm.md)
-- Command-Line Interface (CLI)
-  - [From Twee to Twine 2 HTML](/cli/fromTweeToTwine2HTML.md)
-  - [From Twee to Twine 1 HTML](/cli/fromTweeToTwine1HTML.md)
-  - [From Twine 2 HTML to Twee](/cli/fromTwine2HTMLToTwee.md)
-  - [From Twine 1 HTML to Twee](/cli/fromTwine1HTMLToTwee.md)
+  - [Using NPX (as part of workflow)](/install/npx.md)
+  - [Using NPM (via API)](/install/npm.md)
 - Objects
   - [Passage](/objects/passage.md)
   - [Story](/objects/story.md)
@@ -19,3 +14,4 @@
   - [Twine 2 Archive HTML](/formats/twine2ArchiveHTML.md)
 - Examples
   - [Dynamically Generating Passages](/examples/dynamicPassages.md)
+  - [Converting Twine 2 JSON into Twee 3](/examples/jsonToTwee.md)
