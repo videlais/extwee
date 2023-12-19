@@ -1,10 +1,10 @@
 import StoryFormat from '../src/StoryFormat.js';
 
 describe('StoryFormat', () => {
-  describe('#constructor()', () => {
+  describe('constructor()', () => {
     it('Should create default values', () => {
       const sf = new StoryFormat();
-      expect(sf.name).toBe('');
+      expect(sf.name).toBe('Untitled Story Format');
       expect(sf.version).toBe('');
       expect(sf.author).toBe('');
       expect(sf.image).toBe('');

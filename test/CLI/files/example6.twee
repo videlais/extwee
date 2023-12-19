@@ -1,0 +1,22 @@
+:: StoryData
+{
+   "ifid": "D674C58C-DEFA-4F70-B7A2-27742230C0FC",
+   "format": "SugarCube",
+   "format-version": "2.28.2",
+   "start": "Start",
+   "tag-colors": {
+     "bar": "green",
+     "foo": "red",
+     "qaz": "blue"
+   },
+   "zoom": 0.25
+}
+
+:: StoryTitle
+twineExample
+
+:: Start [tag tags] {"position": "200,200", "size": "100,100"}
+Content
+
+:: Style1 [stylesheet]
+body {background-color: green;}

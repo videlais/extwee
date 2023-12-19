@@ -1,31 +1,29 @@
-import FileReader from './src/FileReader.js';
-import TweeParser from './src/TweeParser.js';
-import TweeWriter from './src/TweeWriter.js';
-import StoryFormatParser from './src/StoryFormatParser.js';
-import HTMLParser from './src/HTMLParser.js';
-import HTMLWriter from './src/HTMLWriter.js';
+import { parse as parseTwee } from './src/Twee/parse.js';
+import { parse as parseJSON } from './src/JSON/parse.js';
+import { parse as parseStoryFormat } from './src/StoryFormat/parse.js';
+import { parse as parseTwine1HTML } from './src/Twine1HTML/parse.js';
+import { parse as parseTwine2HTML } from './src/Twine2HTML/parse.js';
+import { parse as parseTwine2ArchiveHTML } from './src/Twine2ArchiveHTML/parse.js';
+import { parse as parseTWS } from './src/TWS/parse.js';
+import { compile as compileTwine1HTML } from './src/Twine1HTML/compile.js';
+import { compile as compileTwine2HTML } from './src/Twine2HTML/compile.js';
+import { compile as compileTwine2ArchiveHTML } from './src/Twine2ArchiveHTML/compile.js';
 import Story from './src/Story.js';
 import Passage from './src/Passage.js';
 import StoryFormat from './src/StoryFormat.js';
 
-export { FileReader };
-export { TweeParser };
-export { StoryFormat };
-export { Passage };
-export { Story };
-export { StoryFormatParser };
-export { HTMLParser };
-export { HTMLWriter };
-
-// Export everything by default
-export default {
-    readFile: FileReader.read,
-    parseTwee: TweeParser.parse,
-    writeTwee: TweeWriter.write,
-    StoryFormat,
-    Passage,
+export {
+    parseTwee,
+    parseJSON,
+    parseTWS,
+    parseStoryFormat,
+    parseTwine1HTML,
+    parseTwine2HTML,
+    parseTwine2ArchiveHTML,
+    compileTwine1HTML,
+    compileTwine2HTML,
+    compileTwine2ArchiveHTML,
     Story,
-    parseStoryFormat: StoryFormatParser.parse,
-    parseHTML: HTMLParser.parse,
-    writeHTML: HTMLWriter.write
+    Passage,
+    StoryFormat
 };

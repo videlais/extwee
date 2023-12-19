@@ -1,13 +1,14 @@
 import Story from '../src/Story.js';
 import Passage from '../src/Passage';
-import FileReader from '../src/FileReader.js';
+import { parse as parseTwee } from '../src/Twee/parse.js';
+import { readFileSync } from 'node:fs';
 
 // Pull the name and version of this project from package.json.
 // These are used as the 'creator' and 'creator-version'.
-const { name, version } = JSON.parse(FileReader.read('package.json'));
+const { name, version } = JSON.parse(readFileSync('package.json'));
 
 describe('Story', () => {
-  describe('#constructor()', () => {
+  describe('constructor()', () => {
     let s = null;
 
     beforeEach(() => {
@@ -20,6 +21,11 @@ describe('Story', () => {
 
     it('Should have extwee version', () => {
       expect(s.creatorVersion).toBe(version);
+    });
+
+    it('Should have name', () => {
+      s = new Story('Test');
+      expect(s.name).toBe('Test');
     });
   });
 
@@ -107,8 +113,8 @@ describe('Story', () => {
     });
 
     it('Set using String', () => {
-      s.formatVersion = 'New';
-      expect(s.formatVersion).toBe('New');
+      s.formatVersion = '1.1.1';
+      expect(s.formatVersion).toBe('1.1.1');
     });
 
     it('Should throw error if not String', () => {
@@ -242,6 +248,45 @@ describe('Story', () => {
       s.addPassage(p2);
       expect(s.size()).toBe(1);
     });
+
+    it('addPassage() - should override StoryData: ifid', function () {
+      // Generate object.
+      const o = {
+        ifid: 'D674C58C-DEFA-4F70-B7A2-27742230C0FC'
+      };
+
+      // Add the passage.
+      s.addPassage(new Passage('StoryData', JSON.stringify(o)));
+
+      // Test for IFID.
+      expect(s.IFID).toBe('D674C58C-DEFA-4F70-B7A2-27742230C0FC');
+    });
+
+    it('addPassage() - should override StoryData: format', function () {
+      // Generate object.
+      const o = {
+        format: 'SugarCube'
+      };
+
+      // Add the passage.
+      s.addPassage(new Passage('StoryData', JSON.stringify(o)));
+
+      // Test for format.
+      expect(s.format).toBe('SugarCube');
+    });
+
+    it('addPassage() - should override StoryData: formatVersion', function () {
+      // Generate object.
+      const o = {
+        'format-version': '2.28.2'
+      };
+
+      // Add the passage.
+      s.addPassage(new Passage('StoryData', JSON.stringify(o)));
+
+      // Test for format.
+      expect(s.formatVersion).toBe('2.28.2');
+    });
   });
 
   describe('removePassageByName()', () => {
@@ -305,67 +350,27 @@ describe('Story', () => {
     });
   });
 
-  describe('getPassageByPID()', () => {
+  describe('forEachPassage()', () => {
     let s = null;
 
     beforeEach(() => {
       s = new Story();
     });
 
-    it('getPassageByPID() - should get passage by PID', () => {
-      const p = new Passage('Find', '', [], {}, 12);
-      s.addPassage(p);
-      const passage = s.getPassageByPID(12);
-      expect(passage.name).toBe('Find');
-    });
-
-    it('getPassageByPID() - should return null if not found', () => {
-      expect(s.getPassageByPID(12)).toBe(null);
-    });
-  });
-
-  describe('forEach()', () => {
-    let s = null;
-
-    beforeEach(() => {
-      s = new Story();
-    });
-
-    it('forEach() - should return if non-function', () => {
+    it('forEachPassage() - should return if non-function', () => {
       s.addPassage(new Passage('A'));
       s.addPassage(new Passage('B'));
       let passageNames = '';
-      s.forEach((p) => {
+      s.forEachPassage((p) => {
         passageNames += p.name;
       });
       expect(passageNames).toBe('AB');
     });
 
-    it('forEach() - should throw error if non-function', () => {
+    it('forEachPassage() - should throw error if non-function', () => {
       expect(() => {
-        s.forEach(null);
+        s.forEachPassage(null);
       }).toThrow();
-    });
-
-    it('forEach() - should ignore StoryTitle', () => {
-      let count = 0;
-      s.addPassage(new Passage('StoryTitle', 'Test'));
-      s.forEach(() => {count++});
-      expect(count).toBe(0);
-    });
-
-    it('forEach() - should ignore "script" tags', () => {
-      let count = 0;
-      s.addPassage(new Passage('Test', 'Test', ['script']));
-      s.forEach(() => {count++});
-      expect(count).toBe(0);
-    });
-
-    it('forEach() - should ignore "stylesheet" tags', () => {
-      let count = 0;
-      s.addPassage(new Passage('Test', 'Test', ['stylesheet']));
-      s.forEach(() => {count++});
-      expect(count).toBe(0);
     });
   });
 
@@ -386,38 +391,248 @@ describe('Story', () => {
       // Test size after adding one
       expect(s.size()).toBe(1);
     });
+  });
 
-    it('size() - should not count StoryTitle', () => {
-      // Create a Passage
-      const p = new Passage('StoryTitle', 'Test');
-      // Test initial size
-      expect(s.size()).toBe(0);
-      // Add a passage
-      s.addPassage(p);
-      // Test size after adding one
-      expect(s.size()).toBe(0);
+  describe('toJSON()', function () {
+    it('Should have default Story values', function () {
+      // Create a new Story.
+      const s = new Story();
+      // Convert to string and then back to object.
+      const result = JSON.parse(s.toJSON());
+      expect(result.name).toBe('');
+      expect(Object.keys(result.tagColors).length).toBe(0);
+      expect(result.ifid).toBe('');
+      expect(result.start).toBe('');
+      expect(result.formatVersion).toBe('');
+      expect(result.format).toBe('');
+      expect(result.creator).toBe('extwee');
+      expect(result.creatorVersion).toBe('2.2.0');
+      expect(result.zoom).toBe(0);
+      expect(Object.keys(result.metadata).length).toBe(0);
     });
 
-    it('size() - should not count script tags', () => {
-      // Create a Passage
-      const p = new Passage('Test', 'Test', ['script']);
-      // Test initial size
-      expect(s.size()).toBe(0);
-      // Add a passage
-      s.addPassage(p);
-      // Test size after adding one
-      expect(s.size()).toBe(0);
+    it('Should have passage data', function () {
+      // Create default Story.
+      const s = new Story();
+      // Add a passage.
+      s.addPassage(new Passage('Example', 'Test'));
+      // Convert to JSON and then back to object.
+      const result = JSON.parse(s.toJSON());
+      // Should have a single passage.
+      expect(result.passages.length).toBe(1);
+    });
+  });
+
+  describe('toTwee()', function () {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
     });
 
-    it('size() - should not count script tags', () => {
-      // Create a Passage
-      const p = new Passage('Test', 'Test', ['stylesheet']);
-      // Test initial size
-      expect(s.size()).toBe(0);
-      // Add a passage
-      s.addPassage(p);
-      // Test size after adding one
-      expect(s.size()).toBe(0);
+    it('Should detect StoryTitle text', function () {
+      // Add one passage.
+      s.addPassage(new Passage('StoryTitle', 'Content'));
+
+      // Convert to Twee.
+      const t = s.toTwee();
+
+      // Parse into a new story.
+      const story = parseTwee(t);
+
+      // Test for name.
+      expect(story.name).toBe('Content');
+    });
+
+    it('Should encode IFID', () => {
+      // Add passages.
+      s.addPassage(new Passage('Start'));
+      s.addPassage(new Passage('StoryTitle', 'Title'));
+
+      // Set an ifid property.
+      s.IFID = 'DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A';
+
+      // Convert to Twee.
+      const t = s.toTwee();
+
+      // Parse file.
+      const tp = parseTwee(t);
+
+      // Verify IFID.
+      expect(tp.IFID).toBe('DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A');
+    });
+
+    it('Should encode format, formatVersion, zoom, and start', () => {
+      // Add passages.
+      s.addPassage(new Passage('Start', 'Content'));
+      s.addPassage(new Passage('Untitled', 'Some stuff'));
+
+      s.name = 'Title';
+      s.format = 'Test';
+      s.formatVersion = '1.2.3';
+      s.zoom = 1;
+      s.start = 'Untitled';
+
+      // Convert to Twee.
+      const t = s.toTwee();
+
+      // Parse Twee.
+      const story2 = parseTwee(t);
+
+      // Test for format, formatVersion, zoom, and start.
+      expect(story2.formatVersion).toBe('1.2.3');
+      expect(story2.format).toBe('Test');
+      expect(story2.zoom).toBe(1);
+      expect(story2.start).toBe('Untitled');
+    });
+
+    it('Should write tag colors', () => {
+      // Add some passages.
+      s.addPassage(new Passage('Start', 'Content'));
+      s.addPassage(new Passage('Untitled', 'Some stuff'));
+
+      // Add tag colors.
+      s.tagColors = {
+        bar: 'green',
+        foo: 'red',
+        qaz: 'blue'
+      };
+
+      // Convert to Twee.
+      const t = s.toTwee();
+
+      // Convert back into Story.
+      const story2 = parseTwee(t);
+
+      // Test for tag colors
+      expect(story2.tagColors.bar).toBe('green');
+      expect(story2.tagColors.foo).toBe('red');
+      expect(story2.tagColors.qaz).toBe('blue');
+    });
+
+    it('Should encode "script" tag', () => {
+      // Add passages.
+      s.addPassage(new Passage('Test', 'Test', ['script']));
+      s.addPassage(new Passage('Start', 'Content'));
+
+      // Convert into Twee.
+      const t = s.toTwee();
+
+      // Convert back into Story.
+      const story = parseTwee(t);
+
+      // Search for 'script'.
+      const p = story.getPassagesByTag('script');
+
+      // Test for passage text.
+      expect(p[0].text).toBe('Test');
+    });
+
+    it('Should encode "stylesheet" tag', () => {
+      // Add passages.
+      s.addPassage(new Passage('Test', 'Test', ['stylesheet']));
+      s.addPassage(new Passage('Start', 'Content'));
+
+      // Convert into Twee.
+      const t = s.toTwee();
+
+      // Convert back into Story.
+      const story = parseTwee(t);
+
+      // Search for 'stylesheet'.
+      const p = story.getPassagesByTag('stylesheet');
+
+      // Test for passage text.
+      expect(p[0].text).toBe('Test');
+    });
+  });
+
+  describe('toTwine2HTML()', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Should throw error if no starting passage', function () {
+      // No start set.
+      expect(() => { s.toTwine2HTML(); }).toThrow();
+    });
+
+    it('Should throw error if starting passage cannot be found', function () {
+      // Set start.
+      s.start = 'Unknown';
+      // Has a start, but not part of collection.
+      expect(() => { s.toTwine2HTML(); }).toThrow();
+    });
+
+    it('Should encode name', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set name.
+      s.name = 'Test';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the name to be encoded.
+      expect(result.includes('<tw-storydata name="Test"')).toBe(true);
+    });
+
+    it('Should encode IFID', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set IFID.
+      s.IFID = 'B94AC8AD-03E3-4496-96C8-FE958645FE61';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the IFID to be encoded.
+      expect(result.includes('ifid="B94AC8AD-03E3-4496-96C8-FE958645FE61"')).toBe(true);
+    });
+
+    it('Should encode stylesheet passages', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Add a stylesheet passage.
+      s.addPassage(new Passage('Test', 'Word', ['stylesheet']));
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the stylesheet passage text to be encoded.
+      expect(result.includes('<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">Word')).toBe(true);
+    });
+
+    it('Should encode script passages', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Add a script passage.
+      s.addPassage(new Passage('Test', 'Word', ['script']));
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the script passage text to be encoded.
+      expect(result.includes('<script role="script" id="twine-user-script" type="text/twine-javascript">Word')).toBe(true);
+    });
+  });
+
+  describe('toTwine1HTML()', function () {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Should have correct data-size', function () {
+      // Add a passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Create Twine 1 HTML.
+      const result = s.toTwine1HTML();
+      // Expect data-size to be 1.
+      expect(result.includes('<div tiddler="Start"')).toBe(true);
     });
   });
 });

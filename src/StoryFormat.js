@@ -1,74 +1,60 @@
-/**
- * @class StoryFormat
- * @module StoryFormat
- */
 export default class StoryFormat {
   /**
-   * Internal name
-   *
+   * Internal name.
    * @private
    */
   #_name = '';
 
   /**
-   * Internal version
-   *
+   * Internal version.
    * @private
    */
   #_version = '';
 
   /**
-   * Internal description
-   *
+   * Internal description.
    * @private
    */
   #_description = '';
 
   /**
-   * Internal author
-   *
+   * Internal author.
    * @private
    */
   #_author = '';
 
   /**
-   * Internal image
-   *
+   * Internal image.
    * @private
    */
   #_image = '';
 
   /**
-   * Internal URL
-   *
+   * Internal URL.
    * @private
    */
   #_url = '';
 
   /**
-   * Internal license
-   *
+   * Internal license.
    * @private
    */
   #_license = '';
 
   /**
-   * Internal proofing
-   *
+   * Internal proofing.
    * @private
    */
   #_proofing = '';
 
   /**
-   * Internal source
-   *
+   * Internal source.
    * @private
    */
   #_source = '';
 
   /**
-   * @class
-   * @function StoryFormat
+   * Create a story format.
    * @param {string} name - Name
    * @param {string} version - Version
    * @param {string} description - Description
@@ -80,7 +66,7 @@ export default class StoryFormat {
    * @param {string} source - Source
    */
   constructor (
-    name = '',
+    name = 'Untitled Story Format',
     version = '',
     description = '',
     author = '',
@@ -120,9 +106,6 @@ export default class StoryFormat {
 
   /**
    * Name
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {string} Name
    */
   get name () { return this.#_name; }
@@ -140,9 +123,6 @@ export default class StoryFormat {
 
   /**
    * Version
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {string} Version
    */
   get version () { return this.#_version; }
@@ -160,9 +140,6 @@ export default class StoryFormat {
 
   /**
    * Description
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {string} Description
    */
   get description () { return this.#_description; }
@@ -180,9 +157,6 @@ export default class StoryFormat {
 
   /**
    * Author
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {string} Author
    */
   get author () { return this.#_author; }
@@ -200,9 +174,6 @@ export default class StoryFormat {
 
   /**
    * Image
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {string} Image
    */
   get image () { return this.#_image; }
@@ -220,9 +191,6 @@ export default class StoryFormat {
 
   /**
    * URL
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {string} URL
    */
   get url () { return this.#_url; }
@@ -240,9 +208,6 @@ export default class StoryFormat {
 
   /**
    * License
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {string} License
    */
   get license () { return this.#_license; }
@@ -260,9 +225,6 @@ export default class StoryFormat {
 
   /**
    * Proofing
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {boolean} Proofing
    */
   get proofing () { return this.#_proofing; }
@@ -280,9 +242,6 @@ export default class StoryFormat {
 
   /**
    * Source
-   *
-   * @public
-   * @memberof StoryFormat
    * @returns {string} Source
    */
   get source () { return this.#_source; }
