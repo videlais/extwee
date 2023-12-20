@@ -7,11 +7,13 @@
   - [Story](/objects/story.md)
   - [Story Format](/objects/storyformat.md)
 - Formats
+  - [Twee 3](/formats/twee.md)
   - [Twine 2 HTML](/formats/twine2HTML.md)
-  - [Twine 1 HTML](/formats/twine1HTML.md)
-  - [Twee](/formats/twee.md)
-  - [TWS](/formats/tws.md)
+  - [Twine 2 JSON](/formats/json.md)
   - [Twine 2 Archive HTML](/formats/twine2ArchiveHTML.md)
+  - [Twine 1 HTML](/formats/twine1HTML.md)
+  - [Twine 1 TWS](/formats/tws.md)
+  
 - Examples
   - [Dynamically Generating Passages](/examples/dynamicPassages.md)
   - [Converting Twine 2 JSON into Twee 3](/examples/jsonToTwee.md)

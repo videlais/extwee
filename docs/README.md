@@ -12,14 +12,43 @@
 
 Extwee is a story compilation tool supporting multiple historical and current Twine-compatible formats.
 
-| Format                                                                                                                           | Input | Output                                                                                                                                                                                |
-|----------------------------------------------------------------------------------------------------------------------------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [ Twine 1 HTML (2006 - 2015) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md )          | Yes   | Partial support. Twine 1 HTML can be produced, but the  `StorySettings`  optional passage introduced in Twine 1.4.0 requires external libraries like jQuery not included with Extwee. |
-| [ Twine 1 TWS (2009 - 2015) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md )                | Yes   | While the Python pickle format on which Twine 1 TWS is based can be produced from JavaScript, no current version of Twine supports it.                                                |
-| [ Twine 2 HTML (2015 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md )      | Yes   | Yes                                                                                                                                                                                   |
-| [ Twine 2 Archive HTML (2015 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md ) | Yes   | Yes                                                                                                                                                                                   |
-| [ Twee 3 (2021 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md )               | Yes   | Yes                                                                                                                                                                                   |
-| [ Twine 2 JSON (2023 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md )       | Yes   | Yes                                                                                                                                                                                   |
+<table>
+    <tr>
+        <td>Format</td>
+        <td>Input</td>
+        <td>Output</td>
+    </tr>
+    <tr>
+        <td><a href='https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md'>Twine 1 HTML (2006 - 2015)</a> </td>
+        <td>Yes</td>
+        <td>Partial support. Twine 1 HTML can be produced, but the StorySettings optional passage introduced in Twine 1.4.0 requires external libraries like jQuery not included with Extwee.</td>
+    </tr>
+    <tr>
+        <td><a href="https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md">Twine 1 TWS (2009 - 2015)</a></td>
+        <td>Yes</td>
+        <td>Extwee does not support TWS (Python pickle) output because no current version of Twine or other story compilation tool produces this historical format.</td>
+    </tr>
+    <tr>
+        <td><a href="https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md">Twine 2 HTML (2015 - Present)</a></td>
+        <td>Yes</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><a href="https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md">Twine 2 Archive HTML (2015 - Present)</a></td>
+        <td>Yes</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><a href="https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md">Twee 3 (2021 - Present)</a></td>
+        <td>Yes</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><a href="https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md">Twine 2 JSON (2023 - Present)</a></td>
+        <td>Yes</td>
+        <td>Yes</td>
+    </tr>
+</table>
 
 **Note:** Round-trip translations can present problems because of required fields and properties per format. Some metadata may be added or removed based on the specification being followed.
 
