@@ -17,3 +17,4 @@
 - Examples
   - [Dynamically Generating Passages](/examples/dynamicPassages.md)
   - [Converting Twine 2 JSON into Twee 3](/examples/jsonToTwee.md)
+  - [Converting Twine 1 TWS into Twee 3](/examples/twsToTwee.md)

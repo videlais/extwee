@@ -1,6 +1,6 @@
 # TWS To Twee
 
-Converting from TWS to Twee 3 is similar to many other conversion processes:
+Converting from TWS to Twee 3 is similar to many other conversion processes with one small difference. TWS conversion needs to be begin from the [**Buffer** data type in JavaScript](https://nodejs.org/api/buffer.html).
 
 1. Read the binary file.
 2. Convert the binary files into a Buffer.

@@ -16,7 +16,7 @@ import { writeFileSync } from 'node:fs';
 const example = new Story( 'Example' );
 
 // Generate 20 passages and add them to the story.
-for(let i = 0; i < 20; i++;) {
+for(let i = 0; i < 20; i++) {
     example.addPassage( new Passage( `Passage ${i}`, 'Some Text') );
 }
 
