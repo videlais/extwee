@@ -172,4 +172,53 @@ describe('Passage', () => {
       expect(result.includes('position="10,10"')).toBe(true);
     });
   });
+
+  describe('Escaping', function () {
+    it('Should escape double quotes', function () {
+      const p = new Passage('Test', 'Word "word"');
+      expect(p.toTwine2HTML().includes('Word &quot;word&quot;')).toBe(true);
+    });
+
+    it('Should escape ampersands', function () {
+      const p = new Passage('Test', 'Word & word');
+      expect(p.toTwine2HTML().includes('Word &amp; word')).toBe(true);
+    });
+
+    it('Should escape less than', function () {
+      const p = new Passage('Test', 'Word < word');
+      expect(p.toTwine2HTML().includes('Word &lt; word')).toBe(true);
+    });
+
+    it('Should escape greater than', function () {
+      const p = new Passage('Test', 'Word > word');
+      expect(p.toTwine2HTML().includes('Word &gt; word')).toBe(true);
+    });
+
+    it('Should escape all', function () {
+      const p = new Passage('Test', 'Word &<>"\' word');
+      expect(p.toTwine2HTML().includes('>Word &amp;&lt;&gt;&quot;&apos; word<')).toBe(true);
+    });
+
+    it('Should escape meta-characters safely in name', function () {
+      const p = new Passage('"Test"');
+      expect(p.toTwine2HTML().includes('name="&quot;Test&quot;"')).toBe(true);
+      expect(p.toTwine1HTML().includes('tiddler="&quot;Test&quot;"')).toBe(true);
+    });
+
+    it('Should escape meta-characters safely in text', function () {
+      const p = new Passage('Test', '"Word"');
+      expect(p.toTwine2HTML().includes('&quot;Word&quot;')).toBe(true);
+    });
+
+    it('Should escape meta-characters safely in tags', function () {
+      const p = new Passage('Test', 'Word', ['&tag', '"bad"']);
+      expect(p.toTwine2HTML().includes('tags="&amp;tag &quot;bad&quot;"')).toBe(true);
+      expect(p.toTwine1HTML().includes('tags="&amp;tag &quot;bad&quot;"')).toBe(true);
+    });
+
+    it('Should escape meta-characters safely in Twee header', function () {
+      const p = new Passage('Where do tags begin? [well',  '', ['hmm']);
+      expect(p.toTwee().includes('Where do tags begin? \[well [hmm]')).toBe(true);
+    });
+  });
 });

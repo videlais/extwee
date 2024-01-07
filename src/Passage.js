@@ -1,3 +1,5 @@
+import { encode } from 'html-entities';
+
 /**
  * A passage is the smallest unit of a Twine story.
  */
@@ -76,6 +78,7 @@ export default class Passage {
   set tags (t) {
     // Test if tags is an array
     if (Array.isArray(t)) {
+      // Set the tags.
       this.#_tags = t;
     } else {
       throw new Error('Tags must be an array!');
@@ -185,13 +188,13 @@ export default class Passage {
      * name: (string) Required.
      *   The name of the passage.
      */
-    passageData += ` name="${this.name}"`;
+    passageData += ` name="${ encode( this.name ) }"`;
 
     /**
      * tags: (string) Optional.
      *   Any tags for the passage separated by spaces.
      */
-    passageData += ` tags="${this.#_tags.join(' ')}" `;
+    passageData += ` tags="${ encode( this.#_tags.join(' ') ) }" `;
 
     /**
      * position: (string) Optional.
@@ -211,30 +214,8 @@ export default class Passage {
       passageData += `size="${this.#_metadata.size}" `;
     }
 
-    /**
-     * Escape passage Twine 2 passage text.
-     * @param {string} text - Text to escape.
-     * @returns {string} Escaped text.
-     */
-    const escape = function (text) {
-      const rules = [
-        ['&', '&amp;'],
-        ['<', '&lt;'],
-        ['>', '&gt;'],
-        ['"', '&quot;'],
-        ["'", '&#x27;'],
-        ['`', '&#x60;']
-      ];
-
-      rules.forEach(([rule, template]) => {
-        text = text.replaceAll(rule, template);
-      });
-
-      return text;
-    };
-
     // Add the text and close the element.
-    passageData += `>${escape(this.text)}</tw-passagedata>\n`;
+    passageData += `>${ encode( this.text ) }</tw-passagedata>\n`;
 
     // Return the Twine 2 HTML element.
     return passageData;
@@ -258,13 +239,13 @@ export default class Passage {
      * tiddler: (string) Required.
      *   The name of the passage.
      */
-    passageData += ` tiddler="${this.name}"`;
+    passageData += ` tiddler="${ encode( this.name ) }"`;
 
     /**
      * tags: (string) Required.
      *   Any tags for the passage separated by spaces.
      */
-    passageData += ` tags="${this.#_tags.join(' ')}" `;
+    passageData += ` tags="${ encode( this.#_tags.join(' ') ) }" `;
 
     /**
      * modifier: (string) Optional.
@@ -290,7 +271,7 @@ export default class Passage {
      * text: (string) Required.
      * Text content of the passage.
      */
-    passageData += `>${this.#_text}</div>`;
+    passageData += `>${ encode( this.#_text ) }</div>`;
 
     // Return the HTML representation.
     return passageData;
