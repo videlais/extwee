@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { parse as parseTwine2HTML, escapeMetacharacters } from '../../src/Twine2HTML/parse.js';
+import { parse as parseTwine2HTML } from '../../src/Twine2HTML/parse.js';
 
 // Pull the name and version of this project from package.json.
 // These are used as the 'creator' and 'creator-version'.

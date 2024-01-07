@@ -250,7 +250,7 @@ function parse (content) {
           tags.map(tag => decode(tag)),
           metadata
         )
-      )
+      );
     }
   }
 
