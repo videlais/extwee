@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { parse as parseTwine2HTML, escapeMetacharacters } from '../../src/Twine2HTML/parse.js';
+import { parse as parseTwine2HTML } from '../../src/Twine2HTML/parse.js';
 
 // Pull the name and version of this project from package.json.
 // These are used as the 'creator' and 'creator-version'.
@@ -163,10 +163,11 @@ describe('Twine2HTMLParser', () => {
     });
   });
 
-  describe('#escapeMetacharacters()', () => {
-    it('Should escape metacharacters', () => {
-      /* eslint no-useless-escape: "off" */
-      expect(escapeMetacharacters('\\\{\\\}\\\[\\\]\\\\')).toBe('\\\\{\\\\}\\\\[\\\\]\\\\');
+  describe('Unescaping', () => {
+    it('Should unescape HTML metacharacters for passage searching', () => {
+      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/unescaping.html', 'utf-8');
+      const story = parseTwine2HTML(fr);
+      expect(story.getPassageByName('"Test"').text).toBe('Success');
     });
   });
 });

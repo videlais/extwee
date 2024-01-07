@@ -1,6 +1,7 @@
 import { parse as HtmlParser } from 'node-html-parser';
 import Story from '../Story.js';
 import Passage from '../Passage.js';
+import { decode } from 'html-entities';
 
 /**
  * Parse Twine 2 HTML into Story object.
@@ -244,9 +245,9 @@ function parse (content) {
       // Add a new Passage into an array
       story.addPassage(
         new Passage(
-          name,
-          text,
-          tags,
+          decode(name),
+          decode(text),
+          tags.map(tag => decode(tag)),
           metadata
         )
       );
