@@ -1,4 +1,4 @@
-import Story from '../../src/Story.js';
+import { Story, creatorVersion, creatorName } from '../../src/Story.js';
 import Passage from '../../src/Passage.js';
 import { parse as parseJSON } from '../../src/JSON/parse.js';
 
@@ -22,8 +22,8 @@ describe('JSON', () => {
       expect(s.start).toBe('');
       expect(s.formatVersion).toBe('');
       expect(s.format).toBe('');
-      expect(s.creator).toBe('extwee');
-      expect(s.creatorVersion).toBe('2.2.0');
+      expect(s.creator).toBe(creatorName);
+      expect(s.creatorVersion).toBe(creatorVersion);
       expect(s.zoom).toBe(0);
       expect(Object.keys(s.metadata).length).toBe(0);
     });
@@ -59,7 +59,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -75,7 +75,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -91,7 +91,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -107,7 +107,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -123,7 +123,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -139,7 +139,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -155,7 +155,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -171,8 +171,8 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
-        expect(r.creatorVersion).toBe('2.2.0');
+        expect(r.creator).toBe(creatorName);
+        expect(r.creatorVersion).toBe(creatorVersion);
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
       });
@@ -187,7 +187,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(0);
         expect(r.size()).toBe(1);
@@ -203,7 +203,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(0);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -219,7 +219,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(0);
@@ -235,7 +235,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(0);
@@ -251,7 +251,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -268,7 +268,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -286,7 +286,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
@@ -304,7 +304,7 @@ describe('JSON', () => {
         expect(r.formatVersion).toBe('1.0');
         expect(Object.keys(r.metadata).length).toBe(1);
         expect(r.format).toBe('Snowman');
-        expect(r.creator).toBe('extwee');
+        expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
         expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);

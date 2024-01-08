@@ -8,7 +8,7 @@ import { parse as parseTWS } from './src/TWS/parse.js';
 import { compile as compileTwine1HTML } from './src/Twine1HTML/compile.js';
 import { compile as compileTwine2HTML } from './src/Twine2HTML/compile.js';
 import { compile as compileTwine2ArchiveHTML } from './src/Twine2ArchiveHTML/compile.js';
-import Story from './src/Story.js';
+import { Story } from './src/Story.js';
 import Passage from './src/Passage.js';
 import StoryFormat from './src/StoryFormat.js';
 

@@ -1,7 +1,8 @@
-import Story from '../src/Story.js';
+import { Story, creatorName, creatorVersion } from '../src/Story.js';
 import Passage from '../src/Passage';
 import { parse as parseTwee } from '../src/Twee/parse.js';
 import { readFileSync } from 'node:fs';
+import { parse as HTMLParser } from 'node-html-parser';
 
 // Pull the name and version of this project from package.json.
 // These are used as the 'creator' and 'creator-version'.
@@ -405,8 +406,8 @@ describe('Story', () => {
       expect(result.start).toBe('');
       expect(result.formatVersion).toBe('');
       expect(result.format).toBe('');
-      expect(result.creator).toBe('extwee');
-      expect(result.creatorVersion).toBe('2.2.0');
+      expect(result.creator).toBe(creatorName);
+      expect(result.creatorVersion).toBe(creatorVersion);
       expect(result.zoom).toBe(0);
       expect(Object.keys(result.metadata).length).toBe(0);
     });
@@ -633,6 +634,44 @@ describe('Story', () => {
       const result = s.toTwine1HTML();
       // Expect data-size to be 1.
       expect(result.includes('<div tiddler="Start"')).toBe(true);
+    });
+  });
+
+  describe('Escaping', function () {
+    it('Should produce valid Twine 2 Story HTML', function () {
+      // Create a new Story.
+      const s = new Story('"Abuse" &test');
+      // Add a passage.
+      s.addPassage(new Passage('"Test"', 'Word'));
+      // Set start.
+      s.start = '"Test"';
+      // Parse HTML.
+      const root = HTMLParser(s.toTwine2HTML());
+      // Expect correct name attribute for tw-storydata.
+      expect(root.querySelector('tw-storydata').getAttribute('name')).toBe('"Abuse" &test');
+      // Expect correct name attribute for tw-passagedata.
+      expect(root.querySelector('tw-passagedata').getAttribute('name')).toBe('"Test"');
+      // Use Twine 2 result.
+      const s2 = `<tw-storydata name="&quot;Abuse&quot; &amp;test" startnode="1" creator="Twine" creator-version="2.8.1" format="Harlowe" format-version="3.3.8" ifid="452A9D80-C759-42C5-B001-5B861A2410C5" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="&quot;Test&quot;" tags="&amp;tag &quot;bad&quot;" position="300,100" size="100,100"></tw-passagedata></tw-storydata>`;
+      // Parse HTML.
+      const root2 = HTMLParser(s2);
+      // Expect correct name attribute for tw-storydata.
+      expect(root2.querySelector('tw-storydata').getAttribute('name')).toBe('"Abuse" &test');
+      // Expect correct name attribute for tw-passagedata.
+      expect(root2.querySelector('tw-passagedata').getAttribute('name')).toBe('"Test"');
+    });
+
+    it('Should produce valid Twine 1 Story HTML', function () {
+      // Create a new Story.
+      const s = new Story('"Abuse" &test');
+      // Add a passage.
+      s.addPassage(new Passage('"Test"', 'Word'));
+      // Set start.
+      s.start = '"Test"';
+      // Parse HTML.
+      const root = HTMLParser(s.toTwine1HTML());
+      // Expect correct name attribute for div.
+      expect(root.querySelector('div').getAttribute('tiddler')).toBe('"Test"');
     });
   });
 });

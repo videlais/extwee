@@ -1,4 +1,4 @@
-import Story from '../Story.js';
+import { Story } from '../Story.js';
 import StoryFormat from '../StoryFormat.js';
 
 /**

@@ -1,5 +1,5 @@
 import Passage from '../Passage.js';
-import Story from '../Story.js';
+import { Story } from '../Story.js';
 
 /**
  * Parses Twee 3 text into a Story object.

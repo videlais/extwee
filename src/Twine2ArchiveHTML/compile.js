@@ -1,4 +1,4 @@
-import Story from '../Story.js';
+import { Story } from '../Story.js';
 
 /**
  * Write array of Story objects into Twine 2 Archive HTML.

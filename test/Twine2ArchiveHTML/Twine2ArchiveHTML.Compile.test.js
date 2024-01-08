@@ -1,5 +1,5 @@
 import { compile as compileTwine2ArchiveHTML } from '../../src/Twine2ArchiveHTML/compile.js';
-import Story from '../../src/Story.js';
+import { Story } from '../../src/Story.js';
 import Passage from '../../src/Passage.js';
 
 describe('Twine2ArchiveHTML', function () {

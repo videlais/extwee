@@ -1,4 +1,4 @@
-import Story from '../Story.js';
+import { Story } from '../Story.js';
 import Passage from '../Passage.js';
 import { Parser } from 'pickleparser';
 

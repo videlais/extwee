@@ -1,4 +1,4 @@
-import Story from '../Story.js';
+import { Story } from '../Story.js';
 
 /**
  * Write a combination of Story object, `engine.js` (from Twine 1), `header.html`, and optional `code.js`.

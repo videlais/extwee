@@ -1,4 +1,5 @@
 import Passage from '../src/Passage.js';
+import { parse as HTMLParser } from 'node-html-parser';
 
 describe('Passage', () => {
   describe('constructor()', () => {
@@ -219,6 +220,25 @@ describe('Passage', () => {
     it('Should escape meta-characters safely in Twee header', function () {
       const p = new Passage('Where do tags begin? [well',  '', ['hmm']);
       expect(p.toTwee().includes('Where do tags begin? \[well [hmm]')).toBe(true);
+    });
+
+    it('Should produce valid HTML attributes', function () {
+      // Generate passage.
+      const p = new Passage('"Test"', '"Word"', ['&tag', '"bad"'], { position: '100,100' });
+      // Parse HTML.
+      const d = new HTMLParser(p.toTwine2HTML());
+      // Test attributes.
+      expect(d.querySelector('tw-passagedata').getAttribute('name')).toBe('"Test"');
+      expect(d.querySelector('tw-passagedata').getAttribute('tags')).toBe('&tag "bad"');
+      expect(d.querySelector('tw-passagedata').getAttribute('position')).toBe('100,100');
+      // Use Twine 2 result.
+      const s = `<tw-passagedata pid="1" name="&quot;Test&quot;" tags="&amp;tag &quot;bad&quot;" position="100,100" size="100,100"></tw-passagedata>`;
+      // Parse HTML.
+      const t = new HTMLParser(s);
+      // Test Twine 2 attributes.
+      expect(t.querySelector('tw-passagedata').getAttribute('name')).toBe('"Test"');
+      expect(t.querySelector('tw-passagedata').getAttribute('tags')).toBe('&tag "bad"');
+      expect(t.querySelector('tw-passagedata').getAttribute('position')).toBe('100,100');
     });
   });
 });

@@ -1,10 +1,11 @@
 import Passage from './Passage.js';
 import { v4 as uuidv4 } from 'uuid';
+import { encode } from 'html-entities';
 
 const creatorName = 'extwee';
-const version = '2.2.0';
+const creatorVersion = '2.2.1';
 
-export default class Story {
+class Story {
   /**
    * Internal name of story
    * @private
@@ -78,7 +79,7 @@ export default class Story {
     this.name = name;
     // Store the creator.
     this.#_creator = creatorName;
-    this.#_creatorVersion = version;
+    this.#_creatorVersion = creatorVersion;
     // Set metadata to an object.
     this.#_metadata = {};
   }
@@ -516,7 +517,7 @@ export default class Story {
    */
   toTwine2HTML () {
     // Prepare HTML content.
-    let storyData = `<tw-storydata name="${this.name}"`;
+    let storyData = `<tw-storydata name="${ encode( this.name ) }"`;
     // Passage Identification (PID) counter.
     // (Twine 2 starts with 1, so we mirror that.)
     let PIDcounter = 1;
@@ -552,7 +553,7 @@ export default class Story {
     storyData += ` startnode="${startPID}"`;
 
     // Defaults to 'extwee' if missing.
-    storyData += ` creator="${this.creator}"`;
+    storyData += ` creator="${ encode( this.creator ) }"`;
 
     // Default to extwee version.
     storyData += ` creator-version="${this.creatorVersion}"`;
@@ -571,7 +572,7 @@ export default class Story {
     storyData += ` zoom="${this.zoom}"`;
 
     // Write existing or default value.
-    storyData += ` format="${this.#_format}"`;
+    storyData += ` format="${ encode(this.#_format) }"`;
 
     // Write existing or default value.
     storyData += ` format-version="${this.#_formatVersion}"`;
@@ -648,3 +649,5 @@ export default class Story {
     return outputContents;
   }
 }
+
+export { Story, creatorName, creatorVersion };

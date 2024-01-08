@@ -1,7 +1,7 @@
 import { parse as parseStoryFormat } from '../../src/StoryFormat/parse.js';
 import { parse as parseTwine2HTML } from '../../src/Twine2HTML/parse.js';
 import { compile as compileTwine2HTML } from '../../src/Twine2HTML/compile.js';
-import Story from '../../src/Story.js';
+import { Story } from '../../src/Story.js';
 import Passage from '../../src/Passage.js';
 import { readFileSync } from 'node:fs';
 

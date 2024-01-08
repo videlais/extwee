@@ -1,5 +1,5 @@
 import { compile as compileTwine1HTML } from '../../src/Twine1HTML/compile.js';
-import Story from '../../src/Story.js';
+import { Story } from '../../src/Story.js';
 import { readFileSync } from 'fs';
 import Passage from '../../src/Passage.js';
 
