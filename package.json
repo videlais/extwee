@@ -58,7 +58,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/videlais/extwee"
+    "url": "git+https://github.com/videlais/extwee.git"
   },
   "bugs": {
     "url": "https://github.com/videlais/extwee/issues"
