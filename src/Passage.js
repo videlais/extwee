@@ -1,4 +1,5 @@
 import { encode } from 'html-entities';
+import { escapeName, escapeText } from './Escape/Twee.js';
 
 /**
  * A passage is the smallest unit of a Twine story.
@@ -130,7 +131,7 @@ export default class Passage {
     let content = '';
 
     // Write the name.
-    content += `:: ${this.name}`;
+    content += `:: ${ escapeName(this.name) }`;
 
     // Test if it has any tags.
     if (this.tags.length > 0) {
@@ -145,7 +146,7 @@ export default class Passage {
     }
 
     // Add newline, text, and two newlines.
-    content += `\n${this.text}\n\n`;
+    content += `\n${ escapeText(this.text) }\n\n`;
 
     // Return string.
     return content;

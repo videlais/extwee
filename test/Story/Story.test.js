@@ -1,6 +1,6 @@
-import { Story, creatorName, creatorVersion } from '../src/Story.js';
-import Passage from '../src/Passage';
-import { parse as parseTwee } from '../src/Twee/parse.js';
+import { Story, creatorName, creatorVersion } from '../../src/Story.js';
+import Passage from '../../src/Passage.js';
+import { parse as parseTwee } from '../../src/Twee/parse.js';
 import { readFileSync } from 'node:fs';
 import { parse as HTMLParser } from 'node-html-parser';
 
@@ -652,7 +652,7 @@ describe('Story', () => {
       // Expect correct name attribute for tw-passagedata.
       expect(root.querySelector('tw-passagedata').getAttribute('name')).toBe('"Test"');
       // Use Twine 2 result.
-      const s2 = `<tw-storydata name="&quot;Abuse&quot; &amp;test" startnode="1" creator="Twine" creator-version="2.8.1" format="Harlowe" format-version="3.3.8" ifid="452A9D80-C759-42C5-B001-5B861A2410C5" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="&quot;Test&quot;" tags="&amp;tag &quot;bad&quot;" position="300,100" size="100,100"></tw-passagedata></tw-storydata>`;
+      const s2 = '<tw-storydata name="&quot;Abuse&quot; &amp;test" startnode="1" creator="Twine" creator-version="2.8.1" format="Harlowe" format-version="3.3.8" ifid="452A9D80-C759-42C5-B001-5B861A2410C5" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="&quot;Test&quot;" tags="&amp;tag &quot;bad&quot;" position="300,100" size="100,100"></tw-passagedata></tw-storydata>';
       // Parse HTML.
       const root2 = HTMLParser(s2);
       // Expect correct name attribute for tw-storydata.

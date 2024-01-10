@@ -1,4 +1,4 @@
-import StoryFormat from '../src/StoryFormat.js';
+import StoryFormat from '../../src/StoryFormat.js';
 
 describe('StoryFormat', () => {
   describe('constructor()', () => {
