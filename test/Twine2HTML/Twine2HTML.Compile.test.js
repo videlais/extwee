@@ -62,12 +62,12 @@ describe('Twine2HTMLCompiler', () => {
       let tags2 = '';
 
       // Combine contents of tags.
-      story.forEachPassage((p) => {
+      story.passages.forEach((p) => {
         tags += p.tags.join('');
       });
 
       // Combine contents of tags.
-      story2.forEachPassage((p) => {
+      story2.passages.forEach((p) => {
         tags2 += p.tags.join('');
       });
 
@@ -105,12 +105,12 @@ describe('Twine2HTMLCompiler', () => {
       const story2 = parseTwine2HTML(fr3);
 
       // Verify none of the directly created passages have position.
-      story.forEachPassage((passage) => {
+      story.passages.forEach((passage) => {
         expect(Object.prototype.hasOwnProperty.call(passage.metadata, 'position')).toBe(false);
       });
 
       // Verify none parsed passages have position.
-      story2.forEachPassage((passage) => {
+      story2.passages.forEach((passage) => {
         expect(Object.prototype.hasOwnProperty.call(passage.metadata, 'position')).toBe(false);
       });
     });

@@ -223,6 +223,31 @@ describe('Story', () => {
     });
   });
 
+  describe('passages', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set passages to a new array containing at least one Passage', () => {
+      s.passages = [new Passage()];
+      expect(s.passages.length).toBe(1);
+    });
+
+    it('Should throw error if trying to set to a non-Array type', () => {
+      expect(() => {
+        s.passages = null;
+      }).toThrow();
+    });
+
+    it('Should throw error if trying to set to an array containing non-Passage types', () => {
+      expect(() => {
+        s.passages = [null];
+      }).toThrow();
+    });
+  });
+
   describe('addPassage()', () => {
     let s = null;
 
@@ -348,30 +373,6 @@ describe('Story', () => {
       s.addPassage(p);
       const passage = s.getPassageByName('Find');
       expect(passage.name).toBe('Find');
-    });
-  });
-
-  describe('forEachPassage()', () => {
-    let s = null;
-
-    beforeEach(() => {
-      s = new Story();
-    });
-
-    it('forEachPassage() - should return if non-function', () => {
-      s.addPassage(new Passage('A'));
-      s.addPassage(new Passage('B'));
-      let passageNames = '';
-      s.forEachPassage((p) => {
-        passageNames += p.name;
-      });
-      expect(passageNames).toBe('AB');
-    });
-
-    it('forEachPassage() - should throw error if non-function', () => {
-      expect(() => {
-        s.forEachPassage(null);
-      }).toThrow();
     });
   });
 
