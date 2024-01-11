@@ -12,7 +12,7 @@ Depending on the incoming format or creation method, many possible properties ca
 - format ( string ) Name of the story format for Twine 2 HTML.
 - formatVersion ( string ) Semantic version of the named story format for Twine 2 HTML or Twee 3.
 - zoom ( float ) Zoom level for Twine 2 HTML or Twee 3.
-- passages ( array(Passage) ) **[Read-only]** Collection of internal passages.
+- passages ( array(Passage) ) Collection of internal passages.
 - creator ( string ) Name of story creation tool. (Defaults to "Extwee").
 - creatorVersion ( string ) Semantic version of named creation tool.
 - metadata ( object ) Key-value pairs of metadata values.
@@ -41,7 +41,6 @@ As collections of passages, each **Story** has multiple methods for accessing an
 - `getPassagesByTags(string)`: Returns an array of any passages containing a particular tag value.
 - `getPassageByName(string)`: Returns either `null`` or the named passage.
 - `size()`: Returns the number of passages in the collection.
-- `forEachPassage(callback)`: Allows for iterating over the passage collection.
 
 ## Passage Creation Example
 

@@ -256,6 +256,32 @@ class Story {
   }
 
   /**
+   * Passages in Story.
+   * @returns {Array} Passages
+   * @property {Array} passages - Passages
+  */
+  get passages () { return this.#_passages; }
+
+  /**
+   * Set passages in Story.
+   * @param {Array} p - Replacement passages
+   * @property {Array} passages - Passages
+   * @throws {Error} Passages must be an Array!
+   * @throws {Error} Passages must be an Array of Passage objects!
+   */
+  set passages (p) {
+    if (Array.isArray(p)) {
+      if (p.every((passage) => passage instanceof Passage)) {
+        this.#_passages = p;
+      } else {
+        throw new Error('Passages must be an Array of Passage objects!');
+      }
+    } else {
+      throw new Error('Passages must be an Array!');
+    }
+  }
+
+  /**
    * Add a passage to the story.
    * `StoryData` will override story metadata and `StoryTitle` will override story name.
    * @param {Passage} p - Passage to add to Story.
@@ -376,24 +402,6 @@ class Story {
   }
 
   /**
-   * forEach-style iterator of passages in Story.
-   * @param {Function} callback - Callback function
-   */
-  forEachPassage (callback) {
-    // Check if argument is a function.
-    if (typeof callback !== 'function') {
-      // Throw error
-      throw new Error('Callback must be a function!');
-    }
-
-    // Use internal forEach.
-    this.#_passages.forEach((element, index) => {
-      // Call callback function with element and index.
-      callback(element, index);
-    });
-  }
-
-  /**
    * Export Story as JSON representation.
    * @returns {string} JSON string.
    */
@@ -414,7 +422,7 @@ class Story {
     };
 
     // For each passage, convert into simple object.
-    this.forEachPassage((p) => {
+    this.passages.forEach((p) => {
       s.passages.push({
         name: p.name,
         tags: p.tags,
@@ -500,7 +508,7 @@ class Story {
     outputContents += '\n\n';
 
     // For each passage, append it to the output.
-    this.forEachPassage((passage) => {
+    this.passages.forEach((passage) => {
       outputContents += passage.toTwee();
     });
 
@@ -539,7 +547,7 @@ class Story {
     let startPID = 1;
     // We have to do a bit of nonsense here.
     // Twine 2 HTML cares about PID values.
-    this.forEachPassage((p) => {
+    this.passages.forEach((p) => {
       // Have we found the starting passage?
       if (p.name === this.start) {
         // If so, set the PID based on index.
@@ -614,7 +622,7 @@ class Story {
     PIDcounter = 1;
 
     // Build the passages HTML.
-    this.forEachPassage((passage) => {
+    this.passages.forEach((passage) => {
       // Append each passage element using the PID counter.
       storyData += passage.toTwine2HTML(PIDcounter);
       // Increase counter inside loop.
@@ -640,7 +648,7 @@ class Story {
     let outputContents = '';
 
     // Process passages (if any).
-    this.forEachPassage((p) => {
+    this.passages.forEach((p) => {
       // Output HTML output per passage.
       outputContents += `\t${p.toTwine1HTML()}`;
     });
