@@ -10,6 +10,10 @@ import { decode } from 'html-entities';
  * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
  * @param {string} content - Twine 2 HTML content to parse.
  * @returns {Story} Story
+ * @throws {TypeError} If content is not a string.
+ * @throws {Error} If content is not Twine 2 HTML.
+ * @throws {Error} If passage is missing name.
+ * @throws {Error} If passage is missing PID.
  */
 function parse (content) {
   // Create new story.
@@ -125,9 +129,6 @@ function parse (content) {
   if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'startnode')) {
     // Take string value and convert to Int
     startNode = Number.parseInt(storyData.attributes.startnode, 10);
-  } else {
-    // Throw error without start node.
-    throw new Error('Missing startnode in <tw-storydata>!');
   }
 
   // Pull out the `<tw-passagedata>` element.
@@ -229,7 +230,7 @@ function parse (content) {
       // Update PID
       pid = Number.parseInt(attr.pid, 10);
     } else {
-      console.warn('Passages are required to have PID. Will not add!');
+      throw new Error('Passages are required to have PID!');
     }
 
     // Check the current PID against startNode number.
@@ -239,24 +240,15 @@ function parse (content) {
       story.start = name;
     }
 
-    // If passage is missing name and PID (required attributes),
-    //  they are not added.
-    if (name !== null && pid !== -1) {
-      // Add a new Passage into an array
-      story.addPassage(
-        new Passage(
-          decode(name),
-          decode(text),
-          tags.map(tag => decode(tag)),
-          metadata
-        )
-      );
-    }
-  }
-
-  // There was an invalid startNode.
-  if (story.start === '') {
-    throw new Error('startNode does not exist within passages!');
+    // Add a new Passage into an array
+    story.addPassage(
+      new Passage(
+        decode(name),
+        decode(text),
+        tags.map(tag => decode(tag)),
+        metadata
+      )
+    );
   }
 
   // Look for the style element

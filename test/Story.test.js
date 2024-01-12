@@ -556,18 +556,6 @@ describe('Story', () => {
       s = new Story();
     });
 
-    it('Should throw error if no starting passage', function () {
-      // No start set.
-      expect(() => { s.toTwine2HTML(); }).toThrow();
-    });
-
-    it('Should throw error if starting passage cannot be found', function () {
-      // Set start.
-      s.start = 'Unknown';
-      // Has a start, but not part of collection.
-      expect(() => { s.toTwine2HTML(); }).toThrow();
-    });
-
     it('Should encode name', () => {
       // Add passage.
       s.addPassage(new Passage('Start', 'Word'));

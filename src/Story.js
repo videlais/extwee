@@ -1,5 +1,5 @@
 import Passage from './Passage.js';
-import { v4 as uuidv4 } from 'uuid';
+import { generate as generateIFID } from './IFID/generate.js';
 import { encode } from 'html-entities';
 
 const creatorName = 'extwee';
@@ -119,13 +119,13 @@ class Story {
   }
 
   /**
-   * Interactive Fiction ID (IFID) of Story
+   * Interactive Fiction ID (IFID) of Story.
    * @returns {string} IFID
    */
   get IFID () { return this.#_IFID; }
 
   /**
-   * @param {string} i - Replacement IFID
+   * @param {string} i - Replacement IFID.
    */
   set IFID (i) {
     if (typeof i === 'string') {
@@ -456,7 +456,7 @@ class Story {
     if (this.IFID === '') {
       // Generate a new IFID for this work.
       // Twine 2 uses v4 (random) UUIDs, using only capital letters.
-      metadata.ifid = uuidv4().toUpperCase();
+      metadata.ifid = generateIFID();
     } else {
       // Use existing (non-default) value.
       metadata.ifid = this.IFID;
@@ -521,27 +521,41 @@ class Story {
    *
    * See: Twine 2 HTML Output
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
+   * 
+   *  The only required attributes are `name` and `ifid`. All others are optional.
+   * 
    * @returns {string} Twine 2 HTML string
    */
   toTwine2HTML () {
-    // Prepare HTML content.
+    // Twine 2 HTML starts with a <tw-storydata> element.
+    // See: Twine 2 HTML Output
+
+    // name: (string) Required. The name of the story.
+    //
+    // Maps to <tw-storydata name>.
+    //
     let storyData = `<tw-storydata name="${ encode( this.name ) }"`;
+
+    // ifid: (string) Required. 
+    //   An IFID is a sequence of between 8 and 63 characters, 
+    //   each of which shall be a digit, a capital letter or a
+    //    hyphen that uniquely identify a story (see Treaty of Babel).
+    //
+    // Maps to <tw-storydata ifid>.
+    //
+    // Check if IFID exists.
+    if (this.IFID !== '') {
+      // Write the existing IFID.
+      storyData += ` ifid="${ this.IFID }"`;
+    } else {
+      // Generate a new IFID.
+      // Twine 2 uses v4 (random) UUIDs, using only capital letters.
+      storyData += ` ifid="${ generateIFID() }"`;
+    }
+
     // Passage Identification (PID) counter.
     // (Twine 2 starts with 1, so we mirror that.)
     let PIDcounter = 1;
-
-    // Does start exist?
-    if (this.start === '') {
-      // We can't create a Twine 2 HTML file without a starting passage.
-      throw new Error('No starting passage!');
-    }
-
-    // Try to find starting passage.
-    // If it doesn't exist, we throw an error.
-    if (this.getPassageByName(this.start) === null) {
-      // We can't create a Twine 2 HTML file without a starting passage.
-      throw new Error('Starting passage not found');
-    }
 
     // Set initial PID value.
     let startPID = 1;
@@ -557,66 +571,89 @@ class Story {
       PIDcounter++;
     });
 
-    // Set starting passage PID.
-    storyData += ` startnode="${startPID}"`;
-
-    // Defaults to 'extwee' if missing.
-    storyData += ` creator="${ encode( this.creator ) }"`;
-
-    // Default to extwee version.
-    storyData += ` creator-version="${this.creatorVersion}"`;
-
-    // Check if IFID exists.
-    if (this.IFID !== '') {
-      // Write the existing IFID.
-      storyData += ` ifid="${this.IFID}"`;
-    } else {
-      // Generate a new IFID.
-      // Twine 2 uses v4 (random) UUIDs, using only capital letters.
-      storyData += ` ifid="${uuidv4().toUpperCase()}"`;
+    // startnode: (integer) Optional.
+    //
+    // Maps to <tw-storydata startnode>.
+    //
+    // Check if startnode exists.
+    if(this.start !== '') {
+      // Set starting passage PID.
+      storyData += ` startnode="${startPID}"`;
+    }
+    
+    // creator: (string) Optional. The name of the program that created the story.
+    // Maps to <tw-storydata creator>.
+    if(this.creator !== '') {
+      // Write existing creator.
+      storyData += ` creator="${ encode( this.creator ) }"`;
     }
 
-    // Write existing or default value.
-    storyData += ` zoom="${this.zoom}"`;
+    // creator-version: (string) Optional. The version of the program that created the story.
+    // Maps to <tw-storydata creator-version>.
+    if(this.creatorVersion !== '') {
+       // Default to extwee version.
+      storyData += ` creator-version="${this.creatorVersion}"`;
+    }
 
-    // Write existing or default value.
-    storyData += ` format="${ encode(this.#_format) }"`;
+    // zoom: (decimal) Optional. The zoom level of the story.
+    // Maps to <tw-storydata zoom>.
+    if(this.zoom !== 0) {
+      // Write existing or default value.
+      storyData += ` zoom="${this.zoom}"`;
+    }
 
-    // Write existing or default value.
-    storyData += ` format-version="${this.#_formatVersion}"`;
+    // format: (string) Optional. The format of the story.
+    // Maps to <tw-storydata format>.
+    if(this.format !== '') {
+      // Write existing or default value.
+      storyData += ` format="${this.format}"`;
+    }
+   
+    // format-version: (string) Optional. The version of the format of the story.
+    // Maps to <tw-storydata format-version>.
+    if(this.formatVersion !== '') {
+      // Write existing or default value.
+      storyData += ` format-version="${this.formatVersion}"`;
+    }
 
     // Add the default attributes.
     storyData += ' options hidden>\n';
 
-    // Start the STYLE.
-    storyData += '\t<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
-
-    // Get stylesheet passages.
+    // Get any stylesheet passages.
     const stylesheetPassages = this.getPassagesByTag('stylesheet');
 
-    // Concatenate passages.
-    stylesheetPassages.forEach((passage) => {
-      // Add text of passages.
-      storyData += passage.text;
-    });
+    // Were there any stylesheet passages?
+    if (stylesheetPassages.length > 0) {
+      // Start the STYLE.
+      storyData += '\t<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
 
-    // Close the STYLE.
-    storyData += '</style>\n';
+      // Concatenate passages.
+      stylesheetPassages.forEach((passage) => {
+        // Add text of passages.
+        storyData += passage.text;
+      });
 
-    // Start the SCRIPT.
-    storyData += '\t<script role="script" id="twine-user-script" type="text/twine-javascript">';
+      // Close the STYLE.
+      storyData += '</style>\n';
+    }
 
-    // Get stylesheet passages.
+    // Get any stylesheet passages.
     const scriptPassages = this.getPassagesByTag('script');
 
-    // Concatenate passages.
-    scriptPassages.forEach((passage) => {
-      // Add text of passages.
-      storyData += passage.text;
-    });
+    // Were there any script passages?
+    if (scriptPassages.length > 0) {
+      // Start the SCRIPT.
+      storyData += '\t<script role="script" id="twine-user-script" type="text/twine-javascript">';
 
-    // Close SCRIPT.
-    storyData += '</script>\n';
+      // Concatenate passages.
+      scriptPassages.forEach((passage) => {
+        // Add text of passages.
+        storyData += passage.text;
+      });
+
+      // Close SCRIPT.
+      storyData += '</script>\n';
+    }
 
     // Reset the PID counter.
     PIDcounter = 1;
@@ -656,6 +693,8 @@ class Story {
     // Return Twine 1 HTML content.
     return outputContents;
   }
+
+ 
 }
 
 export { Story, creatorName, creatorVersion };
