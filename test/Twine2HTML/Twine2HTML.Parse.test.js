@@ -37,7 +37,7 @@ describe('Twine2HTMLParser', () => {
     it('Should have default name', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingName.html', 'utf-8');
       const story = parseTwine2HTML(fr);
-      expect(story.name).toBe('');
+      expect(story.name).toBe('Untitled Story');
     });
 
     it('Should set a missing IFID to an empty string', () => {
@@ -120,19 +120,20 @@ describe('Twine2HTMLParser', () => {
       expect(stylesheetPassages.length).toBe(1);
     });
 
-    it('Should throw error if startNode is missing', () => {
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingStartnode.html', 'utf-8');
-      expect(() => { parseTwine2HTML(fr); }).toThrow();
-    });
-
     it('Should throw error if passage name is missing', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingPassageName.html', 'utf-8');
       expect(() => { parseTwine2HTML(fr); }).toThrow();
     });
 
-    it('Should throw error without PID', () => {
+    it('Should throw error if passage PID is missing', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingPID.html', 'utf-8');
       expect(() => { parseTwine2HTML(fr); }).toThrow();
+    });
+
+    it('Should parse HTML without passage start node', () => {
+      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingStartNode.html', 'utf-8');
+      const story = parseTwine2HTML(fr);
+      expect(story.start).toBe('');
     });
 
     it('Should parse tag colors', () => {
@@ -141,18 +142,6 @@ describe('Twine2HTMLParser', () => {
       // Test for tag colors
       const tagColors = story.tagColors;
       expect(tagColors.a).toBe('red');
-    });
-
-    it('Should throw error if startnode is missing', () => {
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingStartnode.html', 'utf-8');
-      expect(() => { parseTwine2HTML(fr); }).toThrow();
-    });
-
-    it('Should throw error when startnode has PID that does not exist', () => {
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/lyingStartnode.html', 'utf-8');
-      expect(() => {
-        parseTwine2HTML(fr);
-      }).toThrow();
     });
 
     it('Do not update name and color if those attributes do not exist', () => {

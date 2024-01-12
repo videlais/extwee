@@ -57,6 +57,7 @@ export default class Passage {
 
   /**
    * @param {string} s - Name to replace
+   * @throws {Error} Name must be a String!
    */
   set name (s) {
     if (typeof s === 'string') {
@@ -74,6 +75,7 @@ export default class Passage {
 
   /**
    * @param {Array} t - Replacement array
+   * @throws {Error} Tags must be an array!
    */
   set tags (t) {
     // Test if tags is an array
@@ -93,6 +95,7 @@ export default class Passage {
 
   /**
    * @param {object} m - Replacement object
+   * @throws {Error} Metadata must be an object literal!
    */
   set metadata (m) {
     // Test if metadata was an object
@@ -111,6 +114,7 @@ export default class Passage {
 
   /**
    * @param {string} t - Replacement text
+   * @throws {Error} Text should be a String!
    */
   set text (t) {
     // Test if text is a String
