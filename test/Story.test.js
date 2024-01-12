@@ -28,6 +28,11 @@ describe('Story', () => {
       s = new Story('Test');
       expect(s.name).toBe('Test');
     });
+
+    it('Should have default name', () => {
+      s = new Story();
+      expect(s.name).toBe('Untitled Story');
+    });
   });
 
   describe('creator', () => {
@@ -401,7 +406,7 @@ describe('Story', () => {
       const s = new Story();
       // Convert to string and then back to object.
       const result = JSON.parse(s.toJSON());
-      expect(result.name).toBe('');
+      expect(result.name).toBe('Untitled Story');
       expect(Object.keys(result.tagColors).length).toBe(0);
       expect(result.ifid).toBe('');
       expect(result.start).toBe('');

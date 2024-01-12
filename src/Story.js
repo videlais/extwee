@@ -74,7 +74,7 @@ class Story {
    * Creates a story.
    * @param {string} name - Name of the story.
    */
-  constructor (name = '') {
+  constructor (name = 'Untitled Story') {
     // Every story has a name.
     this.name = name;
     // Store the creator.
@@ -297,7 +297,7 @@ class Story {
     // If it does, we ignore it and return.
     if (this.getPassageByName(p.name) !== null) {
       // Warn user
-      console.warn('Ignored passage with same name as existing one!');
+      console.warn('Warning: Ignored passage with same name as existing one!');
       //
       return;
     }

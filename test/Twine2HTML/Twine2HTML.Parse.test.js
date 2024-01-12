@@ -37,7 +37,7 @@ describe('Twine2HTMLParser', () => {
     it('Should have default name', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingName.html', 'utf-8');
       const story = parseTwine2HTML(fr);
-      expect(story.name).toBe('');
+      expect(story.name).toBe('Untitled Story');
     });
 
     it('Should set a missing IFID to an empty string', () => {

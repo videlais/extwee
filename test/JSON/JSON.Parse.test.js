@@ -16,7 +16,7 @@ describe('JSON', () => {
       const s = parseJSON(r.toJSON());
 
       // Check all properties.
-      expect(s.name).toBe('');
+      expect(s.name).toBe('Untitled Story');
       expect(Object.keys(s.tagColors).length).toBe(0);
       expect(s.IFID).toBe('');
       expect(s.start).toBe('');
@@ -52,7 +52,7 @@ describe('JSON', () => {
       it('Should parse everything but name', function () {
         const s = '{"tagColors":{"r":"red"},"ifid":"dd","start":"Start","formatVersion":"1.0","metadata":{"some":"thing"},"format":"Snowman","creator":"extwee","creatorVersion":"2.2.0","zoom":1,"passages":[{"name":"Start","tags":["tag1"],"metadata":{},"text":"Word"}]}';
         const r = parseJSON(s);
-        expect(r.name).toBe('');
+        expect(r.name).toBe('Untitled Story');
         expect(Object.keys(r.tagColors).length).toBe(1);
         expect(r.IFID).toBe('DD');
         expect(r.start).toBe('Start');
