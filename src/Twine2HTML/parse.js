@@ -8,12 +8,17 @@ import { decode } from 'html-entities';
  *
  * See: Twine 2 HTML Output Specification
  * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
+ *
+ * Produces warnings for:
+ * - Missing name attribute on `<tw-storydata>` element.
+ * - Missing IFID attribute on `<tw-storydata>` element.
+ * - Malformed IFID attribute on `<tw-storydata>` element.
  * @param {string} content - Twine 2 HTML content to parse.
- * @returns {Story} Story
- * @throws {TypeError} If content is not a string.
- * @throws {Error} If content is not Twine 2 HTML.
- * @throws {Error} If passage is missing name.
- * @throws {Error} If passage is missing PID.
+ * @returns {Story} Story object based on Twine 2 HTML content.
+ * @throws {TypeError} Content is not a string.
+ * @throws {Error} Not Twine 2 HTML content!
+ * @throws {Error} Cannot parse passage data without name!
+ * @throws {Error} Passages are required to have PID!
  */
 function parse (content) {
   // Create new story.
@@ -60,7 +65,7 @@ function parse (content) {
     story.name = storyData.attributes.name;
   } else {
     // Name is a required field. Warn user.
-    console.warn('Warning: The name attribute is required!');
+    console.warn('Warning: The name attribute is missing from tw-storydata!');
   }
 
   /**
@@ -74,7 +79,13 @@ function parse (content) {
     story.IFID = storyData.attributes.ifid;
   } else {
     // Name is a required filed. Warn user.
-    console.warn('Warning: The IFID attribute is required!');
+    console.warn('Warning: The ifid attribute is missing from tw-storydata!');
+  }
+
+  // Check if the IFID has valid formatting.
+  if (story.IFID.match(/^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/) === null) {
+    // IFID is not valid.
+    console.warn('Warning: The IFID is not in valid UUIDv4 formatting on tw-storydata!');
   }
 
   /**

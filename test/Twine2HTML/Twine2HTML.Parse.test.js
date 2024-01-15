@@ -159,4 +159,34 @@ describe('Twine2HTMLParser', () => {
       expect(story.getPassageByName('"Test"').text).toBe('Success');
     });
   });
+
+  describe('Warnings', () => {
+    beforeEach(() => {
+      // Mock console.warn.
+      jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      // Restore all mocks.
+      jest.restoreAllMocks();
+    });
+
+    it('Should generate a warning if name attribute is missing from tw-storydata', () => {
+      const s = '<tw-storydata ifid=\'E70FC479-01D9-4E44-AC6A-AFF9F5E1C475\'></tw-storydata>';
+      parseTwine2HTML(s);
+      expect(console.warn).toHaveBeenCalledWith('Warning: The name attribute is missing from tw-storydata!');
+    });
+
+    it('Should generate a warning if ifid attribute is missing from tw-storydata', () => {
+      const s = '<tw-storydata name=\'Test\'></tw-storydata>';
+      parseTwine2HTML(s);
+      expect(console.warn).toHaveBeenCalledWith('Warning: The ifid attribute is missing from tw-storydata!');
+    });
+
+    it('Should generate a warning if ifid on tw-storydata is malformed', () => {
+      const s = '<tw-storydata ifid=\'1234\'></tw-storydata>';
+      parseTwine2HTML(s);
+      expect(console.warn).toHaveBeenCalledWith('Warning: The IFID is not in valid UUIDv4 formatting on tw-storydata!');
+    });
+  });
 });
