@@ -60,7 +60,7 @@ function parse (content) {
     story.name = storyData.attributes.name;
   } else {
     // Name is a required field. Warn user.
-    console.warn('Twine 2 HTML must have a name!');
+    console.warn('Warning: The name attribute is required!');
   }
 
   /**
@@ -74,7 +74,7 @@ function parse (content) {
     story.IFID = storyData.attributes.ifid;
   } else {
     // Name is a required filed. Warn user.
-    console.warn('Twine 2 HTML must have an IFID!');
+    console.warn('Warning: The IFID attribute is required!');
   }
 
   /**

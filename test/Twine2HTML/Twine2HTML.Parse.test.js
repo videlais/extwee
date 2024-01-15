@@ -131,7 +131,7 @@ describe('Twine2HTMLParser', () => {
     });
 
     it('Should parse HTML without passage start node', () => {
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingStartNode.html', 'utf-8');
+      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingStartnode.html', 'utf-8');
       const story = parseTwine2HTML(fr);
       expect(story.start).toBe('');
     });
