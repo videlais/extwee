@@ -27,11 +27,11 @@
 
 ## Story Compilation
 
-The process of *story compilation* converts human-readable content, what is generally called a *story*, into a playable format such as HyperText Markup Language (HTML) able to be read by another application such as a web browser. The result is then presented as links or other visual, interactive elements to a player or reader, depending on the work created.
+The process of *story compilation* converts human-readable content, what is generally called a *story*, into a playable format such as HyperText Markup Language (HTML). The result is then presented as links or other visual, interactive elements for a player or reader, depending on the work created, to interact with to see its content.
 
-The term *compilation* is used because different parts of code are put together in a specific arrangement to enable later play. As part of Twine-compatible HTML, this means combining story format JavaScript code with story HTML data.
+The term *compilation* is used because different parts of code are put together in a specific arrangement to enable later play. As part of Twine-compatible HTML, this means combining JavaScript code (generally a "story format") with story HTML data.
 
-Extwee is **not** an authoring tool. It cannot be used to create story content. This data must be created using other tools or processes. Extwee can then *compile* the story with story format code to produce something playable.
+Extwee is **not** an authoring tool. It cannot be used to create story content. This data must be created using other tools or processes. Extwee can then *compile* the content with story format code to produce something playable.
 
 Playable formats are the following and require external story formats[^1] to enable play:
 
@@ -112,6 +112,12 @@ Compiles story, story formats, or other data into an archive or playable format.
 - `compileTwine2ArchiveHTML()`
 
 **Note:** In order to create playable Twine 1 HTML, an `engine.js` file must be supplied.
+
+### Support Functionality
+
+Multiple Twine formats support using [an IFID](https://ifdb.org/help-ifid) to identify one work from another.
+
+As part of its API, the Extwee method `generateIFID()` can be used to create a new IFID for a `Story` object or as part of other processes.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
