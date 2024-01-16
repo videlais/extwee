@@ -26,7 +26,7 @@ function parse (content) {
 
   // Can only parse string values.
   if (typeof content !== 'string') {
-    throw new TypeError('Content is not a string!');
+    throw new TypeError('TypeError: Content is not a string!');
   }
 
   // Set default start node.
@@ -50,7 +50,7 @@ function parse (content) {
   // Did we find any elements?
   if (storyDataElements.length === 0) {
     // If there is not a single `<tw-storydata>` element, this is not a Twine 2 story!
-    throw new Error('TypeError: Not Twine 2 HTML content!');
+    throw new TypeError('TypeError: Not Twine 2 HTML content!');
   }
 
   // We only parse the first element found.
@@ -185,15 +185,21 @@ function parse (content) {
      *   https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md#passages
      */
     // Create a default value
-    let name = null;
+    let name = 'Untitled Passage';
     // Does name exist?
     if (Object.prototype.hasOwnProperty.call(attr, 'name')) {
       // Escape the name
       name = attr.name;
     } else {
-      throw new Error('TypeError: Cannot parse passage data without name!');
+      console.warn('Warning: name attribute is missing! Default passage name will be used.');
     }
 
+    /**
+     * tags: (string) Optional.
+     *  A space-separated list of tags for the passage.
+     *
+     *  https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md#passages
+     */
     // Create empty tag array.
     let tags = [];
     // Does the tags attribute exist?
@@ -211,6 +217,12 @@ function parse (content) {
       tags = tags.filter(tag => tag !== '');
     }
 
+    /**
+     * metadata: (object) Optional.
+     *  An object containing additional metadata about the passage.
+     *
+     * Twine 2 HTML does not support metadata, but other formats do.
+     */
     // Create metadata for passage.
     const metadata = {};
 
@@ -234,14 +246,14 @@ function parse (content) {
      *   https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md#passages
      */
     // Create a default PID
-    let pid = -1;
+    let pid = 1;
     // Does pid exist?
     if (Object.prototype.hasOwnProperty.call(attr, 'pid')) {
       // Parse string into int
       // Update PID
       pid = Number.parseInt(attr.pid, 10);
     } else {
-      throw new Error('Passages are required to have PID!');
+      console.warn('Warning: pid attribute is missing! Default PID will be used.');
     }
 
     // Check the current PID against startNode number.

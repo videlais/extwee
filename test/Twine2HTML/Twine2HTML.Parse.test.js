@@ -6,7 +6,7 @@ import { parse as parseTwine2HTML } from '../../src/Twine2HTML/parse.js';
 const { version } = JSON.parse(readFileSync('package.json', 'utf-8'));
 
 describe('Twine2HTMLParser', () => {
-  describe('#parse()', () => {
+  describe('Errors', () => {
     it('Should throw error if content is not a string', () => {
       expect(() => { parseTwine2HTML({}); }).toThrow();
     });
@@ -14,7 +14,9 @@ describe('Twine2HTMLParser', () => {
     it('Should throw error if content is not Twine-2 style HTML', () => {
       expect(() => { parseTwine2HTML(''); }).toThrow();
     });
+  });
 
+  describe('#parse()', () => {
     it('Should be able to parse Twine 2 HTML for story name', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/twineExample.html', 'utf-8');
       const story = parseTwine2HTML(fr);
@@ -120,16 +122,6 @@ describe('Twine2HTMLParser', () => {
       expect(stylesheetPassages.length).toBe(1);
     });
 
-    it('Should throw error if passage name is missing', () => {
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingPassageName.html', 'utf-8');
-      expect(() => { parseTwine2HTML(fr); }).toThrow();
-    });
-
-    it('Should throw error if passage PID is missing', () => {
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingPID.html', 'utf-8');
-      expect(() => { parseTwine2HTML(fr); }).toThrow();
-    });
-
     it('Should parse HTML without passage start node', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingStartnode.html', 'utf-8');
       const story = parseTwine2HTML(fr);
@@ -187,6 +179,26 @@ describe('Twine2HTMLParser', () => {
       const s = '<tw-storydata ifid=\'1234\'></tw-storydata>';
       parseTwine2HTML(s);
       expect(console.warn).toHaveBeenCalledWith('Warning: The IFID is not in valid UUIDv4 formatting on tw-storydata!');
+    });
+
+    it('Should generate warning if passage name is missing', () => {
+      const fr = `<tw-storydata name="Tags" startnode="1" creator="Twine" creator-version="2.3.9" ifid="1A6023FC-F68A-4E55-BE9A-5EDFDB7879E6" zoom="1" format="Harlowe" format-version="3.1.0" options="" hidden>
+      <style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style>
+      <script role="script" id="twine-user-script" type="text/twine-javascript"></script>
+      <tw-passagedata pid="1" tags="this-one another-one-like-this" position="200,99" size="100,100">Double-click this passage to edit it.</tw-passagedata>
+  </tw-storydata>`;
+      parseTwine2HTML(fr);
+      expect(console.warn).toHaveBeenCalledWith('Warning: name attribute is missing! Default passage name will be used.');
+    });
+
+    it('Should generate error if passage PID is missing', () => {
+      const fr = `<tw-storydata name="Tags" startnode="1" creator="Twine" creator-version="2.3.9" ifid="1A6023FC-F68A-4E55-BE9A-5EDFDB7879E6" zoom="1" format="Harlowe" format-version="3.1.0" options="" hidden>
+      <style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style>
+      <script role="script" id="twine-user-script" type="text/twine-javascript"></script>
+      <tw-passagedata name="Untitled Passage" tags="this-one another-one-like-this" position="200,99" size="100,100">Double-click this passage to edit it.</tw-passagedata>
+  </tw-storydata>`;
+      parseTwine2HTML(fr);
+      expect(console.warn).toHaveBeenCalledWith('Warning: pid attribute is missing! Default PID will be used.');
     });
   });
 });
