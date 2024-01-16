@@ -50,7 +50,7 @@ function parse (content) {
   // Did we find any elements?
   if (storyDataElements.length === 0) {
     // If there is not a single `<tw-storydata>` element, this is not a Twine 2 story!
-    throw new Error('Not Twine 2 HTML content!');
+    throw new Error('TypeError: Not Twine 2 HTML content!');
   }
 
   // We only parse the first element found.
@@ -189,9 +189,9 @@ function parse (content) {
     // Does name exist?
     if (Object.prototype.hasOwnProperty.call(attr, 'name')) {
       // Escape the name
-      name = escapeMetacharacters(attr.name);
+      name = attr.name;
     } else {
-      throw new Error('Cannot parse passage data without name!');
+      throw new Error('TypeError: Cannot parse passage data without name!');
     }
 
     // Create empty tag array.
@@ -202,7 +202,7 @@ function parse (content) {
       // (Attributes can, themselves, be empty strings.)
       if (attr.tags.length > 0 && attr.tags !== '""') {
         // Escape the tags
-        tags = escapeMetacharacters(attr.tags);
+        tags = attr.tags;
         // Split by spaces into an array
         tags = tags.split(' ');
       }
@@ -328,25 +328,4 @@ function parse (content) {
   return story;
 }
 
-/**
- * Try to escape Twine 2 meta-characters.
- * @param {string} result - Text to parse.
- * @returns {string} Escaped characters.
- */
-function escapeMetacharacters (result) {
-  // Replace any single backslash, \, with two of them, \\.
-  result = result.replace(/\\/g, '\\');
-  // Double-escape escaped {
-  result = result.replace(/\\\{/g, '\\\\{');
-  // Double-escape escaped }
-  result = result.replace(/\\\}/g, '\\\\}');
-  // Double-escape escaped [
-  result = result.replace(/\\\[/g, '\\\\[');
-  // Double-escape escaped ]
-  result = result.replace(/\\\]/g, '\\\\]');
-
-  return result;
-}
-
-export { parse, escapeMetacharacters };
-export default parse;
+export { parse };
