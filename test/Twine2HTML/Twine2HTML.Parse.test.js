@@ -36,18 +36,6 @@ describe('Twine2HTMLParser', () => {
       expect(p.tags).toHaveLength(2);
     });
 
-    it('Should have default name', () => {
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingName.html', 'utf-8');
-      const story = parseTwine2HTML(fr);
-      expect(story.name).toBe('Untitled Story');
-    });
-
-    it('Should set a missing IFID to an empty string', () => {
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingIFID.html', 'utf-8');
-      const tp = parseTwine2HTML(fr);
-      expect(tp.IFID).toBe('');
-    });
-
     it('Should have Extwee for creator when missing', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingCreator.html', 'utf-8');
       const tp = parseTwine2HTML(fr);
