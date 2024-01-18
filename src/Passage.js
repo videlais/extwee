@@ -127,6 +127,9 @@ export default class Passage {
 
   /**
    * Return a Twee representation.
+   * 
+   * See: https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md
+   * 
    * @returns {string} String form of passage.
    */
   toTwee () {

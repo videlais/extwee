@@ -3,6 +3,7 @@ import Passage from '../src/Passage';
 import { parse as parseTwee } from '../src/Twee/parse.js';
 import { readFileSync } from 'node:fs';
 import { parse as HTMLParser } from 'node-html-parser';
+import { generate as generateIFID } from '../src/IFID/generate.js';
 
 // Pull the name and version of this project from package.json.
 // These are used as the 'creator' and 'creator-version'.
@@ -272,14 +273,6 @@ describe('Story', () => {
       }).toThrow();
     });
 
-    it('addPassage() - should prevent passages with same name being added', () => {
-      const p = new Passage('A');
-      const p2 = new Passage('A');
-      s.addPassage(p);
-      s.addPassage(p2);
-      expect(s.size()).toBe(1);
-    });
-
     it('addPassage() - should override StoryData: ifid', function () {
       // Generate object.
       const o = {
@@ -437,9 +430,80 @@ describe('Story', () => {
       s = new Story();
     });
 
+    it('Should not generate format if empty', function () {
+      // Add one passage.
+      s.addPassage(new Passage('Start', 'Content'));
+
+      // Add an IFID (to prevent warning)
+      s.IFID = generateIFID();
+
+      // Set format to empty string.
+      s.format = '';
+
+      // Convert to Twee.
+      const t = s.toTwee();
+
+      // Test for format in metadata, should not exist.
+      expect(t.includes(`"'format":`)).not.toBe(true);
+    });
+
+    it('Should not generate formatVersion if empty', function () {
+      // Add one passage.
+      s.addPassage(new Passage('Start', 'Content'));
+
+      // Add an IFID (to prevent warning)
+      s.IFID = generateIFID();
+
+      // Set formatVersion to empty string.
+      s.formatVersion = '';
+
+      // Convert to Twee.
+      const t = s.toTwee();
+
+      // Test for formatVersion in metadata, should not exist.
+      expect(t.includes(`"'format-version":`)).not.toBe(true);
+    });
+
+    it('Should not generate zoom if zero', function () {
+      // Add one passage.
+      s.addPassage(new Passage('Start', 'Content'));
+
+      // Add an IFID (to prevent warning)
+      s.IFID = generateIFID();
+
+      // Set zoom to 0.
+      s.zoom = 0;
+
+      // Convert to Twee.
+      const t = s.toTwee();
+
+      // Test for zoom in metadata, should not exist.
+      expect(t.includes(`"'zoom":`)).not.toBe(true);
+    });
+
+    it('Should not generate start if empty', function () {
+      // Add one passage.
+      s.addPassage(new Passage('Start', 'Content'));
+
+      // Add an IFID (to prevent warning)
+      s.IFID = generateIFID();
+
+      // Set start to empty string.
+      s.start = '';
+
+      // Convert to Twee.
+      const t = s.toTwee();
+
+      // Test for start in metadata, should not exist.
+      expect(t.includes(`"'start":`)).not.toBe(true);
+    });
+
     it('Should detect StoryTitle text', function () {
       // Add one passage.
       s.addPassage(new Passage('StoryTitle', 'Content'));
+
+      // Add an IFID (to prevent warning)
+      s.IFID = generateIFID();
 
       // Convert to Twee.
       const t = s.toTwee();
@@ -479,6 +543,7 @@ describe('Story', () => {
       s.formatVersion = '1.2.3';
       s.zoom = 1;
       s.start = 'Untitled';
+      s.IFID = 'DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A';
 
       // Convert to Twee.
       const t = s.toTwee();
@@ -491,12 +556,15 @@ describe('Story', () => {
       expect(story2.format).toBe('Test');
       expect(story2.zoom).toBe(1);
       expect(story2.start).toBe('Untitled');
+      expect(story2.IFID).toBe('DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A');
     });
 
     it('Should write tag colors', () => {
       // Add some passages.
       s.addPassage(new Passage('Start', 'Content'));
       s.addPassage(new Passage('Untitled', 'Some stuff'));
+
+      s.IFID = 'DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A';
 
       // Add tag colors.
       s.tagColors = {
@@ -522,6 +590,9 @@ describe('Story', () => {
       s.addPassage(new Passage('Test', 'Test', ['script']));
       s.addPassage(new Passage('Start', 'Content'));
 
+      // Set IFID.
+      s.IFID = 'DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A';
+
       // Convert into Twee.
       const t = s.toTwee();
 
@@ -539,6 +610,9 @@ describe('Story', () => {
       // Add passages.
       s.addPassage(new Passage('Test', 'Test', ['stylesheet']));
       s.addPassage(new Passage('Start', 'Content'));
+
+      // Set IFID.
+      s.IFID = 'DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A';
 
       // Convert into Twee.
       const t = s.toTwee();
@@ -612,6 +686,114 @@ describe('Story', () => {
       // Expect the script passage text to be encoded.
       expect(result.includes('<script role="script" id="twine-user-script" type="text/twine-javascript">Word')).toBe(true);
     });
+
+    it('Should encode format', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set format.
+      s.format = 'Harlowe';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the format to be encoded.
+      expect(result.includes('format="Harlowe"')).toBe(true);
+    });
+
+    it('Should encode formatVersion', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set formatVersion.
+      s.formatVersion = '3.2.0';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the formatVersion to be encoded.
+      expect(result.includes('format-version="3.2.0"')).toBe(true);
+    });
+
+    it('Should encode zoom', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set zoom.
+      s.zoom = 1;
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the zoom to be encoded.
+      expect(result.includes('zoom="1"')).toBe(true);
+    });
+
+    it('Should encode start', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the start to be encoded.
+      expect(result.includes('startnode="1"')).toBe(true);
+    });
+
+    it('Should not encode start if not set', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the start to be encoded.
+      expect(result.includes('startnode="1"')).not.toBe(true);
+    });
+
+    it('Should encode creator', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the creator to be encoded.
+      expect(result.includes(`creator="${creatorName}"`)).toBe(true);
+    });
+
+    it('Should encode creatorVersion', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the creatorVersion to be encoded.
+      expect(result.includes(`creator-version="${creatorVersion}"`)).toBe(true);
+    });
+
+    it('Should not encode creatorVersion if not set', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set creatorVersion to empty string.
+      s.creatorVersion = '';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the creatorVersion to be encoded.
+      expect(result.includes(`creator-version="${creatorVersion}"`)).not.toBe(true);
+    });
+
+   it('Should not encode creator if not set', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set creator to empty string.
+      s.creator = '';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the creator to be encoded.
+      expect(result.includes(`creator="${creatorName}"`)).not.toBe(true);
+    });
+
   });
 
   describe('toTwine1HTML()', function () {
@@ -666,6 +848,40 @@ describe('Story', () => {
       const root = HTMLParser(s.toTwine1HTML());
       // Expect correct name attribute for div.
       expect(root.querySelector('div').getAttribute('tiddler')).toBe('"Test"');
+    });
+  });
+
+  describe('Warnings', function () {
+    beforeEach(() => {
+      // Mock console.warn.
+      jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      // Restore all mocks.
+      jest.restoreAllMocks();
+    });
+
+    it('Should generate warning if a passage with the same name already exists', function () {
+      // Create a new Story.
+      const s = new Story();
+      // Add a passage.
+      s.addPassage(new Passage('Test'));
+      // Add a passage with the same name.
+      s.addPassage(new Passage('Test'));
+      // Expect warning.
+      expect(console.warn).toHaveBeenCalledWith('Warning: A passage with the name "Test" already exists!');
+    });
+
+    it('Should generate a warning if story IFID is not in the correct format', function () {
+      // Create a new Story.
+      const s = new Story();
+      // Set IFID.
+      s.IFID = 'Test';
+      // Create Twee
+      s.toTwee();
+      // Expect warning.
+      expect(console.warn).toHaveBeenCalledWith('Warning: IFID is not in UUIDv4 format! A new IFID was generated.');
     });
   });
 });

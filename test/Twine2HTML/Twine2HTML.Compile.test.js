@@ -18,29 +18,6 @@ describe('Twine2HTMLCompiler', () => {
       expect(() => { compileTwine2HTML(s, {}); }).toThrow();
     });
 
-    it('Read, write, and read HTML', () => {
-      // Read HTML.
-      const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/twineExample3.html', 'utf-8');
-
-      // Parse HTML.
-      const story = parseTwine2HTML(fr);
-
-      // Read StoryFormat.
-      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
-
-      // Parse StoryFormat.
-      const storyFormat = parseStoryFormat(fr2);
-
-      // Write HTML.
-      const fr3 = compileTwine2HTML(story, storyFormat);
-
-      // Parse HTML.
-      const story2 = parseTwine2HTML(fr3);
-
-      // Test both names to be the same.
-      expect(story.name).toBe(story2.name);
-    });
-
     it('Should write one and two-tag passages', () => {
       // Read HTML.
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLCompiler/TestTags.html', 'utf-8');

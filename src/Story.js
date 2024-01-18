@@ -297,7 +297,7 @@ class Story {
     // If it does, we ignore it and return.
     if (this.getPassageByName(p.name) !== null) {
       // Warn user
-      console.warn('Warning: Ignored passage with same name as existing one!');
+      console.warn(`Warning: A passage with the name "${p.name}" already exists!`);
       //
       return;
     }
@@ -452,37 +452,57 @@ class Story {
     /**
      * ifid: (string) Required. Maps to <tw-storydata ifid>.
      */
-    // Is there an IFID?
-    if (this.IFID === '') {
+    // Test if IFID is in UUID format.
+    if (this.IFID.match(/^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/) === null) {
       // Generate a new IFID for this work.
-      // Twine 2 uses v4 (random) UUIDs, using only capital letters.
       metadata.ifid = generateIFID();
+
+      // Write the existing IFID.
+      console.warn('Warning: IFID is not in UUIDv4 format! A new IFID was generated.');
     } else {
-      // Use existing (non-default) value.
+      // Write the IFID.
       metadata.ifid = this.IFID;
     }
 
     /**
      * format: (string) Optional. Maps to <tw-storydata format>.
-     */
-    metadata.format = this.format;
+    */
+    // Does format exist?
+    if (this.format !== '') {
+      // Write the existing format.
+      metadata.format = this.format;
+    }
 
     /**
      * format-version: (string) Optional. Maps to <tw-storydata format-version>.
      */
-    metadata['format-version'] = this.formatVersion;
+    // Does formatVersion exist?
+    if (this.formatVersion !== '') {
+      // Write the existing formatVersion.
+      metadata['format-version'] = this.formatVersion;
+    }
 
     /**
      * zoom: (decimal) Optional. Maps to <tw-storydata zoom>.
      */
-    metadata.zoom = this.zoom;
+    // Does zoom exist?
+    if (this.zoom !== 0) {
+      // Write the existing zoom.
+      metadata.zoom = this.zoom;
+    }
 
     /**
      * start: (string) Optional.
      * Maps to <tw-passagedata name> of the node whose pid matches <tw-storydata startnode>.
+     * 
+     * If there is no start value, the "Start" passage is assumed to be the starting passage.
      */
-    metadata.start = this.start;
-
+    // Does start exist?
+    if (this.start !== '') {
+      // Write the existing start.
+      metadata.start = this.start;
+    }
+   
     /**
      * tag-colors: (object of tag(string):color(string) pairs) Optional.
      * Pairs map to <tw-tag> nodes as <tw-tag name>:<tw-tag color>.
@@ -527,6 +547,10 @@ class Story {
    * @returns {string} Twine 2 HTML string
    */
   toTwine2HTML () {
+    // Get the passages.
+    // Make a local copy, as we might be modifying it.
+    let passages = this.passages;
+
     // Twine 2 HTML starts with a <tw-storydata> element.
     // See: Twine 2 HTML Output
 
@@ -561,7 +585,7 @@ class Story {
     let startPID = 1;
     // We have to do a bit of nonsense here.
     // Twine 2 HTML cares about PID values.
-    this.passages.forEach((p) => {
+    passages.forEach((p) => {
       // Have we found the starting passage?
       if (p.name === this.start) {
         // If so, set the PID based on index.
@@ -619,8 +643,11 @@ class Story {
     // Add the default attributes.
     storyData += ' options hidden>\n';
 
-    // Get any stylesheet passages.
-    const stylesheetPassages = this.getPassagesByTag('stylesheet');
+    // Filter out passages with tag of 'stylesheet'.
+    const stylesheetPassages = passages.filter((passage) => passage.tags.includes('stylesheet'));
+
+    // Remove stylesheet passages from the main array.
+    passages = passages.filter(p => !p.tags.includes('stylesheet'));
 
     // Were there any stylesheet passages?
     if (stylesheetPassages.length > 0) {
@@ -637,8 +664,11 @@ class Story {
       storyData += '</style>\n';
     }
 
-    // Get any stylesheet passages.
-    const scriptPassages = this.getPassagesByTag('script');
+    // Filter out passages with tag of 'script'.
+    const scriptPassages = passages.filter((passage) => passage.tags.includes('script'));
+
+    // Remove script passages from the main array.
+    passages = passages.filter(p => !p.tags.includes('script'));
 
     // Were there any script passages?
     if (scriptPassages.length > 0) {
