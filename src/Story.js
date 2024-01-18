@@ -542,7 +542,15 @@ class Story {
    * See: Twine 2 HTML Output
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
    * 
-   *  The only required attributes are `name` and `ifid`. All others are optional.
+   *  The only required attributes are `name` and `ifid` of the `<tw-storydata>` element. All others are optional.
+   * 
+   * The `<tw-storydata>` element may have any number of optional attributes, which are:
+   * - `startnode`: (integer) Optional. The PID of the starting passage.
+   * - `creator`: (string) Optional. The name of the program that created the story.
+   * - `creator-version`: (string) Optional. The version of the program that created the story.
+   * - `zoom`: (decimal) Optional. The zoom level of the story.
+   * - `format`: (string) Optional. The format of the story.
+   * - `format-version`: (string) Optional. The version of the format of the story.
    * 
    * @returns {string} Twine 2 HTML string
    */
@@ -577,12 +585,16 @@ class Story {
       storyData += ` ifid="${ generateIFID() }"`;
     }
 
+    // 'Start' passage (if there is not a 'start' value set).
+    let startPassagePID = null;
+
     // Passage Identification (PID) counter.
     // (Twine 2 starts with 1, so we mirror that.)
     let PIDcounter = 1;
 
     // Set initial PID value.
     let startPID = 1;
+
     // We have to do a bit of nonsense here.
     // Twine 2 HTML cares about PID values.
     passages.forEach((p) => {
@@ -591,6 +603,13 @@ class Story {
         // If so, set the PID based on index.
         startPID = PIDcounter;
       }
+
+      // Have we found the 'Start' passage?
+      if (p.name === 'Start') {
+        // If so, set the PID based on index.
+        startPassagePID = PIDcounter;
+      }
+
       // Increase and keep looking.
       PIDcounter++;
     });
@@ -603,6 +622,16 @@ class Story {
     if(this.start !== '') {
       // Set starting passage PID.
       storyData += ` startnode="${startPID}"`;
+    }
+
+    /**
+     * If we came from Twee or another source, we might not have a start value.
+     * 
+     * We might, however, have a passage with the name "Start".
+     */
+    if(this.start === '' && startPassagePID !== null) {
+      // Set starting passage PID.
+      storyData += ` startnode="${startPassagePID}"`;
     }
     
     // creator: (string) Optional. The name of the program that created the story.

@@ -737,13 +737,13 @@ describe('Story', () => {
       expect(result.includes('startnode="1"')).toBe(true);
     });
 
-    it('Should not encode start if not set', () => {
+    it('Should encode start if property is not set but Start passage is', () => {
       // Add passage.
       s.addPassage(new Passage('Start', 'Word'));
       // Create HTML.
       const result = s.toTwine2HTML();
       // Expect the start to be encoded.
-      expect(result.includes('startnode="1"')).not.toBe(true);
+      expect(result.includes('startnode="1"')).toBe(true);
     });
 
     it('Should encode creator', () => {
