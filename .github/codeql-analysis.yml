@@ -1,0 +1,13 @@
+on:
+  push:
+    branches: [develop]
+    paths-ignore:
+      - 'test/**'
+    paths:
+      - src
+  pull_request:
+    branches: [develop]
+    paths-ignore:
+      - 'test/**'
+    paths:
+      - src
