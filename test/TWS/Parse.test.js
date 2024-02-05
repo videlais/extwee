@@ -71,7 +71,7 @@ describe('TWSParser', () => {
         const contents = fs.readFileSync('test/TWS/TWSParser/noscale.tws', 'binary');
         const b = Buffer.from(contents, 'binary');
         const r = parseTWS(b);
-        expect(r.zoom).toBe(0);
+        expect(r.zoom).toBe(1);
       });
     });
   });

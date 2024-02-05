@@ -407,7 +407,7 @@ describe('Story', () => {
       expect(result.format).toBe('');
       expect(result.creator).toBe(creatorName);
       expect(result.creatorVersion).toBe(creatorVersion);
-      expect(result.zoom).toBe(0);
+      expect(result.zoom).toBe(1);
       expect(Object.keys(result.metadata).length).toBe(0);
     });
 

@@ -24,7 +24,7 @@ describe('JSON', () => {
       expect(s.format).toBe('');
       expect(s.creator).toBe(creatorName);
       expect(s.creatorVersion).toBe(creatorVersion);
-      expect(s.zoom).toBe(0);
+      expect(s.zoom).toBe(1);
       expect(Object.keys(s.metadata).length).toBe(0);
     });
 
@@ -189,7 +189,7 @@ describe('JSON', () => {
         expect(r.format).toBe('Snowman');
         expect(r.creator).toBe(creatorName);
         expect(r.creatorVersion).toBe('2.2.0');
-        expect(r.zoom).toBe(0);
+        expect(r.zoom).toBe(1);
         expect(r.size()).toBe(1);
       });
 

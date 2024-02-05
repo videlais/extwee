@@ -37,8 +37,9 @@ class Story {
 
   /**
    * Internal zoom level
+   * Default is 1 (100%)
    */
-  #_zoom = 0;
+  #_zoom = 1;
 
   /**
    * Passages
