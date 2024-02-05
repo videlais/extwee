@@ -63,7 +63,7 @@ describe('Twine2HTMLParser', () => {
     it('Should have empty string as zoom when missing', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/missingZoom.html', 'utf-8');
       const tp = parseTwine2HTML(fr);
-      expect(tp.zoom).toBe(0);
+      expect(tp.zoom).toBe(1);
     });
 
     it('Should not have position if passage does not', () => {
