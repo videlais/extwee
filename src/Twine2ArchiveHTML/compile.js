@@ -2,6 +2,7 @@ import { Story } from '../Story.js';
 
 /**
  * Write array of Story objects into Twine 2 Archive HTML.
+ * @function
  * @param {Array} stories - Array of Story objects.
  * @returns {string} Twine 2 Archive HTML.
  */

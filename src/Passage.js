@@ -2,7 +2,19 @@ import { encode } from 'html-entities';
 import { escapeName, escapeText } from './Escape/Twee.js';
 
 /**
- * A passage is the smallest unit of a Twine story.
+ * Passage class.
+ * @class
+ * @classdesc Represents a passage in a Twine story.
+ * @property {string} name - Name of the Passage
+ * @property {Array} tags - Tags of the Passage
+ * @property {object} metadata - Metadata of the Passage
+ * @property {string} text - Text of the Passage
+ * @example
+ * const passage = new Passage('PassageName', 'This is the text of the passage.');
+ * passage.name = 'NewPassageName';
+ * passage.text = 'This is the new text of the passage.';
+ * passage.tags = ['tag1', 'tag2'];
+ * passage.metadata = { position: '400,200', size: '100,100' };
  */
 export default class Passage {
   /**

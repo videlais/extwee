@@ -7,6 +7,7 @@ import { Story } from '../Story.js';
  *
  * See: Twine 1 HTML Output Documentation
  * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)
+ * @function
  * @param {string} content - Twine 1 HTML content to parse.
  * @returns {Story} Story object
  */

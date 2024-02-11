@@ -3,9 +3,13 @@ import Passage from '../Passage.js';
 
 /**
  * Parse JSON representation into Story.
- * @function parse
+ * @function
  * @param {string} jsonString - JSON string to convert to Story.
  * @returns {Story} Story object.
+ * @throws {Error} Invalid JSON.
+ * @example
+ * const story = parse('{"name":"Test"}');
+ * console.log(story.name); // "Test"
  */
 function parse (jsonString) {
   // Create future object.

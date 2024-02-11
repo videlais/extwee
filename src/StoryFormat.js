@@ -1,3 +1,29 @@
+/**
+ * Story Format
+ * @class
+ * @classdesc Story Format object.
+ * @property {string} name - Name
+ * @property {string} version - Version
+ * @property {string} description - Description
+ * @property {string} author - Author
+ * @property {string} image - Image
+ * @property {string} url - URL
+ * @property {string} license - License
+ * @property {boolean} proofing - Proofing
+ * @property {string} source - Source
+ * @example
+ * const storyFormat = new StoryFormat();
+ * storyFormat.name = 'My Story Format';
+ * storyFormat.version = '1.0.0';
+ * storyFormat.description = 'This is my story format.';
+ * storyFormat.author = 'John Doe';
+ * storyFormat.image = 'image.png';
+ * storyFormat.url = 'https://example.com';
+ * storyFormat.license = 'MIT';
+ * storyFormat.proofing = true;
+ * storyFormat.source = 'This is the source code for my story format.';
+ */
+
 export default class StoryFormat {
   /**
    * Internal name.

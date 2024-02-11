@@ -8,8 +8,66 @@ import { decode } from 'html-entities';
  *
  * See: Twine 2 HTML Output Specification
  * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
+ * @function
  * @param {string} content - Twine 2 HTML content to parse.
  * @returns {Story} Story
+ * @throws {TypeError} Content is not a string.
+ * @throws {Error} Not Twine 2 HTML content.
+ * @throws {Error} Missing startnode in `<tw-storydata>`!
+ * @throws {Error} Cannot parse passage data without name!
+ * @throws {Error} startNode does not exist within passages!
+ * @example
+ * const story = parse(`
+ *  <html>
+ *    <tw-storydata
+ *        name="Story"
+ *        startnode="1"
+ *        zoom="1.0"
+ *        format="Harlowe"
+ *        format-version="2.1.0"
+ *        ifid="A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6"
+ *        creator="Twine"
+ *        creator-version="2.3.9" >
+ *    <style
+ *        role="stylesheet"
+ *        id="twine-user-stylesheet"
+ *        type="text/twine-css">
+ *    </style>
+ *    <script
+ *        role="script"
+ *        id="twine-user-script"
+ *        type="text/twine-javascript">
+ *    </script>
+ *    <tw-passagedata
+ *        pid="1"
+ *        name="Start"
+ *        tags=""
+ *        position="0,0"
+ *        size="100,100">Start Passage</tw-passagedata>
+ *   </tw-storydata>
+ * </html>`);
+ * console.log(story);
+ * // Story {
+ * //   name: 'Story',
+ * //   start: 'Start',
+ * //   IFID: 'A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6',
+ * //   creator: 'Twine',
+ * //   creatorVersion: '2.3.9',
+ * //   format: 'Harlowe',
+ * //   formatVersion: '2.1.0',
+ * //   zoom: 1,
+ * //   passages: [
+ * //     Passage {
+ * //       name: 'Start',
+ * //       text: 'Start Passage',
+ * //       tags: [],
+ * //       metadata: { position: '0,0', size: '100,100' }
+ * //     }
+ * //   ],
+ * //   tagColors: {},
+ * //   userStylesheet: Passage { name: 'UserStylesheet', text: '', tags: [ 'stylesheet' ], metadata: {} },
+ * //   userScript: Passage { name: 'UserScript', text: '', tags: [ 'script' ], metadata: {} }
+ * // }
  */
 function parse (content) {
   // Create new story.

@@ -5,6 +5,33 @@ import { encode } from 'html-entities';
 const creatorName = 'extwee';
 const creatorVersion = '2.2.1';
 
+/**
+ * Story class.
+ * @class
+ * @classdesc Story class for creating and manipulating stories.
+ * @property {string} name - Name of the story.
+ * @property {string} IFID - Interactive Fiction ID (IFID) of Story.
+ * @property {string} start - Name of start passage.
+ * @property {string} format - Story format of Story.
+ * @property {string} formatVersion - Story format version of Story.
+ * @property {number} zoom - Zoom level.
+ * @property {Array} passages - Passages of Story.
+ * @property {string} creator - Program used to create Story.
+ * @property {string} creatorVersion - Version used to create Story.
+ * @property {object} metadata - Metadata of Story.
+ * @property {object} tagColors - Tag Colors object (each property is a tag and its color).
+ * @example
+ * const story = new Story('My Story');
+ * story.IFID = '22F25A58-7062-4927-95B6-F424DDB2EC65';
+ * story.start = 'Start';
+ * story.format = 'Harlowe';
+ * story.formatVersion = '3.3.8';
+ * story.zoom = 1;
+ * story.creator = 'extwee';
+ * story.creatorVersion = '2.2.1';
+ * story.addPassage(new Passage('Start', 'This is the start passage.'));
+ */
+
 class Story {
   /**
    * Internal name of story

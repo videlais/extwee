@@ -1,13 +1,15 @@
 import Passage from '../Passage.js';
 import { Story } from '../Story.js';
+import { unescapeText } from '../Unescape/Twee.js';
 
 /**
  * Parses Twee 3 text into a Story object.
  *
  * See: Twee 3 Specification
  * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
- * @param {string} fileContents - File contents to parse
- * @returns {Story} story
+ * @function
+ * @param {string} fileContents - File contents to parse.
+ * @returns {Story} story object.
  */
 function parse (fileContents) {
   // Create Story.
@@ -31,6 +33,8 @@ function parse (fileContents) {
   // Split the file based on the passage sigil (::) proceeded by a newline
   const parsingPassages = adjusted.split('\n::');
 
+  console.log('Passages: ' + parsingPassages);
+
   // Fix the first result
   parsingPassages[0] = parsingPassages[0].slice(2, parsingPassages[0].length);
 
@@ -47,10 +51,15 @@ function parse (fileContents) {
 
     // Header is everything to the first newline
     let header = passage.slice(0, passage.indexOf('\n'));
-    // Text is everything else
+
+    console.log('Header: ' + header);
+
+    // Text is everything else.
     // (Also eat the leading newline character.)
     // (And trim any remaining whitespace.)
     text = passage.substring(header.length + 1, passage.length).trim();
+
+    console.log('Text: ' + text);
 
     // Test for metadata
     const openingCurlyBracketPosition = header.lastIndexOf('{');
@@ -83,33 +92,33 @@ function parse (fileContents) {
     if (openingSquareBracketPosition !== -1 && closingSquareBracketPosition !== -1) {
       tags = header.slice(openingSquareBracketPosition, closingSquareBracketPosition + 1);
 
-      // Remove the tags from the header
+      // Remove the tags from the header.
       header = header.substring(0, openingSquareBracketPosition) + header.substring(closingSquareBracketPosition + 1);
     }
 
-    // Parse tags
+    // Parse tags.
     if (tags.length > 0) {
-      // Eat the opening and closing square brackets
+      // Eat the opening and closing square brackets.
       tags = tags.substring(1, tags.length - 1);
 
       // Set empty default
       let tagsArray = [];
 
-      // Test if tags is not single, empty string
+      // Test if tags is not single, empty string.
       if (!(tags === '')) {
         tagsArray = tags.split(' ');
       }
 
-      // There are multiple tags
+      // There are multiple tags.
       if (tagsArray.length > 1) {
-        // Create future array
+        // Create future array.
         const futureTagArray = [];
 
-        // Move through entries
-        // Add a trimmed version into future array
+        // Move through entries.
+        // Add a trimmed version into future array.
         tagsArray.forEach((tag) => { futureTagArray.push(tag.trim()); });
 
-        // Set the tags back to the future array
+        // Set the tags back to the future array.
         tags = futureTagArray;
       } else if (tagsArray.length === 1) {
         // There was only one tag
@@ -144,7 +153,7 @@ function parse (fileContents) {
     }
 
     // addPassage() method does all the work.
-    story.addPassage(new Passage(name, text, tags, metadata, pid));
+    story.addPassage(new Passage(name, unescapeText(text), tags, metadata, pid));
 
     // Increase pid
     pid++;

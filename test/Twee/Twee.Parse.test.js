@@ -73,4 +73,16 @@ describe('Twee', () => {
       expect(p).not.toBe(null);
     });
   });
+
+  describe('Unescape', () => {
+    it('Should un-escape Twee name', () => {
+      const fr = readFileSync('test/Twee/TweeParser/escape.twee', 'utf-8');
+      const story = parseTwee(fr);
+      story.forEachPassage((passage) => {
+        console.log(passage.name);
+      });
+      // const p = story.getPassageByName('[Hello] {world} \\\\');
+      expect(true).toBe(':: Extra header');
+    });
+  });
 });

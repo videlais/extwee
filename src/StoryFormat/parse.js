@@ -3,6 +3,7 @@ import { valid } from 'semver';
 
 /**
  * Parse a Story Format file.
+ * @function
  * @param {string} contents - Content
  * @returns {StoryFormat} StoryFormat object
  */

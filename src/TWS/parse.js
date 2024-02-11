@@ -6,7 +6,8 @@ import { Parser } from 'pickleparser';
  * Parse TWS file (as Buffer) into Story.
  * Unless it throws an error, it will return a Story object.
  *
- * See: Twine 1 TWS Documentation [Approval Pending]
+ * See: Twine 1 TWS Documentation (https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md)
+ * @function
  * @param {Buffer} binaryFileContents - File contents to parse as Buffer.
  * @returns {Story} Story object.
  */

@@ -3,6 +3,7 @@ import { parse as parseTwine2HTML } from '../Twine2HTML/parse.js';
 
 /**
  * Parse HTML for one or more Twine 2 HTML elements and return array of story objects.
+ * @function
  * @param {string} content - Content to parse for Twine 2 HTML elements.
  * @returns {Array} Array of stories found in content.
  */
