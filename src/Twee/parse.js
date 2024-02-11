@@ -3,9 +3,8 @@ import { Story } from '../Story.js';
 
 /**
  * Parses Twee 3 text into a Story object.
- *
- * See: Twee 3 Specification
- * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
+ * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md Twee 3 Specification}
+ * @function parse
  * @param {string} fileContents - File contents to parse
  * @returns {Story} story
  */
