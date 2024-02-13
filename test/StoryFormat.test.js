@@ -1,8 +1,8 @@
 import StoryFormat from '../src/StoryFormat.js';
 
 describe('StoryFormat', () => {
-  describe('constructor()', () => {
-    it('Should create default values', () => {
+  describe('Default values', () => {
+    it('Should have default values', () => {
       const sf = new StoryFormat();
       expect(sf.name).toBe('Untitled Story Format');
       expect(sf.version).toBe('');
@@ -147,6 +147,13 @@ describe('StoryFormat', () => {
       expect(() => {
         sf.description = 1;
       }).toThrow();
+    });
+  });
+
+  describe('toString', () => {
+    it('Should return string representation', () => {
+      const sf = new StoryFormat();
+      expect(sf.toString()).toBe(JSON.stringify(sf, null, "\t"));
     });
   });
 });
