@@ -26,7 +26,7 @@ describe('Twine2HTMLCompiler', () => {
       const story = parseTwine2HTML(fr);
 
       // Read StoryFormat.
-      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/Twine2HTML/Twine2HTMLCompiler/format.js', 'utf-8');
 
       // Parse StoryFormat.
       const storyFormat = parseStoryFormat(fr2);
@@ -63,7 +63,7 @@ describe('Twine2HTMLCompiler', () => {
       story.addPassage(new Passage('A'));
 
       // Read StoryFormat.
-      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/Twine2HTML/Twine2HTMLCompiler/format.js', 'utf-8');
 
       // Parse StoryFormat.
       const storyFormat = parseStoryFormat(fr2);
@@ -87,7 +87,7 @@ describe('Twine2HTMLCompiler', () => {
       story.start = 'Nope';
 
       // Read StoryFormat.
-      const fr2 = readFileSync('test/StoryFormat/StoryFormatParser/format.js', 'utf-8');
+      const fr2 = readFileSync('test/Twine2HTML/Twine2HTMLCompiler/format.js', 'utf-8');
 
       // Parse StoryFormat.
       const storyFormat = parseStoryFormat(fr2);
