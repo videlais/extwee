@@ -1,6 +1,6 @@
 {
   "name": "extwee",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "A story compiler tool using Twine-compatible formats",
   "author": "Dan Cox",
   "main": "index.js",
