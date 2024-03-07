@@ -5,12 +5,46 @@ import { encode } from 'html-entities';
 const creatorName = 'extwee';
 const creatorVersion = '2.2.1';
 
+/**
+ * Story class.
+ * @class
+ * @classdesc Represents a Twine story.
+ * @property {string} name - Name of the story.
+ * @property {string} IFID - Interactive Fiction ID (IFID) of Story.
+ * @property {string} start - Name of start passage.
+ * @property {string} format - Story format of Story.
+ * @property {string} formatVersion - Story format version of Story.
+ * @property {number} zoom - Zoom level.
+ * @property {Array} passages - Array of Passage objects. @see {@link Passage}
+ * @property {string} creator - Program used to create Story.
+ * @property {string} creatorVersion - Version used to create Story.
+ * @property {object} metadata - Metadata of Story.
+ * @property {object} tagColors - Tag Colors
+ * @method {number} addPassage - Add a passage to the story and returns the new length of the passages array.
+ * @method {number} removePassageByName - Remove a passage from the story by name and returns the new length of the passages array.
+ * @method {Array} getPassagesByTag - Find passages by tag.
+ * @method {Array} getPassageByName - Find passage by name.
+ * @method {number} size - Size (number of passages).
+ * @method {string} toJSON - Export Story as JSON representation.
+ * @method {string} toTwee - Return Twee representation.
+ * @method {string} toTwine2HTML - Return Twine 2 HTML representation.
+ * @method {string} toTwine1HTML - Return Twine 1 HTML representation.
+ * @example
+ * const story = new Story('My Story');
+ * story.IFID = '12345678-1234-5678-1234-567812345678';
+ * story.start = 'Start';
+ * story.format = 'SugarCube';
+ * story.formatVersion = '2.31.0';
+ * story.zoom = 1;
+ * story.creator = 'extwee';
+ * story.creatorVersion = '2.2.1';
+ */
 class Story {
   /**
    * Internal name of story
    * @private
    */
-  #_name = '';
+  #_name = 'Untitled Story';
 
   /**
    * Internal start
@@ -78,9 +112,13 @@ class Story {
   constructor (name = 'Untitled Story') {
     // Every story has a name.
     this.name = name;
+    
     // Store the creator.
     this.#_creator = creatorName;
+    
+    // Store the creator version.
     this.#_creatorVersion = creatorVersion;
+    
     // Set metadata to an object.
     this.#_metadata = {};
   }
@@ -284,8 +322,10 @@ class Story {
 
   /**
    * Add a passage to the story.
-   * `StoryData` will override story metadata and `StoryTitle` will override story name.
+   * Passing `StoryData` will override story metadata and `StoryTitle` will override story name.
+   * @method addPassage
    * @param {Passage} p - Passage to add to Story.
+   * @returns {number} Return new length of passages array.
    */
   addPassage (p) {
     // Check if passed argument is a Passage.
@@ -300,7 +340,7 @@ class Story {
       // Warn user
       console.warn(`Warning: A passage with the name "${p.name}" already exists!`);
       //
-      return;
+      return this.#_passages.length;
     }
 
     // Parse StoryData.
@@ -344,7 +384,7 @@ class Story {
       }
 
       // Don't add StoryData to passages.
-      return;
+      return this.#_passages.length;
     }
 
     // Parse StoryTitle.
@@ -353,24 +393,28 @@ class Story {
       // Set internal name based on StoryTitle.
       this.name = p.text;
       // Once we override story.name, return.
-      return;
+      return this.#_passages.length;
     }
 
     // This is not StoryData or StoryTitle.
     // Push the passage to the array.
-    this.#_passages.push(p);
+    return this.#_passages.push(p);
   }
 
   /**
    * Remove a passage from the story by name.
-   * @param {string} name - Passage name to remove
+   * @method removePassageByName
+   * @param {string} name - Passage name to remove.
+   * @returns {number} Return new length of passages array.
    */
   removePassageByName (name) {
     this.#_passages = this.#_passages.filter(passage => passage.name !== name);
+    return this.#_passages.length;
   }
 
   /**
    * Find passages by tag.
+   * @method getPassagesByTag
    * @param {string} t - Passage name to search for
    * @returns {Array} Return array of passages
    */
@@ -384,6 +428,7 @@ class Story {
 
   /**
    * Find passage by name.
+   * @method getPassageByName
    * @param {string} name - Passage name to search for
    * @returns {Passage | null} Return passage or null
    */
@@ -396,6 +441,7 @@ class Story {
 
   /**
    * Size (number of passages).
+   * @method size
    * @returns {number} Return number of passages
    */
   size () {
@@ -404,6 +450,7 @@ class Story {
 
   /**
    * Export Story as JSON representation.
+   * @method toJSON
    * @returns {string} JSON string.
    */
   toJSON () {
@@ -441,6 +488,8 @@ class Story {
    *
    * See: Twee 3 Specification
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
+   * 
+   * @method toTwee
    * @returns {string} Twee String
    */
   toTwee () {
@@ -553,6 +602,7 @@ class Story {
    * - `format`: (string) Optional. The format of the story.
    * - `format-version`: (string) Optional. The version of the format of the story.
    * 
+   * @method toTwine2HTML
    * @returns {string} Twine 2 HTML string
    */
   toTwine2HTML () {
@@ -651,7 +701,7 @@ class Story {
 
     // zoom: (decimal) Optional. The zoom level of the story.
     // Maps to <tw-storydata zoom>.
-    if(this.zoom !== 0) {
+    if(this.zoom !== 1) {
       // Write existing or default value.
       storyData += ` zoom="${this.zoom}"`;
     }
@@ -738,6 +788,8 @@ class Story {
    *
    * See: Twine 1 HTML Output
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)
+   * 
+   * @method toTwine1HTML
    * @returns {string} Twine 1 HTML string.
    */
   toTwine1HTML () {

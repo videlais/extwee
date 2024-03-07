@@ -13,6 +13,7 @@ import { decode } from 'html-entities';
  * - Missing name attribute on `<tw-storydata>` element.
  * - Missing IFID attribute on `<tw-storydata>` element.
  * - Malformed IFID attribute on `<tw-storydata>` element.
+ * @function parse
  * @param {string} content - Twine 2 HTML content to parse.
  * @returns {Story} Story object based on Twine 2 HTML content.
  * @throws {TypeError} Content is not a string.

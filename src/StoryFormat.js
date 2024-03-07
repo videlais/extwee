@@ -240,7 +240,7 @@ export default class StoryFormat {
 
   /**
    * Produces a string representation of the story format object.
-   * @function toString
+   * @method toString
    * @returns {string} - A string representation of the story format.
    */
   toString() {

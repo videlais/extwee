@@ -719,11 +719,11 @@ describe('Story', () => {
       // Set start.
       s.start = 'Start';
       // Set zoom.
-      s.zoom = 1;
+      s.zoom = 2;
       // Create HTML.
       const result = s.toTwine2HTML();
       // Expect the zoom to be encoded.
-      expect(result.includes('zoom="1"')).toBe(true);
+      expect(result.includes('zoom="2"')).toBe(true);
     });
 
     it('Should encode start', () => {
