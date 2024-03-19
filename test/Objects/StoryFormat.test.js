@@ -1,4 +1,4 @@
-import StoryFormat from '../src/StoryFormat.js';
+import StoryFormat from '../../src/StoryFormat.js';
 
 describe('StoryFormat', () => {
   describe('Default values', () => {
@@ -153,7 +153,7 @@ describe('StoryFormat', () => {
   describe('toString', () => {
     it('Should return string representation', () => {
       const sf = new StoryFormat();
-      expect(sf.toString()).toBe(JSON.stringify(sf, null, "\t"));
+      expect(sf.toString()).toBe(JSON.stringify(sf, null, '\t'));
     });
   });
 });

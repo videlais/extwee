@@ -1,9 +1,9 @@
-import { Story, creatorName, creatorVersion } from '../src/Story.js';
-import Passage from '../src/Passage';
-import { parse as parseTwee } from '../src/Twee/parse.js';
+import { Story, creatorName, creatorVersion } from '../../src/Story.js';
+import Passage from '../../src/Passage.js';
+import { parse as parseTwee } from '../../src/Twee/parse.js';
 import { readFileSync } from 'node:fs';
 import { parse as HTMLParser } from 'node-html-parser';
-import { generate as generateIFID } from '../src/IFID/generate.js';
+import { generate as generateIFID } from '../../src/IFID/generate.js';
 
 // Pull the name and version of this project from package.json.
 // These are used as the 'creator' and 'creator-version'.
@@ -444,7 +444,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Test for format in metadata, should not exist.
-      expect(t.includes(`"'format":`)).not.toBe(true);
+      expect(t.includes('"\'format":')).not.toBe(true);
     });
 
     it('Should not generate formatVersion if empty', function () {
@@ -461,7 +461,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Test for formatVersion in metadata, should not exist.
-      expect(t.includes(`"'format-version":`)).not.toBe(true);
+      expect(t.includes('"\'format-version":')).not.toBe(true);
     });
 
     it('Should not generate zoom if zero', function () {
@@ -478,7 +478,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Test for zoom in metadata, should not exist.
-      expect(t.includes(`"'zoom":`)).not.toBe(true);
+      expect(t.includes('"\'zoom":')).not.toBe(true);
     });
 
     it('Should not generate start if empty', function () {
@@ -495,7 +495,7 @@ describe('Story', () => {
       const t = s.toTwee();
 
       // Test for start in metadata, should not exist.
-      expect(t.includes(`"'start":`)).not.toBe(true);
+      expect(t.includes('"\'start":')).not.toBe(true);
     });
 
     it('Should detect StoryTitle text', function () {
@@ -781,7 +781,7 @@ describe('Story', () => {
       expect(result.includes(`creator-version="${creatorVersion}"`)).not.toBe(true);
     });
 
-   it('Should not encode creator if not set', () => {
+    it('Should not encode creator if not set', () => {
       // Add passage.
       s.addPassage(new Passage('Start', 'Word'));
       // Set start.
@@ -793,7 +793,6 @@ describe('Story', () => {
       // Expect the creator to be encoded.
       expect(result.includes(`creator="${creatorName}"`)).not.toBe(true);
     });
-
   });
 
   describe('toTwine1HTML()', function () {
@@ -828,7 +827,7 @@ describe('Story', () => {
       // Expect correct name attribute for tw-passagedata.
       expect(root.querySelector('tw-passagedata').getAttribute('name')).toBe('"Test"');
       // Use Twine 2 result.
-      const s2 = `<tw-storydata name="&quot;Abuse&quot; &amp;test" startnode="1" creator="Twine" creator-version="2.8.1" format="Harlowe" format-version="3.3.8" ifid="452A9D80-C759-42C5-B001-5B861A2410C5" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="&quot;Test&quot;" tags="&amp;tag &quot;bad&quot;" position="300,100" size="100,100"></tw-passagedata></tw-storydata>`;
+      const s2 = '<tw-storydata name="&quot;Abuse&quot; &amp;test" startnode="1" creator="Twine" creator-version="2.8.1" format="Harlowe" format-version="3.3.8" ifid="452A9D80-C759-42C5-B001-5B861A2410C5" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="&quot;Test&quot;" tags="&amp;tag &quot;bad&quot;" position="300,100" size="100,100"></tw-passagedata></tw-storydata>';
       // Parse HTML.
       const root2 = HTMLParser(s2);
       // Expect correct name attribute for tw-storydata.

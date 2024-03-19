@@ -8,7 +8,7 @@
     "extwee": "src/extwee.js"
   },
   "scripts": {
-    "test": "jest --runInBand --coverage --colors",
+    "test": "jest --runInBand",
     "lint": "eslint ./src/**/*.js --fix",
     "lint:test": "eslint ./test/**/*.test.js --fix",
     "build:web": "webpack",
