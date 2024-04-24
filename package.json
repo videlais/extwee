@@ -13,7 +13,8 @@
     "lint:test": "eslint ./test/**/*.test.js --fix",
     "build:web": "webpack",
     "build:bin": "esbuild ./src/extwee.js --bundle --platform=node --target=node12 --outfile=out.js && pkg -t node18-macos-x64 out.js --output ./build/extwee && rm out.js",
-    "all": "npm run lint && npm run lint:test && npm run test"
+    "gen-types": "npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "all": "npm run lint && npm run lint:test && npm run test && npm run gen-types"
   },
   "keywords": [
     "twine",
