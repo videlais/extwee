@@ -3,7 +3,7 @@ import { generate as generateIFID } from './IFID/generate.js';
 import { encode } from 'html-entities';
 
 const creatorName = 'extwee';
-const creatorVersion = '2.2.2';
+const creatorVersion = '2.2.3';
 
 /**
  * Story class.
