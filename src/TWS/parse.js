@@ -28,8 +28,9 @@ function parse (binaryFileContents) {
     // Try to parse the pickle data, assuming it is pickle data.
     pythonObject = parser.parse(binaryFileContents);
   } catch (error) {
+    console.log(error);
     // This is a Buffer, but not pickle data.
-    throw new Error('Buffer does not contain Python pickle data!');
+    throw new TypeError('Error: Buffer does not contain Python pickle data!');
   }
 
   // Create Story object.

@@ -11,9 +11,9 @@ describe('TWSParser', () => {
       let r = null;
 
       beforeAll(() => {
-        const contents = fs.readFileSync('test/TWS/TWSParser/Example1.tws', 'binary');
-        const b = Buffer.from(contents, 'binary');
-        r = parseTWS(b);
+        const contents = fs.readFileSync('test/TWS/TWSParser/Example1.tws');
+        //const b = Buffer.from(contents, 'binary');
+        r = parseTWS(contents);
       });
 
       it('Should parse StoryTitle', function () {
