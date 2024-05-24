@@ -61,7 +61,7 @@ function parse (jsonString) {
   try {
     result = JSON.parse(jsonString);
   } catch (error) {
-    throw new Error('Invalid JSON!');
+    throw new Error(`Error: JSON could not be parsed! ${error.message}`);
   }
 
   // Name

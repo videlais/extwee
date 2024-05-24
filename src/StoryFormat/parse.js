@@ -90,8 +90,8 @@ function parse (contents) {
   // Attempt to parse the JSON.
   try {
     jsonContent = JSON.parse(contents);
-  } catch (event) {
-    throw new Error('Error: Unable to parse Twine 2 JSON chunk!');
+  } catch (error) {
+    throw new Error(`Error: Unable to parse Twine 2 JSON chunk! ${error.message}`);
   }
 
   /**
