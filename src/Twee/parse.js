@@ -70,6 +70,7 @@ function parse (fileContents) {
         metadata = JSON.parse(metadata);
       } catch (error) {
         console.info(`Info: Metadata could not be parsed. Setting to empty object. Reported error: ${error.message}`);
+        metadata = {};
       }
     } else {
       // There wasn't any metadata, so set default

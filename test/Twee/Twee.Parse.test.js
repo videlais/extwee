@@ -15,6 +15,14 @@ describe('Twee', () => {
       expect(() => { parseTwee('()()'); }).toThrow();
     });
 
+    it('Should ignore malformed passage metadata and create empty object', () => {
+      const fr = readFileSync('test/Twee/TweeParser/malformed.twee', 'utf-8');
+      const story = parseTwee(fr);
+      const metadata = story.getPassageByName('Start').metadata;
+      const numberOfMetadataProperties = Object.keys(metadata).length;
+      expect(numberOfMetadataProperties).toBe(0);
+    });
+
     it('Should throw error if it detects malformed passage headers', () => {
       expect(() => { parseTwee('::{}[]\nNo name'); }).toThrow();
     });
@@ -71,6 +79,15 @@ describe('Twee', () => {
       const story = parseTwee(fr);
       const p = story.getPassageByName('StoryAuthor');
       expect(p).not.toBe(null);
+    });
+
+    it('Should parse single and only passage Start', () => {
+      const fr = readFileSync('test/Twee/TweeParser/start.twee', 'utf-8');
+      const story = parseTwee(fr);
+      const p = story.getPassageByName('Start');
+      const startingPassage = story.start;
+      expect(p).not.toBe(null);
+      expect(startingPassage).toBe('Start');
     });
   });
 });

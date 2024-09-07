@@ -3,7 +3,9 @@ import { generate as generateIFID } from './IFID/generate.js';
 import { encode } from 'html-entities';
 
 const creatorName = 'extwee';
-const creatorVersion = '2.2.3';
+
+// Set the creator version.
+const creatorVersion = '2.2.4';
 
 /**
  * Story class.
@@ -396,6 +398,22 @@ class Story {
       return this.#_passages.length;
     }
 
+    // Parse Start
+    if (p.name === 'Start') {
+      // Have we already encountered StoryData?
+      if (this.start == '') {
+        // Set internal start based on Start.
+        /**
+         * Four possible scenarios:
+         * 1. StoryData has already been encountered, and we will never get here.
+         * 2. StoryData exists and will be encountered after Start.
+         * 3. StoryData does not exist.
+         * 4. Start is the first and only passage.
+         */
+        this.start = p.name;
+      }
+    }
+
     // This is not StoryData or StoryTitle.
     // Push the passage to the array.
     return this.#_passages.push(p);
@@ -636,9 +654,6 @@ class Story {
       storyData += ` ifid="${ generateIFID() }"`;
     }
 
-    // 'Start' passage (if there is not a 'start' value set).
-    let startPassagePID = null;
-
     // Passage Identification (PID) counter.
     // (Twine 2 starts with 1, so we mirror that.)
     let PIDcounter = 1;
@@ -655,35 +670,25 @@ class Story {
         startPID = PIDcounter;
       }
 
-      // Have we found the 'Start' passage?
-      if (p.name === 'Start') {
-        // If so, set the PID based on index.
-        startPassagePID = PIDcounter;
-      }
-
       // Increase and keep looking.
       PIDcounter++;
     });
 
-    // startnode: (integer) Optional.
-    //
-    // Maps to <tw-storydata startnode>.
-    //
-    // Check if startnode exists.
-    if(this.start !== '') {
-      // Set starting passage PID.
-      storyData += ` startnode="${startPID}"`;
+    // Are there any passages?
+    if (passages.length === 0) {
+      // No passages, so we can't set a startnode.
+      startPID = 0;
     }
 
     /**
-     * If we came from Twee or another source, we might not have a start value.
-     * 
-     * We might, however, have a passage with the name "Start".
+     * Multiple possible scenarios:
+     * 1. No passages. (StartPID is 0.)
+     * 2. Start is the first or only passage. (StartPID is 1.)
+     * 3. Starting passage is not the first passage. (StartPID is > 1.)
      */
-    if(this.start === '' && startPassagePID !== null) {
-      // Set starting passage PID.
-      storyData += ` startnode="${startPassagePID}"`;
-    }
+
+    // startnode: (integer) Optional. The PID of the starting passage.
+    storyData += ` startnode="${startPID}"`;
     
     // creator: (string) Optional. The name of the program that created the story.
     // Maps to <tw-storydata creator>.

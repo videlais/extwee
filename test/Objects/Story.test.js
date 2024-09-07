@@ -311,6 +311,27 @@ describe('Story', () => {
       // Test for format.
       expect(s.formatVersion).toBe('2.28.2');
     });
+
+    it('addPassage() - should override StoryData: zoom', function () {
+      // Generate object.
+      const o = {
+        zoom: 0.5
+      };
+
+      // Add the passage.
+      s.addPassage(new Passage('StoryData', JSON.stringify(o)));
+
+      // Test for zoom.
+      expect(s.zoom).toBe(0.5);
+    });
+
+    it('addPassage() - should set start if Start passage and StoryData is not present', function () {
+      // Add the passage.
+      s.addPassage(new Passage('Start'));
+
+      // Test for start.
+      expect(s.start).toBe('Start');
+    });
   });
 
   describe('removePassageByName()', () => {
@@ -726,16 +747,21 @@ describe('Story', () => {
       expect(result.includes('zoom="2"')).toBe(true);
     });
 
-    it('Should encode start', () => {
+    it('Should encode startnode as Start as single and only passage', () => {
       // Add passage.
       s.addPassage(new Passage('Start', 'Word'));
-      // Set start.
-      s.start = 'Start';
       // Create HTML.
       const result = s.toTwine2HTML();
       // Expect the start to be encoded.
       expect(result.includes('startnode="1"')).toBe(true);
     });
+
+    it('Should encode startnode as 0 if no passages', () => {
+        // Create HTML.
+        const result = s.toTwine2HTML();
+        // Expect the start to be encoded.
+        expect(result.includes('startnode="0"')).toBe(true);
+      });
 
     it('Should encode start if property is not set but Start passage is', () => {
       // Add passage.
