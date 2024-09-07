@@ -1,0 +1,16 @@
+:: StoryTitle
+Cursed
+
+
+:: StoryData
+{
+  "ifid": "22F25A58-7062-4927-95B6-F424DDB2EC65",
+  "format": "Harlowe",
+  "format-version": "3.3.8",
+  "start": "[Hello] {world} \\\\",
+  "zoom": 1
+}
+
+
+:: \[Hello\] \{world\} \\\\ {"position":"400,200","size":"100,100"}
+\:: Extra header
