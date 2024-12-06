@@ -50,12 +50,12 @@ export class Story {
     /**
      * @param {object} a - Replacement tag colors
      */
-    set tagColors(a: any);
+    set tagColors(a: object);
     /**
      * Tag Colors object (each property is a tag and its color)
      * @returns {object} tag colors array
      */
-    get tagColors(): any;
+    get tagColors(): object;
     /**
      * @param {string} i - Replacement IFID.
      */
@@ -86,12 +86,12 @@ export class Story {
     /**
      * @param {object} o - Replacement metadata
      */
-    set metadata(o: any);
+    set metadata(o: object);
     /**
      * Metadata of Story.
      * @returns {object} metadata of story
      */
-    get metadata(): any;
+    get metadata(): object;
     /**
      * @param {string} f - Replacement format
      */

@@ -68,12 +68,12 @@ export default class Passage {
      * @param {object} m - Replacement object
      * @throws {Error} Metadata must be an object literal!
      */
-    set metadata(m: any);
+    set metadata(m: object);
     /**
      * Metadata
      * @returns {object} Metadata
      */
-    get metadata(): any;
+    get metadata(): object;
     /**
      * @param {string} t - Replacement text
      * @throws {Error} Text should be a String!
