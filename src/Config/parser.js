@@ -1,7 +1,7 @@
 /**
  * Parses a JSON object and extracts the StoryFormat, StoryTitle and StoryVersion.
- * @param {Object} obj 
- * @returns {Object} An object containing the extracted results.
+ * @param {object} obj Incoming JSON object.
+ * @returns {object} An object containing the extracted results.
  */
 export function parser(obj) {
     // Check if the object is a valid JSON object.

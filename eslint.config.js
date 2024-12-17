@@ -1,8 +1,10 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import jest from "eslint-plugin-jest";
+import jsdoc from 'eslint-plugin-jsdoc';
 
 export default [
+  jsdoc.configs['flat/recommended'],
   {
     languageOptions: { 
         globals: {
@@ -12,7 +14,11 @@ export default [
         }
     },
     plugins: {
-        jest: jest
+        jest: jest,
+        jsdoc: jsdoc
+    },
+    rules: {
+      'jsdoc/require-description': 'warn'
     }
   },
   pluginJs.configs.recommended,
