@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "commander": "^12.1.0",
+    "commander": "^13.0.0",
     "graphemer": "^1.4.0",
     "html-entities": "^2.5.2",
     "node-html-parser": "^7.0.1",
