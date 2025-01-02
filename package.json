@@ -27,7 +27,7 @@
     "commander": "^12.1.0",
     "graphemer": "^1.4.0",
     "html-entities": "^2.5.2",
-    "node-html-parser": "^6.1.13",
+    "node-html-parser": "^7.0.1",
     "pickleparser": "^0.2.1",
     "semver": "^7.6.3",
     "uuid": "^11.0.3"
