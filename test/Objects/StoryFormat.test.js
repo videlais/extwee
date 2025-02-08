@@ -153,7 +153,44 @@ describe('StoryFormat', () => {
   describe('toString', () => {
     it('Should return string representation', () => {
       const sf = new StoryFormat();
+      sf.version = '1.0.0';
       expect(sf.toString()).toBe(JSON.stringify(sf, null, '\t'));
+    });
+
+    it('Should throw error if version is not valid', () => {
+      const sf = new StoryFormat();
+      expect(() => {
+        sf.toString();
+      }).toThrow();
+    });
+  });
+
+  describe('toJSON', () => {
+    it('Should return JSON representation with default name', () => {
+      const sf = new StoryFormat();
+      sf.version = '1.0.0';
+      expect(sf.toJSON().includes("Untitled Story Format")).toEqual(true);
+    });
+
+    it('Should return JSON representation with custom name', () => {
+      const sf = new StoryFormat();
+      sf.name = 'Custom Name';
+      sf.version = '1.0.0';
+      expect(sf.toJSON().includes("Custom Name")).toEqual(true);
+    });
+
+    it('Should overwrite with default name if name is empty string', () => {
+      const sf = new StoryFormat();
+      sf.name = '';
+      sf.version = '1.0.0';
+      expect(sf.toJSON().includes("Untitled Story Format")).toEqual(true);
+    });
+
+    it('Should throw error if version is not valid', () => {
+      const sf = new StoryFormat();
+      expect(() => {
+        sf.toJSON();
+      }).toThrow();
     });
   });
 });

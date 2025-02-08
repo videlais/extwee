@@ -1,3 +1,5 @@
+import { valid } from 'semver';
+
 /**
  * StoryFormat representing a Twine 2 story format.
  * 
@@ -245,5 +247,41 @@ export default class StoryFormat {
    */
   toString() {
     return JSON.stringify(this, null, "\t");
+  }
+
+  /**
+   * Produces a JSON representation of the story format object.
+   * @method toJSON
+   * @returns {object} - A JSON representation of the story format.
+   */
+  toJSON() {
+    // name: (string) Optional. The name of the story format. (Omitting the name will lead to an Untitled Story Format.)
+    // Set a default name.
+    let name = "Untitled Story Format";
+
+    // Check if the story format is not an empty string.
+    if (this.name.length > 0) {
+      // Update the name.
+      name = this.name;
+    }
+
+    // version: (string) Required, and semantic version-style formatting (x.y.z, e.g., 1.2.1) of the version is also required.
+
+    // Check if the version is valid. If not, throw an error.
+    if (!valid(this.version)) {
+      throw new TypeError('ERROR: Version must be a valid semantic version!');
+    }
+
+    return JSON.stringify({
+      name,
+      version: this.version,
+      description: this.description,
+      author: this.author,
+      image: this.image,
+      url: this.url,
+      license: this.license,
+      proofing: this.proofing,
+      source: this.source
+    });
   }
 }

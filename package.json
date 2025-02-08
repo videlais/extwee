@@ -37,6 +37,7 @@
     "@babel/core": "^7.26.8",
     "@babel/preset-env": "^7.26.8",
     "@eslint/js": "^9.20.0",
+    "@types/semver": "^7.5.8",
     "@types/uuid": "^10.0.0",
     "babel-loader": "^9.2.1",
     "clean-jsdoc-theme": "^4.3.0",
