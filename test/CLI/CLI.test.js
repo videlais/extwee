@@ -27,12 +27,12 @@ describe('CLI', () => {
   });
 
   it('Twine 1 - compile: Twee 3 + Twine 1 engine.js + Twine 1 code.js + Twine 1 header.html', () => {
-    shell.exec(`node ${currentPath}/src/extwee.js -t1 -c -i ${testFilePath}/example6.twee -o ${testFilePath}/output/test3.html -codejs ${testFilePath}/twine1/code.js -engine ${testFilePath}/twine1/engine.js -header ${testFilePath}/twine1/header.html -name Test`);
+    shell.exec(`node ${currentPath}/src/extwee.js --twine1 -c -i ${testFilePath}/example6.twee -o ${testFilePath}/output/test3.html --codejs ${testFilePath}/twine1/code.js --engine ${testFilePath}/twine1/engine.js --header ${testFilePath}/twine1/header.html --name Test`);
     expect(shell.test('-e', `${testFilePath}/output/test3.html`)).toBe(true);
   });
 
   it('Twine 1 - de-compile: Twine 1 HTML into Twee 3', () => {
-    shell.exec(`node ${currentPath}/src/extwee.js -t1 -d -i ${testFilePath}/twine1Test.html -o ${testFilePath}/output/test.twee`);
+    shell.exec(`node ${currentPath}/src/extwee.js --twine1 -d -i ${testFilePath}/twine1Test.html -o ${testFilePath}/output/test.twee`);
     expect(shell.test('-e', `${testFilePath}/output/test.twee`)).toBe(true);
   });
 

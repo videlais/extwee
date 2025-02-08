@@ -53,12 +53,12 @@ const isFile = (path) => {
 program
   .name('extwee')
   .description('CLI for Extwee')
-  .version('2.2.0', '-v, -V, --version', 'Output the current version')
+  .option('-v, --version', '2.2.4')
   .option('-c, --compile', 'Compile input into output')
   .option('-d, --decompile', 'De-compile input into output')
-  .option('-t1, --twine1', 'Enable Twine 1 processing')
-  .option('-name <storyFormatName>', 'Name of the Twine 1 story format (needed for `code.js` inclusion)')
-  .option('-codejs <codeJSFile>', 'Twine 1 code.js file for use with Twine 1 HTML', (value) => {
+  .option('--twine1', 'Enable Twine 1 processing')
+  .option('--name <storyFormatName>', 'Name of the Twine 1 story format (needed for `code.js` inclusion)')
+  .option('--codejs <codeJSFile>', 'Twine 1 code.js file for use with Twine 1 HTML', (value) => {
     // Does the input file exist?
     if (isFile(value) === false) {
       // We cannot do anything without valid input.
@@ -67,7 +67,7 @@ program
 
     return value;
   })
-  .option('-engine <engineFile>', 'Twine 1 engine.js file for use with Twine 1 HTML', (value) => {
+  .option('--engine <engineFile>', 'Twine 1 engine.js file for use with Twine 1 HTML', (value) => {
     // Does the input file exist?
     if (isFile(value) === false) {
       // We cannot do anything without valid input.
@@ -76,7 +76,7 @@ program
 
     return value;
   })
-  .option('-header <headerFile>', 'Twine 1 header.html file for use with Twine 1 HTML', (value) => {
+  .option('--header <headerFile>', 'Twine 1 header.html file for use with Twine 1 HTML', (value) => {
     // Does the input file exist?
     if (isFile(value) === false) {
       // We cannot do anything without valid input.

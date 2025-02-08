@@ -145,17 +145,17 @@ De-compile Twine 2 HTML into Twee 3:
 
 ### Compiling Twee 3 into Twine 1 HTML
 
-Enabling Twine 1 mode requires using the `-t1` or `--twine1` flag.
+Enabling Twine 1 mode requires using the `--twine1` flag.
 
 Because Twine 1 story formats can be split across files, compilation requires the "engine" from Twine 1 named `engine.js`, the name of the story format, and then its `header.html` template code and the optional but often included `code.js` file.
 
-`extwee -t1 -c -i <tweeFile> -o <Twine1HTML> -engine <engineJS> -name <storyFormatName> -codejs <CodeJS> -header <header>`
+`extwee --twine1 -c -i <tweeFile> -o <Twine1HTML> --engine <engineJS> --name <storyFormatName> --codejs <CodeJS> --header <header>`
 
 ### De-compiling Twine 1 HTML into Twee 3
 
-Enabling Twine 1 mode requires using the `-t1` or `--twine1` flag.
+Enabling Twine 1 mode requires using the `--twine1` flag.
 
-`extwee -t1 -d -i <twine1HTML> -o <outputTwee>`
+`extwee --twine1 -d -i <twine1HTML> -o <outputTwee>`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -163,7 +163,6 @@ Enabling Twine 1 mode requires using the `-t1` or `--twine1` flag.
 
 Each major version has its own GitHub project:
 
-- [Road to Extwee 2.2.0](https://github.com/users/videlais/projects/2)
 - [Road to Extwee 2.4.0](https://github.com/users/videlais/projects/4)
 
 ## Tree Shaking Support
