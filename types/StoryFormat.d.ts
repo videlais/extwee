@@ -117,5 +117,11 @@ export default class StoryFormat {
      * @returns {string} - A string representation of the story format.
      */
     toString(): string;
+    /**
+     * Produces a JSON representation of the story format object.
+     * @method toJSON
+     * @returns {object} - A JSON representation of the story format.
+     */
+    toJSON(): object;
     #private;
 }

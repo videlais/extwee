@@ -27,7 +27,7 @@
 
 ## Story Compilation
 
-The process of *story compilation* converts human-readable content, what is generally called a *story*, into a playable format such as HyperText Markup Language (HTML). The result is then presented as links or other visual, interactive elements for another party to interact with to see its content.
+The process of *story compilation* converts human-readable content, what is generally called a *story*, into a playable format such as HyperText Markup Language (HTML). The result is then presented as links or other visual, interactive elements for another party.
 
 The term *compilation* is used because different parts of code are put together in a specific arrangement to enable later play. As part of Twine-compatible HTML, this means combining JavaScript code (generally a "story format") with story HTML data.
 
@@ -59,12 +59,13 @@ Extwee supports multiple historical and current Twine-compatible formats.
 
 | Format                                                                                                                           | Input | Output                                                                                                                                                                                |
 |----------------------------------------------------------------------------------------------------------------------------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [ Twine 1 HTML (2006 - 2015) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md )          | Yes   | Partial support. Twine 1 HTML can be produced, but the  `StorySettings`  optional passage introduced in Twine 1.4.0 requires external libraries like jQuery not included with Extwee. |
-| [ Twine 1 TWS (2009 - 2015) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md )                | Yes   | Extwee does not support TWS (Python pickle) output because no current version of Twine or other story compilation tool produces this historical format.                                                |
-| [ Twine 2 HTML (2015 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md )      | Yes   | Yes                                                                                                                                                                                   |
-| [ Twine 2 Archive HTML (2015 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md ) | Yes   | Yes                                                                                                                                                                                   |
-| [ Twee 3 (2021 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md )               | Yes   | Yes                                                                                                                                                                                   |
-| [ Twine 2 JSON (2023 - Present) ]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md )       | Yes   | Yes                                                                                                                                                                                   |
+| [Twine 1 HTML (2006 - 2015)]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md )          | Yes   | Partial support. Twine 1 HTML can be produced, but the  `StorySettings`  optional passage introduced in Twine 1.4.0 requires external libraries like jQuery not included with Extwee. |
+| [Twine 1 TWS (2009 - 2015)]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-twsoutput.md )                | Yes   | Extwee does not support TWS (Python pickle) output because no current version of Twine or other story compilation tool produces this historical format.                                                |
+| [Twine 2 HTML (2015 - Present)]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md )      | Yes   | Yes                                                                                                                                                                                   |
+| [Twine 2 Archive HTML (2015 - Present)]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md ) | Yes   | Yes                                                                                                                                                                                   |
+| [Twee 3 (2021 - Present)]( https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md )               | Yes   | Yes                                                                                                                                                                                   |
+| [Twine 2 JSON (2023 - Present)]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md )       | Yes   | Yes                                                                                                                                                                                   |
+| [Twine 2 Story Format (2015 - Present)]( https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-storyformats-spec.md )       | Yes   | Yes                                                                                                                                                                                   |
 
 **Note:** Round-trip translations can present problems because of required fields and properties per format. Some metadata may be added or removed based on the specification being followed.
 
@@ -85,6 +86,8 @@ An object must be created using either the `new` keyword in JavaScript or as the
 - `Story`
 
 Story and Passage objects can generate multiple output formats: `toTwee()`, `toTwine1HTML()`, `toTwine2HTML()`, and `toJSON()`. Stories cannot be played in a browser without the corresponding compiler combining it with story format data.
+
+The StoryFormat object supports `toString()` method of producing a tab-separated JSON output and `toJSON()` method of generating JSON output matching the Twine 2 Story Format Specification.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -110,8 +113,11 @@ Compiles story, story formats, or other data into an archive or playable format.
 - `compileTwine2HTML()`
 - `compileTwine1HTML()`
 - `compileTwine2ArchiveHTML()`
+- `compileStoryFormat()`
 
-**Note:** In order to create playable Twine 1 HTML, an `engine.js` file must be supplied.
+To create playable Twine 1 HTML, an `engine.js` file must be supplied. (See [Story Format Archive](https://github.com/videlais/story-formats-archive/tree/main/official/twine1/engine/1.4.2) for available Twine 1 `engine.js` file.)
+
+Compilation of a story format adds the necessary function wrapper to convert the JSON output, via `toJSON()`, to JSONP.
 
 ### Support Functionality
 
@@ -129,7 +135,9 @@ Extwee has [documentation hosted on GitHub Pages](https://videlais.github.io/ext
 
 ## Command-Line Usage
 
-Extwee supports a command-line interface for four general scenarios:
+Extwee supports a command-line interface for four general scenarios.
+
+**Notes:** As of Extwee 2.2.5, short and long command-line option flags are separated. Short options use one hyphen followed by one character and all long options begin with two hyphens and a name as word.
 
 ### Compiling Twee 3 + Twine 2 Story Format into Twine 2 HTML
 
@@ -145,9 +153,11 @@ De-compile Twine 2 HTML into Twee 3:
 
 ### Compiling Twee 3 into Twine 1 HTML
 
-Enabling Twine 1 mode requires using the `--twine1` flag.
+Enabling Twine 1 mode requires using the `--twine1` long flag.
 
 Because Twine 1 story formats can be split across files, compilation requires the "engine" from Twine 1 named `engine.js`, the name of the story format, and then its `header.html` template code and the optional but often included `code.js` file.
+
+(Refer to the [Story Formats Archive](https://github.com/videlais/story-formats-archive) for access to historic `engine.js` and other files.)
 
 `extwee --twine1 -c -i <tweeFile> -o <Twine1HTML> --engine <engineJS> --name <storyFormatName> --codejs <CodeJS> --header <header>`
 
@@ -159,15 +169,11 @@ Enabling Twine 1 mode requires using the `--twine1` flag.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Roadmap
-
-Each major version has its own GitHub project:
-
-- [Road to Extwee 2.4.0](https://github.com/users/videlais/projects/4)
-
 ## Tree Shaking Support
 
-For [advanced tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) patterns, most formats are broke into `compile.js` and `parse.js` files exporting associated `compile()` and `parse()` functions. When using the API, it is possible to only import a single function or object to produce smaller and potentially faster code in projects dependent on Extwee functionality.
+For [advanced tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) patterns, most formats are broke into `compile.js` and `parse.js` files exporting associated `compile()` and `parse()` functions.
+
+When using the API, it is possible to only import a single function or object to produce smaller and potentially faster code in projects dependent on Extwee functionality.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
