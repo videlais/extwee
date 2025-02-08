@@ -6,7 +6,7 @@ import StoryFormat from '../StoryFormat.js';
  * @param {StoryFormat} storyFormat Story format object to compile.
  * @returns {string} JSONP string.
  */
-export default function compile (storyFormat) {
+function compile (storyFormat) {
     // Test if storyFormat is a StoryFormat object.
     if (!(storyFormat instanceof StoryFormat)) {
         throw new TypeError('Error: Incoming object is not a storyFormat object');
@@ -15,3 +15,5 @@ export default function compile (storyFormat) {
     // Create a JSONP string wrapped with the function window.StoryFormat.
     return `window.storyFormat(${JSON.stringify(storyFormat)})`;
 }
+
+export { compile };
