@@ -819,6 +819,49 @@ describe('Story', () => {
       // Expect the creator to be encoded.
       expect(result.includes(`creator="${creatorName}"`)).not.toBe(true);
     });
+
+    it('Should not encode story tag colors if none are present', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the tag colors to not be encoded if none are present.
+      expect(result.includes('<tw-tag')).toBe(false);
+    });
+
+    it('Should encode single story tag color', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Add tag colors.
+      s.tagColors = {
+        bar: 'green'
+      };
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the tag colors to be encoded.
+      expect(result.includes('<tw-tag name="bar" color="green"></tw-tag>')).toBe(true);
+    });
+
+    it('Should encode multiple story tag colors', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Add tag colors.
+      s.tagColors = {
+        bar: 'green',
+        foo: 'red'
+      };
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the tag colors to be encoded.
+      expect(result.includes('<tw-tag name="bar" color="green"></tw-tag>')).toBe(true);
+      expect(result.includes('<tw-tag name="foo" color="red"></tw-tag>')).toBe(true);
+    });
   });
 
   describe('toTwine1HTML()', function () {

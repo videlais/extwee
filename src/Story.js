@@ -781,6 +781,15 @@ class Story {
       PIDcounter++;
     });
 
+    // Generate <tw-tag> elements for each tag, if any.
+    const tagList = Object.keys(this.tagColors);
+
+    // For each tag, generate a <tw-tag> element.
+    tagList.forEach((tag) => {
+      // Add the <tw-tag> element.
+      storyData += `\t<tw-tag name="${tag}" color="${this.tagColors[tag]}"></tw-tag>\n`;
+    });
+
     // Close the HTML element.
     storyData += '</tw-storydata>';
 
