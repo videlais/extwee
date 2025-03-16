@@ -15,6 +15,29 @@ describe('StoryFormat', () => {
     });
   });
 
+  describe('Constructor with default values', () => {
+    it('Should create an instance of StoryFormat', () => {
+      const sf = new StoryFormat();
+      expect(sf).toBeInstanceOf(StoryFormat);
+    });
+  });
+
+  describe('Constructor with parameters', () => {
+    it('Should create an instance of StoryFormat with parameters', () => {
+      const sf = new StoryFormat('name', 'version', 'description', 'author', 'image', 'url', 'license', true, 'source');
+      expect(sf).toBeInstanceOf(StoryFormat);
+      expect(sf.name).toBe('name');
+      expect(sf.version).toBe('version');
+      expect(sf.description).toBe('description');
+      expect(sf.author).toBe('author');
+      expect(sf.image).toBe('image');
+      expect(sf.url).toBe('url');
+      expect(sf.license).toBe('license');
+      expect(sf.proofing).toBe(true);
+      expect(sf.source).toBe('source');
+    });
+  });
+
   describe('name', () => {
     it('Set new String', () => {
       const sf = new StoryFormat();

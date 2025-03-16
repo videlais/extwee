@@ -87,6 +87,19 @@ export default class StoryFormat {
    */
   #_source = '';
 
+  // Constructor with all parameters.
+  constructor(name = 'Untitled Story Format', version = '', description = '', author = '', image = '', url = '', license = '', proofing = false, source = '') {
+    this.name = name;
+    this.version = version;
+    this.description = description;
+    this.author = author;
+    this.image = image;
+    this.url = url;
+    this.license = license;
+    this.proofing = proofing;
+    this.source = source;
+  }
+
   /**
    * Name
    * @returns {string} Name.

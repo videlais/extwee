@@ -30,6 +30,7 @@
  * sf.source = 'New';
  */
 export default class StoryFormat {
+    constructor(name?: string, version?: string, description?: string, author?: string, image?: string, url?: string, license?: string, proofing?: boolean, source?: string);
     /**
      * @param {string} n - Replacement name.
      */
