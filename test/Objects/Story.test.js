@@ -229,6 +229,45 @@ describe('Story', () => {
     });
   });
 
+  describe('storyStylesheet', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set storyStylesheet', () => {
+      s.storyStylesheet = 'Test';
+      expect(s.storyStylesheet).not.toBe('');
+    });
+
+    it('Should throw error if not String', () => {
+      expect(() => {
+        s.storyStylesheet = 1;
+      }).toThrow();
+    }
+    );
+  });
+
+  describe('storyJavaScript', () => {
+    let s = null;
+
+    beforeEach(() => {
+      s = new Story();
+    });
+
+    it('Set storyJavaScript', () => {
+      s.storyJavaScript = 'Test';
+      expect(s.storyJavaScript).not.toBe('');
+    });
+
+    it('Should throw error if not String', () => {
+      expect(() => {
+        s.storyJavaScript = 1;
+      }).toThrow();
+    });
+  });
+
   describe('passages', () => {
     let s = null;
 
@@ -442,6 +481,30 @@ describe('Story', () => {
       // Should have a single passage.
       expect(result.passages.length).toBe(1);
     });
+
+    it('Should have style data', function () {
+      // Create default Story.
+      const s = new Story();
+      // Add a stylesheet.
+      s.storyStylesheet = 'Test';
+      // Convert to JSON and then back to object.
+      const result = JSON.parse(s.toJSON());
+      // Should have a stylesheet.
+      expect(result.style).toBe('Test');
+    }
+    );
+
+    it('Should have script data', function () {
+      // Create default Story.
+      const s = new Story();
+      // Add a script.
+      s.storyJavaScript = 'Test';
+      // Convert to JSON and then back to object.
+      const result = JSON.parse(s.toJSON());
+      // Should have a script.
+      expect(result.script).toBe('Test');
+    }
+    );
   });
 
   describe('toTwee()', function () {
@@ -647,6 +710,48 @@ describe('Story', () => {
       // Test for passage text.
       expect(p[0].text).toBe('Test');
     });
+
+    it('Should encode story stylesheet as passage with "stylesheet" tag', () => {
+      // Add passages.
+      s.storyStylesheet = 'Test';
+
+      // Set IFID.
+      s.IFID = 'DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A';
+
+      // Convert into Twee.
+      const t = s.toTwee();
+
+      // Convert back into Story.
+      const story = parseTwee(t);
+
+      // Search for 'stylesheet'.
+      const p = story.getPassagesByTag('stylesheet');
+
+      // Test for passage text.
+      expect(p[0].text).toBe('Test');
+    }
+    );
+
+    it('Should encode story JavaScript as passage with "script" tag', () => {
+      // Add passages.
+      s.storyJavaScript = 'Test';
+
+      // Set IFID.
+      s.IFID = 'DE7DF8AD-E4CD-499E-A4E7-C5B98B73449A';
+
+      // Convert into Twee.
+      const t = s.toTwee();
+
+      // Convert back into Story.
+      const story = parseTwee(t);
+
+      // Search for 'stylesheet'.
+      const p = story.getPassagesByTag('script');
+
+      // Test for passage text.
+      expect(p[0].text).toBe('Test');
+    }
+    );
   });
 
   describe('toTwine2HTML()', () => {
@@ -695,6 +800,19 @@ describe('Story', () => {
       expect(result.includes('<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">Word')).toBe(true);
     });
 
+    it('Should encode stylesheet property', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set stylesheet.
+      s.storyStylesheet = 'Test';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the stylesheet passage text to be encoded.
+      expect(result.includes('<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">Test')).toBe(true);
+    });
+
     it('Should encode script passages', () => {
       // Add passage.
       s.addPassage(new Passage('Start', 'Word'));
@@ -706,6 +824,19 @@ describe('Story', () => {
       const result = s.toTwine2HTML();
       // Expect the script passage text to be encoded.
       expect(result.includes('<script role="script" id="twine-user-script" type="text/twine-javascript">Word')).toBe(true);
+    });
+
+    it('Should encode script property', () => {
+      // Add passage.
+      s.addPassage(new Passage('Start', 'Word'));
+      // Set start.
+      s.start = 'Start';
+      // Set script.
+      s.storyJavaScript = 'Test';
+      // Create HTML.
+      const result = s.toTwine2HTML();
+      // Expect the script passage text to be encoded.
+      expect(result.includes('<script role="script" id="twine-user-script" type="text/twine-javascript">Test')).toBe(true);
     });
 
     it('Should encode format', () => {

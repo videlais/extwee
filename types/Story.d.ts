@@ -13,6 +13,8 @@
  * @property {string} creatorVersion - Version used to create Story.
  * @property {object} metadata - Metadata of Story.
  * @property {object} tagColors - Tag Colors
+ * @property {string} storyJavaScript - Story JavaScript
+ * @property {string} storyStylesheet - Story Stylesheet
  * @method {number} addPassage - Add a passage to the story and returns the new length of the passages array.
  * @method {number} removePassageByName - Remove a passage from the story by name and returns the new length of the passages array.
  * @method {Array} getPassagesByTag - Find passages by tag.
@@ -143,6 +145,25 @@ export class Story {
     */
     get passages(): any[];
     /**
+     * @param {string} s - Replacement story stylesheet
+     */
+    set storyStylesheet(s: string);
+    /**
+     * Story stylesheet data can be set as a passage, property value, or both.
+     * @returns {string} storyStylesheet
+     */
+    get storyStylesheet(): string;
+    /**
+     * Set story JavaScript.
+     * @param {string} s - Replacement story JavaScript
+     */
+    set storyJavaScript(s: string);
+    /**
+     * Get story JavaScript.
+     * @returns {string} storyJavaScript
+     */
+    get storyJavaScript(): string;
+    /**
      * Add a passage to the story.
      * Passing `StoryData` will override story metadata and `StoryTitle` will override story name.
      * @method addPassage
@@ -208,6 +229,10 @@ export class Story {
      * - `zoom`: (decimal) Optional. The zoom level of the story.
      * - `format`: (string) Optional. The format of the story.
      * - `format-version`: (string) Optional. The version of the format of the story.
+     *
+     * Because story stylesheet data can be represented as a passage, property value, or both, all approaches are encoded.
+     *
+     * Because story JavaScript can be represented as a passage, property value, or both, all approaches are encoded.
      *
      * @method toTwine2HTML
      * @returns {string} Twine 2 HTML string

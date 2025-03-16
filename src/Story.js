@@ -22,6 +22,8 @@ const creatorVersion = '2.2.6';
  * @property {string} creatorVersion - Version used to create Story.
  * @property {object} metadata - Metadata of Story.
  * @property {object} tagColors - Tag Colors
+ * @property {string} storyJavaScript - Story JavaScript
+ * @property {string} storyStylesheet - Story Stylesheet
  * @method {number} addPassage - Add a passage to the story and returns the new length of the passages array.
  * @method {number} removePassageByName - Remove a passage from the story by name and returns the new length of the passages array.
  * @method {Array} getPassagesByTag - Find passages by tag.
@@ -106,6 +108,18 @@ class Story {
    * @private
    */
   #_tagColors = {};
+
+  /**
+   * Story JavaScript
+   * @private
+   */
+  #_storyJavaScript = '';
+
+  /**
+   * Story Stylesheet
+   * @private
+   */
+  #_storyStylesheet = '';
 
   /**
    * Creates a story.
@@ -323,6 +337,45 @@ class Story {
   }
 
   /**
+   * Story stylesheet data can be set as a passage, property value, or both.
+   * @returns {string} storyStylesheet
+   */
+  get storyStylesheet () {
+    return this.#_storyStylesheet;
+  }
+
+  /**
+   * @param {string} s - Replacement story stylesheet
+   */
+  set storyStylesheet (s) {
+    if (typeof s === 'string') {
+      this.#_storyStylesheet = s;
+    } else {
+      throw new Error('Story stylesheet must be a string!');
+    }
+  }
+
+  /** 
+   * Get story JavaScript.
+   * @returns {string} storyJavaScript
+   */
+  get storyJavaScript () {
+    return this.#_storyJavaScript;
+  }
+
+  /**
+   * Set story JavaScript.
+   * @param {string} s - Replacement story JavaScript
+   */
+  set storyJavaScript (s) {
+    if (typeof s === 'string') {
+      this.#_storyJavaScript = s;
+    } else {
+      throw new Error('Story JavaScript must be a string!');
+    }
+  }
+
+  /**
    * Add a passage to the story.
    * Passing `StoryData` will override story metadata and `StoryTitle` will override story name.
    * @method addPassage
@@ -484,6 +537,8 @@ class Story {
       creator: this.creator,
       creatorVersion: this.creatorVersion,
       zoom: this.zoom,
+      style: this.storyStylesheet,
+      script: this.storyJavaScript,
       passages: []
     };
 
@@ -595,6 +650,16 @@ class Story {
     // Add two newlines.
     outputContents += '\n\n';
 
+    // Write out the story stylesheet, if any.
+    if (this.#_storyStylesheet.length > 0) {
+      outputContents += ':: StoryStylesheet [stylesheet]\n' + this.#_storyStylesheet + '\n\n';
+    }
+
+    // Write out the story JavaScript, if any.
+    if (this.#_storyJavaScript.length > 0) {
+      outputContents += ':: StoryJavaScript [script]\n' + this.#_storyJavaScript + '\n\n';
+    }
+
     // For each passage, append it to the output.
     this.passages.forEach((passage) => {
       outputContents += passage.toTwee();
@@ -619,6 +684,10 @@ class Story {
    * - `zoom`: (decimal) Optional. The zoom level of the story.
    * - `format`: (string) Optional. The format of the story.
    * - `format-version`: (string) Optional. The version of the format of the story.
+   * 
+   * Because story stylesheet data can be represented as a passage, property value, or both, all approaches are encoded.
+   * 
+   * Because story JavaScript can be represented as a passage, property value, or both, all approaches are encoded.
    * 
    * @method toTwine2HTML
    * @returns {string} Twine 2 HTML string
@@ -728,6 +797,9 @@ class Story {
     // Add the default attributes.
     storyData += ' options hidden>\n';
 
+    // We may have passages with tags of 'stylesheet', story stylesheet data, both, or none.
+
+    // Step 1: Add all passages with tag of 'stylesheet' to the stylesheet element.
     // Filter out passages with tag of 'stylesheet'.
     const stylesheetPassages = passages.filter((passage) => passage.tags.includes('stylesheet'));
 
@@ -749,6 +821,16 @@ class Story {
       storyData += '</style>\n';
     }
 
+    // Step 2: Check if the internal stylesheet data is empty.
+    // If it is not empty, add it to the stylesheet element.
+    if (this.#_storyStylesheet.length > 0) {
+      // Add the internal stylesheet.
+      storyData += `\t<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">${this.#_storyStylesheet}</style>\n`;
+    }
+
+    // We may have passages with tags of 'script', story JavaScript data, both, or none.
+
+    // Step 1: Add all passages with tag of 'script' to the script element.
     // Filter out passages with tag of 'script'.
     const scriptPassages = passages.filter((passage) => passage.tags.includes('script'));
 
@@ -768,6 +850,13 @@ class Story {
 
       // Close SCRIPT.
       storyData += '</script>\n';
+    }
+
+    // Step 2: Check if the internal JavaScript data is empty.
+    // If it is not empty, add it to the script element.
+    if (this.#_storyJavaScript.length > 0) {
+      // Add the internal JavaScript.
+      storyData += `\t<script role="script" id="twine-user-script" type="text/twine-javascript">${this.#_storyJavaScript}</script>\n`;
     }
 
     // Reset the PID counter.
