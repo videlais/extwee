@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 
 /**
  * @file CLI for Extwee
@@ -53,7 +53,7 @@ const isFile = (path) => {
 program
   .name('extwee')
   .description('CLI for Extwee')
-  .option('-v, --version', '2.2.4')
+  .option('-v, --version', '2.2.6')
   .option('-c, --compile', 'Compile input into output')
   .option('-d, --decompile', 'De-compile input into output')
   .option('--twine1', 'Enable Twine 1 processing')
