@@ -1,5 +1,7 @@
 /**
  * Write a combination of Story object, `engine.js` (from Twine 1), `header.html`, and optional `code.js`.
+ * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md Twine 1 HTML Documentation}
+ * @function compile
  * @param {Story} story - Story object to write.
  * @param {string} engine - Source of `engine.js` file from Twine 1.
  * @param {string} header - `header.html` content for Twine 1 story format.
@@ -14,4 +16,4 @@ export function compile(story: Story, engine?: string, header?: string, name?: s
     jquery: string;
     modernizr: string;
 }): string;
-import Story from '../Story.js';
+import { Story } from '../Story.js';

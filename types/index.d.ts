@@ -8,7 +8,9 @@ import { parse as parseTwine2ArchiveHTML } from './src/Twine2ArchiveHTML/parse.j
 import { compile as compileTwine1HTML } from './src/Twine1HTML/compile.js';
 import { compile as compileTwine2HTML } from './src/Twine2HTML/compile.js';
 import { compile as compileTwine2ArchiveHTML } from './src/Twine2ArchiveHTML/compile.js';
-import Story from './src/Story.js';
+import { compile as compileStoryFormat } from './src/StoryFormat/compile.js';
+import { generate as generateIFID } from './src/IFID/generate.js';
+import { Story } from './src/Story.js';
 import Passage from './src/Passage.js';
 import StoryFormat from './src/StoryFormat.js';
-export { parseTwee, parseJSON, parseTWS, parseStoryFormat, parseTwine1HTML, parseTwine2HTML, parseTwine2ArchiveHTML, compileTwine1HTML, compileTwine2HTML, compileTwine2ArchiveHTML, Story, Passage, StoryFormat };
+export { parseTwee, parseJSON, parseTWS, parseStoryFormat, parseTwine1HTML, parseTwine2HTML, parseTwine2ArchiveHTML, compileTwine1HTML, compileTwine2HTML, compileTwine2ArchiveHTML, compileStoryFormat, generateIFID, Story, Passage, StoryFormat };
