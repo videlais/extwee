@@ -5,8 +5,8 @@
  * @author Dan Cox
  */
 
-import { CommandLineProcessing } from "./CLI/commandLineProcessing.js";
-import { ConfigFilePresent, ConfigFileProcessing } from "./CLI/processConfig.js";
+import { CommandLineProcessing } from "./CLI/CommandLineProcessing.js";
+import { ConfigFilePresent, ConfigFileProcessing } from "./CLI/ProcessConfig.js";
 
 /**
  * As a command-line tool, Extwee can be invoked multiple ways.
