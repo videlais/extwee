@@ -1,14 +1,8 @@
 {
-    "storyFormat": {
-        "name": "harlowe",
-        "version": "3.2.0"
-    },
-    "input": {
-        "format": "twee",
-        "filename": "input.twee"
-    },
-    "output": {
-        "format": "twin2-html",
-        "filename": "output.html"
-    }
+    "mode": "decompile",
+    "input": "index.html",
+    "story-format": "Harlowe",
+    "story-format-version": "3.2.0",
+    "output": "index.twee",
+    "twine1Processing": false
 }
