@@ -23,74 +23,78 @@ import { readFileSync } from "node:fs";
  * // Output: The contents of the format.js file.
  */
 export function loadStoryFormat(storyFormatName, storyFormatVersion) {
-    // Does the story-formats directory exist?
-    const isDir = isDirectory('story-formats');
-    // If the story-formats directory does not exist, exit the process.
-    if (isDir === false) {
-        console.error(`Error: story-formats directory does not exist. Consider running 'npx sfa-get' to download the latest story formats.`);
-        // Exit the process.
-        process.exit(1);
+    // If the story-formats directory does not exist, throw error.
+    if (isDirectory('story-formats') === false) {
+        throw new Error(`Error: story-formats directory does not exist. Consider running 'npx sfa-get' to download the latest story formats.`);
     }
 
     // Does the named story format exist in the story-formats directory?
     const isStoryFormatDir = isDirectory(`story-formats/${storyFormatName}`);
-    // If the story format directory does not exist, exit the process.
+    
+    // If the story format directory does not exist, throw error.
     if (isStoryFormatDir === false) {
-        console.error(`Error: story format ${storyFormatName} does not exist in the story-formats directory.`);
-        // Exit the process.
-        process.exit(1);
+        throw new Error(`Error: story format ${storyFormatName} does not exist in the story-formats directory.`);
     }
 
-    // Does the named story format have a version directory?
-    const isVersionDir = isDirectory(`story-formats/${storyFormatName}/${storyFormatVersion}`);
-    // If the version directory does not exist, exit the process.
-    if (isVersionDir === false) {
-        console.error(`Error: story format ${storyFormatName} version ${storyFormatVersion} does not exist in the story-formats directory.`);
-        // Exit the process.
-        process.exit(1);
-    }
+    let filepath = `story-formats/${storyFormatName}/format.js`;
 
-    // Set an initial path based on the version.
-    let filepath = `story-formats/${storyFormatName}/${storyFormatVersion}/format.js`;
+    // If the story format version is 'latest', check if the format.js file exists.
+    // If the format.js file does not exist, check if there are version directories.
+    // If there are version directories, get the latest version and set the filepath to that version directory and format.js file.
+    // If the format.js file exists, return its contents.
 
-    // check if storyFormatVersion is "latest"
-    if (storyFormatVersion === 'latest') {
-        // If latest, check if 'format.js' exists in the story format directory.
-        const latestFormat = `story-formats/${storyFormatName}/format.js`;
-        const isLatestFormatFile = isFile(latestFormat);
+    // Check if storyFormatVersion is "latest"
+    if (storyFormatVersion === 'latest' && isFile(filepath) === false) {
+        // Read the directories in the story format directory.
+        // The directories are expected to be version directories.
+        let directories = readDirectories(`story-formats/${storyFormatName}`);
 
-        // If the `format.js` file does not exist, read the directories with in the story format directory.
-        if (isLatestFormatFile === false) {
-            // Read the directories in the story format directory.
-            // The directories are expected to be version directories.
-            const directories = readDirectories(`story-formats/${storyFormatName}`);
-            
-            // Sort the directories in descending order.
-            directories.sort((a, b) => {
-                return b.localeCompare(a, undefined, { numeric: true });
-            });
+        console.log("!!! directories", directories);
 
-            // Get the latest version directory.
-            // The latest version is the last directory in the sorted list.
-            const latestVersion = directories[0];
-            // Set the filepath to the latest version directory.
-            filepath = `story-formats/${storyFormatName}/${latestVersion}/format.js`;
-        } else {
-            filepath = latestFormat;
+        // Check if there are any version directories.
+        if (directories.length === 0) {
+            // If there are no version directories, throw error.
+            throw new Error(`Error: story format ${storyFormatName} does not have any version directories.`);
         }
-    } else {
-        // If the version is not "latest", set the filepath to the version directory.
-        filepath = `story-formats/${storyFormatName}/${storyFormatVersion}/format.js`;
+            
+        // Sort the directories in descending order.
+        directories.sort((a, b) => {
+            return b.localeCompare(a, undefined, { numeric: true });
+        });
+
+        // Get the latest version directory.
+        // The latest version is the last directory in the sorted list.
+        const latestVersion = directories[0];
+        
+        // Set the filepath to the latest version directory.
+        filepath = `story-formats/${storyFormatName}/${latestVersion}/format.js`;
+
+        // Is there a 'format.js' file in the version directory?
+        let isFormatFile = isFile(filepath);
+
+        // If the format.js file does not exist, exit the process.
+        if (isFormatFile === false) {
+            throw new Error(`Error: story format ${storyFormatName} version ${storyFormatVersion} does not have a format.js file.`);
+        }
     }
 
-    // Is there a 'format.js' file in the version directory?
-    let isFormatFile = isFile(filepath);
+    // If the story format version is not 'latest', check if version directories exists.
+    if(storyFormatVersion !== 'latest') {
+        // Does the named story format have a version directory?
+        const isVersionDir = isDirectory(`story-formats/${storyFormatName}/${storyFormatVersion}`);
+        
+        // If the version directory does not exist, throw error.
+        if (isVersionDir === false) {
+            throw new Error(`Error: story format ${storyFormatName} version ${storyFormatVersion} does not exist in the story-formats directory.`);
+        }
 
-    // If the format.js file does not exist, exit the process.
-    if (isFormatFile === false) {
-        console.error(`Error: story format ${storyFormatName} version ${storyFormatVersion} does not have a format.js file.`);
-        // Exit the process.
-        process.exit(1);
+        // Set an initial path based on the version.
+        filepath = `story-formats/${storyFormatName}/${storyFormatVersion}/format.js`;
+        
+        // If the format.js file does not exist, throw error.
+        if (isFile(filepath) === false) {
+            throw new Error(`Error: story format ${storyFormatName} version ${storyFormatVersion} does not have a format.js file.`);
+        }
     }
 
     // If the format.js file exists, read and return its contents.

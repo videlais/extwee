@@ -10,28 +10,37 @@ import { isDirectory } from '../isDirectory.js';
  * @throws {Error} - If the directory does not exist or if there is an error reading the directory.
  */
 export function readDirectories(directory) {
-    // Check if the directory exists
+
+    // Create default response.
+    let results = [];
+
+    // Check if the directory exists.
     const isDir = isDirectory(directory);
-    if (!isDir) {
+    // If the directory does not exist, return an empty array
+    //  and log an error message.
+    if (isDir == false) {
         console.error(`Error: Directory ${directory} does not exist.`);
-        return [];
     }
 
-    // Create an empty array to hold the directories
-    let directories = [];
-
-    // Read the directory and return the list of files
+    // Read the directory and return the list of files.
     try {
-        directories = readdirSync(directory);
+        results = readdirSync(directory);
     } catch (error) {
         console.error(`Error reading directory ${directory}:`, error);
+        results = [];
     }
 
-    // Filter the list to only include directories
-    const directoriesOnly = directories.filter((item) => {
+    // Check if results is an array.
+    // This should not happen, but for some reason it can.
+    if (!Array.isArray(results)) {
+        results = [];
+    }
+
+    // Filter the list to only include directories.
+    const directoriesOnly = results.filter((item) => {
         return isDirectory(`${directory}/${item}`);
     });
 
-    // Return the list of directories
+    // Return the list of directories.
     return directoriesOnly;
 }
