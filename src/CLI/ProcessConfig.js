@@ -5,9 +5,9 @@ import {
   parseTwee,
   parseStoryFormat,
   parseTwine1HTML,
-  compileTwine2HTML,
-  compileTwine1HTML
+  compileTwine2HTML
 } from '../../index.js';
+import { loadStoryFormat } from './ProcessConfig/loadStoryFormat.js';
 
 // Look for the config file in the current directory.
 const configFile = 'extwee.config.json';
@@ -106,10 +106,18 @@ export function ConfigFileProcessing() {
   const isCompileMode = (configFileContents.mode === "compile");
 
   // Check if Twine 1 is enabled.
-  const isTwine1Mode = (options.twine1 === true);
+  const isTwine1Mode = (configFileContents.twine1Project === true);
+
+  // Check if story-format-version is present.
+  if (configFileContents.storyFormatVersion === undefined) {
+    // If not present, assume "latest" version.
+    configFileContents.storyFormatVersion = 'latest';
+  }
 
   // Check if Twine 2 is enabled.
-  const isTwine2Mode = (isTwine1Mode === false);
+  // By default, Twine 2 is enabled and only disabled if Twine 1 is enabled.
+  // This is because Twine 2 is the default mode for Extwee.
+  const isTwine2Mode = (isTwine1Mode === false ? true : false);
 
   // De-compile Twine 2 HTML into Twee 3 branch.
   if (isTwine2Mode === true && isDecompileMode === true) {
@@ -129,13 +137,13 @@ export function ConfigFileProcessing() {
   // Compile Twee 3 into Twine 2 HTML branch.
   if (isTwine2Mode === true && isCompileMode === true) {
     // Read the input file.
-    const inputTwee = readFileSync(options.i, 'utf-8');
+    const inputTwee = readFileSync(configFileContents.input, 'utf-8');
 
     // Parse the input file.
     const story = parseTwee(inputTwee);
 
     // Read the story format file.
-    const inputStoryFormat = readFileSync(options.s, 'utf-8');
+    const inputStoryFormat = loadStoryFormat(configFileContents.storyFormatName, configFileContents.storyFormatVersion);
 
     // Parse the story format file.
     const parsedStoryFormat = parseStoryFormat(inputStoryFormat);
@@ -144,7 +152,7 @@ export function ConfigFileProcessing() {
     const Twine2HTML = compileTwine2HTML(story, parsedStoryFormat);
 
     // Write the output file.
-    writeFileSync(options.o, Twine2HTML);
+    writeFileSync(configFileContents.output, Twine2HTML);
 
     // Exit the process.
     return;
@@ -153,13 +161,13 @@ export function ConfigFileProcessing() {
   // De-compile Twine 1 HTML into Twee 3 branch.
   if (isTwine1Mode === true && isDecompileMode === true) {
     // Read the input HTML file.
-    const inputHTML = readFileSync(options.i, 'utf-8');
+    const inputHTML = readFileSync(configFileContents.input, 'utf-8');
 
     // Parse the input HTML file into Story object.
     const storyObject = parseTwine1HTML(inputHTML);
 
     // Write the output file from Story as Twee 3.
-    writeFileSync(options.o, storyObject.toTwee());
+    writeFileSync(configFileContents.output, storyObject.toTwee());
 
     return;
   }

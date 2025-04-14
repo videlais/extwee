@@ -1,0 +1,8 @@
+{
+    "story-format": "harlowe",
+    "mode": "compile",
+    "input": "index.twee",
+    "output": "index.html",
+    "story-format-version": "3.2.0",
+    "twine1-project": false
+}

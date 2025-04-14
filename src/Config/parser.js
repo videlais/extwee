@@ -12,8 +12,11 @@ export function parser(obj) {
     // Extracted results.
     let results = {
         StoryFormat: null,
-        StoryTitle: null,
-        StoryVersion: null
+        Input: null,
+        Output: null,
+        Mode: null,
+        Twine1Project: false,
+        StoryFormatVersion: null
     };
     
     // Does the object contain 'StoryFormat'?
@@ -21,14 +24,33 @@ export function parser(obj) {
         results.StoryFormat = obj['story-format'];
     }
 
-    // Does the object contain 'StoryTitle'?
-    if (Object.hasOwnProperty.call(obj, 'story-title')) {
-        results.StoryTitle = obj['story-title'];
+    // Does the object contain 'StoryFormatVersion'?
+    if (Object.hasOwnProperty.call(obj, 'story-format-version')) {
+        results.StoryFormatVersion = obj['story-format-version'];
+    } else {
+        results.StoryFormatVersion = "latest";
     }
 
-    // Does the object contain 'StoryVersion'?
-    if (Object.hasOwnProperty.call(obj, 'story-version')) {
-        results.StoryVersion = obj['story-version'];
+    // Does the object contain 'mode'?
+    if (Object.hasOwnProperty.call(obj, 'mode')) {
+        results.Mode = obj['mode'];
+    }
+
+    // Does the object contain 'input'?
+    if (Object.hasOwnProperty.call(obj, 'input')) {
+        results.Input = obj['input'];
+    }
+
+    // Does the object contain 'output'?
+    if (Object.hasOwnProperty.call(obj, 'output')) {
+        results.Output = obj['output'];
+    }
+
+    // Does the object contain 'twine1-project'?
+    if (Object.hasOwnProperty.call(obj, 'twine1-project')) {
+        results.Twine1Project = obj['twine1-project'];
+    } else {
+        results.Twine1Project = false;
     }
 
     // Return the extracted results.
