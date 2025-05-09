@@ -240,5 +240,10 @@ describe('Passage', () => {
       expect(t.querySelector('tw-passagedata').getAttribute('tags')).toBe('&tag "bad"');
       expect(t.querySelector('tw-passagedata').getAttribute('position')).toBe('100,100');
     });
+
+    it('Should escape double-colon at start of text when exporting to Twee', function () {
+      const p = new Passage('test', ':: nefarious');
+      expect(p.toTwee()).toBe(':: test\n\\:: nefarious\n\n');
+    });
   });
 });
