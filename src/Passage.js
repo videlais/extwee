@@ -190,8 +190,23 @@ export default class Passage {
       content += ` ${JSON.stringify(this.metadata)}`;
     }
 
-    // Add newline, text, and two newlines.
-    content += `\n${this.text}\n\n`;
+    // Split the text into lines.
+    const lines = this.text.split('\n');
+
+    // For each line, check if it begins with a double-colon.
+    for (let i = 0; i < lines.length; i++) {
+      // Check if the line begins with a double-colon.
+      if (lines[i].startsWith('::')) {
+        // Escape the double-colon.
+        lines[i] = `\\${lines[i]}`;
+      }
+    }
+
+    // Rejoin the lines.
+    const output = lines.join('\n');
+
+    // Add newline and text.
+    content += `\n${output}\n\n`;
 
     // Return string.
     return content;
