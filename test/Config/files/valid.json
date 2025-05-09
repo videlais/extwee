@@ -1,5 +1,6 @@
 {
-    "story-format": "Harlowe",
-    "story-title": "My Story",
-    "story-version": "2.0.1"
+    "story-format": "harlowe",
+    "mode": "decompile",
+    "input": "index.html",
+    "output": "index.twee"
 }
