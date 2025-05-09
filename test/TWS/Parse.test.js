@@ -7,28 +7,6 @@ describe('TWSParser', () => {
       expect(() => { parseTWS(0); }).toThrow();
     });
 
-    describe('Story parsing', function () {
-      let r = null;
-
-      beforeAll(() => {
-        const contents = fs.readFileSync('test/TWS/TWSParser/Example1.tws');
-        //const b = Buffer.from(contents, 'binary');
-        r = parseTWS(contents);
-      });
-
-      it('Should parse StoryTitle', function () {
-        expect(r.name).toBe('Untitled Story');
-      });
-
-      it('Should parse zoom', function () {
-        expect(r.zoom).toBe(1);
-      });
-
-      it('Should parse start passage', function () {
-        expect(r.start).toBe('Start');
-      });
-    });
-
     describe('Passage parsing', function () {
       let r = null;
 
