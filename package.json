@@ -23,7 +23,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "commander": "^13.1.0",
+    "commander": "^14.0.0",
     "graphemer": "^1.4.0",
     "html-entities": "^2.6.0",
     "node-html-parser": "^7.0.1",
