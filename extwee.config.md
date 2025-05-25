@@ -43,3 +43,12 @@ For example, if using Harlowe, the path would be `./story-formats/harlowe` and t
 
 The Story Format Archive retains story formats based on its version. This can be specified, such as `3.2.0`, or the default `latest` can be used.
 
+```json
+{
+    "mode": "compile",
+    "input": "index.twee",
+    "output": "index.html",
+    "story-format": "harlowe",
+    "story-format-version": "3.2.0"
+}
+```
