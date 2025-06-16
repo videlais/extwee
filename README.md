@@ -21,6 +21,7 @@
   </ol>
   <li><a href="#documentation">Documentation</a></li>
   <li><a href="#command-line-usage">Command-Line Usage</a></li>
+  <li><a href="#config-file-usage">Config File Usage</a></li>
   <li><a href="#escaping- meta-characters">Escaping Meta-Characters</a></li>
   <li><a href="#license">License</a></li>
   </ol>
@@ -166,6 +167,14 @@ Because Twine 1 story formats can be split across files, compilation requires th
 Enabling Twine 1 mode requires using the `--twine1` flag.
 
 `extwee --twine1 -d -i <twine1HTML> -o <outputTwee>`
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Config File Usage
+
+When invoked from its command-line interface using `npx extwee`, it will look for a `extwee.config.json` file in the local directory. If found, and its fields are valid, processing will use the values found in the file.
+
+Consult the possible options in its [dedicated file](extwee.config.md).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

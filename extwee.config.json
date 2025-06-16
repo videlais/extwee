@@ -2,5 +2,5 @@
     "mode": "decompile",
     "input": "index.html",
     "output": "index.twee",
-    "story-format": "Harlowe"
+    "story-format": "harlowe"
 }

@@ -41,7 +41,18 @@ For example, if using Harlowe, the path would be `./story-formats/harlowe` and t
 
 ### Defining optional `story-format-version`
 
-The Story Format Archive retains story formats based on its version. This can be specified, such as `3.2.0`, or the default `latest` can be used.
+The Story Format Archive retrieves story formats based on its version in a sub-directory structure:
+
+```file
+story-formats/
+├── harlowe/
+│   ├── 2.3.0/
+│       └── format.js
+│   ├── 2.4.0/
+│       └── format.js
+```
+
+This can be specified, such as `3.2.0`, or the default `latest`, can be used.
 
 ```json
 {
@@ -52,3 +63,5 @@ The Story Format Archive retains story formats based on its version. This can be
     "story-format-version": "3.2.0"
 }
 ```
+
+If only the story format name is specified, and it can be found in the local `story-formats` directory, it will search for a corresponding `format.js` file.
