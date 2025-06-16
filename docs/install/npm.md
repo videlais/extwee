@@ -13,8 +13,4 @@ import { Story, Passage } from 'extwee';
 const example = new Story( 'Example' );
 // Add a new passage.
 example.addPassage(new Passage( 'Test', 'Some Text') );
-
-// Confirm size change.
-// (Should produce 1).
-console.log ( example.size() );
 ```

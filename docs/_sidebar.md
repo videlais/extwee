@@ -1,5 +1,4 @@
 - Installation and General Usage
-  - [Binaries (stand alone)](/install/binaries.md)
   - [Using NPX (as part of workflow)](/install/npx.md)
   - [Using NPM (via API)](/install/npm.md)
 - Objects
