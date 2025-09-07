@@ -1,3 +1,4 @@
+import {jest} from '@jest/globals';
 import { Story, creatorName, creatorVersion } from '../../src/Story.js';
 import Passage from '../../src/Passage.js';
 import { parse as parseTwee } from '../../src/Twee/parse.js';

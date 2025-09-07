@@ -18,7 +18,10 @@ export default [
         jsdoc: jsdoc
     },
     rules: {
-      'jsdoc/require-description': 'warn'
+      'jsdoc/require-description': 'warn',
+      'jsdoc/check-tag-names': ['error', {
+        definedTags: ['jest-environment']
+      }]
     }
   },
   pluginJs.configs.recommended,

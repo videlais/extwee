@@ -1,3 +1,4 @@
+import {jest} from '@jest/globals';
 import { parse as parseStoryFormat } from '../../src/StoryFormat/parse.js';
 
 describe('StoryFormat', () => {

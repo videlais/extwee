@@ -1,3 +1,4 @@
+import {jest} from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { parse as parseTwine2HTML } from '../../src/Twine2HTML/parse.js';
 

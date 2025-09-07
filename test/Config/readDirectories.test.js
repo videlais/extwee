@@ -1,9 +1,19 @@
-import { readDirectories } from '../../src/CLI/ProcessConfig/readDirectories.js';
-import { readdirSync } from 'node:fs';
-import { isDirectory } from '../../src/CLI/isDirectory.js';
+import {jest} from '@jest/globals';
 
-jest.mock('node:fs');
-jest.mock('../../src/CLI/isDirectory.js');
+// Mock the fs module and isDirectory before importing anything that uses them
+const mockReaddirSync = jest.fn();
+const mockIsDirectory = jest.fn();
+
+jest.unstable_mockModule('node:fs', () => ({
+    readdirSync: mockReaddirSync
+}));
+
+jest.unstable_mockModule('../../src/CLI/isDirectory.js', () => ({
+    isDirectory: mockIsDirectory
+}));
+
+// Now import the modules that depend on the mocked modules
+const { readDirectories } = await import('../../src/CLI/ProcessConfig/readDirectories.js');
 
 describe('readDirectories', () => {
     afterEach(() => {
@@ -12,7 +22,7 @@ describe('readDirectories', () => {
 
     it('should return an empty array and log an error if the directory does not exist', () => {
         const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-        isDirectory.mockReturnValue(false);
+        mockIsDirectory.mockReturnValue(false);
 
         const result = readDirectories('/nonexistent');
 
@@ -23,8 +33,8 @@ describe('readDirectories', () => {
 
     it('should return an empty array and log an error if readdirSync throws an error', () => {
         const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-        isDirectory.mockReturnValue(true);
-        readdirSync.mockImplementation(() => {
+        mockIsDirectory.mockReturnValue(true);
+        mockReaddirSync.mockImplementation(() => {
             throw new Error('Permission denied');
         });
 
@@ -36,8 +46,8 @@ describe('readDirectories', () => {
     });
 
     it('should return an empty array if the directory is empty', () => {
-        isDirectory.mockReturnValue(true);
-        readdirSync.mockReturnValue([]);
+        mockIsDirectory.mockReturnValue(true);
+        mockReaddirSync.mockReturnValue([]);
 
         const result = readDirectories('/empty');
 
@@ -45,10 +55,10 @@ describe('readDirectories', () => {
     });
 
     it('should return an array of directories', () => {
-        isDirectory.mockReturnValue(true);
-        readdirSync.mockReturnValue(['dir1', 'file1', 'dir2']);
+        mockIsDirectory.mockReturnValue(true);
+        mockReaddirSync.mockReturnValue(['dir1', 'file1', 'dir2']);
 
-        isDirectory.mockImplementation((path) => {
+        mockIsDirectory.mockImplementation((path) => {
             return path === '/test/dir1' || path === '/test/dir2';
         });
 
@@ -58,8 +68,8 @@ describe('readDirectories', () => {
     });
     
     it('should return an empty array if the result is not an array', () => {
-        isDirectory.mockReturnValue(true);
-        readdirSync.mockReturnValue('not an array');
+        mockIsDirectory.mockReturnValue(true);
+        mockReaddirSync.mockReturnValue('not an array');
 
         const result = readDirectories('/test');
 

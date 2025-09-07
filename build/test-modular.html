@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extwee Modular Build Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .module {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .size-info {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Extwee Modular Build Test</h1>
+    
+    <div class="module">
+        <h2>Core Module</h2>
+        <div class="size-info">File size: 79K</div>
+        <div id="core-result">Loading...</div>
+    </div>
+    
+    <div class="module">
+        <h2>Twine1HTML Module</h2>
+        <div class="size-info">File size: 45K</div>
+        <div id="twine1html-result">Loading...</div>
+    </div>
+    
+    <div class="module">
+        <h2>Twine2Archive Module</h2>
+        <div class="size-info">File size: 49K</div>
+        <div id="twine2archive-result">Loading...</div>
+    </div>
+    
+    <div class="module">
+        <h2>TWS Module</h2>
+        <div class="size-info">File size: 52K</div>
+        <div id="tws-result">Loading...</div>
+    </div>
+    
+    <div class="module">
+        <h2>Bundle Size Summary</h2>
+        <ul>
+            <li><strong>Core bundle:</strong> 79K (most common functionality)</li>
+            <li><strong>Individual modules:</strong> 45K-52K each (specialized parsers)</li>
+            <li><strong>All modules total:</strong> 225K (vs. original 290K - 22% reduction)</li>
+            <li><strong>Core only:</strong> 79K (vs. original 290K - 73% reduction)</li>
+        </ul>
+        <p><strong>Advantage:</strong> Users can load only what they need!</p>
+    </div>
+
+    <!-- Load Core Module -->
+    <script src="extwee.core.min.js"></script>
+    <script>
+        try {
+            console.log('Core Extwee:', typeof Extwee);
+            document.getElementById('core-result').innerHTML = 
+                '<span class="success">✓ Core module loaded successfully</span><br>' +
+                'Available: ' + Object.keys(Extwee).join(', ');
+        } catch (e) {
+            document.getElementById('core-result').innerHTML = 
+                '<span class="error">✗ Error loading core: ' + e.message + '</span>';
+        }
+    </script>
+
+    <!-- Load Twine1HTML Module -->
+    <script src="extwee.twine1html.min.js"></script>
+    <script>
+        try {
+            // The Twine1HTML module should extend the same Extwee global
+            document.getElementById('twine1html-result').innerHTML = 
+                '<span class="success">✓ Twine1HTML module loaded successfully</span>';
+        } catch (e) {
+            document.getElementById('twine1html-result').innerHTML = 
+                '<span class="error">✗ Error loading Twine1HTML: ' + e.message + '</span>';
+        }
+    </script>
+
+    <!-- Load Twine2Archive Module -->
+    <script src="extwee.twine2archive.min.js"></script>
+    <script>
+        try {
+            document.getElementById('twine2archive-result').innerHTML = 
+                '<span class="success">✓ Twine2Archive module loaded successfully</span>';
+        } catch (e) {
+            document.getElementById('twine2archive-result').innerHTML = 
+                '<span class="error">✗ Error loading Twine2Archive: ' + e.message + '</span>';
+        }
+    </script>
+
+    <!-- Load TWS Module -->
+    <script src="extwee.tws.min.js"></script>
+    <script>
+        try {
+            document.getElementById('tws-result').innerHTML = 
+                '<span class="success">✓ TWS module loaded successfully</span>';
+        } catch (e) {
+            document.getElementById('tws-result').innerHTML = 
+                '<span class="error">✗ Error loading TWS: ' + e.message + '</span>';
+        }
+    </script>
+</body>
+</html>

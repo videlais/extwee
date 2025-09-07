@@ -2,41 +2,48 @@
  * @jest-environment jsdom
  */
 
-import '../../web-index.js';
+// Load the core web module to set up window.Extwee
+import '../../src/Web/web-index.js';
 
 describe('Extwee', () => {
-    it('should have all the expected properties', () => {
+    it('should have all the expected immediate properties', () => {
+        // Core functionality that's immediately available
         expect(window.Extwee).toHaveProperty('parseTwee');
         expect(window.Extwee).toHaveProperty('parseJSON');
-        expect(window.Extwee).toHaveProperty('parseTWS');
         expect(window.Extwee).toHaveProperty('parseStoryFormat');
-        expect(window.Extwee).toHaveProperty('parseTwine1HTML');
         expect(window.Extwee).toHaveProperty('parseTwine2HTML');
-        expect(window.Extwee).toHaveProperty('parseTwine2ArchiveHTML');
-        expect(window.Extwee).toHaveProperty('compileTwine1HTML');
         expect(window.Extwee).toHaveProperty('compileTwine2HTML');
-        expect(window.Extwee).toHaveProperty('compileTwine2ArchiveHTML');
         expect(window.Extwee).toHaveProperty('generateIFID');
         expect(window.Extwee).toHaveProperty('Story');
         expect(window.Extwee).toHaveProperty('Passage');
         expect(window.Extwee).toHaveProperty('StoryFormat');
+        
+        // Additional parsers available in unified build
+        expect(window.Extwee).toHaveProperty('parseTwine1HTML');
+        expect(window.Extwee).toHaveProperty('parseTwine2ArchiveHTML');
+        expect(window.Extwee).toHaveProperty('parseTWS');
+        expect(window.Extwee).toHaveProperty('compileTwine1HTML');
+        expect(window.Extwee).toHaveProperty('compileTwine2ArchiveHTML');
     });
 
-    it('should have the expected types', () => {
+    it('should have the expected types for immediate functions', () => {
+        // Core functionality
         expect(typeof window.Extwee.parseTwee).toBe('function');
         expect(typeof window.Extwee.parseJSON).toBe('function');
-        expect(typeof window.Extwee.parseTWS).toBe('function');
         expect(typeof window.Extwee.parseStoryFormat).toBe('function');
-        expect(typeof window.Extwee.parseTwine1HTML).toBe('function');
         expect(typeof window.Extwee.parseTwine2HTML).toBe('function');
-        expect(typeof window.Extwee.parseTwine2ArchiveHTML).toBe('function');
-        expect(typeof window.Extwee.compileTwine1HTML).toBe('function');
         expect(typeof window.Extwee.compileTwine2HTML).toBe('function');
-        expect(typeof window.Extwee.compileTwine2ArchiveHTML).toBe('function');
         expect(typeof window.Extwee.generateIFID).toBe('function');
         expect(typeof window.Extwee.Story).toBe('function');
         expect(typeof window.Extwee.Passage).toBe('function');
         expect(typeof window.Extwee.StoryFormat).toBe('function');
+        
+        // Additional parsers
+        expect(typeof window.Extwee.parseTwine1HTML).toBe('function');
+        expect(typeof window.Extwee.parseTwine2ArchiveHTML).toBe('function');
+        expect(typeof window.Extwee.parseTWS).toBe('function');
+        expect(typeof window.Extwee.compileTwine1HTML).toBe('function');
+        expect(typeof window.Extwee.compileTwine2ArchiveHTML).toBe('function');
     });
 
     it('should have the expected properties in StoryFormat', () => {

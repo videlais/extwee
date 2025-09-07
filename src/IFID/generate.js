@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Generates an Interactive Fiction Identification (IFID) based the Treaty of Babel.
@@ -14,7 +14,7 @@ import { v4 } from 'uuid';
  * // => 'A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6'
  */
 function generate () {
-  return v4().toUpperCase();
+  return uuidv4().toUpperCase();
 }
 
 export { generate };

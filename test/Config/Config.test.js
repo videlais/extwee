@@ -1,4 +1,4 @@
-import {reader as ConfigReader} from '../../src/Config/reader.js';
+import { reader as ConfigReader } from '../../src/Config/reader.js';
 import {parser as ConfigParser} from '../../src/Config/parser.js';
 
 describe('src/Config/reader.js', () => {
