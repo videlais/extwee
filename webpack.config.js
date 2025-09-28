@@ -15,7 +15,8 @@ export default {
     filename: '[name].min.js',
     library: {
       type: 'umd',
-      name: 'Extwee' // Use a single library name for all modules
+      name: 'Extwee', // Use a single library name for all modules
+      export: 'default'  // Export the default export directly
     },
     globalObject: 'this'
   },

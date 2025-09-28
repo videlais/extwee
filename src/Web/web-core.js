@@ -10,7 +10,7 @@ import Passage from '../Passage.js';
 import StoryFormat from '../StoryFormat.js';
 
 // Core functionality - most commonly used
-window.Extwee = {
+const Extwee = {
     // Core parsers (immediately available)
     parseTwee,
     parseJSON,
@@ -27,5 +27,25 @@ window.Extwee = {
     StoryFormat,
     
     // Version info
-    version: '2.3.2'
+    version: '2.3.3'
 };
+
+// Export individual functions for ES6 module usage
+export { parseTwee, parseJSON, parseStoryFormat, parseTwine2HTML, compileTwine2HTML, generateIFID, Story, Passage, StoryFormat };
+
+// Export default for webpack UMD build
+export default Extwee;
+
+// For direct ES6 module usage, also assign to global object
+// Use globalThis for cross-environment compatibility (browser, Node.js, Web Workers)
+const globalObject = (function() {
+    if (typeof globalThis !== 'undefined') return globalThis;
+    if (typeof window !== 'undefined') return window;
+    if (typeof global !== 'undefined') return global;
+    if (typeof self !== 'undefined') return self;
+    return null;
+})();
+
+if (globalObject) {
+    globalObject.Extwee = Extwee;
+}

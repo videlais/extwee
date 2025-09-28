@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extwee Story Format Compiler Demo</title>
+    
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="./index.css" rel="stylesheet">
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Header -->
+        <div class="demo-header">
+            <h1 class="mb-3">Example Extwee Story Format Compiler</h1>
+            <p class="lead mb-0">Compile Twee code with different Twine story formats</p>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="demo-section">
+            <h3>📝 How to Use</h3>
+            <ol>
+                <li><strong>Select a Story Format:</strong> Choose from Harlowe, SugarCube, Snowman, or Chapbook</li>
+                <li><strong>Enter Twee Code:</strong> Write or paste your Twee story code in the text area</li>
+                <li><strong>Compile:</strong> Click the "Compile Story" button to generate the HTML output</li>
+            </ol>
+            
+            <div class="example-twee">
+                <strong>Example Twee Code:</strong><br>
+                <code>:: Start<br>
+This is the beginning of your story.<br>
+<br>
+[[Continue to the next passage->Next]]<br>
+<br>
+:: Next<br>
+This is the second passage of your story.<br>
+<br>
+The End.
+                </code>
+            </div>
+            <div>
+                <p>Similar to Twine, this page will automatically assign an IFID to your story.</p>
+            </div>
+        </div>
+        
+        <!-- Main Demo Interface -->
+        <div class="demo-section">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="storyFormat" class="form-label"><strong>Story Format</strong></label>
+                    <select id="storyFormat" class="form-select">
+                        <option value="">Select a story format...</option>
+                        <option value="harlowe" data-version="3.3.9">Harlowe (3.3.9)</option>
+                        <option value="sugarcube" data-version="2.37.3">SugarCube (2.37.3)</option>
+                        <option value="snowman" data-version="2.0.2">Snowman (2.0.2)</option>
+                        <option value="chapbook" data-version="2.3.0">Chapbook (2.3.0)</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-8 mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label for="tweeCode" class="form-label"><strong>Twee Code</strong></label>
+                        <button id="loadExample" class="btn btn-sm btn-outline-secondary">Load Example</button>
+                    </div>
+                    <textarea id="tweeCode" class="form-control" rows="15" 
+                              placeholder="Enter your Twee code here..."></textarea>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-12 text-center">
+                    <button id="compileBtn" class="btn btn-primary btn-lg" disabled>
+                        <span id="compileSpinner" class="spinner-border spinner-border-sm me-2" style="display: none;"></span>
+                        <span id="compileBtnText">Compile Story</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Output Section -->
+        <div class="demo-section">
+            <h4>📄 Compiled Output</h4>
+            <div id="outputContainer" class="output-container">
+                <div class="loading">Select a story format and enter Twee code, then click "Compile Story" to see the output here.</div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-6">
+                    <button id="downloadBtn" class="btn btn-success w-100" style="display: none;">
+                        📥 Download HTML File
+                    </button>
+                </div>
+                <div class="col-6">
+                    <button id="previewBtn" class="btn btn-info w-100" style="display: none;">
+                        👁️ Preview in New Tab
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="demo-section">
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>About This Demo</h5>
+                    <p>This demo uses the <strong>Extwee</strong> web build to compile Twee code with story formats loaded dynamically from the <a href="https://github.com/videlais/story-formats-archive" target="_blank">Story Formats Archive</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Load Local Extwee build -->
+    <script src="./extwee.core.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            let storyFormats = {};
+            let currentCompiledHTML = '';
+
+            // Load story formats index
+            async function loadStoryFormatsIndex() {
+                try {
+                    const response = await fetch('https://raw.githubusercontent.com/videlais/story-formats-archive/docs/official/index.json');
+                    // Convert to JSON.
+                    const data = await response.json();
+                    // Use Twine 2 formats only.
+                    storyFormats = data.twine2;
+                    // Show versions on console
+                    console.log('Loaded story formats index:', storyFormats);
+                    
+                } catch (error) {
+                    console.error('Failed to load story formats index:', error);
+                    showError('Failed to load story formats. Please check your internet connection.');
+                }
+            }
+            
+            // Update format info when selection changes
+            $('#storyFormat').on('change', function() {
+                const selectedFormat = $(this).val();
+                const $compileBtn = $('#compileBtn');
+                const $formatInfo = $('#formatInfo');
+                
+                if (selectedFormat) {
+                    $compileBtn.prop('disabled', false);
+                    $formatInfo.show();
+                } else {
+                    $compileBtn.prop('disabled', true);
+                    $formatInfo.hide();
+                }
+            });
+            
+            // Load example code
+            $('#loadExample').on('click', function() {
+                const exampleCode = `:: Start
+Welcome to your interactive story!
+
+You find yourself at a crossroads in a mysterious forest.
+
+[[Take the left path->LeftPath]]
+[[Take the right path->RightPath]]
+
+:: LeftPath
+You venture down the left path and discover a hidden cottage.
+
+The door creaks open as you approach...
+
+[[Enter the cottage->Cottage]]
+[[Return to the crossroads->Start]]
+
+:: RightPath  
+The right path leads to a sparkling stream.
+
+The water is crystal clear and you can see fish swimming below.
+
+[[Follow the stream->Stream]]
+[[Return to the crossroads->Start]]
+
+:: Cottage
+Inside the cottage, you find an old book on a dusty table.
+
+As you open it, magical words begin to glow on the pages...
+
+*The End*
+
+:: Stream
+You follow the stream until you reach a beautiful waterfall.
+
+Behind the waterfall, you discover a secret cave filled with treasure!
+
+*The End*`;
+                
+                $('#tweeCode').val(exampleCode);
+            });
+            
+            // Show error message
+            function showError(message) {
+                $('#outputContainer').html(`<div class="error">❌ Error: ${message}</div>`);
+            }
+            
+            // Show success message  
+            function showSuccess(message) {
+                $('#outputContainer').html(`<div class="success">✅ ${message}</div>`);
+            }
+            
+            // Compile story
+            $('#compileBtn').on('click', async function() {
+                const selectedFormat = $('#storyFormat').val();
+                const formatVersion = $('#storyFormat option:selected').data('version');
+                let tweeCode = $('#tweeCode').val().trim();
+
+                // Check if the input contains the "StoryData" passage
+                const hasStoryData = /::\s*StoryData/i.test(tweeCode);
+                // If it doesn't, we will add a default one
+                //  and generate a new IFID
+                if (hasStoryData == false) {
+                    
+                    const ifid = Extwee.generateIFID();
+                    const storyDataPassage = `:: StoryData
+                            {"ifid": "${ifid}"}`;
+                    // Append to the start of the Twee code
+                    tweeCode = storyDataPassage + '\n\n' + tweeCode;
+                    console.log('Added StoryData passage with IFID:', ifid);
+                }
+
+                if (!selectedFormat) {
+                    showError('Please select a story format.');
+                    return;
+                }
+                
+                if (!tweeCode) {
+                    showError('Please enter some Twee code.');
+                    return;
+                }
+                
+                // Show loading state
+                const $btn = $(this);
+                const $spinner = $('#compileSpinner');
+                const $btnText = $('#compileBtnText');
+                
+                $btn.prop('disabled', true);
+                $spinner.show();
+                $btnText.text('Compiling...');
+                $('#outputContainer').html('<div class="loading">🔄 Loading story format and compiling...</div>');
+                
+                try {
+                    // Fetch the latest version of the selected format
+                    const formatData = storyFormats[selectedFormat];
+                    let formatUrl = `https://raw.githubusercontent.com/videlais/story-formats-archive/docs/official/twine2/${selectedFormat}/${formatVersion}/format.js`;
+                    
+                    
+                    console.log('Fetching format from:', formatUrl);
+                    
+                    // Fetch the story format
+                    const formatResponse = await fetch(formatUrl);
+                    if (!formatResponse.ok) {
+                        throw new Error(`Failed to fetch story format: ${formatResponse.status}`);
+                    }
+                    
+                    const formatCode = await formatResponse.text();
+                    console.log('Story format loaded, size:', formatCode.length);
+                    
+                    // Parse the story format
+                    const storyFormat = Extwee.parseStoryFormat(formatCode);
+                    console.log('Story format parsed:', storyFormat.name, storyFormat.version);
+                    
+                    // Parse the Twee code
+                    const story = Extwee.parseTwee(tweeCode);
+                    console.log('Story parsed, passages:', story.passages.length);
+                    
+                    // Set story format info
+                    story.format = storyFormat.name;
+                    story.formatVersion = storyFormat.version;
+                    
+                    // Compile to HTML
+                    const compiledHTML = Extwee.compileTwine2HTML(story, storyFormat);
+                    currentCompiledHTML = compiledHTML;
+                    
+                    // Show the compiled output (truncated for display)
+                    const displayHTML = compiledHTML.length > 2000 
+                        ? compiledHTML.substring(0, 2000) + '\n\n... (output truncated, full HTML available for download) ...'
+                        : compiledHTML;
+                    
+                    $('#outputContainer').html(`<div class="success">✅ Story compiled successfully!</div><pre>${escapeHtml(displayHTML)}</pre>`);
+                    
+                    // Show download and preview buttons
+                    $('#downloadBtn, #previewBtn').show();
+                    
+                } catch (error) {
+                    console.error('Compilation error:', error);
+                    showError(error.message || 'An unexpected error occurred during compilation.');
+                } finally {
+                    // Reset button state
+                    $btn.prop('disabled', false);
+                    $spinner.hide();
+                    $btnText.text('Compile Story');
+                }
+            });
+            
+            // Download compiled HTML
+            $('#downloadBtn').on('click', function() {
+                if (!currentCompiledHTML) {
+                    showError('No compiled HTML available for download.');
+                    return;
+                }
+                
+                const blob = new Blob([currentCompiledHTML], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'compiled-story.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            
+            // Preview compiled HTML
+            $('#previewBtn').on('click', function() {
+                if (!currentCompiledHTML) {
+                    showError('No compiled HTML available for preview.');
+                    return;
+                }
+                
+                const previewWindow = window.open('', '_blank');
+                previewWindow.document.write(currentCompiledHTML);
+                previewWindow.document.close();
+            });
+            
+            // Utility function to escape HTML
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            // Initialize
+            loadStoryFormatsIndex();
+        });
+    </script>
+</body>
+</html>

@@ -3,7 +3,12 @@
  */
 
 // Load the core web module to set up window.Extwee
-import '../../src/Web/web-index.js';
+import '../../src/Web/web-core.js';
+
+// Load additional modular parsers
+import '../../src/Web/web-twine1html.js';
+import '../../src/Web/web-twine2archive.js';
+import '../../src/Web/web-tws.js';
 
 describe('Extwee', () => {
     it('should have all the expected immediate properties', () => {
@@ -18,7 +23,7 @@ describe('Extwee', () => {
         expect(window.Extwee).toHaveProperty('Passage');
         expect(window.Extwee).toHaveProperty('StoryFormat');
         
-        // Additional parsers available in unified build
+        // Additional parsers loaded via modular imports
         expect(window.Extwee).toHaveProperty('parseTwine1HTML');
         expect(window.Extwee).toHaveProperty('parseTwine2ArchiveHTML');
         expect(window.Extwee).toHaveProperty('parseTWS');

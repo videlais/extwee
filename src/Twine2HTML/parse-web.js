@@ -101,11 +101,17 @@ class LightweightTwine2Parser {
   parseAttributes(elementHtml) {
     const attributes = {};
     
+    // Extract just the opening tag to avoid getting attributes from nested elements
+    const openingTagMatch = elementHtml.match(/^<[^>]*>/);
+    if (!openingTagMatch) return attributes;
+    
+    const openingTag = openingTagMatch[0];
+    
     // Common attribute patterns
     const attributeRegex = /(\w+(?:-\w+)*)=["']([^"']*)["']/g;
     let match;
 
-    while ((match = attributeRegex.exec(elementHtml)) !== null) {
+    while ((match = attributeRegex.exec(openingTag)) !== null) {
       attributes[match[1]] = match[2];
     }
 
