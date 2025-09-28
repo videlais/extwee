@@ -200,8 +200,19 @@ Behind the waterfall, you discover a secret cave filled with treasure!
             });
             
             // Show error message
+
+            // Escape HTML helper to prevent XSS
+            function escapeHtml(str) {
+                return String(str)
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#39;");
+            }
             function showError(message) {
-                $('#outputContainer').html(`<div class="error">❌ Error: ${message}</div>`);
+                // Escape the error message to prevent XSS
+                $('#outputContainer').html(`<div class="error">❌ Error: ${escapeHtml(message)}</div>`);
             }
             
             // Show success message  
