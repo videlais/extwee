@@ -119,7 +119,7 @@ class LightweightTwine2Parser {
   }
 
   extractTextContent(html) {
-    // Remove HTML tags and decode basic entities
+    // Remove HTML tags and decode basic entities, and strip any remaining angle brackets
     return html
       .replace(/<[^>]*>/g, '') // Remove HTML tags
       .replace(/&lt;/g, '<')
@@ -127,6 +127,7 @@ class LightweightTwine2Parser {
       .replace(/&quot;/g, '"')
       .replace(/&#39;/g, "'")
       .replace(/&amp;/g, '&') // This should be last
+      .replace(/[<>]/g, '') // Remove any remaining angle brackets to prevent injection
       .trim();
   }
 
