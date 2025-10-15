@@ -1,4 +1,5 @@
 import { encode } from 'html-entities';
+import { escapeTweeMetacharacters } from './Twee/parse.js';
 
 /**
   * Passage class.
@@ -175,13 +176,14 @@ export default class Passage {
     // Start empty string.
     let content = '';
 
-    // Write the name.
-    content += `:: ${this.name}`;
+    // Write the name with proper escaping for metacharacters.
+    content += `:: ${escapeTweeMetacharacters(this.name)}`;
 
     // Test if it has any tags.
     if (this.tags.length > 0) {
-      // Write output of tags.
-      content += ` [${this.tags.join(' ')}]`;
+      // Write output of tags with proper escaping.
+      const escapedTags = this.tags.map(tag => escapeTweeMetacharacters(tag));
+      content += ` [${escapedTags.join(' ')}]`;
     }
 
     // Check if any properties exist.

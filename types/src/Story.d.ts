@@ -251,5 +251,5 @@ export class Story {
     #private;
 }
 export const creatorName: "extwee";
-export const creatorVersion: "2.3.4";
+export const creatorVersion: "2.3.5";
 import Passage from './Passage.js';

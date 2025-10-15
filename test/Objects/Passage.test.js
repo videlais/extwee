@@ -219,7 +219,7 @@ describe('Passage', () => {
 
     it('Should escape meta-characters safely in Twee header', function () {
       const p = new Passage('Where do tags begin? [well', '', ['hmm']);
-      expect(p.toTwee().includes('Where do tags begin? [well [hmm]')).toBe(true);
+      expect(p.toTwee().includes('Where do tags begin? \\[well [hmm]')).toBe(true);
     });
 
     it('Should produce valid HTML attributes', function () {

@@ -2,6 +2,108 @@ import Passage from '../Passage.js';
 import { Story } from '../Story.js';
 
 /**
+ * Unescapes Twee 3 metacharacters according to the specification.
+ *
+ * From the Twee 3 specification:
+ * - Encoding: To avoid ambiguity, non-escape backslashes must also be escaped via
+ * the same mechanism (i.e. `foo\bar` must become `foo\\bar`).
+ * - Decoding: To make decoding more robust, any escaped character within a chunk of
+ * encoded text must yield the character minus the backslash (i.e. `\q` must yield `q`).
+ * @function unescapeTweeMetacharacters
+ * @param {string} text - Text to unescape
+ * @returns {string} Unescaped text
+ */
+function unescapeTweeMetacharacters(text) {
+  if (typeof text !== 'string') {
+    return text;
+  }
+  
+  // Replace any escaped character with the character minus the backslash
+  // This implements the robust decoding rule from the specification
+  return text.replace(/\\(.)/g, '$1');
+}
+
+/**
+ * Escapes Twee 3 metacharacters according to the specification.
+ * This is used when writing Twee files to ensure special characters are properly escaped.
+ * @function escapeTweeMetacharacters
+ * @param {string} text - Text to escape
+ * @returns {string} Escaped text
+ */
+function escapeTweeMetacharacters(text) {
+  if (typeof text !== 'string') {
+    return text;
+  }
+  
+  // First escape backslashes, then escape the metacharacters
+  return text
+    .replace(/\\/g, '\\\\')  // Escape backslashes first
+    .replace(/\[/g, '\\[')   // Escape opening square brackets
+    .replace(/\]/g, '\\]')   // Escape closing square brackets
+    .replace(/\{/g, '\\{')   // Escape opening curly braces
+    .replace(/\}/g, '\\}');  // Escape closing curly braces
+}
+
+/**
+ * Finds the last unescaped occurrence of a character in a string.
+ * @param {string} str - String to search in
+ * @param {string} char - Character to find
+ * @returns {number} Position of last unescaped occurrence, or -1 if not found
+ */
+function findLastUnescaped(str, char) {
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (str[i] === char) {
+      // Count consecutive backslashes before this character
+      let backslashCount = 0;
+      for (let j = i - 1; j >= 0 && str[j] === '\\'; j--) {
+        backslashCount++;
+      }
+      // If even number of backslashes (including 0), the character is not escaped
+      if (backslashCount % 2 === 0) {
+        return i;
+      }
+    }
+  }
+  return -1;
+}
+
+/**
+ * Parses metadata from a header string, respecting escaped characters.
+ * @param {string} header - Header string to parse
+ * @returns {object | null} Object with {metadata, remainingHeader} or null if no metadata
+ */
+function parseMetadataFromHeader(header) {
+  const openingPos = findLastUnescaped(header, '{');
+  const closingPos = findLastUnescaped(header, '}');
+  
+  if (openingPos !== -1 && closingPos !== -1 && closingPos > openingPos) {
+    const metadata = header.slice(openingPos, closingPos + 1);
+    const remainingHeader = header.substring(0, openingPos) + header.substring(closingPos + 1);
+    return { metadata, remainingHeader };
+  }
+  
+  return null;
+}
+
+/**
+ * Parses tags from a header string, respecting escaped characters.
+ * @param {string} header - Header string to parse
+ * @returns {object | null} Object with {tags, remainingHeader} or null if no tags
+ */
+function parseTagsFromHeader(header) {
+  const openingPos = findLastUnescaped(header, '[');
+  const closingPos = findLastUnescaped(header, ']');
+  
+  if (openingPos !== -1 && closingPos !== -1 && closingPos > openingPos) {
+    const tags = header.slice(openingPos, closingPos + 1);
+    const remainingHeader = header.substring(0, openingPos) + header.substring(closingPos + 1);
+    return { tags, remainingHeader };
+  }
+  
+  return null;
+}
+
+/**
  * Parses Twee 3 text into a Story object.
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md Twee 3 Specification}
  * @function parse
@@ -51,16 +153,11 @@ function parse (fileContents) {
     // (And trim any remaining whitespace.)
     text = passage.substring(header.length + 1, passage.length).trim();
 
-    // Test for metadata
-    const openingCurlyBracketPosition = header.lastIndexOf('{');
-    const closingCurlyBracketPosition = header.lastIndexOf('}');
-
-    if (openingCurlyBracketPosition !== -1 && closingCurlyBracketPosition !== -1) {
-      // Save the text metadata
-      metadata = header.slice(openingCurlyBracketPosition, closingCurlyBracketPosition + 1);
-
-      // Remove the metadata from the header
-      header = header.substring(0, openingCurlyBracketPosition) + header.substring(closingCurlyBracketPosition + 1);
+    // Parse metadata using escape-aware logic
+    const metadataMatch = parseMetadataFromHeader(header);
+    if (metadataMatch) {
+      metadata = metadataMatch.metadata;
+      header = metadataMatch.remainingHeader;
     }
 
     // There was passage metadata
@@ -77,15 +174,11 @@ function parse (fileContents) {
       metadata = {};
     }
 
-    // Test for tags
-    const openingSquareBracketPosition = header.lastIndexOf('[');
-    const closingSquareBracketPosition = header.lastIndexOf(']');
-
-    if (openingSquareBracketPosition !== -1 && closingSquareBracketPosition !== -1) {
-      tags = header.slice(openingSquareBracketPosition, closingSquareBracketPosition + 1);
-
-      // Remove the tags from the header
-      header = header.substring(0, openingSquareBracketPosition) + header.substring(closingSquareBracketPosition + 1);
+    // Parse tags using escape-aware logic
+    const tagsMatch = parseTagsFromHeader(header);
+    if (tagsMatch) {
+      tags = tagsMatch.tags;
+      header = tagsMatch.remainingHeader;
     }
 
     // Parse tags
@@ -138,11 +231,14 @@ function parse (fileContents) {
 
     // Check if there is a name left
     if (header.length > 0) {
-      name = header;
+      name = unescapeTweeMetacharacters(header);
     } else {
       // No name left. Something went wrong. Blame user.
       throw new Error('Malformed passage header!');
     }
+
+    // Unescape tag names according to Twee 3 specification
+    tags = tags.map(tag => unescapeTweeMetacharacters(tag));
 
     // addPassage() method does all the work.
     story.addPassage(new Passage(name, text, tags, metadata, pid));
@@ -155,4 +251,4 @@ function parse (fileContents) {
   return story;
 }
 
-export { parse };
+export { parse, escapeTweeMetacharacters, unescapeTweeMetacharacters };

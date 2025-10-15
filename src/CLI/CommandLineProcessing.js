@@ -12,7 +12,7 @@ import {
 import { readFileSync, writeFileSync } from 'node:fs';
   
 // Import Commander.
-import { Command, InvalidArgumentError } from 'commander';
+import { Command } from 'commander';
   
 // Import package.json.
 import Package from '../../package.json' with { type: 'json' };
@@ -20,177 +20,172 @@ import Package from '../../package.json' with { type: 'json' };
 // Import isFile function.
 import { isFile } from './isFile.js';
 
+
+
 /**
  * Process command line arguments.
- * @function CommandLineProcessing
+ * @function CommandLineProcessing  
  * @description This function processes the command line arguments passed to the Extwee CLI.
  * @module CLI/commandLineProcessing
  * @param {Array} argv - The command line arguments passed to the CLI.
  */
 export function CommandLineProcessing(argv) {
-  // This is the main function for processing the command line arguments.
-  // It uses the Commander library to parse the arguments and then calls the appropriate functions.
-  // The function is called when the script is run from the command line.
-
-
   // Create a new Command.
   const program = new Command();
 
   program
     .name('extwee')
-    .description('CLI for Extwee')
-    .option('-v, --version', 'Show version number', () => {
-      // Show the version number.
-      console.log(`Extwee v${Package.version}`);
-      // Exit the process.
-      process.exit(0);
-    })
+    .description('CLI for Extwee - A tool for compiling and decompiling Twine stories')
+    .version(Package.version, '-v, --version', 'Show version number')
     .option('-c, --compile', 'Compile input into output')
     .option('-d, --decompile', 'De-compile input into output')
     .option('--twine1', 'Enable Twine 1 processing')
     .option('--name <storyFormatName>', 'Name of the Twine 1 story format (needed for `code.js` inclusion)')
-    .option('--codejs <codeJSFile>', 'Twine 1 code.js file for use with Twine 1 HTML', (value) => {
-      // Does the input file exist?
-      if (isFile(value) === false) {
-        // We cannot do anything without valid input.
-        throw new InvalidArgumentError(`Twine 1 code.js ${value} does not exist.`);
-      }
+    .option('--codejs <codeJSFile>', 'Twine 1 code.js file for use with Twine 1 HTML')
+    .option('--engine <engineFile>', 'Twine 1 engine.js file for use with Twine 1 HTML')
+    .option('--header <headerFile>', 'Twine 1 header.html file for use with Twine 1 HTML')
+    .option('-s <storyformat>, --storyformat <storyformat>', 'Path to story format file for Twine 2')
+    .option('-i <inputFile>, --input <inputFile>', 'Path to input file')
+    .option('-o <outputFile>, --output <outputFile>', 'Path to output file')
+    .addHelpText('after', `
+Examples:
+  Compile Twee to Twine 2 HTML:
+    extwee -c -i story.twee -o story.html -s format.js
 
-      return value;
-    })
-    .option('--engine <engineFile>', 'Twine 1 engine.js file for use with Twine 1 HTML', (value) => {
-      // Does the input file exist?
-      if (isFile(value) === false) {
-        // We cannot do anything without valid input.
-        throw new InvalidArgumentError(`Twine 1 engine.js ${value} does not exist.`);
-      }
+  Compile Twee to Twine 1 HTML:
+    extwee --twine1 -c -i story.twee -o story.html --name "Sugarcane" --engine engine.js --header header.html --codejs code.js
 
-      return value;
-    })
-    .option('--header <headerFile>', 'Twine 1 header.html file for use with Twine 1 HTML', (value) => {
-      // Does the input file exist?
-      if (isFile(value) === false) {
-        // We cannot do anything without valid input.
-        throw new InvalidArgumentError(`Twine 1 header.html ${value} does not exist.`);
-      }
+  Decompile Twine 2 HTML to Twee:
+    extwee -d -i story.html -o story.twee
 
-      return value;
-    })
-    .option('-s <storyformat>, --storyformat <storyformat>', 'Path to story format file for Twine 2', (value) => {
-      // Does the input file exist?
-      if (isFile(value) === false) {
-        // We cannot do anything without valid input.
-        throw new InvalidArgumentError(`Story format ${value} does not exist.`);
-      }
+  Decompile Twine 1 HTML to Twee:
+    extwee --twine1 -d -i story.html -o story.twee
+`);
 
-      return value;
-    })
-    .option('-i <inputFile>, --input <inputFile>', 'Path to input file', (value) => {
-      // Does the input file exist?
-      if (isFile(value) === false) {
-        // We cannot do anything without valid input.
-        throw new InvalidArgumentError(`Input file ${value} does not exist.`);
-      }
-
-      return value;
-    })
-    .option('-o <outputFile>, --output <outputFile>', 'Path to output file');
-
-  // Parse the passed arguments.
-  program.parse(argv);
-
-  // Create object of passed arguments parsed by Commander.
-  const options = program.opts();
-
-  /*
-  * Prepare some (soon to be) global variables.
-  */
-  // Check if Twine 1 is enabled.
-  const isTwine1Mode = (options.twine1 === true);
-
-  // Check if Twine 2 is enabled.
-  const isTwine2Mode = (isTwine1Mode === false);
-
-  // Check if de-compile mode is enabled.
-  const isDecompileMode = (options.decompile === true);
-
-  // Check if compile mode is enabled.
-  const isCompileMode = (options.compile === true);
-
-  // De-compile Twine 2 HTML into Twee 3 branch.
-  // If -d is passed, -i and -o are required.
-  if (isTwine2Mode === true && isDecompileMode === true) {
-    // Read the input HTML file.
-    const inputHTML = readFileSync(options.i, 'utf-8');
-
-    // Parse the input HTML file into Story object.
-    const storyObject = parseTwine2HTML(inputHTML);
-
-    // Write the output file from Story as Twee 3.
-    writeFileSync(options.o, storyObject.toTwee());
-
-    return;
-  }
-
-  // Compile Twee 3 into Twine 2 HTML branch.
-  // If -c is passed, -i, -o, and -s are required.
-  if (isTwine2Mode === true && isCompileMode === true) {
-    // Read the input file.
-    const inputTwee = readFileSync(options.i, 'utf-8');
-
-    // Parse the input file.
-    const story = parseTwee(inputTwee);
-
-    // Read the story format file.
-    const inputStoryFormat = readFileSync(options.s, 'utf-8');
-
-    // Parse the story format file.
-    const parsedStoryFormat = parseStoryFormat(inputStoryFormat);
-
-    // Compile the story.
-    const Twine2HTML = compileTwine2HTML(story, parsedStoryFormat);
-
-    // Write the output file.
-    writeFileSync(options.o, Twine2HTML);
-
-    // Exit the process.
-    return;
-  }
-
-  // Compile Twee 3 into Twine 1 HTML branch.
-  // Twine 1 compilation is complicated, so we have to check for all the required options.
-  // * options.engine (from Twine 1 itself)
-  // * options.header (from Twine 1 story format)
-  // * options.name (from Twine 1 story format)
-  // * options.codejs (from Twine 1 story format)
-  if (isTwine1Mode === true && isCompileMode === true) {
-    // Read the input file.
-    const inputTwee = readFileSync(options.i, 'utf-8');
-
-    // Parse the input file.
-    const story = parseTwee(inputTwee);
-
-    // Does the engine file exist?
-    const Twine1HTML = compileTwine1HTML(story, options.engine, options.header, options.name, options.codejs);
-
-    // Write the output file.
-    writeFileSync(options.o, Twine1HTML);
-
-    // Exit the process.
-    return;
-  }
-
-  // De-compile Twine 1 HTML into Twee 3 branch.
-  if (isTwine1Mode === true && isDecompileMode === true) {
-    // Read the input HTML file.
-    const inputHTML = readFileSync(options.i, 'utf-8');
-
-    // Parse the input HTML file into Story object.
-    const storyObject = parseTwine1HTML(inputHTML);
-
-    // Write the output file from Story as Twee 3.
-    writeFileSync(options.o, storyObject.toTwee());
-
-    return;
+  // Parse the passed arguments with improved error handling
+  try {
+    program.parse(argv);
+    
+    // Get parsed options
+    const options = program.opts();
+    
+    // Validate and execute based on options
+    handleCommand(options);
+  } catch (error) {
+    if (error.code === 'commander.invalidArgument') {
+      console.error(`❌ ${error.message}`);
+    } else {
+      console.error(`❌ Error: ${error.message}`);
+    }
+    process.exit(1);
   }
 }
+
+/**
+ * Handle the parsed command with improved validation and error messages
+ * @param {object} options - Parsed command options
+ */
+function handleCommand(options) {
+  try {
+    // Commander uses the first option name as the property, so -i becomes 'i' and --input becomes 'input'
+    const inputFile = options.input || options.i;
+    const outputFile = options.output || options.o;
+    const storyFormatFile = options.storyformat || options.s;
+    
+    // Validate required options
+    if (!inputFile) {
+      throw new Error('Input file (-i, --input) is required');
+    }
+    if (!outputFile) {
+      throw new Error('Output file (-o, --output) is required');
+    }
+    
+    if (!options.compile && !options.decompile) {
+      throw new Error('Either --compile (-c) or --decompile (-d) must be specified');
+    }
+    
+    if (options.compile && options.decompile) {
+      throw new Error('Cannot specify both --compile and --decompile');
+    }
+
+    // Validate input file exists
+    if (!isFile(inputFile)) {
+      throw new Error(`Input file '${inputFile}' does not exist`);
+    }
+
+    const isTwine1Mode = options.twine1 === true;
+    const isDecompileMode = options.decompile === true;
+    const isCompileMode = options.compile === true;
+
+    if (isDecompileMode) {
+      // Decompile HTML to Twee
+      console.log(`🔄 Decompiling ${isTwine1Mode ? 'Twine 1' : 'Twine 2'} HTML to Twee...`);
+      
+      const inputHTML = readFileSync(inputFile, 'utf-8');
+      let storyObject;
+      
+      if (isTwine1Mode) {
+        storyObject = parseTwine1HTML(inputHTML);
+      } else {
+        storyObject = parseTwine2HTML(inputHTML);
+      }
+      
+      writeFileSync(outputFile, storyObject.toTwee());
+      console.log(`✅ Successfully decompiled '${inputFile}' to '${outputFile}'`);
+      
+    } else if (isCompileMode) {
+      // Compile Twee to HTML
+      console.log(`🔄 Compiling Twee to ${isTwine1Mode ? 'Twine 1' : 'Twine 2'} HTML...`);
+      
+      const inputTwee = readFileSync(inputFile, 'utf-8');
+      const story = parseTwee(inputTwee);
+      
+      if (isTwine1Mode) {
+        // Validate Twine 1 required options and files
+        const requiredOptions = [
+          { opt: 'engine', desc: 'engine.js file' },
+          { opt: 'header', desc: 'header.html file' },
+          { opt: 'name', desc: 'story format name' },
+          { opt: 'codejs', desc: 'code.js file' }
+        ];
+        
+        const missingOptions = requiredOptions.filter(({ opt }) => !options[opt]);
+        if (missingOptions.length > 0) {
+          throw new Error(`Twine 1 compilation requires the following options: ${missingOptions.map(({ opt }) => `--${opt}`).join(', ')}`);
+        }
+        
+        // Validate required files exist
+        const requiredFiles = ['engine', 'header', 'codejs'];
+        for (const fileOpt of requiredFiles) {
+          if (!isFile(options[fileOpt])) {
+            throw new Error(`Twine 1 ${fileOpt} file '${options[fileOpt]}' does not exist`);
+          }
+        }
+        
+        const Twine1HTML = compileTwine1HTML(story, options.engine, options.header, options.name, options.codejs);
+        writeFileSync(outputFile, Twine1HTML);
+      } else {
+        // Validate Twine 2 required options
+        if (!storyFormatFile) {
+          throw new Error('Twine 2 compilation requires --storyformat option');
+        }
+        
+        if (!isFile(storyFormatFile)) {
+          throw new Error(`Story format file '${storyFormatFile}' does not exist`);
+        }
+        
+        const inputStoryFormat = readFileSync(storyFormatFile, 'utf-8');
+        const parsedStoryFormat = parseStoryFormat(inputStoryFormat);
+        const Twine2HTML = compileTwine2HTML(story, parsedStoryFormat);
+        writeFileSync(outputFile, Twine2HTML);
+      }
+      
+      console.log(`✅ Successfully compiled '${inputFile}' to '${outputFile}'`);
+    }
+  } catch (error) {
+    console.error(`❌ Operation failed: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+
