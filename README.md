@@ -19,6 +19,7 @@
     <li><a href="#parsers">Parsers</a></li>
     <li><a href="#compilers">Compilers</a></li>
   </ol>
+  <li><a href="#web-build-imports">Web Build Imports</a></li>
   <li><a href="#documentation">Documentation</a></li>
   <li><a href="#command-line-usage">Command-Line Usage</a></li>
   <li><a href="#config-file-usage">Config File Usage</a></li>
@@ -125,6 +126,36 @@ Compilation of a story format adds the necessary function wrapper to convert the
 Multiple Twine formats support using [an IFID](https://ifdb.org/help-ifid) to identify one work from another.
 
 As part of its API, the Extwee method `generateIFID()` can be used to create a new IFID for a `Story` object or as part of other processes.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Web Build Imports
+
+For users who want to use pre-built, minified versions optimized for browser environments, Extwee provides several web build exports:
+
+### Available Web Builds
+
+- **Core Build**: `import Extwee from 'extwee/web'` - Complete functionality including parsers, compilers, and core utilities
+- **Twine 1 HTML**: `import Extwee from 'extwee/web/twine1html'` - Specialized for Twine 1 HTML parsing and compilation
+- **Twine 2 Archive HTML**: `import Extwee from 'extwee/web/twine2archive'` - Specialized for Twine 2 Archive HTML parsing and compilation  
+- **TWS Format**: `import Extwee from 'extwee/web/tws'` - Specialized for TWS (Twine 1 workspace) parsing
+
+### Usage Examples
+
+```javascript
+// Use the full core build
+import Extwee from 'extwee/web';
+const story = new Extwee.Story();
+const ifid = Extwee.generateIFID();
+
+// Use a specialized build for smaller bundle size
+import Extwee from 'extwee/web/twine1html';
+const story = Extwee.parseTwine1HTML(htmlContent);
+```
+
+These web builds are UMD-compatible and can be used with module bundlers like webpack, or loaded directly in browsers. They are optimized and minified for production use.
+
+**Note:** Web builds include their dependencies bundled, making them suitable for browser environments but larger than the Node.js imports which rely on external dependencies.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
