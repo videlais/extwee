@@ -189,9 +189,10 @@
             showFileInfo(file) {
                 const fileInfo = document.getElementById('fileInfo');
                 const fileSize = (file.size / 1024).toFixed(2);
+                const lastModified = new Date(file.lastModified).toLocaleString();
                 fileInfo.innerHTML = `
-                    <strong>File:</strong> ${file.name} (${fileSize} KB)<br>
-                    <strong>Last Modified:</strong> ${new Date(file.lastModified).toLocaleString()}
+                    <strong>File:</strong> ${this.escapeHtml(file.name)} (${fileSize} KB)<br>
+                    <strong>Last Modified:</strong> ${this.escapeHtml(lastModified)}
                 `;
             }
 
@@ -372,8 +373,10 @@
 
             countWords(text) {
                 if (!text) return 0;
-                // Remove HTML tags and count words
-                const cleanText = text.replace(/<[^>]*>/g, '').trim();
+                // Safely remove HTML tags using DOM parsing for security
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = text;
+                const cleanText = (tempDiv.textContent || tempDiv.innerText || '').trim();
                 return cleanText ? cleanText.split(/\s+/).length : 0;
             }
 
@@ -388,14 +391,17 @@
             createTextPreview(text, maxLength = 200) {
                 if (!text) return '<em>Empty passage</em>';
                 
-                // Remove HTML tags for preview
-                const cleanText = text.replace(/<[^>]*>/g, '').trim();
+                // Safely remove HTML tags using DOM parsing for security
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = text;
+                const cleanText = tempDiv.textContent || tempDiv.innerText || '';
+                const trimmedText = cleanText.trim();
                 
-                if (cleanText.length <= maxLength) {
-                    return this.escapeHtml(cleanText);
+                if (trimmedText.length <= maxLength) {
+                    return this.escapeHtml(trimmedText);
                 }
                 
-                return this.escapeHtml(cleanText.substring(0, maxLength)) + '...';
+                return this.escapeHtml(trimmedText.substring(0, maxLength)) + '...';
             }
 
             filterPassages(searchTerm) {
