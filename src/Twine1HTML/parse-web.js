@@ -9,23 +9,41 @@ class LightweightTwine1Parser {
   constructor(html) {
     this.html = html;
     this.doc = null;
+    this.usingDOMParser = false;
     
     // Parse HTML using browser's native DOMParser if available, otherwise fallback
     if (typeof DOMParser !== 'undefined') {
-      const parser = new DOMParser();
-      this.doc = parser.parseFromString(html, 'text/html');
+      try {
+        const parser = new DOMParser();
+        this.doc = parser.parseFromString(html, 'text/html');
+        this.usingDOMParser = true;
+        
+        // Check if parsing was successful (DOMParser doesn't throw errors, but creates error documents)
+        const parserError = this.doc.querySelector('parsererror');
+        if (parserError) {
+          console.warn('DOMParser encountered an error, falling back to regex parsing:', parserError.textContent);
+          this.doc = this.createSimpleDOM(html);
+          this.usingDOMParser = false;
+        }
+      } catch (error) {
+        console.warn('DOMParser failed, falling back to regex parsing:', error.message);
+        this.doc = this.createSimpleDOM(html);
+        this.usingDOMParser = false;
+      }
     } else {
       // Fallback for environments without DOMParser
       this.doc = this.createSimpleDOM(html);
+      this.usingDOMParser = false;
     }
   }
 
   querySelector(selector) {
-    if (this.doc && this.doc.querySelector) {
+    if (this.usingDOMParser && this.doc && this.doc.querySelector) {
+      // Use native DOM methods when DOMParser is available and working
       return this.doc.querySelector(selector);
     }
     
-    // Simple fallback implementation
+    // Fallback implementation for environments without DOMParser
     if (selector === '#storeArea') {
       const match = this.html.match(/<div[^>]*id=["']storeArea["'][^>]*>/i);
       return match ? { found: true } : null;
@@ -38,11 +56,31 @@ class LightweightTwine1Parser {
   }
 
   querySelectorAll(selector) {
-    if (this.doc && this.doc.querySelectorAll) {
-      return Array.from(this.doc.querySelectorAll(selector));
+    if (this.usingDOMParser && this.doc && this.doc.querySelectorAll) {
+      // Use native DOM methods when DOMParser is available and working
+      const elements = Array.from(this.doc.querySelectorAll(selector));
+      
+      // Convert DOM elements to expected format for compatibility
+      return elements.map(element => {
+        const attributes = {};
+        
+        // Extract attributes using DOM methods - much more reliable than regex
+        if (element.attributes) {
+          for (let i = 0; i < element.attributes.length; i++) {
+            const attr = element.attributes[i];
+            // DOM automatically handles HTML entity decoding
+            attributes[attr.name] = attr.value;
+          }
+        }
+        
+        return {
+          attributes,
+          rawText: element.textContent || element.innerText || ''
+        };
+      });
     }
     
-    // Fallback implementation for [tiddler] elements
+    // Fallback implementation for environments without DOMParser
     if (selector === '[tiddler]') {
       return this.extractTiddlerElements();
     }
@@ -111,7 +149,8 @@ class LightweightTwine1Parser {
   }
 
   createSimpleDOM(html) {
-    // Minimal DOM-like object for fallback
+    // Minimal DOM-like object for fallback when DOMParser is not available
+    // This should only be used in very limited environments
     return {
       querySelector: (selector) => {
         if (selector === '#storeArea' && html.includes('id="storeArea"')) {

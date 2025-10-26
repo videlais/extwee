@@ -8,23 +8,48 @@ class LightweightTwine2ArchiveParser {
   constructor(html) {
     this.html = html;
     this.doc = null;
+    this.usingDOMParser = false;
     
     // Parse HTML using browser's native DOMParser if available, otherwise fallback
     if (typeof DOMParser !== 'undefined') {
-      const parser = new DOMParser();
-      this.doc = parser.parseFromString(html, 'text/html');
+      try {
+        const parser = new DOMParser();
+        this.doc = parser.parseFromString(html, 'text/html');
+        this.usingDOMParser = true;
+        
+        // Check if parsing was successful (DOMParser doesn't throw errors, but creates error documents)
+        const parserError = this.doc.querySelector('parsererror');
+        if (parserError) {
+          console.warn('DOMParser encountered an error, falling back to regex parsing:', parserError.textContent);
+          this.doc = this.createSimpleDOM(html);
+          this.usingDOMParser = false;
+        }
+      } catch (error) {
+        console.warn('DOMParser failed, falling back to regex parsing:', error.message);
+        this.doc = this.createSimpleDOM(html);
+        this.usingDOMParser = false;
+      }
     } else {
       // Fallback for environments without DOMParser
       this.doc = this.createSimpleDOM(html);
+      this.usingDOMParser = false;
     }
   }
 
   getElementsByTagName(tagName) {
-    if (this.doc && this.doc.getElementsByTagName) {
-      return Array.from(this.doc.getElementsByTagName(tagName));
+    if (this.usingDOMParser && this.doc && this.doc.getElementsByTagName) {
+      // Use native DOM methods when DOMParser is available and working
+      const elements = Array.from(this.doc.getElementsByTagName(tagName));
+      
+      // Convert DOM elements to expected format for compatibility
+      return elements.map(element => ({
+        outerHTML: element.outerHTML,
+        // For compatibility with the original parser interface
+        toString: () => element.outerHTML
+      }));
     }
     
-    // Fallback implementation for tw-storydata elements
+    // Fallback implementation for environments without DOMParser
     if (tagName === 'tw-storydata') {
       return this.extractStoryDataElements();
     }
@@ -52,11 +77,12 @@ class LightweightTwine2ArchiveParser {
 
   // eslint-disable-next-line no-unused-vars
   createSimpleDOM(_htmlContent) {
-    // Minimal DOM-like object for fallback
+    // Minimal DOM-like object for fallback when DOMParser is not available
+    // This should only be used in very limited environments
     return {
       getElementsByTagName: (tagName) => {
         if (tagName === 'tw-storydata') {
-          return this.extractStoryDataElements(this.htmlContent);
+          return this.extractStoryDataElements();
         }
         return [];
       }

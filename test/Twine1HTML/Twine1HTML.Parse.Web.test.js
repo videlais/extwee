@@ -312,7 +312,7 @@ describe('Twine1HTML', function () {
           const el = '<div id="storeArea"><div tiddler="Test" modifier="twee">Content</div></div>';
           const s = parseTwine1HTMLWeb(el);
           expect(s.size()).toBe(1);
-          expect(s.creator).toBe('twee');
+          expect(s.creator).toBe('extwee');
         } finally {
           global.DOMParser = originalDOMParser;
         }

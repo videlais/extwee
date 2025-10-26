@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extwee Decompiler Demo</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="./extwee.core.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Extwee Decompiler Demo</h1>
+            <p>Upload a Twine 2 HTML file to analyze its structure and extract statistics.</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <div class="file-input-container">
+                    <input type="file" id="fileInput" accept=".html,.htm" />
+                    <label for="fileInput" class="file-input-label">
+                        <span class="file-input-text">Choose Twine 2 HTML File</span>
+                        <span class="file-input-icon">📁</span>
+                    </label>
+                </div>
+                <div class="file-info" id="fileInfo"></div>
+            </section>
+
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="overview">Overview</button>
+                    <button class="tab-button" data-tab="passages">Passages</button>
+                    <button class="tab-button" data-tab="tags">Tags</button>
+                    <button class="tab-button" data-tab="metadata">Metadata</button>
+                </div>
+
+                <div class="tab-content active" id="overview">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="passageCount">0</div>
+                            <div class="stat-label">Passages</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="wordCount">0</div>
+                            <div class="stat-label">Total Words</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="characterCount">0</div>
+                            <div class="stat-label">Characters</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="tagCount">0</div>
+                            <div class="stat-label">Unique Tags</div>
+                        </div>
+                    </div>
+
+                    <div class="story-info">
+                        <h3>Story Information</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Title:</label>
+                                <span id="storyTitle">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>IFID:</label>
+                                <span id="storyIFID">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Format:</label>
+                                <span id="storyFormat">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Format Version:</label>
+                                <span id="storyFormatVersion">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Start Passage:</label>
+                                <span id="startPassage">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Creator:</label>
+                                <span id="storyCreator">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="passages">
+                    <div class="passages-header">
+                        <h3>Passages (<span id="passageListCount">0</span>)</h3>
+                        <div class="search-container">
+                            <input type="text" id="passageSearch" placeholder="Search passages...">
+                        </div>
+                    </div>
+                    <div class="passages-list" id="passagesList"></div>
+                </div>
+
+                <div class="tab-content" id="tags">
+                    <div class="tags-header">
+                        <h3>Tags Overview</h3>
+                    </div>
+                    <div class="tags-container" id="tagsContainer"></div>
+                </div>
+
+                <div class="tab-content" id="metadata">
+                    <div class="metadata-container">
+                        <h3>Technical Details</h3>
+                        <div class="metadata-content" id="metadataContent"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="error-section" id="errorSection" style="display: none;">
+                <div class="error-message">
+                    <h3>Error</h3>
+                    <p id="errorText"></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        class TwineDecompiler {
+            constructor() {
+                this.story = null;
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                const fileInput = document.getElementById('fileInput');
+                const tabButtons = document.querySelectorAll('.tab-button');
+                const passageSearch = document.getElementById('passageSearch');
+
+                fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
+                
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
+                });
+
+                passageSearch.addEventListener('input', (e) => this.filterPassages(e.target.value));
+            }
+
+            async handleFileUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                this.showFileInfo(file);
+                this.hideError();
+                this.hideResults();
+
+                try {
+                    const content = await this.readFile(file);
+                    
+                    // First, let's validate that this looks like Twine 2 HTML
+                    if (!content.includes('<tw-storydata')) {
+                        throw new Error('Not Twine 2 HTML content');
+                    }
+                    
+                    this.story = Extwee.parseTwine2HTML(content);
+                    this.displayResults();
+                } catch (error) {
+                    console.error('Parsing error:', error);
+                    
+                    // Provide more helpful error messages for common issues
+                    let errorMessage = error.message;
+                    if (error.message.includes('Story name must be a string')) {
+                        errorMessage = 'The Twine 2 HTML file has an invalid story name attribute. This usually means the file is corrupted or not a standard Twine 2 HTML export.';
+                    } else if (error.message.includes('Not Twine 2 HTML content')) {
+                        errorMessage = 'This file does not appear to be a valid Twine 2 HTML export. Please make sure you uploaded a file exported from Twine 2 using "Publish to File".';
+                    } else if (error.message.includes('Content is not a string')) {
+                        errorMessage = 'Unable to read the file content. Please make sure the file is not corrupted and is a text-based HTML file.';
+                    } else if (error.message.includes('Passages are required to have PID')) {
+                        errorMessage = 'The Twine 2 HTML file contains passages without proper IDs. This suggests the file may be corrupted or manually edited.';
+                    }
+                    
+                    this.showError(errorMessage);
+                }
+            }
+
+            readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(new Error('Failed to read file'));
+                    reader.readAsText(file);
+                });
+            }
+
+            showFileInfo(file) {
+                const fileInfo = document.getElementById('fileInfo');
+                const fileSize = (file.size / 1024).toFixed(2);
+                fileInfo.innerHTML = `
+                    <strong>File:</strong> ${file.name} (${fileSize} KB)<br>
+                    <strong>Last Modified:</strong> ${new Date(file.lastModified).toLocaleString()}
+                `;
+            }
+
+            displayResults() {
+                this.showResults();
+                this.populateOverview();
+                this.populatePassages();
+                this.populateTags();
+                this.populateMetadata();
+            }
+
+            populateOverview() {
+                const passages = this.story.passages;
+                const allText = passages.map(p => p.text).join(' ');
+                const wordCount = this.countWords(allText);
+                const characterCount = allText.length;
+                const uniqueTags = this.getUniqueTags(passages);
+
+                document.getElementById('passageCount').textContent = passages.length;
+                document.getElementById('wordCount').textContent = wordCount.toLocaleString();
+                document.getElementById('characterCount').textContent = characterCount.toLocaleString();
+                document.getElementById('tagCount').textContent = uniqueTags.length;
+
+                document.getElementById('storyTitle').textContent = this.story.name || 'Untitled';
+                document.getElementById('storyIFID').textContent = this.story.IFID || 'None';
+                document.getElementById('storyFormat').textContent = this.story.format || 'Unknown';
+                document.getElementById('storyFormatVersion').textContent = this.story.formatVersion || 'Unknown';
+                document.getElementById('startPassage').textContent = this.story.start || 'None';
+                document.getElementById('storyCreator').textContent = this.story.creator || 'Unknown';
+            }
+
+            populatePassages() {
+                const passagesList = document.getElementById('passagesList');
+                const passageListCount = document.getElementById('passageListCount');
+                
+                passageListCount.textContent = this.story.passages.length;
+                passagesList.innerHTML = '';
+
+                this.story.passages.forEach((passage, index) => {
+                    const passageElement = this.createPassageElement(passage, index);
+                    passagesList.appendChild(passageElement);
+                });
+            }
+
+            createPassageElement(passage, index) {
+                const div = document.createElement('div');
+                div.className = 'passage-item';
+                
+                const wordCount = this.countWords(passage.text);
+                const characterCount = passage.text.length;
+                const tagsHtml = passage.tags.length > 0 
+                    ? passage.tags.map(tag => `<span class="tag">${tag}</span>`).join('')
+                    : '<span class="no-tags">No tags</span>';
+
+                div.innerHTML = `
+                    <div class="passage-header">
+                        <h4 class="passage-name">${this.escapeHtml(passage.name)}</h4>
+                        <div class="passage-stats">
+                            <span class="stat">${wordCount} words</span>
+                            <span class="stat">${characterCount} chars</span>
+                        </div>
+                    </div>
+                    <div class="passage-tags">${tagsHtml}</div>
+                    <div class="passage-preview">
+                        ${this.createTextPreview(passage.text)}
+                    </div>
+                `;
+
+                return div;
+            }
+
+            populateTags() {
+                const tagsContainer = document.getElementById('tagsContainer');
+                const tagStats = this.getTagStatistics();
+
+                if (tagStats.length === 0) {
+                    tagsContainer.innerHTML = '<p class="no-data">No tags found in this story.</p>';
+                    return;
+                }
+
+                tagsContainer.innerHTML = '';
+                
+                tagStats.forEach(tagStat => {
+                    const tagElement = document.createElement('div');
+                    tagElement.className = 'tag-stat';
+                    
+                    const color = this.story.tagColors[tagStat.name] || '#666';
+                    
+                    tagElement.innerHTML = `
+                        <div class="tag-stat-header">
+                            <span class="tag-name" style="border-left: 4px solid ${color};">${tagStat.name}</span>
+                            <span class="tag-count">${tagStat.count} passage${tagStat.count !== 1 ? 's' : ''}</span>
+                        </div>
+                        <div class="tag-passages">
+                            ${tagStat.passages.map(p => `<span class="passage-link">${this.escapeHtml(p)}</span>`).join(', ')}
+                        </div>
+                    `;
+                    
+                    tagsContainer.appendChild(tagElement);
+                });
+            }
+
+            populateMetadata() {
+                const metadataContent = document.getElementById('metadataContent');
+                
+                const metadata = {
+                    'Story Properties': {
+                        'Name': this.story.name,
+                        'IFID': this.story.IFID,
+                        'Start Passage': this.story.start,
+                        'Format': this.story.format,
+                        'Format Version': this.story.formatVersion,
+                        'Creator': this.story.creator,
+                        'Creator Version': this.story.creatorVersion,
+                        'Zoom Level': this.story.zoom
+                    },
+                    'Statistics': {
+                        'Total Passages': this.story.passages.length,
+                        'Total Words': this.countWords(this.story.passages.map(p => p.text).join(' ')),
+                        'Total Characters': this.story.passages.map(p => p.text).join('').length,
+                        'Unique Tags': new Set(this.story.passages.flatMap(p => p.tags)).size,
+                        'Average Words per Passage': Math.round(this.countWords(this.story.passages.map(p => p.text).join(' ')) / this.story.passages.length)
+                    }
+                };
+
+                if (Object.keys(this.story.metadata).length > 0) {
+                    metadata['Additional Metadata'] = this.story.metadata;
+                }
+
+                metadataContent.innerHTML = '';
+                
+                Object.entries(metadata).forEach(([section, data]) => {
+                    const sectionDiv = document.createElement('div');
+                    sectionDiv.className = 'metadata-section';
+                    
+                    const sectionTitle = document.createElement('h4');
+                    sectionTitle.textContent = section;
+                    sectionDiv.appendChild(sectionTitle);
+                    
+                    const dataList = document.createElement('dl');
+                    dataList.className = 'metadata-list';
+                    
+                    Object.entries(data).forEach(([key, value]) => {
+                        const dt = document.createElement('dt');
+                        dt.textContent = key;
+                        const dd = document.createElement('dd');
+                        dd.textContent = value || 'N/A';
+                        
+                        dataList.appendChild(dt);
+                        dataList.appendChild(dd);
+                    });
+                    
+                    sectionDiv.appendChild(dataList);
+                    metadataContent.appendChild(sectionDiv);
+                });
+            }
+
+            getTagStatistics() {
+                const tagMap = new Map();
+                
+                this.story.passages.forEach(passage => {
+                    passage.tags.forEach(tag => {
+                        if (!tagMap.has(tag)) {
+                            tagMap.set(tag, []);
+                        }
+                        tagMap.get(tag).push(passage.name);
+                    });
+                });
+
+                return Array.from(tagMap.entries())
+                    .map(([name, passages]) => ({
+                        name,
+                        count: passages.length,
+                        passages: passages.sort()
+                    }))
+                    .sort((a, b) => b.count - a.count);
+            }
+
+            countWords(text) {
+                if (!text) return 0;
+                // Remove HTML tags and count words
+                const cleanText = text.replace(/<[^>]*>/g, '').trim();
+                return cleanText ? cleanText.split(/\s+/).length : 0;
+            }
+
+            getUniqueTags(passages) {
+                const tags = new Set();
+                passages.forEach(passage => {
+                    passage.tags.forEach(tag => tags.add(tag));
+                });
+                return Array.from(tags);
+            }
+
+            createTextPreview(text, maxLength = 200) {
+                if (!text) return '<em>Empty passage</em>';
+                
+                // Remove HTML tags for preview
+                const cleanText = text.replace(/<[^>]*>/g, '').trim();
+                
+                if (cleanText.length <= maxLength) {
+                    return this.escapeHtml(cleanText);
+                }
+                
+                return this.escapeHtml(cleanText.substring(0, maxLength)) + '...';
+            }
+
+            filterPassages(searchTerm) {
+                const passageItems = document.querySelectorAll('.passage-item');
+                const term = searchTerm.toLowerCase();
+
+                passageItems.forEach(item => {
+                    const passageName = item.querySelector('.passage-name').textContent.toLowerCase();
+                    const passageText = item.querySelector('.passage-preview').textContent.toLowerCase();
+                    const passageTags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                    
+                    const matches = passageName.includes(term) || 
+                                  passageText.includes(term) || 
+                                  passageTags.some(tag => tag.includes(term));
+                    
+                    item.style.display = matches ? 'block' : 'none';
+                });
+            }
+
+            switchTab(tabName) {
+                // Update tab buttons
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabName).classList.add('active');
+            }
+
+            showResults() {
+                document.getElementById('resultsSection').style.display = 'block';
+            }
+
+            hideResults() {
+                document.getElementById('resultsSection').style.display = 'none';
+            }
+
+            showError(message) {
+                document.getElementById('errorText').textContent = message;
+                document.getElementById('errorSection').style.display = 'block';
+            }
+
+            hideError() {
+                document.getElementById('errorSection').style.display = 'none';
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        // Initialize the decompiler when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new TwineDecompiler();
+        });
+    </script>
+</body>
+</html>

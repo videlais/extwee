@@ -10,23 +10,61 @@ class LightweightTwine2Parser {
   constructor(html) {
     this.html = html;
     this.doc = null;
+    this.usingDOMParser = false;
     
     // Parse HTML using browser's native DOMParser if available, otherwise fallback
     if (typeof DOMParser !== 'undefined') {
-      const parser = new DOMParser();
-      this.doc = parser.parseFromString(html, 'text/html');
+      try {
+        const parser = new DOMParser();
+        this.doc = parser.parseFromString(html, 'text/html');
+        this.usingDOMParser = true;
+        
+        // Check if parsing was successful (DOMParser doesn't throw errors, but creates error documents)
+        const parserError = this.doc.querySelector('parsererror');
+        if (parserError) {
+          console.warn('DOMParser encountered an error, falling back to regex parsing:', parserError.textContent);
+          this.doc = this.createSimpleDOM(html);
+          this.usingDOMParser = false;
+        }
+      } catch (error) {
+        console.warn('DOMParser failed, falling back to regex parsing:', error.message);
+        this.doc = this.createSimpleDOM(html);
+        this.usingDOMParser = false;
+      }
     } else {
       // Fallback for environments without DOMParser
       this.doc = this.createSimpleDOM(html);
+      this.usingDOMParser = false;
     }
   }
 
   getElementsByTagName(tagName) {
-    if (this.doc && this.doc.getElementsByTagName) {
-      return Array.from(this.doc.getElementsByTagName(tagName));
+    if (this.usingDOMParser && this.doc && this.doc.getElementsByTagName) {
+      // Use native DOM methods when DOMParser is available and working
+      const elements = Array.from(this.doc.getElementsByTagName(tagName));
+      
+      // Convert DOM elements to our expected format
+      return elements.map(element => {
+        const attributes = {};
+        
+        // Extract attributes using DOM methods - much more reliable than regex
+        if (element.attributes) {
+          for (let i = 0; i < element.attributes.length; i++) {
+            const attr = element.attributes[i];
+            // DOM automatically handles HTML entity decoding
+            attributes[attr.name] = attr.value;
+          }
+        }
+        
+        return {
+          attributes,
+          innerHTML: element.innerHTML || '',
+          rawText: element.textContent || element.innerText || ''
+        };
+      });
     }
     
-    // Fallback implementation
+    // Fallback implementation for environments without DOMParser or when DOM parsing fails
     if (tagName === 'tw-storydata') {
       return this.extractStoryDataElements();
     }
@@ -107,12 +145,49 @@ class LightweightTwine2Parser {
     
     const openingTag = openingTagMatch[0];
     
-    // Common attribute patterns
-    const attributeRegex = /(\w+(?:-\w+)*)=["']([^"']*)["']/g;
+    // Enhanced attribute parsing to handle multiple formats:
+    // 1. Quoted attributes: name="value" or name='value'
+    // 2. Unquoted attributes: name=value
+    // 3. Boolean attributes: hidden, selected, etc.
+    
+    // First, handle quoted attributes (including those with escaped quotes)
+    const quotedAttributeRegex = /(\w+(?:-\w+)*)=["']([^"']*)["']/g;
     let match;
 
-    while ((match = attributeRegex.exec(openingTag)) !== null) {
-      attributes[match[1]] = match[2];
+    while ((match = quotedAttributeRegex.exec(openingTag)) !== null) {
+      // Decode basic HTML entities in attribute values
+      const value = match[2]
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&'); // This should be last
+      
+      attributes[match[1]] = value;
+    }
+    
+    // Handle unquoted attributes (but avoid matching already processed quoted ones)
+    let tagWithoutQuoted = openingTag;
+    const quotedMatches = [...openingTag.matchAll(quotedAttributeRegex)];
+    quotedMatches.forEach(quotedMatch => {
+      tagWithoutQuoted = tagWithoutQuoted.replace(quotedMatch[0], '');
+    });
+    
+    const unquotedAttributeRegex = /(\w+(?:-\w+)*)=([^\s>]+)/g;
+    while ((match = unquotedAttributeRegex.exec(tagWithoutQuoted)) !== null) {
+      if (!attributes[match[1]]) { // Don't overwrite quoted attributes
+        attributes[match[1]] = match[2];
+      }
+    }
+    
+    // Handle boolean attributes (attributes without values)
+    const booleanAttributeRegex = /\s(\w+(?:-\w+)*)(?=\s|>|$)/g;
+    while ((match = booleanAttributeRegex.exec(openingTag)) !== null) {
+      const attrName = match[1];
+      // Only add if it's not already parsed as a key=value attribute and not the tag name
+      if (!attributes[attrName] && !openingTag.includes(`${attrName}=`) && attrName !== openingTag.match(/<(\w+)/)?.[1]) {
+        attributes[attrName] = true;
+      }
     }
 
     return attributes;
@@ -132,9 +207,11 @@ class LightweightTwine2Parser {
 
   // eslint-disable-next-line no-unused-vars
   createSimpleDOM(_html) {
-    // Minimal DOM-like object for fallback
+    // Minimal DOM-like object for fallback when DOMParser is not available
+    // This should only be used in very limited environments (like some older Node.js versions)
     return {
       getElementsByTagName: (tagName) => {
+        // Use regex-based extraction as fallback
         if (tagName === 'tw-storydata') {
           return this.extractStoryDataElements();
         }
@@ -201,8 +278,14 @@ function parse(content) {
    *   The name of the story.
    */
   if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'name')) {
-    // Set the story name
-    story.name = storyData.attributes.name;
+    // Validate that the name is a non-empty string before setting
+    const nameValue = storyData.attributes.name;
+    if (typeof nameValue === 'string' && nameValue.trim().length > 0) {
+      story.name = nameValue.trim();
+    } else {
+      console.warn('Warning: The name attribute is empty or invalid on tw-storydata!');
+      // Keep the default name from Story constructor
+    }
   } else {
     // Name is a required field. Warn user.
     console.warn('Warning: The name attribute is missing from tw-storydata!');
@@ -215,15 +298,20 @@ function parse(content) {
    *   hyphen that uniquely identify a story (see Treaty of Babel).
    */
   if (Object.prototype.hasOwnProperty.call(storyData.attributes, 'ifid')) {
-    // Update story IFID.
-    story.IFID = storyData.attributes.ifid;
+    // Validate that the IFID is a non-empty string before setting
+    const ifidValue = storyData.attributes.ifid;
+    if (typeof ifidValue === 'string' && ifidValue.trim().length > 0) {
+      story.IFID = ifidValue.trim();
+    } else {
+      console.warn('Warning: The ifid attribute is empty or invalid on tw-storydata!');
+    }
   } else {
-    // Name is a required filed. Warn user.
+    // IFID is a required field. Warn user.
     console.warn('Warning: The ifid attribute is missing from tw-storydata!');
   }
 
-  // Check if the IFID has valid formatting.
-  if (story.IFID.match(/^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/) === null) {
+  // Check if the IFID has valid formatting (only if IFID was set).
+  if (story.IFID && story.IFID.match(/^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/) === null) {
     // IFID is not valid.
     console.warn('Warning: The IFID is not in valid UUIDv4 formatting on tw-storydata!');
   }

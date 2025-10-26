@@ -128,7 +128,7 @@ describe('Twine2HTML', function () {
         
         const content = '<tw-storydata name="Test Story"><tw-passagedata pid="1" name="Start">Content</tw-passagedata></tw-storydata>';
         parseTwine2HTMLWeb(content);
-        expect(warningMessage).toBe('Warning: The IFID is not in valid UUIDv4 formatting on tw-storydata!');
+        expect(warningMessage).toBe('Warning: The ifid attribute is missing from tw-storydata!');
       });
 
       it('Should warn for malformed IFID', function () {
@@ -201,7 +201,7 @@ describe('Twine2HTML', function () {
       });
 
       it('Should handle quoted empty tags', function () {
-        const content = '<tw-storydata name="Test" ifid="12345678-1234-1234-1234-123456789012"><tw-passagedata pid="1" name="Start" tags=\\"\\"\\" >Content</tw-passagedata></tw-storydata>';
+        const content = '<tw-storydata name="Test" ifid="12345678-1234-1234-1234-123456789012"><tw-passagedata pid="1" name="Start" tags=\'""\'">Content</tw-passagedata></tw-storydata>';
         
         const story = parseTwine2HTMLWeb(content);
         const passage = story.getPassageByName('Start');
