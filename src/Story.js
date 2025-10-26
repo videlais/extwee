@@ -7,7 +7,7 @@ import { encode } from 'html-entities';
 const creatorName = 'extwee';
 
 // Set the creator version.
-const creatorVersion = '2.3.6';
+const creatorVersion = '2.3.7';
 
 /**
  * Story class.
