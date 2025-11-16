@@ -280,7 +280,12 @@ export default class Passage {
     }
 
     // Add the text and close the element.
-    passageData += `>${ encode( this.text ) }</tw-passagedata>\n`;
+    // NOTE: Passage text content is NOT HTML-encoded because:
+    // 1. The browser's HTML parser handles special characters correctly
+    // 2. Story formats retrieve content via .innerHTML which auto-decodes entities  
+    // 3. Encoding breaks JavaScript code and HTML that must execute at runtime
+    // Only attribute values need encoding for proper XML/HTML structure.
+    passageData += `>${ this.text }</tw-passagedata>\n`;
 
     // Return the Twine 2 HTML element.
     return passageData;
@@ -337,7 +342,9 @@ export default class Passage {
      * text: (string) Required.
      * Text content of the passage.
      */
-    passageData += `>${ encode( this.#_text ) }</div>`;
+    // NOTE: Passage text content is NOT HTML-encoded for the same reasons
+    // as Twine 2 HTML output (see toTwine2HTML above).
+    passageData += `>${ this.#_text }</div>`;
 
     // Return the HTML representation.
     return passageData;

@@ -175,44 +175,65 @@ describe('Passage', () => {
   });
 
   describe('Escaping', function () {
-    it('Should escape double quotes', function () {
+    it('Should NOT HTML-encode passage text content with double quotes', function () {
       const p = new Passage('Test', 'Word "word"');
-      expect(p.toTwine2HTML().includes('Word &quot;word&quot;')).toBe(true);
+      // Passage text should NOT be HTML-encoded (matches Twine 2 behavior)
+      expect(p.toTwine2HTML().includes('>Word "word"<')).toBe(true);
+      expect(p.toTwine2HTML().includes('&quot;word&quot;')).toBe(false);
     });
 
-    it('Should escape ampersands', function () {
+    it('Should NOT HTML-encode passage text content with ampersands', function () {
       const p = new Passage('Test', 'Word & word');
-      expect(p.toTwine2HTML().includes('Word &amp; word')).toBe(true);
+      // Passage text should NOT be HTML-encoded
+      expect(p.toTwine2HTML().includes('>Word & word<')).toBe(true);
+      expect(p.toTwine2HTML().includes('&amp;')).toBe(false);
     });
 
-    it('Should escape less than', function () {
+    it('Should NOT HTML-encode passage text content with less than', function () {
       const p = new Passage('Test', 'Word < word');
-      expect(p.toTwine2HTML().includes('Word &lt; word')).toBe(true);
+      // Passage text should NOT be HTML-encoded
+      expect(p.toTwine2HTML().includes('>Word < word<')).toBe(true);
+      expect(p.toTwine2HTML().includes('&lt;')).toBe(false);
     });
 
-    it('Should escape greater than', function () {
+    it('Should NOT HTML-encode passage text content with greater than', function () {
       const p = new Passage('Test', 'Word > word');
-      expect(p.toTwine2HTML().includes('Word &gt; word')).toBe(true);
+      // Passage text should NOT be HTML-encoded
+      expect(p.toTwine2HTML().includes('>Word > word<')).toBe(true);
+      expect(p.toTwine2HTML().includes('&gt;')).toBe(false);
     });
 
-    it('Should escape all', function () {
+    it('Should NOT HTML-encode passage text content with special characters', function () {
       const p = new Passage('Test', 'Word &<>"\' word');
-      expect(p.toTwine2HTML().includes('>Word &amp;&lt;&gt;&quot;&apos; word<')).toBe(true);
+      // Passage text should NOT be HTML-encoded
+      expect(p.toTwine2HTML().includes('>Word &<>"\' word<')).toBe(true);
+      expect(p.toTwine2HTML().includes('&amp;')).toBe(false);
+      expect(p.toTwine2HTML().includes('&lt;')).toBe(false);
+      expect(p.toTwine2HTML().includes('&gt;')).toBe(false);
+      expect(p.toTwine2HTML().includes('&quot;')).toBe(false);
+      expect(p.toTwine2HTML().includes('&apos;')).toBe(false);
     });
 
-    it('Should escape meta-characters safely in name', function () {
+    it('Should escape meta-characters safely in name attribute', function () {
       const p = new Passage('"Test"');
+      // Attributes SHOULD be HTML-encoded
       expect(p.toTwine2HTML().includes('name="&quot;Test&quot;"')).toBe(true);
       expect(p.toTwine1HTML().includes('tiddler="&quot;Test&quot;"')).toBe(true);
     });
 
-    it('Should escape meta-characters safely in text', function () {
-      const p = new Passage('Test', '"Word"');
-      expect(p.toTwine2HTML().includes('&quot;Word&quot;')).toBe(true);
+    it('Should NOT HTML-encode passage text but preserve JavaScript/HTML', function () {
+      const p = new Passage('Test', '<%\n$.getScript("https://example.com/script.js");\n%>');
+      const html = p.toTwine2HTML();
+      // Should preserve the JavaScript code exactly as-is
+      expect(html.includes('$.getScript("https://example.com/script.js");')).toBe(true);
+      expect(html.includes('&quot;')).toBe(false);
+      expect(html.includes('&lt;')).toBe(false);
+      expect(html.includes('&gt;')).toBe(false);
     });
 
-    it('Should escape meta-characters safely in tags', function () {
+    it('Should escape meta-characters safely in tags attribute', function () {
       const p = new Passage('Test', 'Word', ['&tag', '"bad"']);
+      // Attributes SHOULD be HTML-encoded
       expect(p.toTwine2HTML().includes('tags="&amp;tag &quot;bad&quot;"')).toBe(true);
       expect(p.toTwine1HTML().includes('tags="&amp;tag &quot;bad&quot;"')).toBe(true);
     });
