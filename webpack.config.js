@@ -1,4 +1,5 @@
 import path from 'node:path';
+import webpack from 'webpack';
 
 export default {
   mode: 'production',
@@ -19,6 +20,19 @@ export default {
       export: 'default'  // Export the default export directly
     },
     globalObject: 'this'
+  },
+  plugins: [
+    // Replace Node.js IFID generator with browser version for web builds
+    new webpack.NormalModuleReplacementPlugin(
+      /src[\\/]IFID[\\/]generate\.js$/,
+      './generate-web.js'
+    )
+  ],
+  resolve: {
+    fallback: {
+      // Exclude Node.js core modules from browser builds
+      'crypto': false
+    }
   },
   optimization: {
     usedExports: true,

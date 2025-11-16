@@ -4,7 +4,7 @@
  * For Twine works, the IFID is a UUID (v4) in uppercase.
  * @see Treaty of Babel ({@link https://babel.ifarchive.org/babel_rev11.html#the-ifid-for-an-html-story-file})
  * @function generate
- * @description Generates a new IFID using UUIDv4 (RFC 4122).
+ * @description Generates a new IFID using UUIDv4 (RFC 4122). Browser version using Web Crypto API.
  * @returns {string} IFID - A UUIDv4 string in uppercase format
  * @example
  * const ifid = generate();
