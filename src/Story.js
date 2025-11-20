@@ -469,6 +469,22 @@ class Story {
       }
     }
 
+    // Parse passages with "script" tag
+    if (p.tags.includes('script')) {
+      // Add the passage text to storyJavaScript
+      this.#_storyJavaScript += p.text;
+      // Don't add script-tagged passages to the passages array
+      return this.#_passages.length;
+    }
+
+    // Parse passages with "stylesheet" tag
+    if (p.tags.includes('stylesheet')) {
+      // Add the passage text to storyJavaScript
+      this.#_storyStylesheet += p.text;
+      // Don't add script-tagged passages to the passages array
+      return this.#_passages.length;
+    }
+
     // This is not StoryData or StoryTitle.
     // Push the passage to the array.
     return this.#_passages.push(p);

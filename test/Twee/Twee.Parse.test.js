@@ -57,15 +57,16 @@ describe('Twee', () => {
       const fr = readFileSync('test/Twee/TweeParser/scriptPassage.twee', 'utf-8');
       const story = parseTwee(fr);
       const p = story.getPassageByName('UserScript');
-      expect(p.tags).toHaveLength(1);
+      expect(p).toBe(null);
+      expect(story.storyJavaScript.length).toBeGreaterThan(0);
     });
 
     it('Should parse single stylesheet passage', () => {
       const fr = readFileSync('test/Twee/TweeParser/stylePassage.twee', 'utf-8');
       const story = parseTwee(fr);
       const p = story.getPassageByName('UserStylesheet');
-      expect(p.tags).toHaveLength(1);
-      expect(p.name).toBe('UserStylesheet');
+      expect(p).toBe(null);
+      expect(story.storyStylesheet.length).toBeGreaterThan(0);
     });
 
     it('Should parse StoryTitle', () => {
@@ -88,6 +89,20 @@ describe('Twee', () => {
       const startingPassage = story.start;
       expect(p).not.toBe(null);
       expect(startingPassage).toBe('Start');
+    });
+
+    it('Should correctly parse "script" tagged passages as story javascript AND remove passages from story', () => {
+      const fr = readFileSync('test/Twee/TweeParser/cycling.twee', 'utf-8');
+      const story = parseTwee(fr);
+      expect(story.storyJavaScript.length).toBeGreaterThan(0);
+      expect(story.passages.length).toBe(2);
+    });
+
+    it('Should correctly parse "stylesheet" tagged passages as story stylesheet AND remove passages from story', () => {
+      const fr = readFileSync('test/Twee/TweeParser/style.twee', 'utf-8');
+      const story = parseTwee(fr);
+      expect(story.storyStylesheet.length).toBeGreaterThan(0);
+      expect(story.passages.length).toBe(1);
     });
   });
 });

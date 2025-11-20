@@ -684,14 +684,11 @@ describe('Story', () => {
       // Convert back into Story.
       const story = parseTwee(t);
 
-      // Search for 'script'.
-      const p = story.getPassagesByTag('script');
-
-      // Test for passage text.
-      expect(p[0].text).toBe('Test');
+      // Script-tagged passages are now stored in storyJavaScript, not in passages array.
+      expect(story.storyJavaScript).toBe('Test');
     });
 
-    it('Should encode "stylesheet" tag', () => {
+    it('Should encode "stylesheet" tag as storyStylesheet', () => {
       // Add passages.
       s.addPassage(new Passage('Test', 'Test', ['stylesheet']));
       s.addPassage(new Passage('Start', 'Content'));
@@ -705,11 +702,8 @@ describe('Story', () => {
       // Convert back into Story.
       const story = parseTwee(t);
 
-      // Search for 'stylesheet'.
-      const p = story.getPassagesByTag('stylesheet');
-
       // Test for passage text.
-      expect(p[0].text).toBe('Test');
+      expect(story.storyStylesheet).toBe('Test');
     });
 
     it('Should encode story stylesheet as passage with "stylesheet" tag', () => {
@@ -725,11 +719,8 @@ describe('Story', () => {
       // Convert back into Story.
       const story = parseTwee(t);
 
-      // Search for 'stylesheet'.
-      const p = story.getPassagesByTag('stylesheet');
-
       // Test for passage text.
-      expect(p[0].text).toBe('Test');
+      expect(story.storyStylesheet).toBe('Test');
     }
     );
 
@@ -746,11 +737,8 @@ describe('Story', () => {
       // Convert back into Story.
       const story = parseTwee(t);
 
-      // Search for 'stylesheet'.
-      const p = story.getPassagesByTag('script');
-
-      // Test for passage text.
-      expect(p[0].text).toBe('Test');
+      // Script-tagged passages are now stored in storyJavaScript, not in passages array.
+      expect(story.storyJavaScript).toBe('Test');
     }
     );
   });

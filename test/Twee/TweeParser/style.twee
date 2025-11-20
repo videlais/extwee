@@ -1,0 +1,16 @@
+:: StoryTitle
+Style Tag Usage
+
+
+:: StoryData
+{
+    "ifid": "2A4D6978-93A7-4FD3-96FB-94B995FCBE29"
+}
+
+:: Example [stylesheet]
+#green {
+    color:green;
+}
+
+:: Start
+Nothing here!

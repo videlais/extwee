@@ -105,10 +105,9 @@ describe('Twine2HTMLParser', () => {
     it('Should have script and style tags normally', () => {
       const fr = readFileSync('test/Twine2HTML/Twine2HTMLParser/Example1.html', 'utf-8');
       const story = parseTwine2HTML(fr);
-      const scriptPassages = story.getPassagesByTag('script');
-      const stylesheetPassages = story.getPassagesByTag('stylesheet');
-      expect(scriptPassages.length).toBe(1);
-      expect(stylesheetPassages.length).toBe(1);
+      // Script-tagged passages are now stored in storyJavaScript, not passages array
+      expect(story.storyJavaScript.length).toBeGreaterThan(0);
+      expect(story.storyStylesheet.length).toBeGreaterThan(0);
     });
 
     it('Should parse HTML without passage start node', () => {
