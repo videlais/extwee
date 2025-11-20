@@ -175,43 +175,45 @@ describe('Passage', () => {
   });
 
   describe('Escaping', function () {
-    it('Should NOT HTML-encode passage text content with double quotes', function () {
+    it('Should HTML-encode passage text content with double quotes', function () {
       const p = new Passage('Test', 'Word "word"');
-      // Passage text should NOT be HTML-encoded (matches Twine 2 behavior)
-      expect(p.toTwine2HTML().includes('>Word "word"<')).toBe(true);
-      expect(p.toTwine2HTML().includes('&quot;word&quot;')).toBe(false);
+      // Passage text MUST be HTML-encoded for valid HTML output
+      expect(p.toTwine2HTML().includes('&quot;word&quot;')).toBe(true);
+      expect(p.toTwine2HTML().includes('>Word "word"<')).toBe(false);
     });
 
-    it('Should NOT HTML-encode passage text content with ampersands', function () {
+    it('Should HTML-encode passage text content with ampersands', function () {
       const p = new Passage('Test', 'Word & word');
-      // Passage text should NOT be HTML-encoded
-      expect(p.toTwine2HTML().includes('>Word & word<')).toBe(true);
-      expect(p.toTwine2HTML().includes('&amp;')).toBe(false);
+      // Passage text MUST be HTML-encoded
+      expect(p.toTwine2HTML().includes('&amp;')).toBe(true);
+      expect(p.toTwine2HTML().includes('>Word & word<')).toBe(false);
     });
 
-    it('Should NOT HTML-encode passage text content with less than', function () {
+    it('Should HTML-encode passage text content with less than', function () {
       const p = new Passage('Test', 'Word < word');
-      // Passage text should NOT be HTML-encoded
-      expect(p.toTwine2HTML().includes('>Word < word<')).toBe(true);
-      expect(p.toTwine2HTML().includes('&lt;')).toBe(false);
+      // Passage text MUST be HTML-encoded
+      expect(p.toTwine2HTML().includes('&lt;')).toBe(true);
+      expect(p.toTwine2HTML().includes('>Word < word<')).toBe(false);
     });
 
-    it('Should NOT HTML-encode passage text content with greater than', function () {
+    it('Should HTML-encode passage text content with greater than', function () {
       const p = new Passage('Test', 'Word > word');
-      // Passage text should NOT be HTML-encoded
-      expect(p.toTwine2HTML().includes('>Word > word<')).toBe(true);
-      expect(p.toTwine2HTML().includes('&gt;')).toBe(false);
+      // Passage text MUST be HTML-encoded
+      expect(p.toTwine2HTML().includes('&gt;')).toBe(true);
+      expect(p.toTwine2HTML().includes('>Word > word<')).toBe(false);
     });
 
-    it('Should NOT HTML-encode passage text content with special characters', function () {
+    it('Should HTML-encode passage text content with special characters', function () {
       const p = new Passage('Test', 'Word &<>"\' word');
-      // Passage text should NOT be HTML-encoded
-      expect(p.toTwine2HTML().includes('>Word &<>"\' word<')).toBe(true);
-      expect(p.toTwine2HTML().includes('&amp;')).toBe(false);
-      expect(p.toTwine2HTML().includes('&lt;')).toBe(false);
-      expect(p.toTwine2HTML().includes('&gt;')).toBe(false);
-      expect(p.toTwine2HTML().includes('&quot;')).toBe(false);
-      expect(p.toTwine2HTML().includes('&apos;')).toBe(false);
+      // Passage text MUST be HTML-encoded
+      expect(p.toTwine2HTML().includes('&amp;')).toBe(true);
+      expect(p.toTwine2HTML().includes('&lt;')).toBe(true);
+      expect(p.toTwine2HTML().includes('&gt;')).toBe(true);
+      expect(p.toTwine2HTML().includes('&quot;')).toBe(true);
+      // Single quotes can be encoded as either &apos; or &#39;
+      const html = p.toTwine2HTML();
+      expect(html.includes('&apos;') || html.includes('&#39;')).toBe(true);
+      expect(html.includes('>Word &<>"\' word<')).toBe(false);
     });
 
     it('Should escape meta-characters safely in name attribute', function () {
@@ -221,14 +223,16 @@ describe('Passage', () => {
       expect(p.toTwine1HTML().includes('tiddler="&quot;Test&quot;"')).toBe(true);
     });
 
-    it('Should NOT HTML-encode passage text but preserve JavaScript/HTML', function () {
+    it('Should HTML-encode passage text including JavaScript/HTML code', function () {
       const p = new Passage('Test', '<%\n$.getScript("https://example.com/script.js");\n%>');
       const html = p.toTwine2HTML();
-      // Should preserve the JavaScript code exactly as-is
-      expect(html.includes('$.getScript("https://example.com/script.js");')).toBe(true);
-      expect(html.includes('&quot;')).toBe(false);
-      expect(html.includes('&lt;')).toBe(false);
-      expect(html.includes('&gt;')).toBe(false);
+      // JavaScript code in passages MUST be HTML-encoded in the HTML file
+      // The story format will retrieve it via .innerHTML which decodes entities automatically
+      expect(html.includes('&lt;%')).toBe(true);
+      expect(html.includes('%&gt;')).toBe(true);
+      expect(html.includes('&quot;https://example.com/script.js&quot;')).toBe(true);
+      // Raw characters should NOT appear in the HTML
+      expect(html.includes('$.getScript("https://example.com/script.js");')).toBe(false);
     });
 
     it('Should escape meta-characters safely in tags attribute', function () {
