@@ -436,7 +436,7 @@ class Story {
         if (Object.prototype.hasOwnProperty.call(metadata, 'tag-colors')) {
           this.tagColors = metadata['tag-colors'];
         }
-      } catch (event) {
+      } catch {
         // Ignore errors.
       }
 

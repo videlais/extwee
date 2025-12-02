@@ -73,5 +73,8 @@
     "url": "https://github.com/videlais/extwee/issues"
   },
   "type": "module",
-  "types": "./types/index.d.ts"
+  "types": "./types/index.d.ts",
+  "engines": {
+    "node": ">=18.18.0"
+  }
 }
