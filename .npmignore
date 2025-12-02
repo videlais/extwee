@@ -1,0 +1,52 @@
+# Development files
+.git/
+.github/
+.gitignore
+.vscode/
+.idea/
+
+# Test files
+test/
+coverage/
+jest.config.json
+*.test.js
+*.spec.js
+
+# Documentation source
+docs/
+
+# Build tools
+webpack.config.js
+babel.config.json
+eslint.config.js
+tsconfig.json
+.travis.yml
+
+# Development dependencies
+node_modules/
+
+# Example and config files
+extwee.config.json
+extwee.config.md
+verify-*.js
+benchmark-*.js
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/

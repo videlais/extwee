@@ -217,6 +217,22 @@ When using the API, it is possible to only import a single function or object to
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on:
+
+- Setting up your development environment
+- Code style and standards
+- Testing requirements
+- Submitting pull requests
+
+See also:
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Changelog](CHANGELOG.md)
+- [Security Policy](SECURITY.md)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.

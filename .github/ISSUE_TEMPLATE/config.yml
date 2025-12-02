@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Discussion Forum
+    url: https://github.com/videlais/extwee/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 📚 Documentation
+    url: https://videlais.github.io/extwee/
+    about: Read the official documentation
+  - name: 📖 Twine Specifications
+    url: https://github.com/iftechfoundation/twine-specs
+    about: Reference for Twine format specifications
