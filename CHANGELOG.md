@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Script-tagged passages now automatically added to `storyJavaScript` property instead of passages array
 - Comprehensive Snowman story format compatibility tests
 - Enhanced HTML entity handling for passage content
-- CI/CD testing across multiple Node.js versions (18.x, 20.x, 22.x, 23.x)
+- CI/CD testing across multiple Node.js versions (20.x, 22.x, 23.x)
 - CI/CD testing across multiple operating systems (Ubuntu, Windows, macOS)
 
 ### Changed
