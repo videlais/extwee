@@ -20,13 +20,13 @@ export function reader(path) {
     const contents = readFileSync(path, 'utf8');
 
     // Parsed contents.
-    let parsedContents = null;
+    let parsedContents;
 
     // Try to parse the contents into JSON object.
     try {
         parsedContents = JSON.parse(contents);
     } catch (error) {
-        throw new Error(`Error: File ${path} is not a valid JSON file. ${error.message}`);
+        throw new Error(`Error: File ${path} is not a valid JSON file. ${error.message}`, { cause: error });
     }
 
     // Return the parsed contents.

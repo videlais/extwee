@@ -52,7 +52,7 @@ import Passage from '../Passage.js';
  */
 function parse (jsonString) {
   // Create future object.
-  let result = {};
+  let result;
 
   // Create Story.
   const s = new Story();
@@ -61,7 +61,7 @@ function parse (jsonString) {
   try {
     result = JSON.parse(jsonString);
   } catch (error) {
-    throw new Error(`Error: JSON could not be parsed! ${error.message}`);
+    throw new Error(`Error: JSON could not be parsed! ${error.message}`, { cause: error });
   }
 
   // Name

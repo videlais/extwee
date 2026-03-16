@@ -85,13 +85,13 @@ function parse (contents) {
   }
 
   // Create an object literal
-  let jsonContent = {};
+  let jsonContent;
 
   // Attempt to parse the JSON.
   try {
     jsonContent = JSON.parse(contents);
   } catch (error) {
-    throw new Error(`Error: Unable to parse Twine 2 JSON chunk! ${error.message}`);
+    throw new Error(`Error: Unable to parse Twine 2 JSON chunk! ${error.message}`, { cause: error });
   }
 
   /**

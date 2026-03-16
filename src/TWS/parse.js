@@ -21,7 +21,7 @@ function parse (binaryFileContents) {
   const parser = new Parser();
 
   // Set default value.
-  let pythonObject = null;
+  let pythonObject;
 
   // Does the Buffer contain pickle data?
   try {
@@ -29,7 +29,7 @@ function parse (binaryFileContents) {
     pythonObject = parser.parse(binaryFileContents);
   } catch (error) {
     // This is a Buffer, but not pickle data.
-    throw new TypeError(`Error: Buffer does not contain Python pickle data! ${error}`);
+    throw new TypeError(`Error: Buffer does not contain Python pickle data! ${error}`, { cause: error });
   }
 
   // Create Story object.

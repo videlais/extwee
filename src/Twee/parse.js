@@ -119,7 +119,7 @@ function parse (fileContents) {
     throw new Error('Contents not a String');
   }
 
-  let adjusted = '';
+  let adjusted;
 
   // Check if there are extra content in the files
   // If so, cut it all out for the parser
@@ -143,8 +143,8 @@ function parse (fileContents) {
     // Set default values
     let tags = '';
     let metadata = '';
-    let text = '';
-    let name = '';
+    let text;
+    let name;
 
     // Header is everything to the first newline
     let header = passage.slice(0, passage.indexOf('\n'));
