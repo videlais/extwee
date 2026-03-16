@@ -20,34 +20,34 @@ export function parser(obj) {
     };
     
     // Does the object contain 'StoryFormat'?
-    if (Object.hasOwnProperty.call(obj, 'story-format')) {
+    if (Object.prototype.hasOwnProperty.call(obj, 'story-format')) {
         results.StoryFormat = obj['story-format'];
     }
 
     // Does the object contain 'StoryFormatVersion'?
-    if (Object.hasOwnProperty.call(obj, 'story-format-version')) {
+    if (Object.prototype.hasOwnProperty.call(obj, 'story-format-version')) {
         results.StoryFormatVersion = obj['story-format-version'];
     } else {
         results.StoryFormatVersion = "latest";
     }
 
     // Does the object contain 'mode'?
-    if (Object.hasOwnProperty.call(obj, 'mode')) {
+    if (Object.prototype.hasOwnProperty.call(obj, 'mode')) {
         results.Mode = obj['mode'];
     }
 
     // Does the object contain 'input'?
-    if (Object.hasOwnProperty.call(obj, 'input')) {
+    if (Object.prototype.hasOwnProperty.call(obj, 'input')) {
         results.Input = obj['input'];
     }
 
     // Does the object contain 'output'?
-    if (Object.hasOwnProperty.call(obj, 'output')) {
+    if (Object.prototype.hasOwnProperty.call(obj, 'output')) {
         results.Output = obj['output'];
     }
 
     // Does the object contain 'twine1-project'?
-    if (Object.hasOwnProperty.call(obj, 'twine1-project')) {
+    if (Object.prototype.hasOwnProperty.call(obj, 'twine1-project')) {
         results.Twine1Project = obj['twine1-project'];
     } else {
         results.Twine1Project = false;

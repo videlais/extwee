@@ -21,36 +21,36 @@ function compile (story, engine = '', header = '', name = '', codeJS = '', confi
   }
 
   // Replace the "VERSION" with story.creator.
-  header = header.replaceAll(/"VERSION"/gm, story.creator);
+  header = header.replaceAll(/"VERSION"/gm, () => story.creator);
 
   // Replace the "TIME" with new Date().
-  header = header.replaceAll(/"TIME"/gm, new Date());
+  header = header.replaceAll(/"TIME"/gm, () => String(new Date()));
 
   // Replace the ENGINE with `engine.js` code.
-  header = header.replaceAll(/"ENGINE"/gm, engine);
+  header = header.replaceAll(/"ENGINE"/gm, () => engine);
 
   // Replace the NAME (e.g. "JONAH") with `engine.js` code.
-  header = header.replaceAll(`"${name.toUpperCase()}"`, codeJS);
+  header = header.replaceAll(`"${name.toUpperCase()}"`, () => codeJS);
 
   // Replace "STORY_SIZE".
-  header = header.replaceAll(/"STORY_SIZE"/gm, `"${story.size()}"`);
+  header = header.replaceAll(/"STORY_SIZE"/gm, () => `"${story.size()}"`);
 
   // Replace "STORY" with Twine 1 HTML.
-  header = header.replaceAll(/"STORY"/gm, story.toTwine1HTML());
+  header = header.replaceAll(/"STORY"/gm, () => story.toTwine1HTML());
 
   // Replace START_AT with ''.
-  header = header.replaceAll(/"START_AT"/gm, '\'\'');
+  header = header.replaceAll(/"START_AT"/gm, () => '\'\'');
 
   // Does 'jquery' exist?
   if (Object.prototype.hasOwnProperty.call(config, 'jquery')) {
     // Replace JQUERY with jQuery.
-    header = header.replaceAll(/"JQUERY"/gm, config.jquery);
+    header = header.replaceAll(/"JQUERY"/gm, () => config.jquery);
   }
 
   // Does 'modernizr' exist?
   if (Object.prototype.hasOwnProperty.call(config, 'modernizr')) {
     // Replace "MODERNIZR" with Modernizr.
-    header = header.replaceAll(/"MODERNIZR"/gm, config.modernizr);
+    header = header.replaceAll(/"MODERNIZR"/gm, () => config.modernizr);
   }
 
   // Return code.

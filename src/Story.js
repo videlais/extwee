@@ -168,10 +168,10 @@ class Story {
    * @param {object} a - Replacement tag colors
    */
   set tagColors (a) {
-    if (a instanceof Object) {
+    if (a !== null && typeof a === 'object' && !Array.isArray(a)) {
       this.#_tagColors = a;
     } else {
-      throw new Error('Tag colors must be an object!');
+      throw new Error('Tag colors must be a plain object!');
     }
   }
 
@@ -236,10 +236,10 @@ class Story {
    * @param {object} o - Replacement metadata
    */
   set metadata (o) {
-    if (typeof o === 'object') {
+    if (o !== null && typeof o === 'object') {
       this.#_metadata = o;
     } else {
-      throw new Error('Story metadata must be Object!');
+      throw new Error('Story metadata must be a non-null Object!');
     }
   }
 
@@ -304,11 +304,11 @@ class Story {
    * @param {number} n - Replacement zoom level
    */
   set zoom (n) {
-    if (typeof n === 'number') {
+    if (typeof n === 'number' && Number.isFinite(n)) {
       // Parse float with a fixed length and then force into Number
       this.#_zoom = Number(Number.parseFloat(n).toFixed(2));
     } else {
-      throw new Error('Zoom level must be a Number!');
+      throw new Error('Zoom level must be a finite Number!');
     }
   }
 
@@ -894,7 +894,7 @@ class Story {
     // For each tag, generate a <tw-tag> element.
     tagList.forEach((tag) => {
       // Add the <tw-tag> element.
-      storyData += `\t<tw-tag name="${tag}" color="${this.tagColors[tag]}"></tw-tag>\n`;
+      storyData += `\t<tw-tag name="${encode(tag)}" color="${encode(String(this.tagColors[tag]))}"></tw-tag>\n`;
     });
 
     // Close the HTML element.

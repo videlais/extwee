@@ -23,6 +23,14 @@ import { readFileSync } from "node:fs";
  * // Output: The contents of the format.js file.
  */
 export function loadStoryFormat(storyFormatName, storyFormatVersion) {
+    // Validate path components to prevent path traversal.
+    if (/[/\\]|\.\./.test(storyFormatName)) {
+        throw new Error('Error: story format name contains invalid characters.');
+    }
+    if (/[/\\]|\.\./.test(storyFormatVersion)) {
+        throw new Error('Error: story format version contains invalid characters.');
+    }
+
     // If the story-formats directory does not exist, throw error.
     if (isDirectory('story-formats') === false) {
         throw new Error(`Error: story-formats directory does not exist. Consider running 'npx sfa-get' to download the latest story formats.`);
