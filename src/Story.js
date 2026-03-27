@@ -19,22 +19,22 @@ const creatorVersion = '2.3.14';
  * @property {string} format - Story format of Story.
  * @property {string} formatVersion - Story format version of Story.
  * @property {number} zoom - Zoom level.
- * @property {Array} passages - Array of Passage objects. @see {@link Passage}
+ * @property {Array} passages - Array of Passage objects. See {@link Passage}.
  * @property {string} creator - Program used to create Story.
  * @property {string} creatorVersion - Version used to create Story.
  * @property {object} metadata - Metadata of Story.
  * @property {object} tagColors - Tag Colors
  * @property {string} storyJavaScript - Story JavaScript
  * @property {string} storyStylesheet - Story Stylesheet
- * @method {number} addPassage - Add a passage to the story and returns the new length of the passages array.
- * @method {number} removePassageByName - Remove a passage from the story by name and returns the new length of the passages array.
- * @method {Array} getPassagesByTag - Find passages by tag.
- * @method {Array} getPassageByName - Find passage by name.
- * @method {number} size - Size (number of passages).
- * @method {string} toJSON - Export Story as JSON representation.
- * @method {string} toTwee - Return Twee representation.
- * @method {string} toTwine2HTML - Return Twine 2 HTML representation.
- * @method {string} toTwine1HTML - Return Twine 1 HTML representation.
+ * @function addPassage - Add a passage to the story and returns the new length of the passages array.
+ * @function removePassageByName - Remove a passage from the story by name and returns the new length of the passages array.
+ * @function getPassagesByTag - Find passages by tag.
+ * @function getPassageByName - Find passage by name.
+ * @function size - Size (number of passages).
+ * @function toJSON - Export Story as JSON representation.
+ * @function toTwee - Return Twee representation.
+ * @function toTwine2HTML - Return Twine 2 HTML representation.
+ * @function toTwine1HTML - Return Twine 1 HTML representation.
  * @example
  * const story = new Story('My Story');
  * story.IFID = '12345678-1234-5678-1234-567812345678';
@@ -148,6 +148,7 @@ class Story {
   get name () { return this.#_name; }
 
   /**
+   * Set story name.
    * @param {string} a - Replacement story name
    */
   set name (a) {
@@ -165,6 +166,7 @@ class Story {
   get tagColors () { return this.#_tagColors; }
 
   /**
+   * Set tag colors.
    * @param {object} a - Replacement tag colors
    */
   set tagColors (a) {
@@ -182,6 +184,7 @@ class Story {
   get IFID () { return this.#_IFID; }
 
   /**
+   * Set story IFID.
    * @param {string} i - Replacement IFID.
    */
   set IFID (i) {
@@ -199,6 +202,7 @@ class Story {
   get start () { return this.#_start; }
 
   /**
+   * Set start passage name.
    * @param {string} s - Replacement start
    */
   set start (s) {
@@ -216,6 +220,7 @@ class Story {
   get formatVersion () { return this.#_formatVersion; }
 
   /**
+   * Set story format version.
    * @param {string} f - Replacement format version
    */
   set formatVersion (f) {
@@ -233,6 +238,7 @@ class Story {
   get metadata () { return this.#_metadata; }
 
   /**
+   * Set story metadata.
    * @param {object} o - Replacement metadata
    */
   set metadata (o) {
@@ -250,6 +256,7 @@ class Story {
   get format () { return this.#_format; }
 
   /**
+   * Set story format.
    * @param {string} f - Replacement format
    */
   set format (f) {
@@ -267,6 +274,7 @@ class Story {
   get creator () { return this.#_creator; }
 
   /**
+   * Set creator program.
    * @param {string} c - Creator Program of Story
    */
   set creator (c) {
@@ -284,6 +292,7 @@ class Story {
   get creatorVersion () { return this.#_creatorVersion; }
 
   /**
+   * Set creator version.
    * @param {string} c - Version of creator program
    */
   set creatorVersion (c) {
@@ -301,6 +310,7 @@ class Story {
   get zoom () { return this.#_zoom; }
 
   /**
+   * Set zoom level.
    * @param {number} n - Replacement zoom level
    */
   set zoom (n) {
@@ -316,7 +326,7 @@ class Story {
    * Passages in Story.
    * @returns {Array} Passages
    * @property {Array} passages - Passages
-  */
+   */
   get passages () { return this.#_passages; }
 
   /**
@@ -347,6 +357,7 @@ class Story {
   }
 
   /**
+   * Set story stylesheet.
    * @param {string} s - Replacement story stylesheet
    */
   set storyStylesheet (s) {
@@ -380,7 +391,7 @@ class Story {
   /**
    * Add a passage to the story.
    * Passing `StoryData` will override story metadata and `StoryTitle` will override story name.
-   * @method addPassage
+   * @function addPassage
    * @param {Passage} p - Passage to add to Story.
    * @returns {number} Return new length of passages array.
    */
@@ -492,7 +503,7 @@ class Story {
 
   /**
    * Remove a passage from the story by name.
-   * @method removePassageByName
+   * @function removePassageByName
    * @param {string} name - Passage name to remove.
    * @returns {number} Return new length of passages array.
    */
@@ -503,7 +514,7 @@ class Story {
 
   /**
    * Find passages by tag.
-   * @method getPassagesByTag
+   * @function getPassagesByTag
    * @param {string} t - Passage name to search for
    * @returns {Array} Return array of passages
    */
@@ -517,7 +528,7 @@ class Story {
 
   /**
    * Find passage by name.
-   * @method getPassageByName
+   * @function getPassageByName
    * @param {string} name - Passage name to search for
    * @returns {Passage | null} Return passage or null
    */
@@ -530,7 +541,7 @@ class Story {
 
   /**
    * Size (number of passages).
-   * @method size
+   * @function size
    * @returns {number} Return number of passages
    */
   size () {
@@ -539,7 +550,7 @@ class Story {
 
   /**
    * Export Story as JSON representation.
-   * @method toJSON
+   * @function toJSON
    * @returns {string} JSON string.
    */
   toJSON () {
@@ -579,8 +590,7 @@ class Story {
    *
    * See: Twee 3 Specification
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md)
-   * 
-   * @method toTwee
+   * @function toTwee
    * @returns {string} Twee String
    */
   toTwee () {
@@ -607,7 +617,7 @@ class Story {
 
     /**
      * format: (string) Optional. Maps to <tw-storydata format>.
-    */
+     */
     // Does format exist?
     if (this.format !== '') {
       // Write the existing format.
@@ -706,8 +716,7 @@ class Story {
    * Because story stylesheet data can be represented as a passage, property value, or both, all approaches are encoded.
    * 
    * Because story JavaScript can be represented as a passage, property value, or both, all approaches are encoded.
-   * 
-   * @method toTwine2HTML
+   * @function toTwine2HTML
    * @returns {string} Twine 2 HTML string
    */
   toTwine2HTML () {
@@ -852,9 +861,6 @@ class Story {
     // Filter out passages with tag of 'script'.
     const scriptPassages = passages.filter((passage) => passage.tags.includes('script'));
 
-    // Remove script passages from the main array.
-    passages = passages.filter(p => !p.tags.includes('script'));
-
     // Were there any script passages?
     if (scriptPassages.length > 0) {
       // Start the SCRIPT.
@@ -909,8 +915,7 @@ class Story {
    *
    * See: Twine 1 HTML Output
    * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-1-htmloutput-doc.md)
-   * 
-   * @method toTwine1HTML
+   * @function toTwine1HTML
    * @returns {string} Twine 1 HTML string.
    */
   toTwine1HTML () {

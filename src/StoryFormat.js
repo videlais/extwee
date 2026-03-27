@@ -5,9 +5,7 @@ import { valid } from 'semver';
  * 
  * This class has type checking on all of its properties.
  * If a property is set to a value of the wrong type, a TypeError will be thrown.
- * 
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-storyformats-spec.md Twine 2 Story Formats Specification}
- * 
  * @class
  * @classdesc A class representing a Twine 2 story format.
  * @property {string} name - The name of the story format.
@@ -107,6 +105,7 @@ export default class StoryFormat {
   get name () { return this.#_name; }
 
   /**
+   * Set name.
    * @param {string} n - Replacement name.
    */
   set name (n) {
@@ -124,6 +123,7 @@ export default class StoryFormat {
   get version () { return this.#_version; }
 
   /**
+   * Set version.
    * @param {string} n - Replacement version.
    */
   set version (n) {
@@ -141,6 +141,7 @@ export default class StoryFormat {
   get description () { return this.#_description; }
 
   /**
+   * Set description.
    * @param {string} d - Replacement description.
    */
   set description (d) {
@@ -158,6 +159,7 @@ export default class StoryFormat {
   get author () { return this.#_author; }
 
   /**
+   * Set author.
    * @param {string} a - Replacement author.
    */
   set author (a) {
@@ -175,6 +177,7 @@ export default class StoryFormat {
   get image () { return this.#_image; }
 
   /**
+   * Set image.
    * @param {string} i - Replacement image.
    */
   set image (i) {
@@ -192,6 +195,7 @@ export default class StoryFormat {
   get url () { return this.#_url; }
 
   /**
+   * Set URL.
    * @param {string} u - Replacement URL.
    */
   set url (u) {
@@ -209,6 +213,7 @@ export default class StoryFormat {
   get license () { return this.#_license; }
 
   /**
+   * Set license.
    * @param {string} l - Replacement license.
    */
   set license (l) {
@@ -226,6 +231,7 @@ export default class StoryFormat {
   get proofing () { return this.#_proofing; }
 
   /**
+   * Set proofing.
    * @param {boolean} p - Replacement proofing.
    */
   set proofing (p) {
@@ -243,6 +249,7 @@ export default class StoryFormat {
   get source () { return this.#_source; }
 
   /**
+   * Set source.
    * @param {string} s - Replacement source.
    */
   set source (s) {
@@ -255,7 +262,7 @@ export default class StoryFormat {
 
   /**
    * Produces a string representation of the story format object.
-   * @method toString
+   * @function toString
    * @returns {string} - A string representation of the story format.
    */
   toString() {
@@ -264,7 +271,7 @@ export default class StoryFormat {
 
   /**
    * Produces a JSON representation of the story format object.
-   * @method toJSON
+   * @function toJSON
    * @returns {object} - A JSON representation of the story format.
    */
   toJSON() {

@@ -11,9 +11,6 @@ import { isDirectory } from '../isDirectory.js';
  */
 export function readDirectories(directory) {
 
-    // Create default response.
-    let results = [];
-
     // Check if the directory exists.
     const isDir = isDirectory(directory);
     // If the directory does not exist, return an empty array
@@ -23,6 +20,7 @@ export function readDirectories(directory) {
     }
 
     // Read the directory and return the list of files.
+    let results;
     try {
         results = readdirSync(directory);
     } catch (error) {

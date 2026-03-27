@@ -2,42 +2,42 @@ import { encode } from 'html-entities';
 import { escapeTweeMetacharacters } from './Twee/parse.js';
 
 /**
-  * Passage class.
-  * @class
-  * @classdesc Represents a passage in a Twine story.
-  * @property {string} name - Name of the passage.
-  * @property {Array} tags - Tags for the passage.
-  * @property {object} metadata - Metadata for the passage.
-  * @property {string} text - Text content of the passage.
-  * @method {string} toTwee - Return a Twee representation.
-  * @method {string} toJSON - Return JSON representation.
-  * @method {string} toTwine2HTML - Return Twine 2 HTML representation.
-  * @method {string} toTwine1HTML - Return Twine 1 HTML representation.
-  * @example
-  * const p = new Passage('Start', 'This is the start of the story.');
-  * console.log(p.toTwee());
-  * // :: Start
-  * // This is the start of the story.
-  * //
-  * console.log(p.toJSON());
-  * // {"name":"Start","tags":[],"metadata":{},"text":"This is the start of the story."}
-  * console.log(p.toTwine2HTML());
-  * // <tw-passagedata pid="1" name="Start" tags="" >This is the start of the story.</tw-passagedata>
-  * console.log(p.toTwine1HTML());
-  * // <div tiddler="Start" tags="" modifier="extwee" twine-position="10,10">This is the start of the story.</div>
-  * @example
-  * const p = new Passage('Start', 'This is the start of the story.', ['start', 'beginning'], {position: '10,10', size: '100,100'});
-  * console.log(p.toTwee());
-  * // :: Start [start beginning] {"position":"10,10","size":"100,100"}
-  * // This is the start of the story.
-  * //
-  * console.log(p.toJSON());
-  * // {"name":"Start","tags":["start","beginning"],"metadata":{"position":"10,10","size":"100,100"},"text":"This is the start of the story."}
-  * console.log(p.toTwine2HTML());
-  * // <tw-passagedata pid="1" name="Start" tags="start beginning" position="10,10" size="100,100">This is the start of the story.</tw-passagedata>
-  * console.log(p.toTwine1HTML());
-  * // <div tiddler="Start" tags="start beginning" modifier="extwee" twine-position="10,10">This is the start of the story.</div>
-  */ 
+ * Passage class.
+ * @class
+ * @classdesc Represents a passage in a Twine story.
+ * @property {string} name - Name of the passage.
+ * @property {Array} tags - Tags for the passage.
+ * @property {object} metadata - Metadata for the passage.
+ * @property {string} text - Text content of the passage.
+ * @function toTwee - Return a Twee representation.
+ * @function toJSON - Return JSON representation.
+ * @function toTwine2HTML - Return Twine 2 HTML representation.
+ * @function toTwine1HTML - Return Twine 1 HTML representation.
+ * @example
+ * const p = new Passage('Start', 'This is the start of the story.');
+ * console.log(p.toTwee());
+ * // :: Start
+ * // This is the start of the story.
+ * //
+ * console.log(p.toJSON());
+ * // {"name":"Start","tags":[],"metadata":{},"text":"This is the start of the story."}
+ * console.log(p.toTwine2HTML());
+ * // <tw-passagedata pid="1" name="Start" tags="" >This is the start of the story.</tw-passagedata>
+ * console.log(p.toTwine1HTML());
+ * // <div tiddler="Start" tags="" modifier="extwee" twine-position="10,10">This is the start of the story.</div>
+ * @example
+ * const p = new Passage('Start', 'This is the start of the story.', ['start', 'beginning'], {position: '10,10', size: '100,100'});
+ * console.log(p.toTwee());
+ * // :: Start [start beginning] {"position":"10,10","size":"100,100"}
+ * // This is the start of the story.
+ * //
+ * console.log(p.toJSON());
+ * // {"name":"Start","tags":["start","beginning"],"metadata":{"position":"10,10","size":"100,100"},"text":"This is the start of the story."}
+ * console.log(p.toTwine2HTML());
+ * // <tw-passagedata pid="1" name="Start" tags="start beginning" position="10,10" size="100,100">This is the start of the story.</tw-passagedata>
+ * console.log(p.toTwine1HTML());
+ * // <div tiddler="Start" tags="start beginning" modifier="extwee" twine-position="10,10">This is the start of the story.</div>
+ */ 
 export default class Passage {
   /**
    * Name of the Passage
@@ -95,6 +95,7 @@ export default class Passage {
   get name () { return this.#_name; }
 
   /**
+   * Set passage name.
    * @param {string} s - Name to replace
    * @throws {Error} Name must be a String!
    */
@@ -113,6 +114,7 @@ export default class Passage {
   get tags () { return this.#_tags; }
 
   /**
+   * Set passage tags.
    * @param {Array} t - Replacement array
    * @throws {Error} Tags must be an array!
    */
@@ -133,6 +135,7 @@ export default class Passage {
   get metadata () { return this.#_metadata; }
 
   /**
+   * Set passage metadata.
    * @param {object} m - Replacement object
    * @throws {Error} Metadata must be an object literal!
    */
@@ -152,6 +155,7 @@ export default class Passage {
   get text () { return this.#_text; }
 
   /**
+   * Set passage text.
    * @param {string} t - Replacement text
    * @throws {Error} Text should be a String!
    */
@@ -168,8 +172,7 @@ export default class Passage {
    * Return a Twee representation.
    * 
    * See: https://github.com/iftechfoundation/twine-specs/blob/master/twee-3-specification.md
-   * 
-   * @method toTwee
+   * @function toTwee
    * @returns {string} String form of passage.
    */
   toTwee () {
@@ -216,7 +219,7 @@ export default class Passage {
 
   /**
    * Return JSON representation.
-   * @method toJSON
+   * @function toJSON
    * @returns {string} JSON string.
    */
   toJSON () {
@@ -235,7 +238,7 @@ export default class Passage {
   /**
    * Return Twine 2 HTML representation.
    * (Default Passage ID is 1.)
-   * @method toTwine2HTML
+   * @function toTwine2HTML
    * @param {number} pid - Passage ID (PID) to record in HTML.
    * @returns {string} Twine 2 HTML string.
    */
@@ -292,7 +295,7 @@ export default class Passage {
 
   /**
    * Return Twine 1 HTML representation.
-   * @method toTwine1HTML
+   * @function toTwine1HTML
    * @returns {string} Twine 1 HTML string.
    */
   toTwine1HTML () {

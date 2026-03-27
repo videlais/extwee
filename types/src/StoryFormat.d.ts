@@ -3,9 +3,7 @@
  *
  * This class has type checking on all of its properties.
  * If a property is set to a value of the wrong type, a TypeError will be thrown.
- *
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-storyformats-spec.md Twine 2 Story Formats Specification}
- *
  * @class
  * @classdesc A class representing a Twine 2 story format.
  * @property {string} name - The name of the story format.
@@ -32,6 +30,7 @@
 export default class StoryFormat {
     constructor(name?: string, version?: string, description?: string, author?: string, image?: string, url?: string, license?: string, proofing?: boolean, source?: string);
     /**
+     * Set name.
      * @param {string} n - Replacement name.
      */
     set name(n: string);
@@ -41,6 +40,7 @@ export default class StoryFormat {
      */
     get name(): string;
     /**
+     * Set version.
      * @param {string} n - Replacement version.
      */
     set version(n: string);
@@ -50,6 +50,7 @@ export default class StoryFormat {
      */
     get version(): string;
     /**
+     * Set description.
      * @param {string} d - Replacement description.
      */
     set description(d: string);
@@ -59,6 +60,7 @@ export default class StoryFormat {
      */
     get description(): string;
     /**
+     * Set author.
      * @param {string} a - Replacement author.
      */
     set author(a: string);
@@ -68,6 +70,7 @@ export default class StoryFormat {
      */
     get author(): string;
     /**
+     * Set image.
      * @param {string} i - Replacement image.
      */
     set image(i: string);
@@ -77,6 +80,7 @@ export default class StoryFormat {
      */
     get image(): string;
     /**
+     * Set URL.
      * @param {string} u - Replacement URL.
      */
     set url(u: string);
@@ -86,6 +90,7 @@ export default class StoryFormat {
      */
     get url(): string;
     /**
+     * Set license.
      * @param {string} l - Replacement license.
      */
     set license(l: string);
@@ -95,6 +100,7 @@ export default class StoryFormat {
      */
     get license(): string;
     /**
+     * Set proofing.
      * @param {boolean} p - Replacement proofing.
      */
     set proofing(p: boolean);
@@ -104,6 +110,7 @@ export default class StoryFormat {
      */
     get proofing(): boolean;
     /**
+     * Set source.
      * @param {string} s - Replacement source.
      */
     set source(s: string);
@@ -114,13 +121,13 @@ export default class StoryFormat {
     get source(): string;
     /**
      * Produces a string representation of the story format object.
-     * @method toString
+     * @function toString
      * @returns {string} - A string representation of the story format.
      */
     toString(): string;
     /**
      * Produces a JSON representation of the story format object.
-     * @method toJSON
+     * @function toJSON
      * @returns {object} - A JSON representation of the story format.
      */
     toJSON(): object;
