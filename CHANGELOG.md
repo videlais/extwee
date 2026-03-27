@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.15] - 2026-3-27
+
+### Changed
+
+- Added more JSDocs comments.
+- Updated ESLint usage to better support Windows platforms.
+- Removed Node 20.x support and added Node 24.x support for GitHub CI Action.
+
 ## [2.3.14] - 2026-2-1
 
 ### Changed
