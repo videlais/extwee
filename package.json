@@ -17,8 +17,8 @@
   },
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
-    "lint": "eslint './src/**/*.js' --fix",
-    "lint:test": "eslint './test/**/*.test.js' --fix",
+    "lint": "eslint \"./src/**/*.js\" --fix",
+    "lint:test": "eslint \"./test/**/*.test.js\" --fix",
     "build:web": "webpack",
     "analyze:web": "webpack-bundle-analyzer build/extwee.web.min.js",
     "gen-types": "npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
