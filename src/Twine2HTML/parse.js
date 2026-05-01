@@ -147,11 +147,11 @@ function parse (content) {
   const storyPassages = dom.querySelectorAll('tw-passagedata');
 
   // Move through the passages
-  for (const passage in storyPassages) {
+  for (const passage of storyPassages) {
     // Get the passage attributes
-    const attr = storyPassages[passage].attributes;
+    const attr = passage.attributes;
     // Get the passage text
-    const text = storyPassages[passage].rawText;
+    const text = passage.rawText;
 
     /**
      * position: (string) Optional.

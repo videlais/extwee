@@ -43,11 +43,11 @@ function parse (content) {
   const storyPassages = dom.querySelectorAll('[tiddler]');
 
   // Move through the passages.
-  for (const passage in storyPassages) {
+  for (const passage of storyPassages) {
     // Get the passage attributes.
-    const attr = storyPassages[passage].attributes;
+    const attr = passage.attributes;
     // Get the passage text.
-    const text = storyPassages[passage].rawText;
+    const text = passage.rawText;
 
     /**
      * twine-position: (string) Required.

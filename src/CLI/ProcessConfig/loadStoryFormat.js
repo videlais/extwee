@@ -57,8 +57,6 @@ export function loadStoryFormat(storyFormatName, storyFormatVersion) {
         // The directories are expected to be version directories.
         let directories = readDirectories(`story-formats/${storyFormatName}`);
 
-        console.log("!!! directories", directories);
-
         // Check if there are any version directories.
         if (directories.length === 0) {
             // If there are no version directories, throw error.
@@ -71,7 +69,6 @@ export function loadStoryFormat(storyFormatName, storyFormatVersion) {
         });
 
         // Get the latest version directory.
-        // The latest version is the last directory in the sorted list.
         const latestVersion = directories[0];
         
         // Set the filepath to the latest version directory.

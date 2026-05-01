@@ -142,8 +142,12 @@ function parse (jsonString) {
 
         // Does s have tags?
         if (Object.prototype.hasOwnProperty.call(p, 'tags')) {
-          // Set tags.
-          newP.tags = p.tags;
+          // Tags must be an array; coerce space-separated strings for compatibility.
+          if (Array.isArray(p.tags)) {
+            newP.tags = p.tags;
+          } else if (typeof p.tags === 'string') {
+            newP.tags = p.tags.length > 0 ? p.tags.split(' ').filter(t => t !== '') : [];
+          }
         }
 
         // Does s have metadata?
