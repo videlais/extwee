@@ -311,6 +311,25 @@ describe('JSON', () => {
         expect(Object.prototype.hasOwnProperty.call(r.getPassageByName('Start').metadata, 's')).toBe(false);
         expect(r.getPassageByName('Start').text).toBe('Word');
       });
+
+      it('Should coerce string tags to array', function () {
+        const s = '{"name":"Test","passages":[{"name":"Start","tags":"tag1 tag2","text":"Word"}]}';
+        const r = parseJSON(s);
+        expect(Array.isArray(r.getPassageByName('Start').tags)).toBe(true);
+        expect(r.getPassageByName('Start').tags).toEqual(['tag1', 'tag2']);
+      });
+
+      it('Should coerce empty string tags to empty array', function () {
+        const s = '{"name":"Test","passages":[{"name":"Start","tags":"","text":"Word"}]}';
+        const r = parseJSON(s);
+        expect(r.getPassageByName('Start').tags).toEqual([]);
+      });
+
+      it('Should ignore non-array non-string tags (default to empty array)', function () {
+        const s = '{"name":"Test","passages":[{"name":"Start","tags":42,"text":"Word"}]}';
+        const r = parseJSON(s);
+        expect(r.getPassageByName('Start').tags).toEqual([]);
+      });
     });
   });
 });

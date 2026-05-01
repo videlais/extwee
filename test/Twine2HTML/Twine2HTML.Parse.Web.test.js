@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { parse } from '../../src/Twine2HTML/parse-web.js';
+import { parse, LightweightTwine2Parser } from '../../src/Twine2HTML/parse-web.js';
 import { Story } from '../../src/Story.js';
 
 /**
@@ -323,6 +323,135 @@ describe('Twine2HTML', function () {
         
         expect(story.zoom).toBe(2.5);
         expect(typeof story.zoom).toBe('number');
+      });
+    });
+
+    describe('DOMParser path (native browser DOM)', function () {
+      it('Should parse using native DOMParser when available', function () {
+        // In jsdom environment, DOMParser is available — use it directly (no deletion)
+        const content = '<tw-storydata name="DOMParser Story" ifid="12345678-1234-1234-1234-123456789012" startnode="1"><tw-passagedata pid="1" name="Start" tags="test" position="100,200" size="100,100">Content here</tw-passagedata></tw-storydata>';
+        const story = parse(content);
+        expect(story.name).toBe('DOMParser Story');
+        expect(story.IFID).toBe('12345678-1234-1234-1234-123456789012');
+        expect(story.size()).toBe(1);
+        const passage = story.getPassageByName('Start');
+        expect(passage.name).toBe('Start');
+        expect(passage.text).toBe('Content here');
+        expect(passage.tags).toEqual(['test']);
+        expect(passage.metadata.position).toBe('100,200');
+      });
+
+      it('Should fall back to regex on DOMParser parsererror', function () {
+        const originalWarn = console.warn;
+        const warnings = [];
+        console.warn = (...args) => { warnings.push(args[0]); };
+        const OriginalDOMParser = global.DOMParser;
+
+        global.DOMParser = class {
+          parseFromString() {
+            const doc = document.implementation.createHTMLDocument('');
+            const err = doc.createElement('parsererror');
+            doc.body.appendChild(err);
+            return doc;
+          }
+        };
+
+        try {
+          const parser = new LightweightTwine2Parser('<tw-storydata name="Test">content</tw-storydata>');
+          expect(parser.usingDOMParser).toBe(false);
+          expect(warnings.some(w => w.includes('DOMParser encountered an error'))).toBe(true);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+          console.warn = originalWarn;
+        }
+      });
+
+      it('Should fall back to regex when DOMParser throws', function () {
+        const originalWarn = console.warn;
+        const warnings = [];
+        console.warn = (...args) => { warnings.push(args[0]); };
+        const OriginalDOMParser = global.DOMParser;
+
+        global.DOMParser = class {
+          parseFromString() {
+            throw new Error('DOMParser unavailable');
+          }
+        };
+
+        try {
+          const parser = new LightweightTwine2Parser('<tw-storydata name="Test">content</tw-storydata>');
+          expect(parser.usingDOMParser).toBe(false);
+          expect(warnings.some(w => w.includes('DOMParser failed'))).toBe(true);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+          console.warn = originalWarn;
+        }
+      });
+    });
+
+    describe('Warning generation for empty/invalid attribute values', function () {
+      let originalConsoleWarn;
+
+      beforeEach(() => {
+        originalConsoleWarn = console.warn;
+      });
+
+      afterEach(() => {
+        console.warn = originalConsoleWarn;
+      });
+
+      it('Should warn for empty name attribute on tw-storydata', function () {
+        const warnings = [];
+        console.warn = (msg) => { warnings.push(msg); };
+        const content = '<tw-storydata name="" ifid="12345678-1234-1234-1234-123456789012"><tw-passagedata pid="1" name="Start">Content</tw-passagedata></tw-storydata>';
+        parseTwine2HTMLWeb(content);
+        expect(warnings.some(w => w.includes('name attribute is empty or invalid'))).toBe(true);
+      });
+
+      it('Should warn for empty ifid attribute on tw-storydata', function () {
+        const warnings = [];
+        console.warn = (msg) => { warnings.push(msg); };
+        const content = '<tw-storydata name="Test" ifid=""><tw-passagedata pid="1" name="Start">Content</tw-passagedata></tw-storydata>';
+        parseTwine2HTMLWeb(content);
+        expect(warnings.some(w => w.includes('ifid attribute is empty or invalid'))).toBe(true);
+      });
+    });
+
+    describe('LightweightTwine2Parser internal methods', function () {
+      it('Should return empty array for unknown tag names via createSimpleDOM', function () {
+        // Constructor HTML must not have passagedata/style elements since extraction uses this.html
+        const parser = new LightweightTwine2Parser('<tw-storydata name="Test">content only</tw-storydata>');
+        const simpleDOM = parser.createSimpleDOM('<tw-storydata name="Test">content</tw-storydata>');
+        expect(simpleDOM.getElementsByTagName('unknown-tag')).toEqual([]);
+        expect(simpleDOM.getElementsByTagName('tw-storydata').length).toBeGreaterThan(0);
+        expect(simpleDOM.getElementsByTagName('tw-passagedata')).toEqual([]);
+        expect(simpleDOM.getElementsByTagName('style')).toEqual([]);
+      });
+
+      it('Should return empty array for unknown tag in class getElementsByTagName fallback', function () {
+        // Force fallback: create parser without DOMParser
+        const OriginalDOMParser = global.DOMParser;
+        delete global.DOMParser;
+        try {
+          const parser = new LightweightTwine2Parser('<tw-storydata name="Test">content</tw-storydata>');
+          expect(parser.usingDOMParser).toBe(false);
+          expect(parser.getElementsByTagName('completely-unknown')).toEqual([]);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+        }
+      });
+
+      it('Should parse unquoted attribute values via parseAttributes', function () {
+        const OriginalDOMParser = global.DOMParser;
+        delete global.DOMParser;
+        try {
+          // pid=1 is an unquoted attribute value — exercises the unquoted attribute regex path
+          const content = '<tw-storydata name="Test" ifid="12345678-1234-1234-1234-123456789012"><tw-passagedata pid=1 name="Unquoted">Text</tw-passagedata></tw-storydata>';
+          const story = parse(content);
+          expect(story.getPassageByName('Unquoted').text).toBe('Text');
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+        }
       });
     });
   });

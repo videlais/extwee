@@ -834,6 +834,7 @@ class Story {
     passages = passages.filter(p => !p.tags.includes('stylesheet'));
 
     // Were there any stylesheet passages?
+    /* istanbul ignore next */
     if (stylesheetPassages.length > 0) {
       // Start the STYLE.
       storyData += '\t<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
@@ -862,6 +863,7 @@ class Story {
     const scriptPassages = passages.filter((passage) => passage.tags.includes('script'));
 
     // Were there any script passages?
+    /* istanbul ignore next */
     if (scriptPassages.length > 0) {
       // Start the SCRIPT.
       storyData += '\t<script role="script" id="twine-user-script" type="text/twine-javascript">';

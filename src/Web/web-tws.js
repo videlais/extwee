@@ -1,4 +1,5 @@
 // TWS parser module
+import { getGlobalObject } from './getGlobalObject.js';
 import { parse as parseTWS } from '../TWS/parse.js';
 
 // Create UMD-compatible export object
@@ -16,13 +17,7 @@ export {
 };
 
 // Add to global Extwee object for direct usage
-const globalObject = (function() {
-    if (typeof globalThis !== 'undefined') return globalThis;
-    if (typeof window !== 'undefined') return window;
-    if (typeof global !== 'undefined') return global;
-    if (typeof self !== 'undefined') return self;
-    return null;
-})();
+const globalObject = getGlobalObject();
 
 if (globalObject) {
     globalObject.Extwee = globalObject.Extwee || {};
