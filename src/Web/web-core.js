@@ -1,4 +1,5 @@
 // Core web build - Common parsers and functionality
+import { getGlobalObject } from './getGlobalObject.js';
 import { parse as parseTwee } from '../Twee/parse.js';
 import { parse as parseJSON } from '../JSON/parse.js';
 import { parse as parseStoryFormat } from '../StoryFormat/parse.js';
@@ -38,13 +39,7 @@ export default Extwee;
 
 // For direct ES6 module usage, also assign to global object
 // Use globalThis for cross-environment compatibility (browser, Node.js, Web Workers)
-const globalObject = (function() {
-    if (typeof globalThis !== 'undefined') return globalThis;
-    if (typeof window !== 'undefined') return window;
-    if (typeof global !== 'undefined') return global;
-    if (typeof self !== 'undefined') return self;
-    return null;
-})();
+const globalObject = getGlobalObject();
 
 if (globalObject) {
     globalObject.Extwee = Extwee;

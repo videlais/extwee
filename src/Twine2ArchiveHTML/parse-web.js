@@ -45,6 +45,7 @@ class LightweightTwine2ArchiveParser {
       return elements.map(element => ({
         outerHTML: element.outerHTML,
         // For compatibility with the original parser interface
+        /* istanbul ignore next */
         toString: () => element.outerHTML
       }));
     }
@@ -68,6 +69,7 @@ class LightweightTwine2ArchiveParser {
       elements.push({
         outerHTML: outerHTML,
         // For compatibility with the original parser interface
+        /* istanbul ignore next */
         toString: () => outerHTML
       });
     }
@@ -157,4 +159,4 @@ function parse(content) {
   return outputArray;
 }
 
-export { parse };
+export { parse, LightweightTwine2ArchiveParser };

@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { parse as parseTwine1HTMLWeb } from '../../src/Twine1HTML/parse-web.js';
+import { parse as parseTwine1HTMLWeb, LightweightTwine1Parser } from '../../src/Twine1HTML/parse-web.js';
 
 describe('Twine1HTML', function () {
   describe('parse-web()', function () {
@@ -478,6 +478,112 @@ describe('Twine1HTML', function () {
         
         // Should use last modifier as creator
         expect(s.creator).toBe('tweego');
+      });
+    });
+
+    describe('DOMParser path (native browser DOM)', function () {
+      it('Should parse using native DOMParser when available', function () {
+        // jsdom has DOMParser — this exercises the DOMParser path in the constructor
+        const html = '<div id="storeArea"><div tiddler="Start" tags="" modifier="twee">Hello World</div></div>';
+        const story = parseTwine1HTMLWeb(html);
+        expect(story.size()).toBe(1);
+        expect(story.getPassageByName('Start').text).toBe('Hello World');
+      });
+
+      it('Should fall back to regex on DOMParser parsererror', function () {
+        const originalWarn = console.warn;
+        const warnings = [];
+        console.warn = (...args) => { warnings.push(args[0]); };
+        const OriginalDOMParser = global.DOMParser;
+
+        global.DOMParser = class {
+          parseFromString() {
+            const doc = document.implementation.createHTMLDocument('');
+            const err = doc.createElement('parsererror');
+            doc.body.appendChild(err);
+            return doc;
+          }
+        };
+
+        try {
+          const parser = new LightweightTwine1Parser('<div id="storeArea"></div>');
+          expect(parser.usingDOMParser).toBe(false);
+          expect(warnings.some(w => w.includes('DOMParser encountered an error'))).toBe(true);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+          console.warn = originalWarn;
+        }
+      });
+
+      it('Should fall back to regex when DOMParser throws', function () {
+        const originalWarn = console.warn;
+        const warnings = [];
+        console.warn = (...args) => { warnings.push(args[0]); };
+        const OriginalDOMParser = global.DOMParser;
+
+        global.DOMParser = class {
+          parseFromString() {
+            throw new Error('DOMParser unavailable');
+          }
+        };
+
+        try {
+          const parser = new LightweightTwine1Parser('<div id="storeArea"></div>');
+          expect(parser.usingDOMParser).toBe(false);
+          expect(warnings.some(w => w.includes('DOMParser failed'))).toBe(true);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+          console.warn = originalWarn;
+        }
+      });
+
+      it('Should return null from querySelector for unknown selector in fallback mode', function () {
+        const OriginalDOMParser = global.DOMParser;
+        delete global.DOMParser;
+        try {
+          const parser = new LightweightTwine1Parser('<div id="storeArea"></div>');
+          expect(parser.querySelector('#unknown-selector')).toBeNull();
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+        }
+      });
+
+      it('Should return empty array from querySelectorAll for unknown selector in fallback mode', function () {
+        const OriginalDOMParser = global.DOMParser;
+        delete global.DOMParser;
+        try {
+          const parser = new LightweightTwine1Parser('<div id="storeArea"></div>');
+          expect(parser.querySelectorAll('.unknown-class')).toEqual([]);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+        }
+      });
+    });
+
+    describe('LightweightTwine1Parser createSimpleDOM internal methods', function () {
+      it('Should return null from createSimpleDOM querySelector for unknown selector', function () {
+        const parser = new LightweightTwine1Parser('<div id="storeArea"></div>');
+        const simpleDOM = parser.createSimpleDOM('<div id="storeArea"><div tiddler="Start">text</div></div>');
+        expect(simpleDOM.querySelector('#storeArea')).toBeTruthy();
+        expect(simpleDOM.querySelector('#store-area')).toBeNull();
+        expect(simpleDOM.querySelector('#unknown')).toBeNull();
+      });
+
+      it('Should find #store-area in createSimpleDOM querySelector', function () {
+        const parser = new LightweightTwine1Parser('<div id="storeArea"></div>');
+        // Create simple DOM with store-area (hyphenated variant)
+        const simpleDOM = parser.createSimpleDOM('<div id="store-area"><div tiddler="Start">text</div></div>');
+        expect(simpleDOM.querySelector('#store-area')).toBeTruthy();
+      });
+
+      it('Should return tiddler elements from createSimpleDOM querySelectorAll', function () {
+        // Constructor HTML must contain tiddlers since extractTiddlerElements() uses this.html
+        const html = '<div id="storeArea"><div tiddler="Start" tags="">Hello</div></div>';
+        const parser = new LightweightTwine1Parser(html);
+        const simpleDOM = parser.createSimpleDOM(html);
+        const tiddlers = simpleDOM.querySelectorAll('[tiddler]');
+        expect(tiddlers.length).toBeGreaterThan(0);
+        expect(simpleDOM.querySelectorAll('.other')).toEqual([]);
       });
     });
   });

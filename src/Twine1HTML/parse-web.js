@@ -291,4 +291,4 @@ function parse(content) {
   return s;
 }
 
-export { parse };
+export { parse, LightweightTwine1Parser };

@@ -519,4 +519,4 @@ function parse(content) {
   return story;
 }
 
-export { parse };
+export { parse, LightweightTwine2Parser };

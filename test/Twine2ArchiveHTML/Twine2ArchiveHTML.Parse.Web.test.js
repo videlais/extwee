@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { parse } from '../../src/Twine2ArchiveHTML/parse-web.js';
+import { parse, LightweightTwine2ArchiveParser } from '../../src/Twine2ArchiveHTML/parse-web.js';
 
 /**
  * Mock environment to force fallback parsing since jsdom doesn't behave like browser DOMParser
@@ -287,6 +287,84 @@ describe('Twine2ArchiveHTML', function () {
         expect(stories[1].IFID).toBe('22222222-2222-2222-2222-222222222222');
         expect(stories[0].getPassageByName('Start').text).toBe('First version');
         expect(stories[1].getPassageByName('Start').text).toBe('Second version');
+      });
+    });
+
+    describe('DOMParser path (native browser DOM)', function () {
+      it('Should parse using native DOMParser when available', function () {
+        const content = '<tw-storydata name="Archive Story" ifid="12345678-1234-1234-1234-123456789012"><tw-passagedata pid="1" name="Start">Content</tw-passagedata></tw-storydata>';
+        // In jsdom environment, DOMParser is available — exercises the DOMParser path
+        const stories = parse(content);
+        expect(stories.length).toBe(1);
+        expect(stories[0].name).toBe('Archive Story');
+      });
+
+      it('Should fall back to regex on DOMParser parsererror', function () {
+        const originalWarn = console.warn;
+        const warnings = [];
+        console.warn = (...args) => { warnings.push(args[0]); };
+        const OriginalDOMParser = global.DOMParser;
+
+        global.DOMParser = class {
+          parseFromString() {
+            const doc = document.implementation.createHTMLDocument('');
+            const err = doc.createElement('parsererror');
+            doc.body.appendChild(err);
+            return doc;
+          }
+        };
+
+        try {
+          const parser = new LightweightTwine2ArchiveParser('<tw-storydata name="Test">content</tw-storydata>');
+          expect(parser.usingDOMParser).toBe(false);
+          expect(warnings.some(w => w.includes('DOMParser encountered an error'))).toBe(true);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+          console.warn = originalWarn;
+        }
+      });
+
+      it('Should fall back to regex when DOMParser throws', function () {
+        const originalWarn = console.warn;
+        const warnings = [];
+        console.warn = (...args) => { warnings.push(args[0]); };
+        const OriginalDOMParser = global.DOMParser;
+
+        global.DOMParser = class {
+          parseFromString() {
+            throw new Error('DOMParser unavailable');
+          }
+        };
+
+        try {
+          const parser = new LightweightTwine2ArchiveParser('<tw-storydata name="Test">content</tw-storydata>');
+          expect(parser.usingDOMParser).toBe(false);
+          expect(warnings.some(w => w.includes('DOMParser failed'))).toBe(true);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+          console.warn = originalWarn;
+        }
+      });
+
+      it('Should return empty array for unknown tag in class getElementsByTagName fallback', function () {
+        const OriginalDOMParser = global.DOMParser;
+        delete global.DOMParser;
+        try {
+          const parser = new LightweightTwine2ArchiveParser('<tw-storydata name="Test">content</tw-storydata>');
+          expect(parser.usingDOMParser).toBe(false);
+          expect(parser.getElementsByTagName('unknown-tag')).toEqual([]);
+        } finally {
+          global.DOMParser = OriginalDOMParser;
+        }
+      });
+    });
+
+    describe('LightweightTwine2ArchiveParser createSimpleDOM internal methods', function () {
+      it('Should return storydata elements and empty array for unknown via createSimpleDOM', function () {
+        const parser = new LightweightTwine2ArchiveParser('<tw-storydata name="Test">content</tw-storydata>');
+        const simpleDOM = parser.createSimpleDOM('<tw-storydata name="Test">content</tw-storydata>');
+        expect(simpleDOM.getElementsByTagName('tw-storydata').length).toBeGreaterThan(0);
+        expect(simpleDOM.getElementsByTagName('unknown-tag')).toEqual([]);
       });
     });
   });
