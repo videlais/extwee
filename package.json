@@ -20,6 +20,7 @@
     "lint": "eslint \"./src/**/*.js\" --fix",
     "lint:test": "eslint \"./test/**/*.test.js\" --fix",
     "build:cli": "esbuild src/extwee.js --bundle --platform=node --format=cjs --outfile=dist/extwee.cjs",
+    "test:bundle": "npm run build:cli && node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --testPathPatterns=CLI-bundle",
     "build:web": "webpack",
     "analyze:web": "webpack-bundle-analyzer build/extwee.web.min.js",
     "gen-types": "npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",

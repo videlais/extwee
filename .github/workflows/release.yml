@@ -65,6 +65,12 @@ jobs:
       - name: Bundle CLI (ESM → CJS)
         run: npm run build:cli
 
+      # Verify the bundle behaves identically to the ESM source on this OS.
+      - name: Run bundle equivalence tests
+        run: npm run test:bundle
+        env:
+          CI: true
+
       # Produce a self-contained executable embedding the Node.js runtime.
       - name: Build binary
         run: npx @yao-pkg/pkg dist/extwee.cjs --targets ${{ matrix.target }} --output dist/${{ matrix.artifact }}
@@ -88,15 +94,17 @@ jobs:
         run: |
           chmod +x dist/extwee-linux-x64
           VERSION=${GITHUB_REF_NAME#v}
+          # Debian upstream versions cannot contain '-'; replace with '~' (semver pre-release safe).
+          DEB_VERSION=${VERSION//-/\~}
           fpm -s dir -t deb \
             -n extwee \
-            -v "$VERSION" \
+            -v "$DEB_VERSION" \
             --description "A story compiler tool using Twine-compatible formats" \
             --url "https://github.com/videlais/extwee" \
             --license MIT \
             --maintainer "Dan Cox" \
             dist/extwee-linux-x64=/usr/local/bin/extwee
-          mv "extwee_${VERSION}_amd64.deb" dist/extwee-linux-x64.deb
+          mv "extwee_${DEB_VERSION}_amd64.deb" dist/extwee-linux-x64.deb
 
       - name: Upload .deb artifact
         if: matrix.os == 'ubuntu-latest'
