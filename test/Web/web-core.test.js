@@ -5,6 +5,7 @@
 // Import to test basic functionality
 import { parseTwee, parseJSON, parseStoryFormat, parseTwine2HTML, compileTwine2HTML, generateIFID, Story, Passage, StoryFormat } from '../../src/Web/web-core.js';
 import Extwee from '../../src/Web/web-core.js';
+import { version } from '../../src/version.js';
 
 describe('web-core.js Node.js environment tests', () => {
   describe('ES6 module exports', () => {
@@ -50,7 +51,7 @@ describe('web-core.js Node.js environment tests', () => {
       expect(Extwee.Story).toBeDefined();
       expect(Extwee.Passage).toBeDefined();
       expect(Extwee.StoryFormat).toBeDefined();
-      expect(Extwee.version).toBe('2.3.3');
+      expect(Extwee.version).toBe(version);
     });
 
     it('should have same functions in default export as individual exports', () => {
@@ -130,7 +131,7 @@ This is the start passage.`;
     it('should assign to global.global in Node.js environment', () => {
       // In Node.js environment, it should assign to global.global
       expect(global.global.Extwee).toBeDefined();
-      expect(global.global.Extwee.version).toBe('2.3.3');
+      expect(global.global.Extwee.version).toBe(version);
       expect(global.global.Extwee).toBe(Extwee);
     });
     
@@ -145,7 +146,7 @@ This is the start passage.`;
 
   describe('Version consistency', () => {
     it('should have consistent version across exports', () => {
-      expect(Extwee.version).toBe('2.3.3');
+      expect(Extwee.version).toBe(version);
     });
 
     it('should have version property as string', () => {

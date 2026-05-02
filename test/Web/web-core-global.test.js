@@ -4,12 +4,13 @@
 
 // Import the module to test global assignment in jsdom environment
 import '../../src/Web/web-core.js';
+import { version } from '../../src/version.js';
 
 describe('web-core.js global assignment in browser environment', () => {
   it('should assign Extwee to window in jsdom environment', () => {
     // Should have assigned to window automatically on import
     expect(window.Extwee).toBeDefined();
-    expect(window.Extwee.version).toBe('2.3.3');
+    expect(window.Extwee.version).toBe(version);
     expect(typeof window.Extwee).toBe('object');
   });
 

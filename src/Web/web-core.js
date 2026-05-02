@@ -9,6 +9,7 @@ import { generate as generateIFID } from '../IFID/generate.js';
 import { Story } from '../Story.js';
 import Passage from '../Passage.js';
 import StoryFormat from '../StoryFormat.js';
+import { version } from '../version.js';
 
 // Core functionality - most commonly used
 const Extwee = {
@@ -28,7 +29,7 @@ const Extwee = {
     StoryFormat,
     
     // Version info
-    version: '2.3.3'
+    version
 };
 
 // Export individual functions for ES6 module usage

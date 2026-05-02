@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.17] - 2026-5-1
+
+### Changed
+
+- Shifting version number to single file, `version.js`, which is used across project.
+- Accidentally forgot to update CHANGELOG before updating on NPM.
+
+## [2.3.16] - 2026-5-1
+
+### Changed
+
+- Part of eeb functionality broken into smaller part, `getGlobalObject.js`, to improve testing code coverage.
+- Code coverage increased from ~90% to ~98%.
+
 ## [2.3.15] - 2026-3-27
 
 ### Changed

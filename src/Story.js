@@ -2,12 +2,14 @@ import Passage from './Passage.js';
 import { generate as generateIFID } from './IFID/generate.js';
 import { encode } from 'html-entities';
 
+import { version } from './version.js';
+
 // Set the creator name.
 // This is used to identify the program that created the story.
 const creatorName = 'extwee';
 
 // Set the creator version.
-const creatorVersion = '2.3.16';
+const creatorVersion = version;
 
 /**
  * Story class.
