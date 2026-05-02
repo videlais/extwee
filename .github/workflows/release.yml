@@ -1,0 +1,126 @@
+name: Build and Release Binaries
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  # Run the full test matrix before building anything.
+  test:
+    name: Test (${{ matrix.os }}, Node ${{ matrix.node-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22.x, 23.x, 24.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
+
+  # Build a self-contained binary for each target platform.
+  build:
+    name: Build ${{ matrix.artifact }}
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            target: node22-win-x64
+            artifact: extwee-win-x64.exe
+          - os: macos-latest
+            target: node22-macos-arm64
+            artifact: extwee-macos-arm64
+          - os: macos-13
+            target: node22-macos-x64
+            artifact: extwee-macos-x64
+          - os: ubuntu-latest
+            target: node22-linux-x64
+            artifact: extwee-linux-x64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Bundle the ESM source to CommonJS so pkg can consume it.
+      - name: Bundle CLI (ESM → CJS)
+        run: npm run build:cli
+
+      # Produce a self-contained executable embedding the Node.js runtime.
+      - name: Build binary
+        run: npx @yao-pkg/pkg dist/extwee.cjs --targets ${{ matrix.target }} --output dist/${{ matrix.artifact }}
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/${{ matrix.artifact }}
+
+      # Build a Debian .deb package from the Linux binary.
+      - name: Install fpm
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y ruby ruby-dev rubygems build-essential
+          sudo gem install fpm --no-document
+
+      - name: Build .deb package
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          chmod +x dist/extwee-linux-x64
+          VERSION=${GITHUB_REF_NAME#v}
+          fpm -s dir -t deb \
+            -n extwee \
+            -v "$VERSION" \
+            --description "A story compiler tool using Twine-compatible formats" \
+            --url "https://github.com/videlais/extwee" \
+            --license MIT \
+            --maintainer "Dan Cox" \
+            dist/extwee-linux-x64=/usr/local/bin/extwee
+          mv "extwee_${VERSION}_amd64.deb" dist/extwee-linux-x64.deb
+
+      - name: Upload .deb artifact
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: extwee-linux-x64.deb
+          path: dist/extwee-linux-x64.deb
+
+  # Collect all artifacts and attach them to the GitHub Release.
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+          merge-multiple: true
+
+      - name: Create release and upload assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
