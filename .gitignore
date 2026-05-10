@@ -78,6 +78,9 @@ web_modules/
 
 # Next.js build output
 .next
+
+# CLI binary build output
+dist/
 out
 
 # Nuxt.js build / generate output
