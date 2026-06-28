@@ -18,4 +18,45 @@
  * @throws {Error} Passages are required to have PID!
  */
 export function parse(content: string): Story;
+/**
+ * Lightweight HTML parser for web builds - specifically for Twine 2 HTML parsing
+ * This replaces node-html-parser to reduce bundle size
+ */
+export class LightweightTwine2Parser {
+    constructor(html: any);
+    html: any;
+    doc: Document | {
+        getElementsByTagName: (tagName: any) => {
+            attributes: {};
+            rawText: any;
+        }[];
+    };
+    usingDOMParser: boolean;
+    getElementsByTagName(tagName: any): {
+        attributes: {};
+        rawText: any;
+    }[];
+    extractStoryDataElements(): {
+        attributes: {};
+        innerHTML: string;
+        rawText: string;
+    }[];
+    extractPassageDataElements(): {
+        attributes: {};
+        rawText: any;
+    }[];
+    extractStyleElements(): {
+        attributes: {};
+        rawText: string;
+        innerHTML: string;
+    }[];
+    parseAttributes(elementHtml: any): {};
+    extractTextContent(html: any): any;
+    createSimpleDOM(_html: any): {
+        getElementsByTagName: (tagName: any) => {
+            attributes: {};
+            rawText: any;
+        }[];
+    };
+}
 import { Story } from '../Story.js';

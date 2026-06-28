@@ -35,3 +35,32 @@
  * //   ]
  */
 export function parse(content: string): any[];
+/**
+ * Lightweight HTML parser for web builds - specifically for Twine 2 Archive HTML parsing
+ * This replaces node-html-parser to reduce bundle size and uses browser DOM APIs
+ */
+export class LightweightTwine2ArchiveParser {
+    constructor(html: any);
+    html: any;
+    doc: Document | {
+        getElementsByTagName: (tagName: any) => {
+            outerHTML: string;
+            toString: () => string;
+        }[];
+    };
+    usingDOMParser: boolean;
+    getElementsByTagName(tagName: any): {
+        outerHTML: string;
+        toString: () => string;
+    }[];
+    extractStoryDataElements(): {
+        outerHTML: string;
+        toString: () => string;
+    }[];
+    createSimpleDOM(_htmlContent: any): {
+        getElementsByTagName: (tagName: any) => {
+            outerHTML: string;
+            toString: () => string;
+        }[];
+    };
+}

@@ -18,6 +18,7 @@ declare namespace Extwee {
     export { Story };
     export { Passage };
     export { StoryFormat };
-    export let version: string;
+    export { version };
 }
+import { version } from '../version.js';
 export { parseTwee, parseJSON, parseStoryFormat, parseTwine2HTML, compileTwine2HTML, generateIFID, Story, Passage, StoryFormat };
