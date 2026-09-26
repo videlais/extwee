@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [22.x, 23.x, 24.x]
+        node-version: [24.x, 26.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
@@ -40,22 +40,22 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            target: node22-win-x64
+            target: node24-win-x64
             artifact: extwee-win-x64.exe
           - os: macos-latest
-            target: node22-macos-arm64
+            target: node24-macos-arm64
             artifact: extwee-macos-arm64
-          - os: macos-13
-            target: node22-macos-x64
+          - os: macos-15-intel
+            target: node24-macos-x64
             artifact: extwee-macos-x64
           - os: ubuntu-latest
-            target: node22-linux-x64
+            target: node24-linux-x64
             artifact: extwee-linux-x64
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '26.x'
           cache: 'npm'
 
       - name: Install dependencies
