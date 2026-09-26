@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.19] - 2026-9-26
+
+### Changed
+
+- Moved the Babel toolchain to Babel 8 (`@babel/core` and `@babel/preset-env` 8.x, `babel-plugin-polyfill-corejs3` 1.x).
+- GitHub CI test matrix now covers Node 24.x and 26.x (removed 22.x and 23.x).
+- Release binaries now embed Node 24 (previously Node 22).
+- Updated GitHub Actions to their latest major versions (`checkout`, `setup-node`, `upload-artifact`, `download-artifact`, `codecov-action`, `action-gh-release`).
+- `npm test` now rebuilds the CLI bundle first so bundle equivalence tests never run against a stale build.
+- Monthly dependency updates.
+
+### Fixed
+
+- Codecov coverage uploads, which had been skipped on every CI run since Node 20.x was removed from the matrix.
+- Release workflow's Intel macOS build moved from the retired `macos-13` runner to `macos-15-intel`.
+
 ## [2.3.18] - 2026-6-28
 
 ### Changed
