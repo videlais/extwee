@@ -1,7 +1,19 @@
 /**
- * Parses a JSON object and extracts the StoryFormat, StoryTitle and StoryVersion.
- * @param {object} obj Incoming JSON object.
- * @returns {object} An object containing the extracted results.
+ * Settings extracted from an `extwee.config.json` object.
+ * @typedef {object} ExtweeConfig
+ * @property {string|null} StoryFormat - Value of `story-format`, or `null` if absent.
+ * @property {string} StoryFormatVersion - Value of `story-format-version`, or `latest` if absent.
+ * @property {string|null} Mode - Value of `mode` (e.g. `compile`, `decompile`), or `null` if absent.
+ * @property {string|null} Input - Value of `input`, or `null` if absent.
+ * @property {string|null} Output - Value of `output`, or `null` if absent.
+ * @property {boolean} Twine1Project - Value of `twine1-project`, or `false` if absent.
+ */
+
+/**
+ * Extracts Extwee settings from a parsed `extwee.config.json` object. Unknown keys are ignored.
+ * @param {Record<string, unknown>} obj Parsed configuration object.
+ * @returns {ExtweeConfig} Extracted settings with defaults applied.
+ * @throws {Error} Error: Invalid JSON object
  */
 export function parser(obj) {
     // Check if the object is a valid JSON object.

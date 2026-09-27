@@ -1,9 +1,9 @@
 import { statSync } from 'node:fs';
 
-/*
+/**
  * Check if a passed option is a valid directory.
  * @function isDirectory
- * @description Check if a directory exists.
+ * @description Check if a directory exists. Errors (e.g. a missing path) are logged to the console and return `false`.
  * @param {string} path - Path to directory.
  * @returns {boolean} True if directory exists, false if not.
  */

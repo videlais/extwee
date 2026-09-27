@@ -2,10 +2,21 @@ import Passage from '../Passage.js';
 import { Story } from '../Story.js';
 
 /**
+ * Passage element extracted by {@link LightweightTwine1Parser}, in a shape shared by the DOMParser and regex paths.
+ * @typedef {object} ParsedTiddler
+ * @property {Record<string, string>} attributes - Attribute values by name (e.g. `tiddler`, `tags`, `twine-position`).
+ * @property {string} rawText - Decoded text content.
+ */
+
+/**
  * Lightweight HTML parser for web builds - specifically for Twine 1 HTML parsing
  * This replaces node-html-parser to reduce bundle size
  */
 class LightweightTwine1Parser {
+  /**
+   * Parse HTML with the browser's DOMParser, falling back to regex extraction if it is unavailable or reports an error.
+   * @param {string} html - Twine 1 HTML to parse.
+   */
   constructor(html) {
     this.html = html;
     this.doc = null;
@@ -37,6 +48,11 @@ class LightweightTwine1Parser {
     }
   }
 
+  /**
+   * Find the first element matching a selector. The regex fallback only supports `#storeArea` and `#store-area`.
+   * @param {string} selector - CSS selector.
+   * @returns {Element|{found: true}|null} Matching element, a placeholder when found by the fallback, or `null`.
+   */
   querySelector(selector) {
     if (this.usingDOMParser && this.doc && this.doc.querySelector) {
       // Use native DOM methods when DOMParser is available and working
@@ -55,6 +71,11 @@ class LightweightTwine1Parser {
     return null;
   }
 
+  /**
+   * Find all elements matching a selector. The regex fallback only supports `[tiddler]`.
+   * @param {string} selector - CSS selector.
+   * @returns {ParsedTiddler[]} Matching elements (empty if none or unsupported).
+   */
   querySelectorAll(selector) {
     if (this.usingDOMParser && this.doc && this.doc.querySelectorAll) {
       // Use native DOM methods when DOMParser is available and working
@@ -87,6 +108,10 @@ class LightweightTwine1Parser {
     return [];
   }
 
+  /**
+   * Regex fallback: extract `<div tiddler>` passage elements.
+   * @returns {ParsedTiddler[]} Passage elements.
+   */
   extractTiddlerElements() {
     const tiddlerRegex = /<div[^>]*tiddler=["']([^"']+)["'][^>]*>([\s\S]*?)<\/div>/gi;
     const elements = [];
@@ -106,6 +131,11 @@ class LightweightTwine1Parser {
     return elements;
   }
 
+  /**
+   * Extract the `tiddler`, `tags`, `twine-position`, and `modifier` attributes from a passage element.
+   * @param {string} elementHtml - Passage element HTML.
+   * @returns {Record<string, string>} Attribute values found.
+   */
   parseAttributes(elementHtml) {
     const attributes = {};
     
@@ -136,6 +166,11 @@ class LightweightTwine1Parser {
     return attributes;
   }
 
+  /**
+   * Strip HTML tags, decode basic HTML entities, and trim.
+   * @param {string} html - HTML fragment.
+   * @returns {string} Plain text.
+   */
   extractTextContent(html) {
     // Remove HTML tags and decode basic entities
     return html
@@ -148,6 +183,11 @@ class LightweightTwine1Parser {
       .trim();
   }
 
+  /**
+   * Build a minimal DOM-like object backed by string checks and the regex extractors.
+   * @param {string} html - Twine 1 HTML.
+   * @returns {{querySelector: function(string): ({found: true}|null), querySelectorAll: function(string): ParsedTiddler[]}} Minimal document.
+   */
   createSimpleDOM(html) {
     // Minimal DOM-like object for fallback when DOMParser is not available
     // This should only be used in very limited environments
@@ -178,6 +218,7 @@ class LightweightTwine1Parser {
  * @function parse
  * @param {string} content - Twine 1 HTML content to parse.
  * @returns {Story} Story object
+ * @throws {Error} Cannot find #storeArea or #store-area!
  */
 function parse(content) {
   // Create a default Story.

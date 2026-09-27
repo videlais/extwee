@@ -1,1 +1,1 @@
-export function isFile(path: any): boolean;
+export function isFile(path: string): boolean;

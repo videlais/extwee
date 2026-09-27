@@ -1,10 +1,10 @@
 // Import fs.
 import { statSync } from 'node:fs';
 
-/*
+/**
  * Check if a passed option is a valid file.
  * @function isFile
- * @description Check if a file exists.
+ * @description Check if a file exists. Errors (e.g. a missing path) are logged to the console and return `false`.
  * @param {string} path - Path to file.
  * @returns {boolean} True if file exists, false if not.
  */

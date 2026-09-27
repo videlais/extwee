@@ -4,6 +4,13 @@
  * @function parse
  * @param {string} fileContents - File contents to parse
  * @returns {Story} story
+ * @throws {Error} Contents not a String
+ * @throws {Error} Malformed passage header!
+ * @example
+ * import { parseTwee } from 'extwee';
+ * const story = parseTwee(':: StoryTitle\nMy Story\n\n:: Start [intro]\nHello, world!');
+ * story.name;              // 'My Story'
+ * story.passages[0].tags;  // ['intro']
  */
 export function parse(fileContents: string): Story;
 /**

@@ -6,7 +6,7 @@ import Passage from '../Passage.js';
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md Twine 2 JSON Specification}
  * @function parse
  * @param {string} jsonString - JSON string to convert to Story.
- * @throws {Error} - Invalid JSON!
+ * @throws {Error} Error: JSON could not be parsed!
  * @returns {Story} Story object.
  * @example
  * const jsonString = `{

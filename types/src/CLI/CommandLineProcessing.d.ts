@@ -1,8 +1,8 @@
 /**
  * Process command line arguments.
  * @function CommandLineProcessing
- * @description This function processes the command line arguments passed to the Extwee CLI.
+ * @description Parses Extwee CLI arguments and runs the requested compile or decompile. Exits the process with code 1 on error.
  * @module CLI/commandLineProcessing
- * @param {Array} argv - The command line arguments passed to the CLI.
+ * @param {string[]} argv - Full argument vector, usually `process.argv`.
  */
-export function CommandLineProcessing(argv: any[]): void;
+export function CommandLineProcessing(argv: string[]): void;

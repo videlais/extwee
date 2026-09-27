@@ -3,6 +3,13 @@
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-storyformats-spec.md Twine 2 Story Formats Specification}
  * @param {StoryFormat} storyFormat Story format object to compile.
  * @returns {string} JSONP string.
+ * @throws {TypeError} Error: Incoming object is not a storyFormat object
+ * @throws {TypeError} ERROR: Version must be a valid semantic version!
+ * @example
+ * import { StoryFormat, compileStoryFormat } from 'extwee';
+ * const sf = new StoryFormat('My Format', '1.0.0');
+ * sf.source = '<html><body>{{STORY_DATA}}</body></html>';
+ * const jsonp = compileStoryFormat(sf);
  */
 export function compile(storyFormat: StoryFormat): string;
 import StoryFormat from '../StoryFormat.js';

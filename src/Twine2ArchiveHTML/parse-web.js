@@ -1,10 +1,23 @@
 import { parse as parseTwine2HTML } from '../Twine2HTML/parse-web.js';
 
+/** @typedef {import('../Story.js').Story} Story */
+
+/**
+ * `<tw-storydata>` element extracted by {@link LightweightTwine2ArchiveParser}.
+ * @typedef {object} ParsedStoryData
+ * @property {string} outerHTML - Full element HTML.
+ * @property {function(): string} toString - Returns `outerHTML`.
+ */
+
 /**
  * Lightweight HTML parser for web builds - specifically for Twine 2 Archive HTML parsing
  * This replaces node-html-parser to reduce bundle size and uses browser DOM APIs
  */
 class LightweightTwine2ArchiveParser {
+  /**
+   * Parse HTML with the browser's DOMParser, falling back to regex extraction if it is unavailable or reports an error.
+   * @param {string} html - Twine 2 Archive HTML to parse.
+   */
   constructor(html) {
     this.html = html;
     this.doc = null;
@@ -36,6 +49,11 @@ class LightweightTwine2ArchiveParser {
     }
   }
 
+  /**
+   * Find elements by tag name. The regex fallback only supports `tw-storydata`.
+   * @param {string} tagName - Tag name to find.
+   * @returns {ParsedStoryData[]} Matching elements (empty if none or unsupported).
+   */
   getElementsByTagName(tagName) {
     if (this.usingDOMParser && this.doc && this.doc.getElementsByTagName) {
       // Use native DOM methods when DOMParser is available and working
@@ -57,6 +75,10 @@ class LightweightTwine2ArchiveParser {
     return [];
   }
 
+  /**
+   * Regex fallback: extract complete `<tw-storydata>` elements.
+   * @returns {ParsedStoryData[]} Complete `<tw-storydata>` elements found.
+   */
   extractStoryDataElements() {
     // Match tw-storydata elements with their complete content
     const storyDataRegex = /<tw-storydata[^>]*>[\s\S]*?<\/tw-storydata>/gi;
@@ -77,6 +99,11 @@ class LightweightTwine2ArchiveParser {
     return elements;
   }
 
+  /**
+   * Build a minimal DOM-like object backed by the regex extractor.
+   * @param {string} _htmlContent - Unused; the extractor reads `this.html`.
+   * @returns {{getElementsByTagName: function(string): ParsedStoryData[]}} Minimal document.
+   */
   // eslint-disable-next-line no-unused-vars
   createSimpleDOM(_htmlContent) {
     // Minimal DOM-like object for fallback when DOMParser is not available
@@ -98,8 +125,8 @@ class LightweightTwine2ArchiveParser {
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md Twine 2 Archive Specification}
  * @function parse
  * @param {string} content - Content to parse for Twine 2 HTML elements.
- * @throws {TypeError} - Content is not a string!
- * @returns {Array} Array of stories found in content.
+ * @throws {TypeError} Content is not a string!
+ * @returns {Story[]} Stories found in content (empty if none).
  * @example
  * const content = '<tw-storydata name="Untitled" startnode="1" creator="Twine" creator-version="2.3.9" ifid="A1B2C3D4-E5F6-G7H8-I9J0-K1L2M3N4O5P6" zoom="1" format="Harlowe" format-version="3.1.0" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Untitled Passage" tags="" position="0,0" size="100,100"></tw-passagedata></tw-storydata>';
  * console.log(parse(content));

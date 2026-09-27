@@ -3,10 +3,22 @@ import Passage from '../Passage.js';
 import { decode } from 'html-entities';
 
 /**
+ * Element extracted by {@link LightweightTwine2Parser}, in a shape shared by the DOMParser and regex paths.
+ * @typedef {object} ParsedElement
+ * @property {Record<string, string|boolean>} attributes - Attribute values by name (`true` for boolean attributes).
+ * @property {string} rawText - Decoded text content.
+ * @property {string} [innerHTML] - Raw inner HTML (not set for regex-parsed `<tw-passagedata>`).
+ */
+
+/**
  * Lightweight HTML parser for web builds - specifically for Twine 2 HTML parsing
  * This replaces node-html-parser to reduce bundle size
  */
 class LightweightTwine2Parser {
+  /**
+   * Parse HTML with the browser's DOMParser, falling back to regex extraction if it is unavailable or reports an error.
+   * @param {string} html - Twine 2 HTML to parse.
+   */
   constructor(html) {
     this.html = html;
     this.doc = null;
@@ -38,6 +50,11 @@ class LightweightTwine2Parser {
     }
   }
 
+  /**
+   * Find elements by tag name. The regex fallback only supports `tw-storydata`, `tw-passagedata`, and `style`.
+   * @param {string} tagName - Tag name to find.
+   * @returns {ParsedElement[]} Matching elements (empty if none or unsupported).
+   */
   getElementsByTagName(tagName) {
     if (this.usingDOMParser && this.doc && this.doc.getElementsByTagName) {
       // Use native DOM methods when DOMParser is available and working
@@ -77,6 +94,10 @@ class LightweightTwine2Parser {
     return [];
   }
 
+  /**
+   * Regex fallback: extract `<tw-storydata>` elements.
+   * @returns {ParsedElement[]} `<tw-storydata>` elements found.
+   */
   extractStoryDataElements() {
     const storyDataRegex = /<tw-storydata[^>]*>([\s\S]*?)<\/tw-storydata>/gi;
     const elements = [];
@@ -97,6 +118,10 @@ class LightweightTwine2Parser {
     return elements;
   }
 
+  /**
+   * Regex fallback: extract `<tw-passagedata>` elements, with tags stripped from their text.
+   * @returns {ParsedElement[]} `<tw-passagedata>` elements found.
+   */
   extractPassageDataElements() {
     const passageDataRegex = /<tw-passagedata[^>]*>([\s\S]*?)<\/tw-passagedata>/gi;
     const elements = [];
@@ -116,6 +141,10 @@ class LightweightTwine2Parser {
     return elements;
   }
 
+  /**
+   * Regex fallback: extract `<style>` elements.
+   * @returns {ParsedElement[]} `<style>` elements found.
+   */
   extractStyleElements() {
     const styleRegex = /<style[^>]*>([\s\S]*?)<\/style>/gi;
     const elements = [];
@@ -136,6 +165,11 @@ class LightweightTwine2Parser {
     return elements;
   }
 
+  /**
+   * Parse quoted, unquoted, and boolean attributes from an element's opening tag, decoding basic HTML entities.
+   * @param {string} elementHtml - Element HTML, starting with its opening tag.
+   * @returns {Record<string, string|boolean>} Attribute values by name (`true` for boolean attributes).
+   */
   parseAttributes(elementHtml) {
     const attributes = {};
     
@@ -193,6 +227,11 @@ class LightweightTwine2Parser {
     return attributes;
   }
 
+  /**
+   * Strip HTML tags, decode basic HTML entities, and trim.
+   * @param {string} html - HTML fragment.
+   * @returns {string} Plain text.
+   */
   extractTextContent(html) {
     // Remove HTML tags and decode basic entities
     return html
@@ -205,6 +244,11 @@ class LightweightTwine2Parser {
       .trim();
   }
 
+  /**
+   * Build a minimal DOM-like object backed by the regex extractors.
+   * @param {string} _html - Unused; the extractors read `this.html`.
+   * @returns {{getElementsByTagName: function(string): ParsedElement[]}} Minimal document.
+   */
   // eslint-disable-next-line no-unused-vars
   createSimpleDOM(_html) {
     // Minimal DOM-like object for fallback when DOMParser is not available
@@ -231,19 +275,17 @@ class LightweightTwine2Parser {
  * Web-optimized Twine 2 HTML parser with reduced dependencies
  * Parse Twine 2 HTML into Story object using lightweight DOM parsing
  *
- * See: Twine 2 HTML Output Specification
- * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
- *
  * Produces warnings for:
  * - Missing name attribute on `<tw-storydata>` element.
  * - Missing IFID attribute on `<tw-storydata>` element.
  * - Malformed IFID attribute on `<tw-storydata>` element.
+ * - Missing name attribute on `<tw-passagedata>` elements (the passage is skipped).
+ * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md Twine 2 HTML Output Specification}
  * @function parse
  * @param {string} content - Twine 2 HTML content to parse.
  * @returns {Story} Story object based on Twine 2 HTML content.
- * @throws {TypeError} Content is not a string.
- * @throws {Error} Not Twine 2 HTML content!
- * @throws {Error} Cannot parse passage data without name!
+ * @throws {TypeError} Content is not a string!
+ * @throws {TypeError} Not Twine 2 HTML content!
  * @throws {Error} Passages are required to have PID!
  */
 function parse(content) {

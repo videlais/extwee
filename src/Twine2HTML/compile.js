@@ -11,6 +11,14 @@ import StoryFormat from '../StoryFormat.js';
  * @throws {Error} If story is not instance of Story.
  * @throws {Error} If storyFormat is not instance of StoryFormat.
  * @throws {Error} If storyFormat.source is empty string.
+ * @throws {Error} If story IFID is not a valid UUID.
+ * @throws {Error} If story name is an empty string.
+ * @example
+ * import { readFileSync } from 'node:fs';
+ * import { parseTwee, parseStoryFormat, compileTwine2HTML } from 'extwee';
+ * const story = parseTwee(readFileSync('story.twee', 'utf8'));
+ * const format = parseStoryFormat(readFileSync('format.js', 'utf8'));
+ * const html = compileTwine2HTML(story, format);
  */
 function compile (story, storyFormat) {
   // Check if story is instanceof Story.

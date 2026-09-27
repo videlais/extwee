@@ -4,6 +4,12 @@
  * @function parse
  * @param {string} content - Twine 1 HTML content to parse.
  * @returns {Story} Story object
+ * @throws {Error} Cannot find #storeArea or #store-area!
+ * @example
+ * import { readFileSync } from 'node:fs';
+ * import { parseTwine1HTML } from 'extwee';
+ * const story = parseTwine1HTML(readFileSync('story.html', 'utf8'));
+ * console.log(story.size());
  */
 export function parse(content: string): Story;
 import { Story } from '../Story.js';
