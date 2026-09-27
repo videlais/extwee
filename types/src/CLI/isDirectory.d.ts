@@ -1,1 +1,1 @@
-export function isDirectory(path: any): boolean;
+export function isDirectory(path: string): boolean;

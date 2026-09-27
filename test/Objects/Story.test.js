@@ -454,6 +454,15 @@ describe('Story', () => {
     });
   });
 
+  describe('toJSONString()', function () {
+    it('Should return the same JSON text as toJSON()', function () {
+      const s = new Story('My Story');
+      s.addPassage(new Passage('Start', 'Hello'));
+      expect(s.toJSONString()).toBe(s.toJSON());
+      expect(JSON.parse(s.toJSONString()).passages[0].name).toBe('Start');
+    });
+  });
+
   describe('toJSON()', function () {
     it('Should have default Story values', function () {
       // Create a new Story.

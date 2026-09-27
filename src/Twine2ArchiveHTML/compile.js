@@ -4,8 +4,10 @@ import { Story } from '../Story.js';
  * Write array of Story objects into Twine 2 Archive HTML.
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-archive-spec.md Twine 2 Archive Specification}
  * @function compile
- * @param {Array} stories - Array of Story objects.
+ * @param {Story[]} stories - Stories to include in the archive.
  * @returns {string} Twine 2 Archive HTML.
+ * @throws {TypeError} Stories is not array!
+ * @throws {TypeError} Error: story must be a Story object!
  * @example
  * const story1 = new Story();
  * const story2 = new Story();

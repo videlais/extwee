@@ -18,8 +18,8 @@
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-storyformats-spec.md Twine 2 Story Formats Specification}
  * @function parse
  * @param {string} contents - JSONP content.
- * @throws {Error} - Unable to find Twine 2 JSON chunk!
- * @throws {Error} - Unable to parse Twine 2 JSON chunk!
+ * @throws {Error} Error: Unable to find Twine 2 JSON chunk!
+ * @throws {Error} Error: Unable to parse Twine 2 JSON chunk!
  * @returns {StoryFormat} StoryFormat object.
  * @example
  * const contents = `{

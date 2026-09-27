@@ -24,5 +24,15 @@ export default [
       }]
     }
   },
+  {
+    files: ['src/**/*.js'],
+    rules: {
+      'jsdoc/require-throws': 'warn',
+      'jsdoc/informative-docs': 'warn',
+      'jsdoc/require-jsdoc': ['warn', {
+        require: { FunctionDeclaration: true, MethodDefinition: true, ClassDeclaration: true }
+      }]
+    }
+  },
   pluginJs.configs.recommended,
 ];

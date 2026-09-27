@@ -6,20 +6,22 @@ import { decode } from 'html-entities';
 /**
  * Parse Twine 2 HTML into Story object.
  *
- * See: Twine 2 HTML Output Specification
- * (https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md)
- *
  * Produces warnings for:
  * - Missing name attribute on `<tw-storydata>` element.
  * - Missing IFID attribute on `<tw-storydata>` element.
  * - Malformed IFID attribute on `<tw-storydata>` element.
+ * - Missing name or pid attribute on `<tw-passagedata>` elements (defaults are used).
+ * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-htmloutput-spec.md Twine 2 HTML Output Specification}
  * @function parse
  * @param {string} content - Twine 2 HTML content to parse.
  * @returns {Story} Story object based on Twine 2 HTML content.
- * @throws {TypeError} Content is not a string.
- * @throws {Error} Not Twine 2 HTML content!
- * @throws {Error} Cannot parse passage data without name!
- * @throws {Error} Passages are required to have PID!
+ * @throws {TypeError} Content is not a string!
+ * @throws {TypeError} Not Twine 2 HTML content!
+ * @example
+ * import { readFileSync } from 'node:fs';
+ * import { parseTwine2HTML } from 'extwee';
+ * const story = parseTwine2HTML(readFileSync('story.html', 'utf8'));
+ * console.log(story.toTwee());
  */
 function parse (content) {
   // Create new story.

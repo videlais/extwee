@@ -87,6 +87,14 @@ describe('Passage', () => {
     });
   });
 
+  describe('toJSONString()', function () {
+    it('Should return the same JSON text as toJSON()', function () {
+      const p = new Passage('Start', 'Hello', ['tag']);
+      expect(p.toJSONString()).toBe(p.toJSON());
+      expect(JSON.parse(p.toJSONString()).tags).toEqual(['tag']);
+    });
+  });
+
   describe('toJSON()', function () {
     it('Should hold default values', function () {
       const p = new Passage();

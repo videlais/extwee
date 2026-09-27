@@ -5,6 +5,14 @@ import StoryFormat from '../StoryFormat.js';
  * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-storyformats-spec.md Twine 2 Story Formats Specification}
  * @param {StoryFormat} storyFormat Story format object to compile.
  * @returns {string} JSONP string.
+ * @throws {TypeError} Error: Incoming object is not a storyFormat object
+ * @throws {TypeError} ERROR: Version must be a valid semantic version!
+ * @example
+ * import { StoryFormat, compileStoryFormat } from 'extwee';
+ * const sf = new StoryFormat('My Format', '1.0.0');
+ * sf.source = '<html><body>{{STORY_DATA}}</body></html>';
+ * compileStoryFormat(sf);
+ * // => 'window.storyFormat({"name":"My Format","version":"1.0.0",...})'
  */
 function compile (storyFormat) {
     // Test if storyFormat is a StoryFormat object.
@@ -12,8 +20,8 @@ function compile (storyFormat) {
         throw new TypeError('Error: Incoming object is not a storyFormat object');
     }
 
-    // Create a JSONP string wrapped with the function window.StoryFormat.
-    return `window.storyFormat(${JSON.stringify(storyFormat)})`;
+    // Use the JSON text directly; JSON.stringify(storyFormat) would encode it twice (#797).
+    return `window.storyFormat(${storyFormat.toJSONString()})`;
 }
 
 export { compile };
