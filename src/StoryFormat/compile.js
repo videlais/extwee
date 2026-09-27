@@ -11,7 +11,8 @@ import StoryFormat from '../StoryFormat.js';
  * import { StoryFormat, compileStoryFormat } from 'extwee';
  * const sf = new StoryFormat('My Format', '1.0.0');
  * sf.source = '<html><body>{{STORY_DATA}}</body></html>';
- * const jsonp = compileStoryFormat(sf);
+ * compileStoryFormat(sf);
+ * // => 'window.storyFormat({"name":"My Format","version":"1.0.0",...})'
  */
 function compile (storyFormat) {
     // Test if storyFormat is a StoryFormat object.
@@ -19,8 +20,8 @@ function compile (storyFormat) {
         throw new TypeError('Error: Incoming object is not a storyFormat object');
     }
 
-    // Create a JSONP string wrapped with the function window.StoryFormat.
-    return `window.storyFormat(${JSON.stringify(storyFormat)})`;
+    // toJSON() already returns a JSON string; JSON.stringify() would encode it twice.
+    return `window.storyFormat(${storyFormat.toJSON()})`;
 }
 
 export { compile };

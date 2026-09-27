@@ -5,21 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.19] - 2026-9-26
+## [2.4.0] - 2026-9-26
 
 ### Changed
 
 - Moved the Babel toolchain to Babel 8 (`@babel/core` and `@babel/preset-env` 8.x, `babel-plugin-polyfill-corejs3` 1.x).
+- Development now requires Node 22.18+ or 24.11+ (a Babel 8 requirement). The published package still supports Node 18.18+.
 - GitHub CI test matrix now covers Node 24.x and 26.x (removed 22.x and 23.x).
 - Release binaries now embed Node 24 (previously Node 22).
 - Updated GitHub Actions to their latest major versions (`checkout`, `setup-node`, `upload-artifact`, `download-artifact`, `codecov-action`, `action-gh-release`).
 - `npm test` now rebuilds the CLI bundle first so bundle equivalence tests never run against a stale build.
+- Expanded and corrected JSDoc across `src/`: `@throws` on all setters and parse/compile functions, clearer property descriptions, and `@example` blocks for the main parse and compile functions.
+- TypeScript definitions are more precise:
+  - `Story.passages` and `Story.getPassagesByTag()` now use `Passage[]` (previously `any[]`).
+  - `Passage.tags` now uses `string[]` (previously `any[]`).
+  - `Story.tagColors` now uses `Record<string, string>` (previously `object`).
+  - `Story.metadata` and `Passage.metadata` now use `Record<string, unknown>` (previously `object`).
+  - Web parser internals no longer produce `any` types.
+- ESLint now warns on missing JSDoc blocks, missing `@throws`, and descriptions that only repeat a name (`src/` only).
 - Monthly dependency updates.
 
 ### Fixed
 
-- Codecov coverage uploads, which had been skipped on every CI run since Node 20.x was removed from the matrix.
+- `compileStoryFormat()` double-encoded its JSON, so the generated `format.js` passed a string instead of an object to `window.storyFormat()` and could not be read back by `parseStoryFormat()`. `StoryFormat.toString()` had the same problem. Both now output plain JSON, with new regression tests. ([#797](https://github.com/videlais/extwee/issues/797))
+- Codecov coverage uploads, which had been skipped on every CI run since Node 20.x was removed from the matrix, and were missing the newer token-based upload authentication.
 - Release workflow's Intel macOS build moved from the retired `macos-13` runner to `macos-15-intel`.
+- Inaccurate JSDoc:
+  - `Config/parser` listed the wrong returned fields.
+  - `StoryFormat.toJSON()` was documented as returning an object instead of a string.
+  - `Twine2HTML/parse` listed errors it does not throw.
+  - `isFile()`/`isDirectory()` used non-JSDoc comments, so their types were missing.
 
 ## [2.3.18] - 2026-6-28
 

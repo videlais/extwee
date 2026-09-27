@@ -286,7 +286,7 @@ export default class StoryFormat {
    * @throws {TypeError} ERROR: Version must be a valid semantic version!
    */
   toString() {
-    return JSON.stringify(this, null, "\t");
+    return JSON.stringify(JSON.parse(this.toJSON()), null, "\t");
   }
 
   /**

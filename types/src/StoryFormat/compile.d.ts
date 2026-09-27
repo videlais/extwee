@@ -9,7 +9,8 @@
  * import { StoryFormat, compileStoryFormat } from 'extwee';
  * const sf = new StoryFormat('My Format', '1.0.0');
  * sf.source = '<html><body>{{STORY_DATA}}</body></html>';
- * const jsonp = compileStoryFormat(sf);
+ * compileStoryFormat(sf);
+ * // => 'window.storyFormat({"name":"My Format","version":"1.0.0",...})'
  */
 export function compile(storyFormat: StoryFormat): string;
 import StoryFormat from '../StoryFormat.js';
