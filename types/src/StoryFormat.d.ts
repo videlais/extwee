@@ -148,10 +148,21 @@ export default class StoryFormat {
      */
     toString(): string;
     /**
-     * Produces a JSON representation of the story format object. An empty name is written as `Untitled Story Format`.
+     * Produces a JSON string of the story format. Same as {@link StoryFormat#toJSONString}.
+     *
+     * **Note:** Unlike the usual `toJSON()` convention, this returns a string, not an object.
+     * Do not pass a StoryFormat to `JSON.stringify()`, directly or nested; the output will be encoded twice.
+     * Use {@link StoryFormat#toJSONString} when you need JSON text. This is planned to return an object in 3.0.
+     * @see {@link https://github.com/videlais/extwee/issues/799 Issue #799}
      * @returns {string} JSON string of all story format properties.
      * @throws {TypeError} ERROR: Version must be a valid semantic version!
      */
     toJSON(): string;
+    /**
+     * Produces a JSON string of the story format. An empty name is written as `Untitled Story Format`.
+     * @returns {string} JSON string of all story format properties.
+     * @throws {TypeError} ERROR: Version must be a valid semantic version!
+     */
+    toJSONString(): string;
     #private;
 }

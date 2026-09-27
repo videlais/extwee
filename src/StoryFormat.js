@@ -286,15 +286,29 @@ export default class StoryFormat {
    * @throws {TypeError} ERROR: Version must be a valid semantic version!
    */
   toString() {
-    return JSON.stringify(JSON.parse(this.toJSON()), null, "\t");
+    return JSON.stringify(JSON.parse(this.toJSONString()), null, "\t");
   }
 
   /**
-   * Produces a JSON representation of the story format object. An empty name is written as `Untitled Story Format`.
+   * Produces a JSON string of the story format. Same as {@link StoryFormat#toJSONString}.
+   *
+   * **Note:** Unlike the usual `toJSON()` convention, this returns a string, not an object.
+   * Do not pass a StoryFormat to `JSON.stringify()`, directly or nested; the output will be encoded twice.
+   * Use {@link StoryFormat#toJSONString} when you need JSON text. This is planned to return an object in 3.0.
+   * @see {@link https://github.com/videlais/extwee/issues/799 Issue #799}
    * @returns {string} JSON string of all story format properties.
    * @throws {TypeError} ERROR: Version must be a valid semantic version!
    */
   toJSON() {
+    return this.toJSONString();
+  }
+
+  /**
+   * Produces a JSON string of the story format. An empty name is written as `Untitled Story Format`.
+   * @returns {string} JSON string of all story format properties.
+   * @throws {TypeError} ERROR: Version must be a valid semantic version!
+   */
+  toJSONString() {
     // name: (string) Optional. The name of the story format. (Omitting the name will lead to an Untitled Story Format.)
     // Set a default name.
     let name = "Untitled Story Format";

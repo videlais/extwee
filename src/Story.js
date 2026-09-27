@@ -553,11 +553,24 @@ class Story {
   }
 
   /**
-   * Export Story as JSON representation.
-   * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md Twine 2 JSON Output}
+   * Export Story as a Twine 2 JSON string. Same as {@link Story#toJSONString}.
+   *
+   * **Note:** Unlike the usual `toJSON()` convention, this returns a string, not an object.
+   * Do not pass a Story to `JSON.stringify()`, directly or nested; the output will be encoded twice.
+   * Use {@link Story#toJSONString} when you need JSON text. This is planned to return an object in 3.0.
+   * @see {@link https://github.com/videlais/extwee/issues/799 Issue #799}
    * @returns {string} Story serialized as indented JSON.
    */
   toJSON () {
+    return this.toJSONString();
+  }
+
+  /**
+   * Export Story as a Twine 2 JSON string.
+   * @see {@link https://github.com/iftechfoundation/twine-specs/blob/master/twine-2-jsonoutput-doc.md Twine 2 JSON Output}
+   * @returns {string} Story serialized as JSON indented with 4 spaces.
+   */
+  toJSONString () {
     // Create an initial object for later serialization.
     const s = {
       name: this.name,

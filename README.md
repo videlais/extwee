@@ -87,9 +87,11 @@ An object must be created using either the `new` keyword in JavaScript or as the
 - `Passage`
 - `Story`
 
-Story and Passage objects can generate multiple output formats: `toTwee()`, `toTwine1HTML()`, `toTwine2HTML()`, and `toJSON()`. Stories cannot be played in a browser without the corresponding compiler combining it with story format data.
+Story and Passage objects can generate multiple output formats: `toTwee()`, `toTwine1HTML()`, `toTwine2HTML()`, and `toJSONString()`. Stories cannot be played in a browser without the corresponding compiler combining it with story format data.
 
-The StoryFormat object supports `toString()` method of producing a tab-separated JSON output and `toJSON()` method of generating JSON output matching the Twine 2 Story Format Specification.
+**Note:** `toJSON()` on Story, Passage, and StoryFormat currently returns the same JSON *string* as `toJSONString()`, not an object. Do not pass these objects to `JSON.stringify()`, as the result will be encoded twice. `toJSON()` is planned to return an object in Extwee 3.0 ([#799](https://github.com/videlais/extwee/issues/799)).
+
+The StoryFormat object supports `toString()` method of producing a tab-separated JSON output and `toJSONString()` method of generating JSON output matching the Twine 2 Story Format Specification.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -119,7 +121,7 @@ Compiles story, story formats, or other data into an archive or playable format.
 
 To create playable Twine 1 HTML, an `engine.js` file must be supplied. (See [Story Format Archive](https://github.com/videlais/story-formats-archive/tree/main/official/twine1/engine/1.4.2) for available Twine 1 `engine.js` file.)
 
-Compilation of a story format adds the necessary function wrapper to convert the JSON output, via `toJSON()`, to JSONP.
+Compilation of a story format adds the necessary function wrapper to convert the JSON output, via `toJSONString()`, to JSONP.
 
 ### Support Functionality
 

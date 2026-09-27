@@ -20,8 +20,8 @@ function compile (storyFormat) {
         throw new TypeError('Error: Incoming object is not a storyFormat object');
     }
 
-    // toJSON() already returns a JSON string; JSON.stringify() would encode it twice.
-    return `window.storyFormat(${storyFormat.toJSON()})`;
+    // Use the JSON text directly; JSON.stringify(storyFormat) would encode it twice (#797).
+    return `window.storyFormat(${storyFormat.toJSONString()})`;
 }
 
 export { compile };

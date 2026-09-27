@@ -24,4 +24,10 @@ When working with Twine 2 story formats, the associated `parse()` function call 
 - proofing ( boolean ) (defaults to false). True if the story format is a "proofing" format.
 - source ( string ) Full HTML output of the story format including the two placeholders {{STORY_NAME}} and {{STORY_DATA}}. (The placeholders are not themselves required.)
 
+## Methods
+
+- `toJSONString()`: Converts the story format into a JSON string. Throws if `version` is not a valid semantic version.
+- `toJSON()`: Same as `toJSONString()`. Returns a string, not an object, so do not pass a StoryFormat to `JSON.stringify()` (see [#799](https://github.com/videlais/extwee/issues/799)).
+- `toString()`: Tab-indented version of the same JSON.
+
 **Note:** Generally, even when using the Extwee API, it is rare to work with story formats beyond parsing them as part of Twine 1 or Twine 2 HTML compilation.

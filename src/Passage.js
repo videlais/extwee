@@ -213,10 +213,23 @@ export default class Passage {
   }
 
   /**
-   * Return JSON representation.
+   * Return a JSON string. Same as {@link Passage#toJSONString}.
+   *
+   * **Note:** Unlike the usual `toJSON()` convention, this returns a string, not an object.
+   * Do not pass a Passage to `JSON.stringify()`, directly or nested; the output will be encoded twice.
+   * Use {@link Passage#toJSONString} when you need JSON text. This is planned to return an object in 3.0.
+   * @see {@link https://github.com/videlais/extwee/issues/799 Issue #799}
    * @returns {string} JSON string with `name`, `tags`, `metadata`, and `text`.
    */
   toJSON () {
+    return this.toJSONString();
+  }
+
+  /**
+   * Return a JSON string.
+   * @returns {string} JSON string with `name`, `tags`, `metadata`, and `text`.
+   */
+  toJSONString () {
     // Create an initial object for later serialization.
     const p = {
       name: this.name,

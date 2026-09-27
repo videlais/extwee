@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.4.0] - 2026-9-26
 
+### Added
+
+- `toJSONString()` on `Story`, `Passage`, and `StoryFormat`, returning the same JSON string as `toJSON()`. Prefer it wherever JSON text is needed.
+
 ### Changed
 
 - Moved the Babel toolchain to Babel 8 (`@babel/core` and `@babel/preset-env` 8.x, `babel-plugin-polyfill-corejs3` 1.x).
@@ -24,6 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Web parser internals no longer produce `any` types.
 - ESLint now warns on missing JSDoc blocks, missing `@throws`, and descriptions that only repeat a name (`src/` only).
 - Monthly dependency updates.
+
+### Deprecated
+
+- Relying on `toJSON()` returning a string. It is documented as unsafe to pass to `JSON.stringify()` and is planned to return an object in 3.0 ([#799](https://github.com/videlais/extwee/issues/799)). Use `toJSONString()` for JSON text.
 
 ### Fixed
 

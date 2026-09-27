@@ -194,6 +194,19 @@ describe('StoryFormat', () => {
     });
   });
 
+  describe('toJSONString', () => {
+    it('Should return the same JSON text as toJSON()', () => {
+      const sf = new StoryFormat('My Format', '1.0.0');
+      expect(sf.toJSONString()).toBe(sf.toJSON());
+      expect(JSON.parse(sf.toJSONString()).name).toBe('My Format');
+    });
+
+    it('Should throw error if version is not valid', () => {
+      const sf = new StoryFormat();
+      expect(() => sf.toJSONString()).toThrow();
+    });
+  });
+
   describe('toJSON', () => {
     it('Should return JSON representation with default name', () => {
       const sf = new StoryFormat();

@@ -62,7 +62,8 @@ console.log ( example.size() );
 Like passages, each **Story** can generate multiple formats based on its data:
 
 - `toTwee()`: Convert the story, its properties, and all its passages into Twee 3.
-- `toJSON()`: Converts the story, its properties, and all its passages into Twine 2 JSON.
+- `toJSONString()`: Converts the story, its properties, and all its passages into Twine 2 JSON.
+- `toJSON()`: Same as `toJSONString()`. Returns a string, not an object, so do not pass a Story to `JSON.stringify()` (see [#799](https://github.com/videlais/extwee/issues/799)).
 - `toTwine1HTML()`: Converts the story, its properties, and all its passages into Twine 1 HTML.
 - `toTwine2HTML()`: Converts the story, its properties, and all its passages into Twine 2 HTML.
 
