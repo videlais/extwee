@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
 import { parse as parseTwee } from '../../src/Twee/parse.js';
 
 describe('Twee', () => {
@@ -103,6 +104,32 @@ describe('Twee', () => {
       const story = parseTwee(fr);
       expect(story.storyStylesheet.length).toBeGreaterThan(0);
       expect(story.passages.length).toBe(1);
+    });
+
+    it('Should separate multiple script passages, including passages ending with comments and no semicolon', () => {
+      const story = parseTwee(`:: foo [script]
+calls.push("foo") // Log foo
+
+:: bar [script]
+calls.push("bar") // Log bar
+`);
+      const calls = [];
+
+      runInNewContext(story.storyJavaScript, { calls });
+
+      expect(calls).toEqual(['foo', 'bar']);
+    });
+
+    it('Should separate multiple stylesheet passages', () => {
+      const story = parseTwee(`:: first [stylesheet]
+/* First stylesheet passage */
+
+:: second [stylesheet]
+.second { color: blue; }
+`);
+
+      expect(story.storyStylesheet).toContain('*/\n\n.second');
+      expect(story.storyStylesheet).toContain('.second { color: blue; }');
     });
   });
 });

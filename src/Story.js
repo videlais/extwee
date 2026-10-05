@@ -491,15 +491,15 @@ class Story {
     // Parse passages with "script" tag
     if (p.tags.includes('script')) {
       // Add the passage text to storyJavaScript
-      this.#_storyJavaScript += p.text;
+      this.#_storyJavaScript += (this.#_storyJavaScript.length > 0 ? '\n\n' : '') + p.text;
       // Don't add script-tagged passages to the passages array
       return this.#_passages.length;
     }
 
     // Parse passages with "stylesheet" tag
     if (p.tags.includes('stylesheet')) {
-      // Add the passage text to storyJavaScript
-      this.#_storyStylesheet += p.text;
+      // Add the passage text to storyStylesheet
+      this.#_storyStylesheet += (this.#_storyStylesheet.length > 0 ? '\n\n' : '') + p.text;
       // Don't add script-tagged passages to the passages array
       return this.#_passages.length;
     }
@@ -851,11 +851,8 @@ class Story {
       // Start the STYLE.
       storyData += '\t<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">';
 
-      // Concatenate passages.
-      stylesheetPassages.forEach((passage) => {
-        // Add text of passages.
-        storyData += passage.text;
-      });
+      // Concatenate passages with separators to keep passage content distinct.
+      storyData += stylesheetPassages.map((passage) => passage.text).join('\n\n');
 
       // Close the STYLE.
       storyData += '</style>\n';
@@ -880,11 +877,8 @@ class Story {
       // Start the SCRIPT.
       storyData += '\t<script role="script" id="twine-user-script" type="text/twine-javascript">';
 
-      // Concatenate passages.
-      scriptPassages.forEach((passage) => {
-        // Add text of passages.
-        storyData += passage.text;
-      });
+      // Concatenate passages with separators to keep passage content distinct.
+      storyData += scriptPassages.map((passage) => passage.text).join('\n\n');
 
       // Close SCRIPT.
       storyData += '</script>\n';
