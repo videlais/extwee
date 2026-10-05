@@ -824,6 +824,22 @@ describe('Story', () => {
       expect(result.includes('<script role="script" id="twine-user-script" type="text/twine-javascript">Word')).toBe(true);
     });
 
+    it('Should separate script and stylesheet passages in HTML output', () => {
+      s.passages = [
+        new Passage('Start', 'Word'),
+        new Passage('foo', 'calls.push("foo") // Log foo', ['script']),
+        new Passage('bar', 'calls.push("bar") // Log bar', ['script']),
+        new Passage('first', '/* First stylesheet passage */', ['stylesheet']),
+        new Passage('second', '.second { color: blue; }', ['stylesheet'])
+      ];
+      s.start = 'Start';
+
+      const result = s.toTwine2HTML();
+
+      expect(result).toContain('calls.push("foo") // Log foo\n\ncalls.push("bar") // Log bar');
+      expect(result).toContain('/* First stylesheet passage */\n\n.second { color: blue; }');
+    });
+
     it('Should encode script property', () => {
       // Add passage.
       s.addPassage(new Passage('Start', 'Word'));
