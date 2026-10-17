@@ -136,6 +136,18 @@ Content here`;
       expect(story.passages[0].metadata.position).toBe('100,200');
       expect(story.passages[0].metadata.size).toBe('150,100');
     });
+
+    it('Should parse nested metadata and braces inside metadata strings', () => {
+      const content = ':: TestPassage [tag] {"outer":{"inner":1},"example":"{value}"}\nContent here';
+      const story = parseTwee(content);
+
+      expect(story.passages[0].name).toBe('TestPassage');
+      expect(story.passages[0].tags).toEqual(['tag']);
+      expect(story.passages[0].metadata).toEqual({
+        outer: { inner: 1 },
+        example: '{value}'
+      });
+    });
   });
 
   describe('Twee generation with escaping', () => {

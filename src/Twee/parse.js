@@ -68,20 +68,59 @@ function findLastUnescaped(str, char) {
 }
 
 /**
+ * Finds the first unescaped occurrence of a character in a string.
+ * @param {string} str - String to search in
+ * @param {string} char - Character to find
+ * @returns {number} Position of first unescaped occurrence, or -1 if not found
+ */
+function findFirstUnescaped(str, char) {
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === char) {
+      let backslashCount = 0;
+      for (let j = i - 1; j >= 0 && str[j] === '\\'; j--) {
+        backslashCount++;
+      }
+      if (backslashCount % 2 === 0) {
+        return i;
+      }
+    }
+  }
+  return -1;
+}
+
+/**
  * Parses metadata from a header string, respecting escaped characters.
  * @param {string} header - Header string to parse
  * @returns {object | null} Object with {metadata, remainingHeader} or null if no metadata
  */
 function parseMetadataFromHeader(header) {
-  const openingPos = findLastUnescaped(header, '{');
-  const closingPos = findLastUnescaped(header, '}');
-  
-  if (openingPos !== -1 && closingPos !== -1 && closingPos > openingPos) {
-    const metadata = header.slice(openingPos, closingPos + 1);
-    const remainingHeader = header.substring(0, openingPos) + header.substring(closingPos + 1);
-    return { metadata, remainingHeader };
+  const openingPos = findFirstUnescaped(header, '{');
+  if (openingPos === -1) {
+    return null;
   }
-  
+
+  let depth = 0;
+  let inString = false;
+  for (let i = openingPos; i < header.length; i++) {
+    const character = header[i];
+
+    if (inString) {
+      if (character === '\\') {
+        i++;
+      } else if (character === '"') {
+        inString = false;
+      }
+    } else if (character === '"') {
+      inString = true;
+    } else if (character === '{') {
+      depth++;
+    } else if (character === '}' && --depth === 0) {
+      const metadata = header.slice(openingPos, i + 1);
+      const remainingHeader = header.substring(0, openingPos) + header.substring(i + 1);
+      return { metadata, remainingHeader };
+    }
+  }
+
   return null;
 }
 
@@ -153,12 +192,11 @@ function parse (fileContents) {
     let text;
     let name;
 
-    // Header is everything to the first newline
-    let header = passage.slice(0, passage.indexOf('\n'));
-    // Text is everything else
-    // (Also eat the leading newline character.)
-    // (And trim any remaining whitespace.)
-    text = passage.substring(header.length + 1, passage.length).trim();
+    // Header is everything to the first newline; passage content keeps its whitespace.
+    const headerEnd = passage.indexOf('\n');
+    let header = headerEnd === -1 ? passage : passage.slice(0, headerEnd);
+    text = headerEnd === -1 ? '' : passage.slice(headerEnd + 1);
+    text = text.replace(/(?:\r?\n[ \t]*)+$/, '');
 
     // Parse metadata using escape-aware logic
     const metadataMatch = parseMetadataFromHeader(header);
