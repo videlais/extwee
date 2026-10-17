@@ -29,7 +29,7 @@ describe('Twee', () => {
     });
 
     it('Should preserve passage whitespace while omitting trailing blank lines', () => {
-      const story = parseTwee(':: Start\n  keep leading\nkeep trailing  \n \t\n\n');
+      const story = parseTwee(':: Start\n  keep leading\nkeep trailing  \r\n \t\r\n\r\n');
       expect(story.passages[0].text).toBe('  keep leading\nkeep trailing  ');
     });
 
