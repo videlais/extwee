@@ -138,15 +138,23 @@ Content here`;
     });
 
     it('Should parse nested metadata and braces inside metadata strings', () => {
-      const content = ':: TestPassage [tag] {"outer":{"inner":1},"example":"{value}"}\nContent here';
+      const content = ':: TestPassage [tag] {"outer":{"inner":1},"example":"{value}","escaped":"quote: \\" and } brace"}\nContent here';
       const story = parseTwee(content);
 
       expect(story.passages[0].name).toBe('TestPassage');
       expect(story.passages[0].tags).toEqual(['tag']);
       expect(story.passages[0].metadata).toEqual({
         outer: { inner: 1 },
-        example: '{value}'
+        example: '{value}',
+        escaped: 'quote: " and } brace'
       });
+    });
+
+    it('Should leave unmatched opening braces in the passage name', () => {
+      const story = parseTwee(':: TestPassage {"value":1\nContent here');
+
+      expect(story.passages[0].name).toBe('TestPassage {"value":1');
+      expect(story.passages[0].metadata).toEqual({});
     });
   });
 

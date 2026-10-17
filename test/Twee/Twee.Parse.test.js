@@ -29,8 +29,14 @@ describe('Twee', () => {
     });
 
     it('Should preserve passage whitespace while omitting trailing blank lines', () => {
-      const story = parseTwee(':: Start\n  keep leading\nkeep trailing  \n\n');
+      const story = parseTwee(':: Start\n  keep leading\nkeep trailing  \n \t\n\n');
       expect(story.passages[0].text).toBe('  keep leading\nkeep trailing  ');
+    });
+
+    it('Should parse CRLF passage separators without retaining carriage returns', () => {
+      const story = parseTwee(':: StoryTitle\r\ntwineExample\r\n\r\n:: Start\r\nHello\r\n');
+      expect(story.name).toBe('twineExample');
+      expect(story.passages[0].text).toBe('Hello');
     });
 
     it('Should parse a passage header that ends at end of file', () => {
