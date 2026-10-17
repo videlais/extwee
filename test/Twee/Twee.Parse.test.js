@@ -28,6 +28,17 @@ describe('Twee', () => {
       expect(() => { parseTwee('::{}[]\nNo name'); }).toThrow();
     });
 
+    it('Should preserve passage whitespace while omitting trailing blank lines', () => {
+      const story = parseTwee(':: Start\n  keep leading\nkeep trailing  \n\n');
+      expect(story.passages[0].text).toBe('  keep leading\nkeep trailing  ');
+    });
+
+    it('Should parse a passage header that ends at end of file', () => {
+      const story = parseTwee(':: Start');
+      expect(story.passages[0].name).toBe('Start');
+      expect(story.passages[0].text).toBe('');
+    });
+
     it('Should cut notes before passages', () => {
       const fr = readFileSync('test/Twee/TweeParser/notes.twee', 'utf-8');
       const story = parseTwee(fr);
