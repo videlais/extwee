@@ -74,16 +74,12 @@ function findLastUnescaped(str, char) {
  * @returns {number} Position of first unescaped occurrence, or -1 if not found
  */
 function findFirstUnescaped(str, char) {
+  let backslashCount = 0;
   for (let i = 0; i < str.length; i++) {
-    if (str[i] === char) {
-      let backslashCount = 0;
-      for (let j = i - 1; j >= 0 && str[j] === '\\'; j--) {
-        backslashCount++;
-      }
-      if (backslashCount % 2 === 0) {
-        return i;
-      }
+    if (str[i] === char && backslashCount % 2 === 0) {
+      return i;
     }
+    backslashCount = str[i] === '\\' ? backslashCount + 1 : 0;
   }
   return -1;
 }
@@ -176,7 +172,7 @@ function parse (fileContents) {
   }
 
   // Split the file based on the passage sigil (::) proceeded by a newline
-  const parsingPassages = adjusted.split('\n::');
+  const parsingPassages = adjusted.split(/\r?\n::/);
 
   // Fix the first result
   parsingPassages[0] = parsingPassages[0].slice(2, parsingPassages[0].length);
@@ -196,7 +192,33 @@ function parse (fileContents) {
     const headerEnd = passage.indexOf('\n');
     let header = headerEnd === -1 ? passage : passage.slice(0, headerEnd);
     text = headerEnd === -1 ? '' : passage.slice(headerEnd + 1);
-    text = text.replace(/(?:\r?\n[ \t]*)+$/, '');
+
+    let textEnd = text.length;
+    while (textEnd > 0) {
+      if (text[textEnd - 1] === '\n') {
+        textEnd--;
+        if (textEnd > 0 && text[textEnd - 1] === '\r') {
+          textEnd--;
+        }
+        continue;
+      }
+
+      let whitespaceStart = textEnd;
+      while (whitespaceStart > 0 && (text[whitespaceStart - 1] === ' ' || text[whitespaceStart - 1] === '\t')) {
+        whitespaceStart--;
+      }
+
+      if (whitespaceStart < textEnd && whitespaceStart > 0 && text[whitespaceStart - 1] === '\n') {
+        textEnd = whitespaceStart - 1;
+        if (textEnd > 0 && text[textEnd - 1] === '\r') {
+          textEnd--;
+        }
+        continue;
+      }
+
+      break;
+    }
+    text = text.slice(0, textEnd);
 
     // Parse metadata using escape-aware logic
     const metadataMatch = parseMetadataFromHeader(header);
