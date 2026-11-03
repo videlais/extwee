@@ -73,7 +73,7 @@ jobs:
 
       # Produce a self-contained executable embedding the Node.js runtime.
       - name: Build binary
-        run: npx @yao-pkg/pkg dist/extwee.cjs --targets ${{ matrix.target }} --output dist/${{ matrix.artifact }}
+        run: npm exec -- pkg dist/extwee.cjs --targets ${{ matrix.target }} --output dist/${{ matrix.artifact }}
 
       - name: Upload binary artifact
         uses: actions/upload-artifact@v7
