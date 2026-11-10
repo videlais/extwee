@@ -5,7 +5,10 @@
   "author": "Dan Cox",
   "main": "index.js",
   "exports": {
-    ".": "./index.js",
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./index.js"
+    },
     "./web": "./build/extwee.core.min.js",
     "./web/core": "./build/extwee.core.min.js",
     "./web/twine1html": "./build/extwee.twine1html.min.js",

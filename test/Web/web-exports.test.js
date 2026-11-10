@@ -89,7 +89,11 @@ describe('Web build exports', () => {
       const packagePath = path.resolve(process.cwd(), 'package.json');
       const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
       
-      expect(packageJson.exports['.']).toBe('./index.js');
+      expect(packageJson.exports['.']).toEqual({
+        types: './types/index.d.ts',
+        default: './index.js'
+      });
+      expect(packageJson.types).toBe('./types/index.d.ts');
       expect(packageJson.exports['./web']).toBe('./build/extwee.core.min.js');
       expect(packageJson.exports['./web/core']).toBe('./build/extwee.core.min.js');
       expect(packageJson.exports['./web/twine1html']).toBe('./build/extwee.twine1html.min.js');
@@ -101,6 +105,8 @@ describe('Web build exports', () => {
       const packagePath = path.resolve(process.cwd(), 'package.json');
       const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
       
+      expect(fs.existsSync(path.resolve(process.cwd(), packageJson.exports['.'].types))).toBe(true);
+
       // Check each web export path exists
       const webExports = [
         packageJson.exports['./web'],
