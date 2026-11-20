@@ -5,11 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.4.2] - 2026-11-20
 
 ### Fixed
 
 - TypeScript can now resolve the package declarations through the root export when using modern module resolution.
+- Fix data loss in Twee parser for metadata and whitespace handling.
+- Fix Twee parser status check failures.
 
 ## [2.4.1] - 2026-10-05
 
