@@ -1,6 +1,6 @@
 {
   "name": "extwee",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "A story compiler tool using Twine-compatible formats",
   "author": "Dan Cox",
   "main": "index.js",
@@ -19,8 +19,7 @@
     "extwee": "src/extwee.js"
   },
   "scripts": {
-    "pretest": "npm run build:cli",
-    "postinstall": "patch-package",
+    "pretest": "patch-package && npm run build:cli",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "lint": "eslint \"./src/**/*.js\" --fix",
     "lint:test": "eslint \"./test/**/*.test.js\" --fix",

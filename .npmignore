@@ -24,6 +24,7 @@ tsconfig.json
 
 # Development dependencies
 node_modules/
+patches/
 
 # Example and config files
 extwee.config.json
